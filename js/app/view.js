@@ -1,0 +1,191 @@
+/*
+ * Copyright 2012 Denis Washington <denisw@online.de>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+define(['jquery', 'backbone'], function($, Backbone) {
+
+    ///// ChannelMetadataView //////////////////////////////////////////////
+
+    var ChannelMetadataView = Backbone.View.extend({
+        tagName: 'aside',
+        
+        initialize: function() {
+            this.model.bind('change', this.render, this);
+        },
+
+        render: function() {
+            $(this.el).empty();
+            this._renderHeader();
+            this._renderFields();
+        },
+
+        _renderHeader: function() {
+            var titleEl = $(document.createElement('h1')).
+                addClass('channel-title').
+                text(this.model.get('title'));
+
+            $(this.el).append(
+                $(document.createElement('header')).append(titleEl));
+        },
+
+        _renderFields: function(name, value) {
+            var fieldsEl = $(document.createElement('dl'));
+            var description = this.model.get('description');
+            this._renderField(fieldsEl, 'Description', description);
+            $(this.el).append(fieldsEl);
+        },
+
+        _renderField: function(fieldsEl, name, value) {
+            var nameEl = $(document.createElement('dt')).text(name);
+            var valueEl = $(document.createElement('dd')).text(value);
+            fieldsEl.append(nameEl).append(valueEl);
+        }
+    });
+
+    ///// ChannelPostsView /////////////////////////////////////////////////
+
+    var ChannelPostsView = Backbone.View.extend({
+        tagName: 'div',
+        
+        initialize: function() {
+            this.model.bind('reset', this._update, this);
+            this.model.bind('add', this._update, this);
+            this.model.bind('remove', this._update, this);
+            this.render();
+        },
+
+        _update: function() {
+            var threadsById = this.model.groupBy(function(item) {
+                return item.get('replyTo') || item.get('id');
+            });
+
+            this._threads = _.reduce(threadsById, function(t, posts, id) {
+                // The posts for each thread are sorted from newest to
+                // oldest, so the original post is at the end.
+                var toplevel = _.last(posts);
+                
+                // Ensure that the thread really has a toplevel post.
+                // If it hasn't, it is imcomplete and we ignore it.
+                if (!toplevel.get('replyTo')) {
+                    t.push(posts.reverse());
+                }
+                
+                return t;
+            }, []);
+            
+            this.render();
+        },
+
+        render: function() {
+            if (this._threads) {
+                this._renderThreads();
+            } else {
+                this._renderSpinningIcon();
+            }
+        },
+
+        _renderSpinningIcon: function() {            
+            var icon =
+                $('<div class="loading">\
+                     <img src="img/bc-icon.png">\
+                   </div>');
+
+            $(this.el).html(icon);
+            this._startSpinning(icon);
+        },
+
+        _startSpinning: function(icon) {
+            var rotation = 0;
+
+            var spin = setInterval(function() {
+                var rotate = 'rotate(' + rotation + 'deg)';
+                icon.find('img').css({
+                    'transform': rotate,
+                    '-moz-transform': rotate,
+                    '-webkit-transform': rotate,
+                });
+                rotation = (rotation + 10) % 360;
+            }, 50);
+
+            this.model.on('reset', function() {
+                clearTimeout(spin);
+            });
+        },
+
+        _renderThreads: function() {
+            $(this.el).empty();
+            var self = this;
+            _.each(this._threads, function(thread) {
+                self._renderThread(thread);
+            });
+        },
+
+        _renderThread: function(thread) {
+            var toplevel = _.first(thread);
+            var comments = _.rest(thread);
+
+            var threadEl = $(document.createElement('article'))
+                .addClass('thread');
+            
+            this._renderPost(threadEl, toplevel, 'toplevel');
+            this._renderComments(threadEl, comments);
+            $(this.el).append(threadEl);
+        },
+
+        _renderPost: function(threadEl, post, type) {
+            var postEl = $(document.createElement('article')).addClass(type);
+            this._renderPostHeader(postEl, post);
+            this._renderPostBody(postEl, post);
+            threadEl.append(postEl);
+        },
+
+        _renderPostHeader: function(postEl, post) {
+            var authorId = post.get('author');
+            var authorName = authorId.split('@', 2)[0];
+
+            var authorNameEl = $(document.createElement('span')).
+                addClass('author-name').
+                text(authorName);
+            var authorIdEl = $(document.createElement('span')).
+                addClass('author-id').
+                text('(' + authorId + ')');
+            var headerEl = $(document.createElement('header')).
+                append(authorNameEl).
+                append(' ').
+                append(authorIdEl);
+
+            postEl.append(headerEl);
+        },
+        
+        _renderPostBody: function(postEl, post) {
+            postEl.append(
+                $(document.createElement('pre')).text(post.get('content')));
+        },
+        
+        _renderComments: function(threadEl, comments) {
+            var self = this;
+            _.each(comments, function(c) {
+                self._renderPost(threadEl, c, 'comment');
+            });
+        }
+    });
+
+    ///// (Exports) ////////////////////////////////////////////////////////
+
+    return {
+        ChannelMetadataView: ChannelMetadataView,
+        ChannelPostsView: ChannelPostsView
+    };
+});

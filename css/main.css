@@ -1,0 +1,72 @@
+body {
+  width: 95%;
+  margin: 20px auto 0 auto;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+pre {
+  font-family: Helvetica, Arial, sans-serif;
+  white-space: pre-wrap;
+}
+
+#channel-meta {
+  float: right;
+  width: 300px;
+  padding: 20px;
+  background-color: #EFECDF;
+  border-radius: 20px;
+}
+
+#channel-meta .channel-title {
+  margin-top: 0px;
+}
+
+#channel-meta dt {
+  font-weight: bold;
+}
+
+#channel-meta dt:after {
+  content: ":";
+}
+
+#channel-meta dd {
+  margin-left: 0px;
+}
+
+#channel-posts {
+  margin-right: 360px;
+  padding-right: 20px;
+  border-right: 1px solid #ccc;
+}
+
+#channel-posts .loading {
+  text-align: center;
+  padding: 10px;
+}
+
+#channel-posts .thread {
+  border: 1px solid #EFECDF;
+  border-left: none;
+  border-right: none;
+  margin-top: -1px;
+  padding: 10px;
+}
+
+#channel-posts .author-name {
+  font-weight: bold;
+  font-size: 120%;
+}
+
+#channel-posts .author-id {
+  font-size: 80%;
+  color: #444;
+}
+
+#channel-posts .comment {
+  margin-bottom: 1em;
+  padding: 20px;
+  border-radius: 20px;
+  background-color: #EFECDF;
+  font-size: 80%;
+}
+
