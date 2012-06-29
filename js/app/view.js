@@ -16,6 +16,11 @@
 
 define(['jquery', 'backbone'], function($, Backbone) {
 
+    // Thanks to John Gruber:
+    // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+    var URL_REGEX =
+        /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/;
+
     ///// ChannelMetadataView //////////////////////////////////////////////
 
     var ChannelMetadataView = Backbone.View.extend({
@@ -170,8 +175,13 @@ define(['jquery', 'backbone'], function($, Backbone) {
         },
         
         _renderPostBody: function(postEl, post) {
-            postEl.append(
-                $(document.createElement('pre')).text(post.get('content')));
+            var bodyEl = $(document.createElement('pre')).
+                text(post.get('content'));
+
+            // Make all URLs proper links
+            bodyEl.html(bodyEl.text().replace(URL_REGEX, '<a href="$1">$1</a>'));
+
+            postEl.append(bodyEl);
         },
         
         _renderComments: function(threadEl, comments) {
