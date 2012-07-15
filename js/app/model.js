@@ -32,10 +32,27 @@ function($, _, Backbone, config) {
             this.posts = new ChannelNode();
             this.posts.channel = this;
             this.posts.name = 'posts';
+
+            this.followers = new ChannelFollowers();
+            this.followers.channel = this;
         },
 
         url: function() {
             return url('channels', this.get('channel'), 'posts', 'metadata');
+        }
+    });
+
+    ///// ChannelFollowers /////////////////////////////////////////////////
+
+    var ChannelFollowers = Backbone.Model.extend({
+
+        url: function() {
+            return url(
+                'channels',
+                this.channel.get('channel'),
+                'posts',
+                'subscriptions'
+            );
         }
     });
 
@@ -55,7 +72,7 @@ function($, _, Backbone, config) {
         fetch: function(options) {
             // Backbone assumes data coming from the server to be JSON,
             // but we expect Atom feeds here.
-            options || (options = {});
+            options = options || {};
             options.dataType = 'xml';
             Backbone.Collection.prototype.fetch.call(this, options);
         },
@@ -67,8 +84,8 @@ function($, _, Backbone, config) {
                 items.push({
                     id: $(this).find('id').text(),
                     author: $(this).find('author>name').text(),
-                    content: $(this).find('content').text(),                    
-                    replyTo: $(this).find('in-reply-to').attr('ref'),                    
+                    content: $(this).find('content').text(),
+                    replyTo: $(this).find('in-reply-to').attr('ref')
                 });
             });
 

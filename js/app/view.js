@@ -24,38 +24,77 @@ define(['jquery', 'backbone'], function($, Backbone) {
     ///// ChannelMetadataView //////////////////////////////////////////////
 
     var ChannelMetadataView = Backbone.View.extend({
-        tagName: 'aside',
-        
+        tagName: 'header',
+
         initialize: function() {
             this.model.bind('change', this.render, this);
         },
 
         render: function() {
             $(this.el).empty();
+
+            var titleEl = $(document.createElement('h1')).
+                addClass('channel-title').
+                text(this.model.get('title') + ' ');
+
+            var nameEl = $(document.createElement('span')).
+                addClass('channel-name').
+                text('(' + this.model.get('channel') + ')');
+
+            var descriptionEl = $(document.createElement('p')).
+                addClass('channel-description').
+                text(this.model.get('description'));
+
+            $(this.el).append(titleEl.append(nameEl));
+            $(this.el).append(descriptionEl);
+        }
+    });
+
+    ///// ChannelFollowerView //////////////////////////////////////////////
+
+    var ChannelFollowersView = Backbone.View.extend({
+        tagName: 'aside',
+        id: 'channel-followers',
+
+        initialize: function() {
+            this.model.bind('change', this.render, this);
+            this.render();
+        },
+
+        render: function() {
+            $(this.el).empty();
             this._renderHeader();
-            this._renderFields();
+            this._renderFollowerList();
         },
 
         _renderHeader: function() {
-            var titleEl = $(document.createElement('h1')).
-                addClass('channel-title').
-                text(this.model.get('title'));
-
-            $(this.el).append(
-                $(document.createElement('header')).append(titleEl));
+            var titleEl = $(document.createElement('h1')).text('Followers');
+            $(this.el).append(titleEl);
         },
 
-        _renderFields: function(name, value) {
-            var fieldsEl = $(document.createElement('dl'));
-            var description = this.model.get('description');
-            this._renderField(fieldsEl, 'Description', description);
-            $(this.el).append(fieldsEl);
-        },
+        _renderFollowerList: function() {
+            var listEl = $(document.createElement('ul')).
+                addClass('followers');
 
-        _renderField: function(fieldsEl, name, value) {
-            var nameEl = $(document.createElement('dt')).text(name);
-            var valueEl = $(document.createElement('dd')).text(value);
-            fieldsEl.append(nameEl).append(valueEl);
+            var subscriptions = this.model.toJSON();
+            for (var jid in subscriptions) {
+                var parts = jid.split('@', 2);
+                var user = parts[0];
+                var domain = parts[1];
+
+                // FIXME: This is ugly and wrong
+                if (domain.indexOf('anon.') === 0) {
+                    continue;
+                }
+
+                var followerEl =  $(document.createElement('li')).
+                    append($(document.createElement('strong')).text(user)).
+                    append('@' + domain);
+
+                listEl.append(followerEl);
+            }
+
+            $(this.el).append(listEl);
         }
     });
 
@@ -63,7 +102,8 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
     var ChannelPostsView = Backbone.View.extend({
         tagName: 'div',
-        
+        id: 'channel-posts',
+
         initialize: function() {
             this.model.bind('reset', this._update, this);
             this.model.bind('add', this._update, this);
@@ -80,16 +120,16 @@ define(['jquery', 'backbone'], function($, Backbone) {
                 // The posts for each thread are sorted from newest to
                 // oldest, so the original post is at the end.
                 var toplevel = _.last(posts);
-                
+
                 // Ensure that the thread really has a toplevel post.
                 // If it hasn't, it is imcomplete and we ignore it.
                 if (!toplevel.get('replyTo')) {
                     t.push(posts.reverse());
                 }
-                
+
                 return t;
             }, []);
-            
+
             this.render();
         },
 
@@ -101,7 +141,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
             }
         },
 
-        _renderSpinningIcon: function() {            
+        _renderSpinningIcon: function() {
             var icon =
                 $('<div class="loading">\
                      <img src="img/bc-icon.png">\
@@ -119,7 +159,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
                 icon.find('img').css({
                     'transform': rotate,
                     '-moz-transform': rotate,
-                    '-webkit-transform': rotate,
+                    '-webkit-transform': rotate
                 });
                 rotation = (rotation + 10) % 360;
             }, 50);
@@ -143,7 +183,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
             var threadEl = $(document.createElement('article'))
                 .addClass('thread');
-            
+
             this._renderPost(threadEl, toplevel, 'toplevel');
             this._renderComments(threadEl, comments);
             $(this.el).append(threadEl);
@@ -173,7 +213,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
             postEl.append(headerEl);
         },
-        
+
         _renderPostBody: function(postEl, post) {
             var bodyEl = $(document.createElement('pre')).
                 text(post.get('content'));
@@ -183,7 +223,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
             postEl.append(bodyEl);
         },
-        
+
         _renderComments: function(threadEl, comments) {
             var self = this;
             _.each(comments, function(c) {
@@ -196,6 +236,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
 
     return {
         ChannelMetadataView: ChannelMetadataView,
+        ChannelFollowersView: ChannelFollowersView,
         ChannelPostsView: ChannelPostsView
     };
 });

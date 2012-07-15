@@ -26,18 +26,22 @@ define(['jquery', 'app/model', 'app/view'], function($, model, view) {
     });
 
     var metaView = new view.ChannelMetadataView({
-        id: 'channel-meta',
         model: channel
     });
 
+    var followersView = new view.ChannelFollowersView({
+        model: channel.followers
+    });
+
     var postsView = new view.ChannelPostsView({
-        id: 'channel-posts',
         model: channel.posts
     });
-    
-    $('body').append(metaView.el);
-    $('body').append(postsView.el);
+
+    $('#channel-view').append(followersView.el);
+    $('#channel-view').append(metaView.el);
+    $('#channel-view').append(postsView.el);
 
     channel.fetch();
+    channel.followers.fetch();
     channel.posts.fetch();
 });
