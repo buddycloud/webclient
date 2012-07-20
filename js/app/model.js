@@ -73,24 +73,9 @@ function($, _, Backbone, config) {
             // Backbone assumes data coming from the server to be JSON,
             // but we expect Atom feeds here.
             options = options || {};
-            options.dataType = 'xml';
+            options.headers = {'Accept': 'application/json'};
             Backbone.Collection.prototype.fetch.call(this, options);
         },
-
-        parse: function(data) {
-            items = [];
-
-             $(data).find('entry').each(function() {
-                items.push({
-                    id: $(this).find('id').text(),
-                    author: $(this).find('author>name').text(),
-                    content: $(this).find('content').text(),
-                    replyTo: $(this).find('in-reply-to').attr('ref')
-                });
-            });
-
-            return items;
-        }
     });
 
     ///// (Exports) ////////////////////////////////////////////////////////
