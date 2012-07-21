@@ -70,8 +70,8 @@ function($, _, Backbone, config) {
         },
 
         fetch: function(options) {
-            // Backbone assumes data coming from the server to be JSON,
-            // but we expect Atom feeds here.
+            // Explicitly set "Accept: application/json" so that we get the
+            // JSON representation instead of an Atom feed.
             options = options || {};
             options.headers = {'Accept': 'application/json'};
             Backbone.Collection.prototype.fetch.call(this, options);
