@@ -14,12 +14,97 @@
  * limitations under the License.
  */
 
-define(['jquery', 'backbone'], function($, Backbone) {
+define(['jquery', 'backbone', '../../config'], function($, Backbone, config) {
 
     // Thanks to John Gruber:
     // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
     var URL_REGEX =
         /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/;
+
+    ///// UserBar //////////////////////////////////////////////////////////
+
+    var UserBar = Backbone.View.extend({
+        tagName: 'div',
+
+        events: {
+            'submit .login': '_login'
+        },
+
+        initialize: function() {
+            this.render();
+        },
+
+        render: function() {
+            this.$el.empty();
+
+            if (this.model.get('username')) {
+                this._renderUserActions();
+            } else {
+                this._renderLoginForm();
+            }
+        },
+
+        _renderLoginForm: function() {
+            var loginForm = $(this.make('form', {'class': 'login'}));
+
+            loginForm.append(this.make('input', {
+                'class': 'username',
+                'type': 'text',
+                'placeholder': 'Username',
+                'size': '15'
+            }));
+            loginForm.append(this.make('input', {
+                'class': 'password',
+                'type': 'password',
+                'placeholder': 'Password',
+                'size': '15'
+            }));
+            loginForm.append(this.make('input', {
+                'class': 'login-button',
+                'type': 'submit',
+                'value': 'Login'
+            }));
+
+            this.$el.append(loginForm);
+        },
+
+        _renderUserActions: function() {
+            var title = this.make('span', {}, this.model.get('username'));
+            this.$el.append(title);
+        },
+
+        _login: function() {
+            this.$('input').attr('disabled', true);
+            this.$('.login-button').attr('value', 'Logging in…');
+
+            var username = this.$('.username').attr('value');
+            var password = this.$('.password').attr('value');
+
+            var self = this;
+
+            var xhr = $.ajax(config.baseUrl, {
+                method: 'GET',
+                beforeSend: function(xhr) {
+                    var auth = 'Basic ' + btoa(username + ':' + password);
+                    xhr.setRequestHeader('Authorization', auth);
+                    xhr.withCredentials = true;
+                },
+                success: function() {
+                    self.model.set({
+                        username: username,
+                        password: password
+                    });
+                    self.render();
+                },
+                error: function(__, xhr) {
+                    alert('Login failed');
+                    self.render();
+                }
+            })
+
+            return false;
+        }
+    });
 
     ///// ChannelMetadataView //////////////////////////////////////////////
 
@@ -108,6 +193,20 @@ define(['jquery', 'backbone'], function($, Backbone) {
             this.model.bind('reset', this._update, this);
             this.model.bind('add', this._update, this);
             this.model.bind('remove', this._update, this);
+
+            this._credentials = this.options.credentials;
+            this._credentials.bind('change', this._reset, this);
+
+            this.render();
+        },
+
+        _reset: function() {
+            this.model.reset();
+            this.model.fetch({
+                beforeSend: this._credentials.authSetup()
+            });
+
+            this._threads = null;
             this.render();
         },
 
@@ -235,6 +334,7 @@ define(['jquery', 'backbone'], function($, Backbone) {
     ///// (Exports) ////////////////////////////////////////////////////////
 
     return {
+        UserBar: UserBar,
         ChannelMetadataView: ChannelMetadataView,
         ChannelFollowersView: ChannelFollowersView,
         ChannelPostsView: ChannelPostsView

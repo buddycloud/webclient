@@ -78,9 +78,28 @@ function($, _, Backbone, config) {
         },
     });
 
+    ///// UserCredentials //////////////////////////////////////////////////
+
+    var UserCredentials = Backbone.Model.extend({
+
+        authSetup: function() {
+            var self = this;
+            return function(xhr) {
+                var user = self.get('username');
+                var passwd = self.get('password');
+
+                var auth = 'Basic ' + btoa(user + ':' + passwd);
+                xhr.setRequestHeader('Authorization', auth);
+
+                xhr.withCredentials = true;
+            };
+        }
+    });
+
     ///// (Exports) ////////////////////////////////////////////////////////
 
     return {
-        Channel: Channel
+        Channel: Channel,
+        UserCredentials: UserCredentials
     };
 });

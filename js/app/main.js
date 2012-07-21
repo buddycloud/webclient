@@ -20,9 +20,14 @@ define(['jquery', 'app/model', 'app/view'], function($, model, view) {
     var channelArg = location.search.match(/[\?\&]channel=([^\&]*)/);
     var channelId = channelArg ? channelArg[1] : 'lounge@topics.buddycloud.org';
 
+    var credentials = new model.UserCredentials();
     var channel = new model.Channel({
         channel: channelId,
         node: 'posts'
+    });
+
+    var userBar = new view.UserBar({
+        model: credentials
     });
 
     var metaView = new view.ChannelMetadataView({
@@ -34,9 +39,11 @@ define(['jquery', 'app/model', 'app/view'], function($, model, view) {
     });
 
     var postsView = new view.ChannelPostsView({
-        model: channel.posts
+        model: channel.posts,
+        credentials: credentials
     });
 
+    $('#toolbar').append(userBar.el);
     $('#channel-view').append(followersView.el);
     $('#channel-view').append(metaView.el);
     $('#channel-view').append(postsView.el);

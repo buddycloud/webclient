@@ -27,6 +27,33 @@ pre {
   box-shadow: 0 0 10px black;
   background-color: #132B36;
   color: white;
+  font-size: 80%;
+}
+
+#toolbar .login input {
+  font-size: 90%;
+}
+
+#toolbar .login input[type=text] {
+  margin-right: 5px;
+}
+
+#toolbar .login input[type=submit] {
+  margin-left: 5px;
+  padding: 2px 4px 2px 4px;
+  border: none;
+  border-radius: 3px;
+  background: rgb(96, 133, 157);
+  color: white;
+}
+
+#toolbar .login input[type=submit]:hover {
+  background: white;
+  color: rgb(96, 133, 157);
+}
+
+#toolbar .login input[type=submit]:active {
+  opacity: 0.8;
 }
 
 #toolbar .user {
