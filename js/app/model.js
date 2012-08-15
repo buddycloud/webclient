@@ -38,7 +38,7 @@ function($, _, Backbone, config) {
         },
 
         url: function() {
-            return url('channels', this.get('channel'), 'posts', 'metadata');
+            return url(this.get('channel'), 'metadata', 'posts');
         }
     });
 
@@ -47,12 +47,7 @@ function($, _, Backbone, config) {
     var ChannelFollowers = Backbone.Model.extend({
 
         url: function() {
-            return url(
-                'channels',
-                this.channel.get('channel'),
-                'posts',
-                'subscriptions'
-            );
+            return url(this.channel.get('channel'), 'subscribers', 'posts');
         }
     });
 
@@ -66,7 +61,7 @@ function($, _, Backbone, config) {
         model: ChannelItem,
 
         url: function() {
-            return url('channels', this.channel.get('channel'), this.name);
+            return url(this.channel.get('channel'), 'content', this.name);
         },
 
         fetch: function(options) {
