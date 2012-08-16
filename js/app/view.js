@@ -122,8 +122,10 @@ define(['jquery', 'backbone', '../../config'], function($, Backbone, config) {
             var iconEl = $(document.createElement('img')).
                 addClass('channel-icon').
                 attr('width', '64').
-                attr('height', '64').
-                attr('src', iconUrl);
+                attr('height', '64');
+
+            this._setupIconFallback(iconEl);
+            iconEl.attr('src', iconUrl)
 
             var titleEl = $(document.createElement('h1')).
                 addClass('channel-title').
@@ -140,6 +142,16 @@ define(['jquery', 'backbone', '../../config'], function($, Backbone, config) {
             $(this.el).append(iconEl);
             $(this.el).append(titleEl.append(nameEl));
             $(this.el).append(descriptionEl);
+        },
+
+        _setupIconFallback: function(iconEl) {
+            var self = this;
+            iconEl.one('error', function() {
+                if (self.model.get('channel_type') == 'personal')
+                    iconEl.attr('src', 'img/user-avatar-default64.png');
+                else
+                    iconEl.attr('src', 'img/topic-avatar-default64.png');
+            });
         }
     });
 
