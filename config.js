@@ -1,3 +1,3 @@
 define({
-    baseUrl: 'https://api.buddycloud.org/'
+ baseUrl: 'https://api.buddycloud.org/'
 });

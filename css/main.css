@@ -85,6 +85,17 @@ pre {
   box-shadow: 0px 0px 10px #333;
 }
 
+#channel-view header .channel-icon {
+  display: block;
+  float: left;
+  width: 64px;
+  height: 64px;
+  margin-right: 10px;
+  background-color: #EFECDF;
+  border: 2px solid rgb(96, 133, 157);
+  border-radius: 6px;
+}
+
 #channel-view header .channel-title {
   margin: 0px;
   font-weight: normal;

@@ -118,6 +118,13 @@ define(['jquery', 'backbone', '../../config'], function($, Backbone, config) {
         render: function() {
             $(this.el).empty();
 
+            var iconUrl = this.model.iconUrl() + '?maxwidth=64&maxheight=64';
+            var iconEl = $(document.createElement('img')).
+                addClass('channel-icon').
+                attr('width', '64').
+                attr('height', '64').
+                attr('src', iconUrl);
+
             var titleEl = $(document.createElement('h1')).
                 addClass('channel-title').
                 text(this.model.get('title') + ' ');
@@ -130,6 +137,7 @@ define(['jquery', 'backbone', '../../config'], function($, Backbone, config) {
                 addClass('channel-description').
                 text(this.model.get('description'));
 
+            $(this.el).append(iconEl);
             $(this.el).append(titleEl.append(nameEl));
             $(this.el).append(descriptionEl);
         }

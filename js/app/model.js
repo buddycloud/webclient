@@ -39,6 +39,10 @@ function($, _, Backbone, config) {
 
         url: function() {
             return url(this.get('channel'), 'metadata', 'posts');
+        },
+
+        iconUrl: function() {
+            return url(this.get('channel'), 'media', 'avatar');
         }
     });
 
