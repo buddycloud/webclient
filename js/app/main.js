@@ -17,6 +17,8 @@
 requirejs.config({baseUrl: 'js'});
 
 define(['jquery', 'app/model', 'app/view'], function($, model, view) {
+    $('#channel-view').css('min-height', window.innerHeight + 'px');
+
     var channelArg = location.search.match(/[\?\&]channel=([^\&]*)/);
     var channelId = channelArg ? channelArg[1] : 'lounge@topics.buddycloud.org';
 
