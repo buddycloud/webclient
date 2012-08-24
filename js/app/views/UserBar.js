@@ -25,6 +25,7 @@ define([
         events: {'submit .login': '_login'},
 
         initialize: function() {
+            this.model.bind('change', this.render, this);
             this.render();
         },
 
@@ -68,35 +69,26 @@ define([
         },
 
         _login: function() {
+            this._disableLoginControls();
+            this._trySetCredentials();
+            return false;
+        },
+
+        _disableLoginControls: function() {
             this.$('input').attr('disabled', true);
             this.$('.login-button').attr('value', 'Logging in…');
+        },
 
-            var username = this.$('.username').attr('value');
-            var password = this.$('.password').attr('value');
-
-            var self = this;
-
-            var xhr = $.ajax(config.baseUrl, {
-                method: 'GET',
-                beforeSend: function(xhr) {
-                    var auth = 'Basic ' + btoa(username + ':' + password);
-                    xhr.setRequestHeader('Authorization', auth);
-                    xhr.withCredentials = true;
-                },
-                success: function() {
-                    self.model.set({
-                        username: username,
-                        password: password
-                    });
-                    self.render();
-                },
-                error: function(__, xhr) {
+        _trySetCredentials: function() {
+            this.model.set({
+                username: this.$('.username').attr('value'),
+                password: this.$('.password').attr('value'),
+            }, {
+                error: function() {
                     alert('Login failed');
                     self.render();
                 }
-            })
-
-            return false;
+            });
         }
     });
 

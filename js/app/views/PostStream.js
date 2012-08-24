@@ -42,7 +42,11 @@ define([
         _reset: function() {
             this.model.reset();
             this.model.fetch({
-                beforeSend: this._credentials.authSetup()
+                username: this._credentials.get('username'),
+                password: this._credentials.get('password'),
+                xhrFields: {
+                    withCredentials: true
+                }
             });
 
             this._threads = null;

@@ -15,19 +15,55 @@
  */
 
 define([
+    'jquery',
+    'underscore',
     'backbone',
-], function(Backbone) {
+    'app/models/util'
+], function($, _, Backbone, util) {
 
     var UserCredentials = Backbone.Model.extend({
-        authSetup: function() {
+        defaults: {
+            username: null,
+            password: null
+        },
+
+        set: function(attributes, options) {
+            if (_.has(attributes, 'username') || _.has(attributes, 'password')) {
+                var username = attributes.username || this.get('username');
+                var password = attributes.password || this.get('password');
+                var onerror = options ? options.error : null;
+                this._checkCredentialsAndSet(username, password, onerror);
+            } else {
+                Backbone.Model.prototype.set.call(this, attributes, options);
+            }
+        },
+
+        _checkCredentialsAndSet: function(username, password, onerror) {
+            // We check the credentials by using them to GETthe API's root,
+            // which returns 204 (No Content) if the credentials are correct.
             var self = this;
-            return function(xhr) {
-                var user = self.get('username');
-                var passwd = self.get('password');
-                var auth = 'Basic ' + btoa(user + ':' + passwd);
-                xhr.setRequestHeader('Authorization', auth);
-                xhr.withCredentials = true;
-            };
+            var xhr = $.ajax(util.apiUrl(''), {
+                method: 'GET',
+                username: username,
+                password: password,
+                success: function() {
+                    Backbone.Model.prototype.set.call(self, {
+                        username: username,
+                        password: password
+                    });
+                },
+                error: function(__, xhr) {
+                    self._triggerSetError(onerror);
+                }
+            });
+        },
+
+        _triggerSetError: function(onerror) {
+            if (onerror) {
+                onerror();
+            } else {
+                this.trigger(error);
+            }
         }
     });
 
