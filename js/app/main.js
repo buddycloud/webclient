@@ -16,31 +16,47 @@
 
 requirejs.config({baseUrl: 'js'});
 
-define(['jquery', 'app/model', 'app/view'], function($, model, view) {
+define([
+    'jquery',
+    'app/models/Channel',
+    'app/models/UserCredentials',
+    'app/views/UserBar',
+    'app/views/MetadataPane',
+    'app/views/FollowerList',
+    'app/views/PostStream'
+], function(
+    $,
+    Channel,
+    UserCredentials,
+    UserBar,
+    MetadataPane,
+    FollowerList,
+    PostStream
+) {
     $('#channel-view').css('min-height', window.innerHeight + 'px');
 
     var channelArg = location.search.match(/[\?\&]channel=([^\&]*)/);
     var channelId = channelArg ? channelArg[1] : 'lounge@topics.buddycloud.org';
 
-    var credentials = new model.UserCredentials();
-    var channel = new model.Channel({
+    var credentials = new UserCredentials();
+    var channel = new Channel({
         channel: channelId,
         node: 'posts'
     });
 
-    var userBar = new view.UserBar({
+    var userBar = new UserBar({
         model: credentials
     });
 
-    var metaView = new view.ChannelMetadataView({
+    var metaView = new MetadataPane({
         model: channel
     });
 
-    var followersView = new view.ChannelFollowersView({
+    var followersView = new FollowerList({
         model: channel.followers
     });
 
-    var postsView = new view.ChannelPostsView({
+    var postsView = new PostStream({
         model: channel.posts,
         credentials: credentials
     });
