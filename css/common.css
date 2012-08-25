@@ -1,0 +1,90 @@
+/*
+ * Copyright 2012 Denis Washington <denisw@online.de>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+body {
+  margin: 0px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+  background-color: #efecdf;
+  color: #132B36;
+}
+
+a {
+  color: #E28C35;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.bordered {
+    border: 1px solid #fbf8ea;
+    box-shadow: 0 0 4px 0 #9c9a91;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+#toolbar {
+  width: 100%;
+  padding: 8px;
+  box-shadow: 0 0 8px 0 black;
+  color: white;
+  font-size: 80%;
+  background-color: #6993aa;
+  background-image: -webkit-linear-gradient(top, #6993aa, #2f5873);
+  background-image: -moz-linear-gradient(top, #6993aa, #2f5873);
+  background-image: -ms-linear-gradient(top, #6993aa, #2f5873);
+  background-image: -o-linear-gradient(top, #6993aa, #2f5873);
+  background-image: linear-gradient(to bottom, #6993aa, #2f5873);
+}
+
+#toolbar a {
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+#toolbar a:hover {
+  text-decoration: underline;
+}
+
+#main {
+  position: relative;
+  margin: 16px;
+}
+
+#content {
+  position: absolute;
+  margin: 0 16px 0 16px;
+  left: 20em;
+  right: 20em;
+}
+
+#left, #right {
+  position: absolute;
+  width: 20em;
+  box-sizing: border-box;
+}
+
+#left {
+  left: 0;
+}
+
+#right {
+  right: 0;
+}
+

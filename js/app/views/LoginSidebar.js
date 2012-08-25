@@ -15,20 +15,31 @@
  */
 
 define([
-    'underscore',
+    'jquery',
     'backbone',
-    'app/models/util'
-], function(_, Backbone, util) {
+    '../../../config',
+    'text!templates/LoginSidebar.html'
+], function($, Backbone, config, template) {
 
-    var ChannelFollowers = Backbone.Model.extend({
-        url: function() {
-            return util.apiUrl(this.channel.get('channel'), 'subscribers', 'posts');
+    var LoginSidebar = Backbone.View.extend({
+        tagName: 'aside',
+        className: 'login-sidebar bordered',
+        events: {
+            'click .login-button': '_login'
         },
 
-        followerIds: function() {
-            return _.keys(this.attributes);
+        initialize: function() {
+            this.model.bind('change', this.render, this);
+        },
+
+        render: function() {
+            this.$el.html(_.template(template));
+        },
+
+        _login: function() {
+            alert('login');
         }
     });
 
-    return ChannelFollowers;
+    return LoginSidebar;
 });

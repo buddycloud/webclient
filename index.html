@@ -3,14 +3,22 @@
   <head>
     <meta charset="UTF-8">
     <title>buddycloud demo client</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
     <script data-main="js/app/main" src="js/require.js"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="css/common.css">
+    <link rel="stylesheet" type="text/css" href="css/FollowerList.css">
+    <link rel="stylesheet" type="text/css" href="css/LoginSidebar.css">
+    <link rel="stylesheet" type="text/css" href="css/MetadataPane.css">
+    <link rel="stylesheet" type="text/css" href="css/PostStream.css">
   </head>
   <body>
     <header id="toolbar">
       <span class="powered">Powered by <a href="http://buddycloud.com/">buddycloud</a></span>
     </header>
-    <div id="channel-view">
+    <div id="main">
+      <div id="content" class="bordered"></div>
+      <div id="left"></div>
+      <div id="right"></div>
     </div>
   </body>
 </html>

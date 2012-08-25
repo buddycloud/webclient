@@ -16,52 +16,28 @@
 
 define([
     'jquery',
-    'backbone'
-], function($, Backbone) {
+    'backbone',
+    'app/models/Channel',
+    'app/models/util',
+    'app/views/util',
+    'text!templates/FollowerList.html'
+], function($, Backbone, Channel, modelUtil, viewUtil, template) {
 
     var FollowerList = Backbone.View.extend({
         tagName: 'aside',
-        id: 'channel-followers',
+        className: 'follower-list bordered',
 
         initialize: function() {
             this.model.bind('change', this.render, this);
-            this.render();
         },
 
         render: function() {
-            $(this.el).empty();
-            this._renderHeader();
-            this._renderFollowerList();
-        },
-
-        _renderHeader: function() {
-            var titleEl = $(document.createElement('h1')).text('Followers');
-            $(this.el).append(titleEl);
-        },
-
-        _renderFollowerList: function() {
-            var listEl = $(document.createElement('ul')).
-                addClass('followers');
-
-            var subscriptions = this.model.toJSON();
-            for (var jid in subscriptions) {
-                var parts = jid.split('@', 2);
-                var user = parts[0];
-                var domain = parts[1];
-
-                // FIXME: This is ugly and wrong
-                if (domain.indexOf('anon.') === 0) {
-                    continue;
-                }
-
-                var followerEl =  $(document.createElement('li')).
-                    append($(document.createElement('strong')).text(user)).
-                    append('@' + domain);
-
-                listEl.append(followerEl);
-            }
-
-            $(this.el).append(listEl);
+            var followerIds = this.model.followerIds();
+            this.$el.html(_.template(template, {
+                followerIds: followerIds,
+                avatarUrlFunc: modelUtil.avatarUrl
+            }));
+            viewUtil.setupAvatarFallback(this.$('img'), 'personal', 32);
         }
     });
 

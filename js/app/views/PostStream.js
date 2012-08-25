@@ -17,7 +17,10 @@
 define([
     'jquery',
     'backbone',
-], function($, Backbone, config) {
+    'app/models/util',
+    'app/views/util',
+    'text!templates/PostStream.html'
+], function($, Backbone, modelUtil, viewUtil, template) {
 
     // Thanks to John Gruber:
     // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
@@ -26,7 +29,7 @@ define([
 
     var PostStream = Backbone.View.extend({
         tagName: 'div',
-        id: 'channel-posts',
+        className: 'post-stream',
 
         initialize: function() {
             this.model.bind('reset', this._update, this);
@@ -36,21 +39,7 @@ define([
             this._credentials = this.options.credentials;
             this._credentials.bind('change', this._reset, this);
 
-            this.render();
-        },
-
-        _reset: function() {
-            this.model.reset();
-            this.model.fetch({
-                username: this._credentials.get('username'),
-                password: this._credentials.get('password'),
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
-
-            this._threads = null;
-            this.render();
+            this._renderSpinningIcon();
         },
 
         _update: function() {
@@ -76,11 +65,32 @@ define([
         },
 
         render: function() {
-            if (this._threads) {
-                this._renderThreads();
-            } else {
-                this._renderSpinningIcon();
-            }
+            this.$el.html(_.template(template, {
+                threads: this._threads,
+                avatarUrlFunc: modelUtil.avatarUrl
+            }));
+            this._setupAvatarFallbacks();
+        },
+
+        _setupAvatarFallbacks: function() {
+            var toplevelAvatars = this.$('.thread > header .avatar');
+            var commentAvatars = this.$('.comment .avatar');
+            viewUtil.setupAvatarFallback(toplevelAvatars, 'personal', 48);
+            viewUtil.setupAvatarFallback(commentAvatars, 'personal', 32);
+        },
+
+        _reset: function() {
+            this.model.reset();
+            this.model.fetch({
+                username: this._credentials.get('username'),
+                password: this._credentials.get('password'),
+                xhrFields: {
+                    withCredentials: true
+                }
+            });
+
+            this._threads = null;
+            this.render();
         },
 
         _renderSpinningIcon: function() {
@@ -89,7 +99,7 @@ define([
                      <img src="img/bc-icon.png">\
                    </div>');
 
-            $(this.el).html(icon);
+            this.$el.html(icon);
             this._startSpinning(icon);
         },
 
@@ -108,68 +118,6 @@ define([
 
             this.model.on('reset', function() {
                 clearTimeout(spin);
-            });
-        },
-
-        _renderThreads: function() {
-            $(this.el).empty();
-            var self = this;
-            _.each(this._threads, function(thread) {
-                self._renderThread(thread);
-            });
-        },
-
-        _renderThread: function(thread) {
-            var toplevel = _.first(thread);
-            var comments = _.rest(thread);
-
-            var threadEl = $(document.createElement('article'))
-                .addClass('thread');
-
-            this._renderPost(threadEl, toplevel, 'toplevel');
-            this._renderComments(threadEl, comments);
-            $(this.el).append(threadEl);
-        },
-
-        _renderPost: function(threadEl, post, type) {
-            var postEl = $(document.createElement('article')).addClass(type);
-            this._renderPostHeader(postEl, post);
-            this._renderPostBody(postEl, post);
-            threadEl.append(postEl);
-        },
-
-        _renderPostHeader: function(postEl, post) {
-            var authorId = post.get('author');
-            var authorName = authorId.split('@', 2)[0];
-
-            var authorNameEl = $(document.createElement('span')).
-                addClass('author-name').
-                text(authorName);
-            var authorIdEl = $(document.createElement('span')).
-                addClass('author-id').
-                text('(' + authorId + ')');
-            var headerEl = $(document.createElement('header')).
-                append(authorNameEl).
-                append(' ').
-                append(authorIdEl);
-
-            postEl.append(headerEl);
-        },
-
-        _renderPostBody: function(postEl, post) {
-            var bodyEl = $(document.createElement('pre')).
-                text(post.get('content'));
-
-            // Make all URLs proper links
-            bodyEl.html(bodyEl.text().replace(URL_REGEX, '<a href="$1">$1</a>'));
-
-            postEl.append(bodyEl);
-        },
-
-        _renderComments: function(threadEl, comments) {
-            var self = this;
-            _.each(comments, function(c) {
-                self._renderPost(threadEl, c, 'comment');
             });
         }
     });

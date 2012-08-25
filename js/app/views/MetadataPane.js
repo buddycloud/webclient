@@ -15,53 +15,38 @@
  */
 
 define([
-    'jquery',
+    'underscore',
     'backbone',
-], function($, Backbone) {
+    'app/views/util',
+    'text!templates/MetadataPane.html'
+], function(_, Backbone, util, template) {
 
     var MetadataPane = Backbone.View.extend({
         tagName: 'header',
+        className: 'metadata-pane',
 
         initialize: function() {
             this.model.bind('change', this.render, this);
         },
 
         render: function() {
-            $(this.el).empty();
-
-            var iconUrl = this.model.iconUrl() + '?maxwidth=64&maxheight=64';
-            var iconEl = $(document.createElement('img')).
-                addClass('channel-icon').
-                attr('width', '64').
-                attr('height', '64');
-
-            this._setupIconFallback(iconEl);
-            iconEl.attr('src', iconUrl)
-
-            var titleEl = $(document.createElement('h1')).
-                addClass('channel-title').
-                text(this.model.get('title') + ' ');
-
-            var nameEl = $(document.createElement('span')).
-                addClass('channel-name').
-                text('(' + this.model.get('channel') + ')');
-
-            var descriptionEl = $(document.createElement('p')).
-                addClass('channel-description').
-                text(this.model.get('description'));
-
-            $(this.el).append(iconEl);
-            $(this.el).append(titleEl.append(nameEl));
-            $(this.el).append(descriptionEl);
+            this.$el.html(_.template(template, {channel: this.model}));
+            util.setupAvatarFallback(
+                this.$('img'),
+                this.model.get('channel_type'),
+                64
+            );
         },
 
-        _setupIconFallback: function(iconEl) {
-            var self = this;
-            iconEl.one('error', function() {
-                if (self.model.get('channel_type') == 'personal')
-                    iconEl.attr('src', 'img/user-avatar-default64.png');
-                else
-                    iconEl.attr('src', 'img/topic-avatar-default64.png');
+        _setupAvatarFallback: function() {
+            var avatar = this.$('img');
+            var channelType = this.model.get('channel_type');
+            avatar.one('error', function() {
+                var fallbackUrl =
+                    (channelType == 'personal') ?
+                    'img/user-fallback-64px.png' :
+                    'img/topic-fallback-64px.png';
+                avatar.attr('src', fallbackUrl);
             });
         }
     });

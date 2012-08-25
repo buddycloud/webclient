@@ -14,57 +14,48 @@
  * limitations under the License.
  */
 
-requirejs.config({baseUrl: 'js'});
+requirejs.config({
+    baseUrl: 'js',
+    paths: {
+        'templates': '../templates'
+    }
+});
 
 define([
     'jquery',
     'app/models/Channel',
     'app/models/UserCredentials',
-    'app/views/UserBar',
-    'app/views/MetadataPane',
     'app/views/FollowerList',
+    'app/views/LoginSidebar',
+    'app/views/MetadataPane',
     'app/views/PostStream'
 ], function(
     $,
     Channel,
     UserCredentials,
-    UserBar,
-    MetadataPane,
     FollowerList,
+    LoginSidebar,
+    MetadataPane,
     PostStream
 ) {
-    $('#channel-view').css('min-height', window.innerHeight + 'px');
-
     var channelArg = location.search.match(/[\?\&]channel=([^\&]*)/);
     var channelId = channelArg ? channelArg[1] : 'lounge@topics.buddycloud.org';
 
-    var credentials = new UserCredentials();
+    var credentials = new UserCredentials({});
     var channel = new Channel({
         channel: channelId,
         node: 'posts'
     });
 
-    var userBar = new UserBar({
-        model: credentials
-    });
+    var metadataPane = new MetadataPane({model: channel});
+    var postStream = new PostStream({model: channel.posts, credentials: credentials});
+    var followerList = new FollowerList({model: channel.followers});
+    var loginSidebar = new LoginSidebar({model: credentials});
 
-    var metaView = new MetadataPane({
-        model: channel
-    });
-
-    var followersView = new FollowerList({
-        model: channel.followers
-    });
-
-    var postsView = new PostStream({
-        model: channel.posts,
-        credentials: credentials
-    });
-
-    $('#toolbar').append(userBar.el);
-    $('#channel-view').append(followersView.el);
-    $('#channel-view').append(metaView.el);
-    $('#channel-view').append(postsView.el);
+    $('#content').append(metadataPane.el);
+    $('#content').append(postStream.el);
+    $('#left').append(loginSidebar.el);
+    $('#right').append(followerList.el);
 
     channel.fetch();
     channel.followers.fetch();

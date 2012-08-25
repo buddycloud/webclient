@@ -1,0 +1,13 @@
+<h2>Followers</h2>
+<ul>
+  <% _.each(followerIds, function(id) { %>
+  <li>
+    <img class="avatar" src="<%= avatarUrlFunc(id)  %>">
+    <div class="text">
+      <span class="name"><%- id.split('@', 2)[0] %></span>
+      <br>
+      <span class="id"><%- id %></span>
+    </div>
+  </li>
+  <% }); %>
+</ul>

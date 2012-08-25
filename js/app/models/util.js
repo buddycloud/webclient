@@ -25,7 +25,12 @@ define([
         return components.join('/');
     }
 
+    function avatarUrl(channelId) {
+        return apiUrl(channelId, 'media', 'avatar');
+    }
+
     return {
-        apiUrl: apiUrl
+        apiUrl: apiUrl,
+        avatarUrl: avatarUrl
     };
 });
