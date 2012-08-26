@@ -40,6 +40,8 @@ a:hover {
 
 #toolbar {
   width: 100%;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   padding: 8px;
   box-shadow: 0 0 8px 0 black;
   color: white;
