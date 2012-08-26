@@ -36,6 +36,7 @@
 .follower-list li {
   clear: left;
   margin-bottom: 16px;
+  overflow-x: hidden;
   list-style: none;
 }
 
