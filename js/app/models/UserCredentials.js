@@ -22,48 +22,80 @@ define([
 ], function($, _, Backbone, util) {
 
     var UserCredentials = Backbone.Model.extend({
-        defaults: {
-            username: null,
-            password: null
+        anonymous: function() {
+            return !this.get('username');
         },
 
-        set: function(attributes, options) {
-            if (_.has(attributes, 'username') || _.has(attributes, 'password')) {
-                var username = attributes.username || this.get('username');
-                var password = attributes.password || this.get('password');
-                var onerror = options ? options.error : null;
-                this._checkCredentialsAndSet(username, password, onerror);
+        save: function(attributes) {
+            this.set(attributes);
+            this._setSessionStorage('username', this.get('username'));
+            this._setSessionStorage('password', this.get('password'));
+        },
+
+        _setSessionStorage: function(key, value) {
+            if (value) {
+                sessionStorage[key] = value;
             } else {
-                Backbone.Model.prototype.set.call(this, attributes, options);
+                delete sessionStorage[key];
             }
         },
 
-        _checkCredentialsAndSet: function(username, password, onerror) {
-            // We check the credentials by using them to GETthe API's root,
-            // which returns 204 (No Content) if the credentials are correct.
+        fetch: function(options) {
+            var username = sessionStorage.username;
+            var password = sessionStorage.password;
+            this._checkCredentialsAndSet(username, password, options);
+        },
+
+        _checkCredentialsAndSet: function(username, password, callbacks) {
             var self = this;
-            var xhr = $.ajax(util.apiUrl(''), {
-                method: 'GET',
-                username: username,
-                password: password,
+            this._checkCredentials(username, password, {
                 success: function() {
                     Backbone.Model.prototype.set.call(self, {
                         username: username,
                         password: password
                     });
+                    if (callbacks.success) {
+                        callbacks.success();
+                    }
                 },
-                error: function(__, xhr) {
-                    self._triggerSetError(onerror);
-                }
+                error: callbacks.error
             });
         },
 
-        _triggerSetError: function(onerror) {
-            if (onerror) {
-                onerror();
+        _checkCredentials: function(username, password, callbacks) {
+            if (!username) {
+                if (callbacks.success) {
+                    callbacks.success();
+                }
             } else {
-                this.trigger(error);
+                // We check the credentials by using them to GET the API's
+                // root, which returns a 2xx status code if the credentials
+                // are correct.
+                var xhr = $.ajax(util.apiUrl(''), {
+                    method: 'GET',
+                    beforeSend: this._setupAuthFunction(username, password),
+                    success: callbacks.success,
+                    error: callbacks.error
+                });
             }
+        },
+
+        fetchOptions: function() {
+            if (!this.anonymous()) {
+                var username = this.get('username');
+                var password = this.get('password');
+                return {
+                    beforeSend: this._setupAuthFunction(username, password)
+                };
+            }
+        },
+
+        _setupAuthFunction: function(username, password) {
+            return function(xhr) {
+                var auth = 'Basic ' + btoa(username + ':' + password);
+                xhr.setRequestHeader('Authorization', auth);
+                xhr.withCredentials = true;
+            };
         }
     });
 

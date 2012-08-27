@@ -35,10 +35,6 @@ define([
             this.model.bind('reset', this._update, this);
             this.model.bind('add', this._update, this);
             this.model.bind('remove', this._update, this);
-
-            this._credentials = this.options.credentials;
-            this._credentials.bind('change', this._reset, this);
-
             this._renderSpinningIcon();
         },
 
@@ -77,20 +73,6 @@ define([
             var commentAvatars = this.$('.comment .avatar');
             viewUtil.setupAvatarFallback(toplevelAvatars, 'personal', 48);
             viewUtil.setupAvatarFallback(commentAvatars, 'personal', 32);
-        },
-
-        _reset: function() {
-            this.model.reset();
-            this.model.fetch({
-                username: this._credentials.get('username'),
-                password: this._credentials.get('password'),
-                xhrFields: {
-                    withCredentials: true
-                }
-            });
-
-            this._threads = null;
-            this.render();
         },
 
         _renderSpinningIcon: function() {

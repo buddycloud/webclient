@@ -15,29 +15,25 @@
  */
 
 define([
-    'jquery',
     'backbone',
-    '../../../config',
     'text!templates/LoginSidebar.html'
-], function($, Backbone, config, template) {
+], function(Backbone, template) {
 
     var LoginSidebar = Backbone.View.extend({
         tagName: 'aside',
         className: 'login-sidebar bordered',
-        events: {
-            'click .login-button': '_login'
-        },
-
-        initialize: function() {
-            this.model.bind('change', this.render, this);
-        },
+        events: {'click input[type=submit]': '_login'},
 
         render: function() {
             this.$el.html(_.template(template));
         },
 
-        _login: function() {
-            alert('login');
+        _login: function(event) {
+            event.preventDefault();
+            var username = this.$('input[name=username]').attr('value');
+            var password = this.$('input[name=password]').attr('value');
+            this.model.save({username: username, password: password});
+            location.reload();
         }
     });
 

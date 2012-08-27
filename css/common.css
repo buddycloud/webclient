@@ -54,6 +54,12 @@ a:hover {
   background-image: linear-gradient(to bottom, #6993aa, #2f5873);
 }
 
+#toolbar:after {
+  display: block;
+  clear: right;
+  content: '';
+}
+
 #toolbar a {
   font-weight: bold;
   color: white;
@@ -62,6 +68,10 @@ a:hover {
 
 #toolbar a:hover {
   text-decoration: underline;
+}
+
+#toolbar-right {
+  float: right;
 }
 
 #main {
