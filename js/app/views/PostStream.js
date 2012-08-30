@@ -32,37 +32,15 @@ define([
         className: 'post-stream',
 
         initialize: function() {
-            this.model.bind('reset', this._update, this);
-            this.model.bind('add', this._update, this);
-            this.model.bind('remove', this._update, this);
+            this.model.bind('reset', this.render, this);
+            this.model.bind('add', this.render, this);
+            this.model.bind('remove', this.render, this);
             this._renderSpinningIcon();
-        },
-
-        _update: function() {
-            var threadsById = this.model.groupBy(function(item) {
-                return item.get('replyTo') || item.get('id');
-            });
-
-            this._threads = _.reduce(threadsById, function(t, posts, id) {
-                // The posts for each thread are sorted from newest to
-                // oldest, so the original post is at the end.
-                var toplevel = _.last(posts);
-
-                // Ensure that the thread really has a toplevel post.
-                // If it hasn't, it is imcomplete and we ignore it.
-                if (!toplevel.get('replyTo')) {
-                    t.push(posts.reverse());
-                }
-
-                return t;
-            }, []);
-
-            this.render();
         },
 
         render: function() {
             this.$el.html(_.template(template, {
-                threads: this._threads,
+                threads: this.model.threads(),
                 avatarUrlFunc: modelUtil.avatarUrl
             }));
             this._setupAvatarFallbacks();

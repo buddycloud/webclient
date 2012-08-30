@@ -22,11 +22,17 @@ define([
     var ChannelItem = Backbone.Model.extend({
     });
 
-    var ChannelNode = Backbone.Collection.extend({
+    return ChannelNode = Backbone.Collection.extend({
         model: ChannelItem,
 
+        constructor: function(channel, name) {
+            Backbone.Collection.call(this);
+            this.channel = channel;
+            this.name = name;
+        },
+
         url: function() {
-            return util.apiUrl(this.channel.get('channel'), 'content', this.name);
+            return util.apiUrl(this.channel, 'content', this.name);
         },
 
         fetch: function(options) {
@@ -36,6 +42,28 @@ define([
             options.headers = {'Accept': 'application/json'};
             Backbone.Collection.prototype.fetch.call(this, options);
         },
+
+        threads: function() {
+            var incompleteThreads = {};
+            var completeThreads = [];
+
+            // Note that the items returned by the buddycloud
+            // API are sorted from newest to oldest.
+            this.models.forEach(function(item) {
+                var threadId = item.get('replyTo') || item.get('id');
+                var thread = incompleteThreads[threadId];
+                if (!thread) {
+                    thread = incompleteThreads[threadId] = [];
+                }
+                thread.unshift(item);
+                if (!item.get('replyTo')) { // is top-level post
+                    completeThreads.push(thread);
+                    delete incompleteThreads[threadId];
+                }
+            });
+
+            return completeThreads;
+        }
     });
 
 

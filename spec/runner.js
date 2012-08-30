@@ -14,23 +14,17 @@
  * limitations under the License.
  */
 
+requirejs.config({
+    baseUrl: 'js',
+    paths: {
+        'config': '../spec/config',
+        'spec': '../spec'
+    }
+});
 
 define([
-    'config'
+    'spec/ChannelNode.spec'
 ], function(config) {
-
-    function apiUrl() {
-        var components = _.toArray(arguments);
-        components.unshift(config.baseUrl);
-        return components.join('/');
-    }
-
-    function avatarUrl(channelId) {
-        return apiUrl(channelId, 'media', 'avatar');
-    }
-
-    return {
-        apiUrl: apiUrl,
-        avatarUrl: avatarUrl
-    };
+    jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
+    jasmine.getEnv().execute();
 });

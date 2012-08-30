@@ -17,6 +17,7 @@
 requirejs.config({
     baseUrl: 'js',
     paths: {
+        'config': '../config',
         'templates': '../templates'
     }
 });
