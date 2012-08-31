@@ -24,6 +24,7 @@ requirejs.config({
 
 define([
     'spec/ChannelFollowers.spec',
+    'spec/ChannelMetadata.spec',
     'spec/ChannelNode.spec'
 ], function(config) {
     jasmine.getEnv().addReporter(new jasmine.HtmlReporter());

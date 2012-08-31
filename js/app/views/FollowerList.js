@@ -17,11 +17,10 @@
 define([
     'jquery',
     'backbone',
-    'app/models/Channel',
     'app/models/util',
     'app/views/util',
     'text!templates/FollowerList.html'
-], function($, Backbone, Channel, modelUtil, viewUtil, template) {
+], function($, Backbone, modelUtil, viewUtil, template) {
 
     var FollowerList = Backbone.View.extend({
         tagName: 'aside',

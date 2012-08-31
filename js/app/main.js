@@ -24,7 +24,9 @@ requirejs.config({
 
 define([
     'jquery',
-    'app/models/Channel',
+    'app/models/ChannelFollowers',
+    'app/models/ChannelMetadata',
+    'app/models/ChannelNode',
     'app/models/UserCredentials',
     'app/views/FollowerList',
     'app/views/LoginSidebar',
@@ -33,7 +35,9 @@ define([
     'app/views/UserMenu'
 ], function(
     $,
-    Channel,
+    ChannelFollowers,
+    ChannelMetadata,
+    ChannelNode,
     UserCredentials,
     FollowerList,
     LoginSidebar,
@@ -43,14 +47,13 @@ define([
 ) {
     function getRequestedChannel() {
         var channelParam = location.search.match(/[\?\&]channel=([^\&]*)/);
-        var channelId = channelParam ? channelParam[1] : 'lounge@topics.buddycloud.org';
-        return new Channel({channel: channelId});
+        return channelParam ? channelParam[1] : 'lounge@topics.buddycloud.org';
     }
 
-    function setupBasicUI(channel) {
-        var metadataPane = new MetadataPane({model: channel});
-        var postStream = new PostStream({model: channel.posts});
-        var followerList = new FollowerList({model: channel.followers});
+    function setupChannelUI(metadata, posts, followers) {
+        var metadataPane = new MetadataPane({model: metadata});
+        var postStream = new PostStream({model: posts});
+        var followerList = new FollowerList({model: followers});
         $('#content').append(metadataPane.el);
         $('#content').append(postStream.el);
         $('#right').append(followerList.el);
@@ -72,10 +75,10 @@ define([
         callback();
     }
 
-    function fetchChannel(credentials) {
-        channel.fetch(credentials.fetchOptions());
-        channel.posts.fetch(credentials.fetchOptions());
-        channel.followers.fetch(credentials.fetchOptions());
+    function fetchChannel(metadata, posts, followers, credentials) {
+        metadata.fetch(credentials.fetchOptions());
+        posts.fetch(credentials.fetchOptions());
+        followers.fetch(credentials.fetchOptions());
     }
 
     function fetchWithCredentials(model, credentials) {
@@ -91,7 +94,10 @@ define([
     }
 
     var channel = getRequestedChannel();
-    setupBasicUI(channel);
+    var metadata = new ChannelMetadata(channel);
+    var posts = new ChannelNode(channel, 'posts');
+    var followers = new ChannelFollowers(channel);
+    setupChannelUI(metadata, posts, followers);
 
     var credentials = new UserCredentials;
     credentials.fetch({
@@ -101,12 +107,12 @@ define([
             } else {
                 setupUserMenu(credentials);
             }
-            fetchChannel(credentials);
+            fetchChannel(metadata, posts, followers, credentials);
         },
         error: function(xhr) {
             alert('Login failed');
             setupLoginSidebar(credentials);
-            fetchChannel(credentials);
+            fetchChannel(metadata, posts, followers, credentials);
         }
     });
 
