@@ -50,70 +50,51 @@ define([
         return channelParam ? channelParam[1] : 'lounge@topics.buddycloud.org';
     }
 
-    function setupChannelUI(metadata, posts, followers) {
+    function setupChannelUI(metadata, posts, followers, credentials) {
         var metadataPane = new MetadataPane({model: metadata});
         var postStream = new PostStream({model: posts});
         var followerList = new FollowerList({model: followers});
         $('#content').append(metadataPane.el);
         $('#content').append(postStream.el);
         $('#right').append(followerList.el);
-    }
-
-    function setupUserMenu(credentials) {
-        var userMenu = new UserMenu({model: credentials});
-        $('#toolbar-right').append(userMenu.el);
-        userMenu.render();
-    }
-
-    function setupLoginSidebar(credentials) {
-        var sidebar = new LoginSidebar({model: credentials});
-        $('#left').append(sidebar.el);
-        sidebar.render();
-    }
-
-    function verifyCredentials(callback) {
-        callback();
-    }
-
-    function fetchChannel(metadata, posts, followers, credentials) {
-        metadata.fetch(credentials.fetchOptions());
-        posts.fetch(credentials.fetchOptions());
-        followers.fetch(credentials.fetchOptions());
-    }
-
-    function fetchWithCredentials(model, credentials) {
-        var options;
-        if (!credentials.anonymous()) {
-            options = {
-                username: username,
-                password: password,
-                xhrFields: {withCredentials: true}
-            };
+        if (credentials.username) {
+            var userMenu = new UserMenu({model: credentials});
+            $('#toolbar-right').append(userMenu.el);
+            userMenu.render();
+        } else {
+            var sidebar = new LoginSidebar({model: credentials});
+            $('#left').append(sidebar.el);
+            sidebar.render();
         }
-        model.fetch(options);
+    }
+
+    function fetch(model, credentials) {
+        model.fetch({
+            username: credentials.username,
+            password: credentials.password,
+            xhrFields: {withCredentials: this.username ? true : false}
+        });
     }
 
     var channel = getRequestedChannel();
     var metadata = new ChannelMetadata(channel);
     var posts = new ChannelNode(channel, 'posts');
     var followers = new ChannelFollowers(channel);
-    setupChannelUI(metadata, posts, followers);
 
     var credentials = new UserCredentials;
-    credentials.fetch({
-        success: function() {
-            if (credentials.anonymous()) {
-                setupLoginSidebar(credentials);
-            } else {
-                setupUserMenu(credentials);
-            }
-            fetchChannel(metadata, posts, followers, credentials);
-        },
-        error: function(xhr) {
-            alert('Login failed');
-            setupLoginSidebar(credentials);
-            fetchChannel(metadata, posts, followers, credentials);
-        }
-    });
-
+    credentials.fetch({success: function() {
+        credentials.on('accepted', function() {
+            setupChannelUI(metadata, posts, followers, credentials);
+            fetch(metadata, credentials);
+            fetch(posts, credentials);
+            fetch(followers, credentials);
+        });
+        credentials.on('rejected', function() {
+            alert('rejected');
+            alert('Authentication failed');
+            credentials.set({username: null, password: null});
+            credentials.verify();
+        });
+        credentials.verify();
+    }});
 });

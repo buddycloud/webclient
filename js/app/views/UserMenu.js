@@ -26,7 +26,7 @@ define([
         events: {'click .logout': '_logout'},
 
         render: function() {
-            var username = this.model.get('username');
+            var username = this.model.username;
             var avatar = modelUtil.avatarUrl(username);
             this.$el.html(_.template(template, {
                 username: username,
@@ -36,8 +36,7 @@ define([
         },
 
         _logout: function() {
-            this.model.unset('username');
-            this.model.unset('password');
+            this.model.set({username: null, password: null});
             this.model.save();
             location.reload();
         }

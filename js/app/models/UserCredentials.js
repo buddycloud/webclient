@@ -22,8 +22,20 @@ define([
 ], function($, _, Backbone, util) {
 
     var UserCredentials = Backbone.Model.extend({
-        anonymous: function() {
-            return !this.get('username');
+        fetch: function(options) {
+            this.set({
+                username: sessionStorage.username,
+                password: sessionStorage.password
+            });
+            if (options && options.success) {
+                options.success();
+            }
+        },
+
+        set: function() {
+            Backbone.Model.prototype.set.apply(this, arguments);
+            this.username = this.get('username');
+            this.password = this.get('password');
         },
 
         save: function(attributes) {
@@ -40,62 +52,29 @@ define([
             }
         },
 
-        fetch: function(options) {
-            var username = sessionStorage.username;
-            var password = sessionStorage.password;
-            this._checkCredentialsAndSet(username, password, options);
-        },
-
-        _checkCredentialsAndSet: function(username, password, callbacks) {
-            var self = this;
-            this._checkCredentials(username, password, {
-                success: function() {
-                    Backbone.Model.prototype.set.call(self, {
-                        username: username,
-                        password: password
-                    });
-                    if (callbacks.success) {
-                        callbacks.success();
-                    }
-                },
-                error: callbacks.error
-            });
-        },
-
-        _checkCredentials: function(username, password, callbacks) {
-            if (!username) {
-                if (callbacks.success) {
-                    callbacks.success();
-                }
+        verify: function() {
+            if (!this.username) {
+                this.trigger('accepted');
             } else {
-                // We check the credentials by using them to GET the API's
-                // root, which returns a 2xx status code if the credentials
-                // are correct.
-                var xhr = $.ajax(util.apiUrl(''), {
-                    method: 'GET',
-                    beforeSend: this._setupAuthFunction(username, password),
-                    success: callbacks.success,
-                    error: callbacks.error
-                });
+                this._sendVerificationRequest();
             }
         },
 
-        fetchOptions: function() {
-            if (!this.anonymous()) {
-                var username = this.get('username');
-                var password = this.get('password');
-                return {
-                    beforeSend: this._setupAuthFunction(username, password)
-                };
-            }
-        },
-
-        _setupAuthFunction: function(username, password) {
-            return function(xhr) {
-                var auth = 'Basic ' + btoa(username + ':' + password);
-                xhr.setRequestHeader('Authorization', auth);
-                xhr.withCredentials = true;
-            };
+        _sendVerificationRequest: function() {
+            var self = this;
+            var auth = 'Basic ' + btoa(this.username + ':' + this.password);
+            $.ajax({
+                url: util.apiUrl(''),
+                method: 'GET',
+                headers: {'Authorization': auth},
+                xhrFields: {withCredentials: true},
+                success: function() {
+                    self.trigger('accepted');
+                },
+                error: function() {
+                    self.trigger('rejected');
+                },
+            });
         }
     });
 
