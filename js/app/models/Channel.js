@@ -24,8 +24,7 @@ define([
     var Channel = Backbone.Model.extend({
         initialize: function() {
             this.posts = new ChannelNode(this.get('channel'), 'posts');
-            this.followers = new ChannelFollowers();
-            this.followers.channel = this;
+            this.followers = new ChannelFollowers(this.get('channel'));
         },
 
         url: function() {

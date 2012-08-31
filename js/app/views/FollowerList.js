@@ -32,7 +32,7 @@ define([
         },
 
         render: function() {
-            var followerIds = this.model.followerIds();
+            var followerIds = this.model.usernames();
             this.$el.html(_.template(template, {
                 followerIds: followerIds,
                 avatarUrlFunc: modelUtil.avatarUrl

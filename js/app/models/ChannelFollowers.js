@@ -21,11 +21,16 @@ define([
 ], function(_, Backbone, util) {
 
     var ChannelFollowers = Backbone.Model.extend({
-        url: function() {
-            return util.apiUrl(this.channel.get('channel'), 'subscribers', 'posts');
+        constructor: function(channel) {
+            Backbone.Model.call(this);
+            this.channel = channel;
         },
 
-        followerIds: function() {
+        url: function() {
+            return util.apiUrl(this.channel, 'subscribers', 'posts');
+        },
+
+        usernames: function() {
             return _.keys(this.attributes);
         }
     });
