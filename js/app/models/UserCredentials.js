@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-define([
-    'jquery',
-    'underscore',
-    'backbone',
-    'app/models/util'
-], function($, _, Backbone, util) {
+define(function(require) {
+    var $ = require('jquery');
+    var Backbone = require('backbone');
+    var util = require('app/models/util');
 
     var UserCredentials = Backbone.Model.extend({
         fetch: function(options) {

@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-define([
-    'jquery',
-    'backbone',
-    'app/models/util',
-    'app/views/util',
-    'text!templates/FollowerList.html'
-], function($, Backbone, modelUtil, viewUtil, template) {
+define(function(require) {
+    var _ = require('underscore');
+    var Backbone = require('backbone');
+    var modelUtil = require('app/models/util');
+    var template = require('text!templates/FollowerList.html');
+    var viewUtil = require('app/views/util');
 
     var FollowerList = Backbone.View.extend({
         tagName: 'aside',

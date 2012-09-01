@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-define([
-    'underscore',
-    'backbone',
-    'app/models/util'
-], function(_, Backbone, util) {
+define(function(require) {
+    var _ = require('underscore');
+    var Backbone = require('backbone');
+    var util = require('app/models/util');
 
     var ChannelFollowers = Backbone.Model.extend({
         constructor: function(channel) {

@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-define([
-    'underscore',
-    'backbone',
-    'app/views/util',
-    'text!templates/MetadataPane.html'
-], function(_, Backbone, util, template) {
+define(function(require) {
+    var _ = require('underscore');
+    var Backbone = require('backbone');
+    var template = require('text!templates/MetadataPane.html');
+    var util = require('app/views/util');
 
     var MetadataPane = Backbone.View.extend({
         tagName: 'header',

@@ -15,9 +15,8 @@
  */
 
 
-define([
-    'config'
-], function(config) {
+define(function(require) {
+    var config = require('config');
 
     function apiUrl() {
         var components = _.toArray(arguments);

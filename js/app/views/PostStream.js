@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-define([
-    'jquery',
-    'backbone',
-    'app/models/util',
-    'app/views/util',
-    'text!templates/PostStream.html'
-], function($, Backbone, modelUtil, viewUtil, template) {
+define(function(require) {
+    var $ = require('jquery');
+    var _ = require('underscore');
+    var Backbone = require('backbone');
+    var modelUtil = require('app/models/util');
+    var template = require('text!templates/PostStream.html');
+    var viewUtil = require('app/views/util');
 
     // Thanks to John Gruber:
     // http://daringfireball.net/2010/07/improved_regex_for_matching_urls

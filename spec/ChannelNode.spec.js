@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-define([
-    'app/models/ChannelNode'
-], function(ChannelNode) {
+define(function(require) {
+    var ChannelNode = require('app/models/ChannelNode');
 
     describe('ChannelNode', function() {
         var node;

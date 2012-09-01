@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-define([
-    'backbone',
-    'app/models/util',
-    'app/views/util',
-    'text!templates/UserMenu.html'
-], function(Backbone, modelUtil, viewUtil, template) {
+define(function(require) {
+    var _ = require('underscore');
+    var Backbone = require('backbone');
+    var template = require('text!templates/UserMenu.html');
+    var util = require('app/views/util');
 
     var UserMenu = Backbone.View.extend({
         className: 'user-menu',

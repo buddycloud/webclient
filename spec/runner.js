@@ -22,12 +22,12 @@ requirejs.config({
     }
 });
 
-define([
-    'spec/ChannelFollowers.spec',
-    'spec/ChannelMetadata.spec',
-    'spec/ChannelNode.spec',
-    'spec/UserCredentials.spec'
-], function(config) {
+define(function(require) {
+    require('spec/ChannelFollowers.spec');
+    require('spec/ChannelMetadata.spec');
+    require('spec/ChannelNode.spec');
+    require('spec/UserCredentials.spec');
+
     jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
     jasmine.getEnv().execute();
 });

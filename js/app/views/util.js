@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-define([
-    'jquery',
-], function($) {
+define(function(require) {
+    var $ = require('jquery');
 
     function setupAvatarFallback(avatarElements, type, size) {
         var fallback = 'img/fallback-' + type + '-' + size + 'px.png';

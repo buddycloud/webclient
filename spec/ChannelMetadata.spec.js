@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-define([
-    'app/models/ChannelMetadata'
-], function(ChannelMetadata) {
+define(function(require) {
+    var ChannelMetadata = require('app/models/ChannelMetadata');
 
     describe('ChannelMetadata', function() {
         var metadata;

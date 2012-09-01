@@ -22,29 +22,18 @@ requirejs.config({
     }
 });
 
-define([
-    'jquery',
-    'app/models/ChannelFollowers',
-    'app/models/ChannelMetadata',
-    'app/models/ChannelNode',
-    'app/models/UserCredentials',
-    'app/views/FollowerList',
-    'app/views/LoginSidebar',
-    'app/views/MetadataPane',
-    'app/views/PostStream',
-    'app/views/UserMenu'
-], function(
-    $,
-    ChannelFollowers,
-    ChannelMetadata,
-    ChannelNode,
-    UserCredentials,
-    FollowerList,
-    LoginSidebar,
-    MetadataPane,
-    PostStream,
-    UserMenu
-) {
+define(function(require) {
+    var $ = require('jquery');
+    var ChannelFollowers = require('app/models/ChannelFollowers');
+    var ChannelMetadata = require('app/models/ChannelMetadata');
+    var ChannelNode = require('app/models/ChannelNode');
+    var FollowerList = require('app/views/FollowerList');
+    var LoginSidebar = require('app/views/LoginSidebar');
+    var MetadataPane = require('app/views/MetadataPane');
+    var PostStream = require('app/views/PostStream');
+    var UserCredentials = require('app/models/UserCredentials');
+    var UserMenu = require('app/views/UserMenu');
+
     function getRequestedChannel() {
         var channelParam = location.search.match(/[\?\&]channel=([^\&]*)/);
         return channelParam ? channelParam[1] : 'lounge@topics.buddycloud.org';

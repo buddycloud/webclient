@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-define([
-    'app/models/UserCredentials'
-], function(UserCredentials) {
+define(function(require) {
+    var UserCredentials = require('app/models/UserCredentials');
 
     describe('UserCredentials', function() {
         var realSessionStorage = sessionStorage;

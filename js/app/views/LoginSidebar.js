@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-define([
-    'backbone',
-    'text!templates/LoginSidebar.html'
-], function(Backbone, template) {
+define(function(require) {
+    var _ = require('underscore');
+    var Backbone = require('backbone');
+    var template = require('text!templates/LoginSidebar.html');
 
     var LoginSidebar = Backbone.View.extend({
         tagName: 'aside',

@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-define([
-    'backbone',
-    'app/models/util'
-], function(Backbone, util) {
+define(function(require) {
+    var Backbone = require('backbone');
+    var util = require('app/models/util');
 
     var ChannelItem = Backbone.Model.extend({
     });

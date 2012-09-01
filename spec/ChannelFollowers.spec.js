@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-define([
-    'app/models/ChannelFollowers'
-], function(ChannelFollowers) {
+define(function(require) {
+    var ChannelFollowers = require('app/models/ChannelFollowers');
 
     describe('ChannelFollowers', function() {
         var followers;
