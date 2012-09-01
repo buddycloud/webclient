@@ -26,7 +26,7 @@ define(function(require) {
   var $ = require('jquery');
   var ChannelFollowers = require('app/models/ChannelFollowers');
   var ChannelMetadata = require('app/models/ChannelMetadata');
-  var ChannelNode = require('app/models/ChannelNode');
+  var ChannelPosts = require('app/models/ChannelPosts');
   var FollowerList = require('app/views/FollowerList');
   var LoginSidebar = require('app/views/LoginSidebar');
   var MetadataPane = require('app/views/MetadataPane');
@@ -67,7 +67,7 @@ define(function(require) {
 
   var channel = getRequestedChannel();
   var metadata = new ChannelMetadata(channel);
-  var posts = new ChannelNode(channel, 'posts');
+  var posts = new ChannelPosts(channel);
   var followers = new ChannelFollowers(channel);
 
   var credentials = new UserCredentials;

@@ -18,20 +18,14 @@ define(function(require) {
   var Backbone = require('backbone');
   var util = require('app/models/util');
 
-  var ChannelItem = Backbone.Model.extend({
-  });
-
-  return ChannelNode = Backbone.Collection.extend({
-    model: ChannelItem,
-
-    constructor: function(channel, name) {
+  var ChannelPosts = Backbone.Collection.extend({
+    constructor: function(channel) {
       Backbone.Collection.call(this);
       this.channel = channel;
-      this.name = name;
     },
 
     url: function() {
-      return util.apiUrl(this.channel, 'content', this.name);
+      return util.apiUrl(this.channel, 'content', 'posts');
     },
 
     fetch: function(options) {
@@ -42,7 +36,7 @@ define(function(require) {
       Backbone.Collection.prototype.fetch.call(this, options);
     },
 
-    threads: function() {
+    byThread: function() {
       var incompleteThreads = {};
       var completeThreads = [];
 
@@ -65,6 +59,5 @@ define(function(require) {
     }
   });
 
-
-  return ChannelNode;
+  return ChannelPosts;
 });

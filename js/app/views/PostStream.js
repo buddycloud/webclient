@@ -39,7 +39,7 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template, {
-        threads: this.model.threads(),
+        threads: this.model.byThread(),
         avatarUrlFunc: modelUtil.avatarUrl
       }));
       this._setupAvatarFallbacks();

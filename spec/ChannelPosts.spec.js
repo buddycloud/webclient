@@ -15,13 +15,13 @@
  */
 
 define(function(require) {
-  var ChannelNode = require('app/models/ChannelNode');
+  var ChannelPosts = require('app/models/ChannelPosts');
 
-  describe('ChannelNode', function() {
+  describe('ChannelPosts', function() {
     var node;
 
     beforeEach(function() {
-      node = new ChannelNode('alice@example.com', 'posts');
+      node = new ChannelPosts('alice@example.com');
       node.reset([{
         'id': '6',
         'author': 'alice@example.com',
@@ -60,10 +60,9 @@ define(function(require) {
 
     it('should initialize correctly', function() {
       expect(node.channel).toBe('alice@example.com');
-      expect(node.name).toBe('posts');
     });
 
-    it('should have URL /<channel>/content/<node>', function() {
+    it('should have URL /<channel>/content/posts', function() {
       var url = 'https://example.com/alice@example.com/content/posts';
       expect(node.url()).toBe(url);
     });
@@ -78,21 +77,21 @@ define(function(require) {
       });
     });
 
-    describe('threads()', function() {
+    describe('byThread()', function() {
       var threads;
 
       beforeEach(function() {
-        threads = node.threads();
+        threads = node.byThread();
       });
 
-      it('should return an array for each post thread', function() {
+      it('should return an array for each discussion thread', function() {
         expect(threads.length).toBe(3);
         expect(threads[0] instanceof Array).toBeTruthy();
         expect(threads[1] instanceof Array).toBeTruthy();
         expect(threads[2] instanceof Array).toBeTruthy();
       });
 
-      it('should return no double posts', function() {
+      it('should not return double posts', function() {
         var sum = 0;
         sum += threads[0].length;
         sum += threads[1].length;
@@ -114,7 +113,7 @@ define(function(require) {
         expect(date2).toBeGreaterThan(date3);
       });
 
-      it('should sort each thread from oldest to newest', function() {
+      it('should sort each thread\'s posts from oldest to newest', function() {
         var date21 = threads[1][0].get('updated');
         var date22 = threads[1][1].get('updated');
         var date31 = threads[2][0].get('updated');
