@@ -27,6 +27,7 @@ define(function(require) {
   var ChannelFollowers = require('app/models/ChannelFollowers');
   var ChannelMetadata = require('app/models/ChannelMetadata');
   var ChannelPosts = require('app/models/ChannelPosts');
+  var config = require('config');
   var FollowerList = require('app/views/FollowerList');
   var LoginSidebar = require('app/views/LoginSidebar');
   var MetadataPane = require('app/views/MetadataPane');
@@ -34,18 +35,41 @@ define(function(require) {
   var UserCredentials = require('app/models/UserCredentials');
   var UserMenu = require('app/views/UserMenu');
 
+  function initialize() {
+    var channel = getRequestedChannel();
+    var metadata = new ChannelMetadata(channel);
+    var posts = new ChannelPosts(channel);
+    var followers = new ChannelFollowers(channel);
+    getUserCredentials(function(credentials) {
+      setupChannelUI(metadata, posts, followers, credentials);
+      fetch(metadata, credentials);
+      fetch(posts, credentials);
+      fetch(followers, credentials);
+    });
+  }
+
   function getRequestedChannel() {
-    var channelParam = location.search.match(/[\?\&]channel=([^\&]*)/);
-    return channelParam ? channelParam[1] : 'lounge@topics.buddycloud.org';
+    return document.location.search.slice(1) || config.defaultChannel;
+  }
+
+  function getUserCredentials(callback) {
+    var credentials = new UserCredentials;
+    credentials.fetch();
+    credentials.on('accepted', function() {
+      callback(credentials);
+    });
+    credentials.on('rejected', function() {
+      alert('Authentication failed');
+      credentials.set({username: null, password: null});
+      credentials.verify();
+    });
+    credentials.verify();
   }
 
   function setupChannelUI(metadata, posts, followers, credentials) {
-    var metadataPane = new MetadataPane({model: metadata});
-    var postStream = new PostStream({model: posts});
-    var followerList = new FollowerList({model: followers});
-    $('#content').append(metadataPane.el);
-    $('#content').append(postStream.el);
-    $('#right').append(followerList.el);
+    $('#content').append(new MetadataPane({model: metadata}).el);
+    $('#content').append(new PostStream({model: posts}).el);
+    $('#right').append(new FollowerList({model: followers}).el);
     if (credentials.username) {
       var userMenu = new UserMenu({model: credentials});
       $('#toolbar-right').append(userMenu.el);
@@ -65,25 +89,5 @@ define(function(require) {
     });
   }
 
-  var channel = getRequestedChannel();
-  var metadata = new ChannelMetadata(channel);
-  var posts = new ChannelPosts(channel);
-  var followers = new ChannelFollowers(channel);
-
-  var credentials = new UserCredentials;
-  credentials.fetch({success: function() {
-    credentials.on('accepted', function() {
-      setupChannelUI(metadata, posts, followers, credentials);
-      fetch(metadata, credentials);
-      fetch(posts, credentials);
-      fetch(followers, credentials);
-    });
-    credentials.on('rejected', function() {
-      alert('rejected');
-      alert('Authentication failed');
-      credentials.set({username: null, password: null});
-      credentials.verify();
-    });
-    credentials.verify();
-  }});
+  initialize();
 });
