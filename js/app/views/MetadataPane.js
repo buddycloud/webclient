@@ -26,10 +26,13 @@ define(function(require) {
 
     initialize: function() {
       this.model.bind('change', this.render, this);
+      this.model.fetch();
     },
 
     render: function() {
-      this.$el.html(_.template(template, {channel: this.model}));
+      console.error('render:');
+      console.error(this);
+      this.$el.html(_.template(template, {metadata: this.model}));
       util.setupAvatarFallback(
         this.$('img'),
         this.model.get('channel_type'),

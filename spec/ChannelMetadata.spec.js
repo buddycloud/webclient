@@ -41,7 +41,7 @@ define(function(require) {
     });
 
     describe('set()', function() {
-      it('should set metadata attributes', function() {
+      it('should set attributes directly on object', function() {
         metadata.set({
           title: 'Alice',
           description: 'Your favorite persona',
@@ -49,11 +49,28 @@ define(function(require) {
           channel_type: 'personal',
           access_model: 'authorize'
         });
+        expect(metadata.title).toBe('Alice');
         expect(metadata.description).toBe('Your favorite persona');
         expect(metadata.creationDate).toBe('2012-01-01');
         expect(metadata.channelType).toBe('personal');
         expect(metadata.accessModel).toBe('authorize');
       });
+
+      it('should set attributes before triggering "change"', function() {
+        spyOn(metadata, 'trigger').andCallThrough();
+        metadata.on('change:title', function() {
+          expect(metadata.title).toBe('Alice');
+        });
+        metadata.set({
+          title: 'Alice',
+          description: 'Your favorite persona',
+          creation_date: '2012-01-01',
+          channel_type: 'personal',
+          access_model: 'authorize'
+        });
+        expect(metadata.trigger).toHaveBeenCalled();
+      });
+
     });
   });
 

@@ -1,6 +1,7 @@
-<img alt="" src="<%= channel.avatarUrl() %>">
+<img alt="" src="<%= metadata.avatarUrl() %>">
 <h1>
-  <%- channel.get('title') %>
-  <span class="id">(<%- channel.get('channel') %>)</span>
+  <%- metadata.title %>
+  <span class="id">(<%- metadata.channel %>)</span>
 </h1>
-<p class="description"><%- channel.get('description') %></p>
+<p class="description"><%- metadata.description %></p>
+
