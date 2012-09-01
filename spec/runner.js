@@ -15,19 +15,19 @@
  */
 
 requirejs.config({
-    baseUrl: 'js',
-    paths: {
-        'config': '../spec/config',
-        'spec': '../spec'
-    }
+  baseUrl: 'js',
+  paths: {
+    'config': '../spec/config',
+    'spec': '../spec'
+  }
 });
 
 define(function(require) {
-    require('spec/ChannelFollowers.spec');
-    require('spec/ChannelMetadata.spec');
-    require('spec/ChannelNode.spec');
-    require('spec/UserCredentials.spec');
+  require('spec/ChannelFollowers.spec');
+  require('spec/ChannelMetadata.spec');
+  require('spec/ChannelNode.spec');
+  require('spec/UserCredentials.spec');
 
-    jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
-    jasmine.getEnv().execute();
+  jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
+  jasmine.getEnv().execute();
 });

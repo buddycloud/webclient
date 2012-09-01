@@ -1,3 +1,3 @@
 define({
-   baseUrl: 'https://example.com'
+  baseUrl: 'https://example.com'
 });

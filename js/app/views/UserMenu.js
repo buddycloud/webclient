@@ -15,31 +15,31 @@
  */
 
 define(function(require) {
-    var _ = require('underscore');
-    var Backbone = require('backbone');
-    var template = require('text!templates/UserMenu.html');
-    var util = require('app/views/util');
+  var _ = require('underscore');
+  var Backbone = require('backbone');
+  var template = require('text!templates/UserMenu.html');
+  var util = require('app/views/util');
 
-    var UserMenu = Backbone.View.extend({
-        className: 'user-menu',
-        events: {'click .logout': '_logout'},
+  var UserMenu = Backbone.View.extend({
+    className: 'user-menu',
+    events: {'click .logout': '_logout'},
 
-        render: function() {
-            var username = this.model.username;
-            var avatar = modelUtil.avatarUrl(username);
-            this.$el.html(_.template(template, {
-                username: username,
-                avatar: avatar
-            }));
-            viewUtil.setupAvatarFallback(this.$('img'), 'personal', 32);
-        },
+    render: function() {
+      var username = this.model.username;
+      var avatar = modelUtil.avatarUrl(username);
+      this.$el.html(_.template(template, {
+        username: username,
+        avatar: avatar
+      }));
+      viewUtil.setupAvatarFallback(this.$('img'), 'personal', 32);
+    },
 
-        _logout: function() {
-            this.model.set({username: null, password: null});
-            this.model.save();
-            location.reload();
-        }
-    });
+    _logout: function() {
+      this.model.set({username: null, password: null});
+      this.model.save();
+      location.reload();
+    }
+  });
 
-    return UserMenu;
+  return UserMenu;
 });

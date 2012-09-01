@@ -15,40 +15,40 @@
  */
 
 define(function(require) {
-    var _ = require('underscore');
-    var Backbone = require('backbone');
-    var template = require('text!templates/MetadataPane.html');
-    var util = require('app/views/util');
+  var _ = require('underscore');
+  var Backbone = require('backbone');
+  var template = require('text!templates/MetadataPane.html');
+  var util = require('app/views/util');
 
-    var MetadataPane = Backbone.View.extend({
-        tagName: 'header',
-        className: 'metadata-pane',
+  var MetadataPane = Backbone.View.extend({
+    tagName: 'header',
+    className: 'metadata-pane',
 
-        initialize: function() {
-            this.model.bind('change', this.render, this);
-        },
+    initialize: function() {
+      this.model.bind('change', this.render, this);
+    },
 
-        render: function() {
-            this.$el.html(_.template(template, {channel: this.model}));
-            util.setupAvatarFallback(
-                this.$('img'),
-                this.model.get('channel_type'),
-                64
-            );
-        },
+    render: function() {
+      this.$el.html(_.template(template, {channel: this.model}));
+      util.setupAvatarFallback(
+        this.$('img'),
+        this.model.get('channel_type'),
+        64
+      );
+    },
 
-        _setupAvatarFallback: function() {
-            var avatar = this.$('img');
-            var channelType = this.model.get('channel_type');
-            avatar.one('error', function() {
-                var fallbackUrl =
-                    (channelType == 'personal') ?
-                    'img/user-fallback-64px.png' :
-                    'img/topic-fallback-64px.png';
-                avatar.attr('src', fallbackUrl);
-            });
-        }
-    });
+    _setupAvatarFallback: function() {
+      var avatar = this.$('img');
+      var channelType = this.model.get('channel_type');
+      avatar.one('error', function() {
+        var fallbackUrl =
+          (channelType == 'personal') ?
+          'img/user-fallback-64px.png' :
+          'img/topic-fallback-64px.png';
+        avatar.attr('src', fallbackUrl);
+      });
+    }
+  });
 
-    return MetadataPane;
+  return MetadataPane;
 });

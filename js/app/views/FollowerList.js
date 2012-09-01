@@ -15,29 +15,29 @@
  */
 
 define(function(require) {
-    var _ = require('underscore');
-    var Backbone = require('backbone');
-    var modelUtil = require('app/models/util');
-    var template = require('text!templates/FollowerList.html');
-    var viewUtil = require('app/views/util');
+  var _ = require('underscore');
+  var Backbone = require('backbone');
+  var modelUtil = require('app/models/util');
+  var template = require('text!templates/FollowerList.html');
+  var viewUtil = require('app/views/util');
 
-    var FollowerList = Backbone.View.extend({
-        tagName: 'aside',
-        className: 'follower-list bordered',
+  var FollowerList = Backbone.View.extend({
+    tagName: 'aside',
+    className: 'follower-list bordered',
 
-        initialize: function() {
-            this.model.bind('change', this.render, this);
-        },
+    initialize: function() {
+      this.model.bind('change', this.render, this);
+    },
 
-        render: function() {
-            var followerIds = this.model.usernames();
-            this.$el.html(_.template(template, {
-                followerIds: followerIds,
-                avatarUrlFunc: modelUtil.avatarUrl
-            }));
-            viewUtil.setupAvatarFallback(this.$('img'), 'personal', 32);
-        }
-    });
+    render: function() {
+      var followerIds = this.model.usernames();
+      this.$el.html(_.template(template, {
+        followerIds: followerIds,
+        avatarUrlFunc: modelUtil.avatarUrl
+      }));
+      viewUtil.setupAvatarFallback(this.$('img'), 'personal', 32);
+    }
+  });
 
-    return FollowerList;
+  return FollowerList;
 });

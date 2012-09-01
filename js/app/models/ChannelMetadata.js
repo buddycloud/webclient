@@ -15,32 +15,32 @@
  */
 
 define(function(require) {
-    var Backbone = require('backbone');
-    var util = require('app/models/util');
+  var Backbone = require('backbone');
+  var util = require('app/models/util');
 
-    var ChannelMetadata = Backbone.Model.extend({
-        constructor: function(channel) {
-            Backbone.Model.call(this);
-            this.channel = channel;
-        },
+  var ChannelMetadata = Backbone.Model.extend({
+    constructor: function(channel) {
+      Backbone.Model.call(this);
+      this.channel = channel;
+    },
 
-        url: function() {
-            return util.apiUrl(this.channel, 'metadata', 'posts');
-        },
+    url: function() {
+      return util.apiUrl(this.channel, 'metadata', 'posts');
+    },
 
-        avatarUrl: function() {
-            return util.apiUrl(this.channel, 'media', 'avatar');
-        },
+    avatarUrl: function() {
+      return util.apiUrl(this.channel, 'media', 'avatar');
+    },
 
-        set: function() {
-            Backbone.Model.prototype.set.apply(this, arguments);
-            this.title = this.get('title');
-            this.description = this.get('description');
-            this.creationDate = this.get('creation_date');
-            this.channelType = this.get('channel_type');
-            this.accessModel = this.get('access_model');
-        },
-    });
+    set: function() {
+      Backbone.Model.prototype.set.apply(this, arguments);
+      this.title = this.get('title');
+      this.description = this.get('description');
+      this.creationDate = this.get('creation_date');
+      this.channelType = this.get('channel_type');
+      this.accessModel = this.get('access_model');
+    },
+  });
 
-    return ChannelMetadata;
+  return ChannelMetadata;
 });

@@ -15,72 +15,69 @@
  */
 
 define(function(require) {
-    var $ = require('jquery');
-    var _ = require('underscore');
-    var Backbone = require('backbone');
-    var modelUtil = require('app/models/util');
-    var template = require('text!templates/PostStream.html');
-    var viewUtil = require('app/views/util');
+  var $ = require('jquery');
+  var _ = require('underscore');
+  var Backbone = require('backbone');
+  var modelUtil = require('app/models/util');
+  var template = require('text!templates/PostStream.html');
+  var viewUtil = require('app/views/util');
 
-    // Thanks to John Gruber:
-    // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-    var URL_REGEX =
-        /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/;
+  // Thanks to John Gruber:
+  // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+  var URL_REGEX = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/;
 
-    var PostStream = Backbone.View.extend({
-        tagName: 'div',
-        className: 'post-stream',
+  var PostStream = Backbone.View.extend({
+    tagName: 'div',
+    className: 'post-stream',
 
-        initialize: function() {
-            this.model.bind('reset', this.render, this);
-            this.model.bind('add', this.render, this);
-            this.model.bind('remove', this.render, this);
-            this._renderSpinningIcon();
-        },
+    initialize: function() {
+      this.model.bind('reset', this.render, this);
+      this.model.bind('add', this.render, this);
+      this.model.bind('remove', this.render, this);
+      this._renderSpinningIcon();
+    },
 
-        render: function() {
-            this.$el.html(_.template(template, {
-                threads: this.model.threads(),
-                avatarUrlFunc: modelUtil.avatarUrl
-            }));
-            this._setupAvatarFallbacks();
-        },
+    render: function() {
+      this.$el.html(_.template(template, {
+        threads: this.model.threads(),
+        avatarUrlFunc: modelUtil.avatarUrl
+      }));
+      this._setupAvatarFallbacks();
+    },
 
-        _setupAvatarFallbacks: function() {
-            var toplevelAvatars = this.$('.thread > header .avatar');
-            var commentAvatars = this.$('.comment .avatar');
-            viewUtil.setupAvatarFallback(toplevelAvatars, 'personal', 48);
-            viewUtil.setupAvatarFallback(commentAvatars, 'personal', 32);
-        },
+    _setupAvatarFallbacks: function() {
+      var toplevelAvatars = this.$('.thread > header .avatar');
+      var commentAvatars = this.$('.comment .avatar');
+      viewUtil.setupAvatarFallback(toplevelAvatars, 'personal', 48);
+      viewUtil.setupAvatarFallback(commentAvatars, 'personal', 32);
+    },
 
-        _renderSpinningIcon: function() {
-            var icon =
-                $('<div class="loading">\
-                     <img src="img/bc-icon.png">\
-                   </div>');
+    _renderSpinningIcon: function() {
+      var icon =
+        $('<div class="loading"><img src="img/bc-icon.png"></div>');
 
-            this.$el.html(icon);
-            this._startSpinning(icon);
-        },
+      this.$el.html(icon);
+      this._startSpinning(icon);
+    },
 
-        _startSpinning: function(icon) {
-            var rotation = 0;
+    _startSpinning: function(icon) {
+      var rotation = 0;
 
-            var spin = setInterval(function() {
-                var rotate = 'rotate(' + rotation + 'deg)';
-                icon.find('img').css({
-                    'transform': rotate,
-                    '-moz-transform': rotate,
-                    '-webkit-transform': rotate
-                });
-                rotation = (rotation + 10) % 360;
-            }, 50);
+      var spin = setInterval(function() {
+        var rotate = 'rotate(' + rotation + 'deg)';
+        icon.find('img').css({
+          'transform': rotate,
+          '-moz-transform': rotate,
+          '-webkit-transform': rotate
+        });
+        rotation = (rotation + 10) % 360;
+      }, 50);
 
-            this.model.on('reset', function() {
-                clearTimeout(spin);
-            });
-        }
-    });
+      this.model.on('reset', function() {
+        clearTimeout(spin);
+      });
+    }
+  });
 
-    return PostStream;
+  return PostStream;
 });

@@ -15,56 +15,56 @@
  */
 
 define(function(require) {
-    var Backbone = require('backbone');
-    var util = require('app/models/util');
+  var Backbone = require('backbone');
+  var util = require('app/models/util');
 
-    var ChannelItem = Backbone.Model.extend({
-    });
+  var ChannelItem = Backbone.Model.extend({
+  });
 
-    return ChannelNode = Backbone.Collection.extend({
-        model: ChannelItem,
+  return ChannelNode = Backbone.Collection.extend({
+    model: ChannelItem,
 
-        constructor: function(channel, name) {
-            Backbone.Collection.call(this);
-            this.channel = channel;
-            this.name = name;
-        },
+    constructor: function(channel, name) {
+      Backbone.Collection.call(this);
+      this.channel = channel;
+      this.name = name;
+    },
 
-        url: function() {
-            return util.apiUrl(this.channel, 'content', this.name);
-        },
+    url: function() {
+      return util.apiUrl(this.channel, 'content', this.name);
+    },
 
-        fetch: function(options) {
-            // Explicitly set "Accept: application/json" so that we get the
-            // JSON representation instead of an Atom feed.
-            options = options || {};
-            options.headers = {'Accept': 'application/json'};
-            Backbone.Collection.prototype.fetch.call(this, options);
-        },
+    fetch: function(options) {
+      // Explicitly set "Accept: application/json" so that we get the
+      // JSON representation instead of an Atom feed.
+      options = options || {};
+      options.headers = {'Accept': 'application/json'};
+      Backbone.Collection.prototype.fetch.call(this, options);
+    },
 
-        threads: function() {
-            var incompleteThreads = {};
-            var completeThreads = [];
+    threads: function() {
+      var incompleteThreads = {};
+      var completeThreads = [];
 
-            // Note that the items returned by the buddycloud
-            // API are sorted from newest to oldest.
-            this.models.forEach(function(item) {
-                var threadId = item.get('replyTo') || item.get('id');
-                var thread = incompleteThreads[threadId];
-                if (!thread) {
-                    thread = incompleteThreads[threadId] = [];
-                }
-                thread.unshift(item);
-                if (!item.get('replyTo')) { // is top-level post
-                    completeThreads.push(thread);
-                    delete incompleteThreads[threadId];
-                }
-            });
-
-            return completeThreads;
+      // Note that the items returned by the buddycloud
+      // API are sorted from newest to oldest.
+      this.models.forEach(function(item) {
+        var threadId = item.get('replyTo') || item.get('id');
+        var thread = incompleteThreads[threadId];
+        if (!thread) {
+          thread = incompleteThreads[threadId] = [];
         }
-    });
+        thread.unshift(item);
+        if (!item.get('replyTo')) { // is top-level post
+          completeThreads.push(thread);
+          delete incompleteThreads[threadId];
+        }
+      });
+
+      return completeThreads;
+    }
+  });
 
 
-    return ChannelNode;
+  return ChannelNode;
 });

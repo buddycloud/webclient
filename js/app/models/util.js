@@ -16,20 +16,20 @@
 
 
 define(function(require) {
-    var config = require('config');
+  var config = require('config');
 
-    function apiUrl() {
-        var components = _.toArray(arguments);
-        components.unshift(config.baseUrl);
-        return components.join('/');
-    }
+  function apiUrl() {
+    var components = _.toArray(arguments);
+    components.unshift(config.baseUrl);
+    return components.join('/');
+  }
 
-    function avatarUrl(channelId) {
-        return apiUrl(channelId, 'media', 'avatar');
-    }
+  function avatarUrl(channelId) {
+    return apiUrl(channelId, 'media', 'avatar');
+  }
 
-    return {
-        apiUrl: apiUrl,
-        avatarUrl: avatarUrl
-    };
+  return {
+    apiUrl: apiUrl,
+    avatarUrl: avatarUrl
+  };
 });

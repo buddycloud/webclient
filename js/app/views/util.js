@@ -15,18 +15,18 @@
  */
 
 define(function(require) {
-    var $ = require('jquery');
+  var $ = require('jquery');
 
-    function setupAvatarFallback(avatarElements, type, size) {
-        var fallback = 'img/fallback-' + type + '-' + size + 'px.png';
-        $(avatarElements).each(function(__, el) {
-            $(el).one('error', function() {
-                $(el).attr('src', fallback);
-            });
-        });
-    }
+  function setupAvatarFallback(avatarElements, type, size) {
+    var fallback = 'img/fallback-' + type + '-' + size + 'px.png';
+    $(avatarElements).each(function(__, el) {
+      $(el).one('error', function() {
+        $(el).attr('src', fallback);
+      });
+    });
+  }
 
-    return {
-        setupAvatarFallback: setupAvatarFallback
-    }
+  return {
+    setupAvatarFallback: setupAvatarFallback
+  }
 });

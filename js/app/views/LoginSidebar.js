@@ -15,27 +15,27 @@
  */
 
 define(function(require) {
-    var _ = require('underscore');
-    var Backbone = require('backbone');
-    var template = require('text!templates/LoginSidebar.html');
+  var _ = require('underscore');
+  var Backbone = require('backbone');
+  var template = require('text!templates/LoginSidebar.html');
 
-    var LoginSidebar = Backbone.View.extend({
-        tagName: 'aside',
-        className: 'login-sidebar bordered',
-        events: {'click input[type=submit]': '_login'},
+  var LoginSidebar = Backbone.View.extend({
+    tagName: 'aside',
+    className: 'login-sidebar bordered',
+    events: {'click input[type=submit]': '_login'},
 
-        render: function() {
-            this.$el.html(_.template(template));
-        },
+    render: function() {
+      this.$el.html(_.template(template));
+    },
 
-        _login: function(event) {
-            event.preventDefault();
-            var username = this.$('input[name=username]').attr('value');
-            var password = this.$('input[name=password]').attr('value');
-            this.model.save({username: username, password: password});
-            location.reload();
-        }
-    });
+    _login: function(event) {
+      event.preventDefault();
+      var username = this.$('input[name=username]').attr('value');
+      var password = this.$('input[name=password]').attr('value');
+      this.model.save({username: username, password: password});
+      location.reload();
+    }
+  });
 
-    return LoginSidebar;
+  return LoginSidebar;
 });

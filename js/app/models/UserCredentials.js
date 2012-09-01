@@ -15,66 +15,66 @@
  */
 
 define(function(require) {
-    var $ = require('jquery');
-    var Backbone = require('backbone');
-    var util = require('app/models/util');
+  var $ = require('jquery');
+  var Backbone = require('backbone');
+  var util = require('app/models/util');
 
-    var UserCredentials = Backbone.Model.extend({
-        fetch: function(options) {
-            this.set({
-                username: sessionStorage.username,
-                password: sessionStorage.password
-            });
-            if (options && options.success) {
-                options.success();
-            }
+  var UserCredentials = Backbone.Model.extend({
+    fetch: function(options) {
+      this.set({
+        username: sessionStorage.username,
+        password: sessionStorage.password
+      });
+      if (options && options.success) {
+        options.success();
+      }
+    },
+
+    set: function() {
+      Backbone.Model.prototype.set.apply(this, arguments);
+      this.username = this.get('username');
+      this.password = this.get('password');
+    },
+
+    save: function(attributes) {
+      this.set(attributes);
+      this._setSessionStorage('username', this.get('username'));
+      this._setSessionStorage('password', this.get('password'));
+    },
+
+    _setSessionStorage: function(key, value) {
+      if (value) {
+        sessionStorage[key] = value;
+      } else {
+        delete sessionStorage[key];
+      }
+    },
+
+    verify: function() {
+      if (!this.username) {
+        this.trigger('accepted');
+      } else {
+        this._sendVerificationRequest();
+      }
+    },
+
+    _sendVerificationRequest: function() {
+      var self = this;
+      var auth = 'Basic ' + btoa(this.username + ':' + this.password);
+      $.ajax({
+        url: util.apiUrl(''),
+        method: 'GET',
+        headers: {'Authorization': auth},
+        xhrFields: {withCredentials: true},
+        success: function() {
+          self.trigger('accepted');
         },
-
-        set: function() {
-            Backbone.Model.prototype.set.apply(this, arguments);
-            this.username = this.get('username');
-            this.password = this.get('password');
+        error: function() {
+          self.trigger('rejected');
         },
+      });
+    }
+  });
 
-        save: function(attributes) {
-            this.set(attributes);
-            this._setSessionStorage('username', this.get('username'));
-            this._setSessionStorage('password', this.get('password'));
-        },
-
-        _setSessionStorage: function(key, value) {
-            if (value) {
-                sessionStorage[key] = value;
-            } else {
-                delete sessionStorage[key];
-            }
-        },
-
-        verify: function() {
-            if (!this.username) {
-                this.trigger('accepted');
-            } else {
-                this._sendVerificationRequest();
-            }
-        },
-
-        _sendVerificationRequest: function() {
-            var self = this;
-            var auth = 'Basic ' + btoa(this.username + ':' + this.password);
-            $.ajax({
-                url: util.apiUrl(''),
-                method: 'GET',
-                headers: {'Authorization': auth},
-                xhrFields: {withCredentials: true},
-                success: function() {
-                    self.trigger('accepted');
-                },
-                error: function() {
-                    self.trigger('rejected');
-                },
-            });
-        }
-    });
-
-    return UserCredentials;
+  return UserCredentials;
 });

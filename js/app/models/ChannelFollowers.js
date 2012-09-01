@@ -15,24 +15,24 @@
  */
 
 define(function(require) {
-    var _ = require('underscore');
-    var Backbone = require('backbone');
-    var util = require('app/models/util');
+  var _ = require('underscore');
+  var Backbone = require('backbone');
+  var util = require('app/models/util');
 
-    var ChannelFollowers = Backbone.Model.extend({
-        constructor: function(channel) {
-            Backbone.Model.call(this);
-            this.channel = channel;
-        },
+  var ChannelFollowers = Backbone.Model.extend({
+    constructor: function(channel) {
+      Backbone.Model.call(this);
+      this.channel = channel;
+    },
 
-        url: function() {
-            return util.apiUrl(this.channel, 'subscribers', 'posts');
-        },
+    url: function() {
+      return util.apiUrl(this.channel, 'subscribers', 'posts');
+    },
 
-        usernames: function() {
-            return _.keys(this.attributes);
-        }
-    });
+    usernames: function() {
+      return _.keys(this.attributes);
+    }
+  });
 
-    return ChannelFollowers;
+  return ChannelFollowers;
 });
