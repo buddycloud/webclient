@@ -27,6 +27,7 @@ define(function(require) {
   require('spec/ChannelMetadata.spec');
   require('spec/ChannelPosts.spec');
   require('spec/UserCredentials.spec');
+  require('spec/util_api.spec');
 
   jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
   jasmine.getEnv().execute();
