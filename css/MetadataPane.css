@@ -23,13 +23,12 @@
   background-image: linear-gradient(to bottom, #fbf8ea, #efecdf);
 }
 
-.metadata-pane img {
+.metadata-pane .avatar {
   display: block;
   float: left;
   width: 64px;
   height: 64px;
   margin-right: 8px;
-  border: 1px solid #d6d3c7;
   border-radius: 8px;
 }
 

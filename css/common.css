@@ -31,6 +31,10 @@ a:hover {
   text-decoration: underline;
 }
 
+.avatar {
+  border: 1px solid #e1dbc3;
+}
+
 .bordered {
     border: 1px solid #fbf8ea;
     box-shadow: 0 0 4px 0 #9c9a91;

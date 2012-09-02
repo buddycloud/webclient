@@ -2,7 +2,7 @@
 <ul>
   <% _.each(usernames, function(username, index) { %>
   <li>
-    <img class="avatar" src="<%= avatars[index]  %>">
+    <img class="avatar" src="<%= avatars[index]  %>" alt="">
     <div class="text">
       <span class="name"><%- username.split('@', 2)[0] %></span>
       <br>

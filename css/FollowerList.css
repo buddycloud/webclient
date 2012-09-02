@@ -44,7 +44,7 @@
   float: left;
   width: 32px;
   height: 32px;
-  border: 1px solid #d6d3c7;
+  border-radius: 6px;
 }
 
 .follower-list li .text {
