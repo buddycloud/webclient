@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
+.metadata-pane {
+  padding: 8px;
+  background-image: -webkit-linear-gradient(top, #fbf8ea, #efecdf);
+  background-image: -moz-linear-gradient(top, #fbf8ea, #efecdf);
+  background-image: -ms-linear-gradient(top, #fbf8ea, #efecdf);
+  background-image: -o-linear-gradient(top, #fbf8ea, #efecdf);
+  background-image: linear-gradient(to bottom, #fbf8ea, #efecdf);
+}
+
 .metadata-pane img {
   display: block;
   float: left;
@@ -21,6 +30,7 @@
   height: 64px;
   margin-right: 8px;
   border: 1px solid #d6d3c7;
+  border-radius: 8px;
 }
 
 .metadata-pane h1 {
@@ -36,7 +46,7 @@
 }
 
 .metadata-pane .id {
-  font-size: 60%;
+  font-size: 50%;
   color: #a9a79e;
 }
 

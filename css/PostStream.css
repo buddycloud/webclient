@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
+.post-stream {
+  background-color: white;
+}
+
 .post-stream .loading {
   text-align: center;
   padding: 8px;
 }
 
 .post-stream .thread {
-  padding-left: 16px;
+  padding: 16px 24px 0px 24px;
   border-top: 1px solid #d6d3c7;
 }
 
-.post-stream .thread:before {
-  display: block;
-  border-top: 1px solid #fbf8ea;
-  content: '';
-}
-
 .post-stream .comment {
+  margin-top: 2em;
   margin-left: 16px;
-  border-top: 1px dotted #d6d3c7;
-  font-size: 80%;
+  font-size: 90%;
 }
 
 .post-stream .avatar {
@@ -45,17 +43,19 @@
 .post-stream .thread .avatar {
   width: 48px;
   height: 48px;
+  border-radius: 8px;
 }
 
 .post-stream .comment .avatar {
   width: 32px;
   height: 32px;
+  border-radius: 6px;
 }
 
 .post-stream .title {
   font-size: 120%;
   line-height: 110%;
-  margin-bottom: 0.5em;
+  margin: 0 0 0.5em 0;
 }
 
 .post-stream .author-id {

@@ -16,14 +16,14 @@
 
 body {
   margin: 0px;
-  font-family: Helvetica, Arial, sans-serif;
-  font-size: 11pt;
+  font-family: Helvetica, sans-serif;
+  font-size: 13px;
   background-color: #efecdf;
-  color: #132B36;
+  color: #132b36;
 }
 
 a {
-  color: #E28C35;
+  color: #e28c35;
   text-decoration: none;
 }
 
@@ -39,25 +39,19 @@ a:hover {
 }
 
 #toolbar {
-  width: 100%;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  width: 100%;
   padding: 8px;
   box-shadow: 0 0 8px 0 black;
-  color: white;
-  font-size: 80%;
   background-color: #6993aa;
   background-image: -webkit-linear-gradient(top, #6993aa, #2f5873);
   background-image: -moz-linear-gradient(top, #6993aa, #2f5873);
   background-image: -ms-linear-gradient(top, #6993aa, #2f5873);
   background-image: -o-linear-gradient(top, #6993aa, #2f5873);
   background-image: linear-gradient(to bottom, #6993aa, #2f5873);
-}
-
-#toolbar:after {
-  display: block;
-  clear: right;
-  content: '';
+  color: white;
+  font-size: 80%;
 }
 
 #toolbar a {
@@ -74,6 +68,12 @@ a:hover {
   float: right;
 }
 
+#toolbar:after {
+  display: block;
+  clear: right;
+  content: '';
+}
+
 #main {
   position: relative;
   margin: 16px;
@@ -82,6 +82,7 @@ a:hover {
 #content {
   position: absolute;
   margin: 0 16px 0 16px;
+  padding: 0;
   left: 20em;
   right: 20em;
 }
