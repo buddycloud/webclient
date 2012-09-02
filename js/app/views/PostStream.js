@@ -18,9 +18,9 @@ define(function(require) {
   var $ = require('jquery');
   var _ = require('underscore');
   var api = require('app/util/api');
+  var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/PostStream.html');
-  var util = require('app/views/util');
 
   // Thanks to John Gruber:
   // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
@@ -48,8 +48,8 @@ define(function(require) {
     _setupAvatarFallbacks: function() {
       var toplevelAvatars = this.$('.thread > header .avatar');
       var commentAvatars = this.$('.comment .avatar');
-      util.setupAvatarFallback(toplevelAvatars, 'personal', 48);
-      util.setupAvatarFallback(commentAvatars, 'personal', 32);
+      avatarFallback(toplevelAvatars, 'personal', 48);
+      avatarFallback(commentAvatars, 'personal', 32);
     },
 
     _renderSpinningIcon: function() {

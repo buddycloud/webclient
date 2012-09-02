@@ -16,9 +16,9 @@
 
 define(function(require) {
   var _ = require('underscore');
+  var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/MetadataPane.html');
-  var util = require('app/views/util');
 
   var MetadataPane = Backbone.View.extend({
     tagName: 'header',
@@ -30,11 +30,7 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template, {metadata: this.model}));
-      util.setupAvatarFallback(
-        this.$('img'),
-        this.model.channelType,
-        64
-      );
+      avatarFallback(this.$('img'), this.model.channelType, 64);
     }
   });
 

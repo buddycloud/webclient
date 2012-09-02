@@ -28,6 +28,7 @@ define(function(require) {
   require('spec/ChannelPosts.spec');
   require('spec/UserCredentials.spec');
   require('spec/util_api.spec');
+  require('spec/util_avatarFallback.spec');
 
   jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
   jasmine.getEnv().execute();

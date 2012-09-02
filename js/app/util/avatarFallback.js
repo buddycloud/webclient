@@ -17,16 +17,20 @@
 define(function(require) {
   var $ = require('jquery');
 
-  function setupAvatarFallback(avatarElements, type, size) {
-    var fallback = 'img/fallback-' + type + '-' + size + 'px.png';
-    $(avatarElements).each(function(__, el) {
-      $(el).one('error', function() {
-        $(el).attr('src', fallback);
-      });
+  function avatarFallback(avatarElements, type, size) {
+    var fallbackUrl = _getFallbackUrl(type, size);
+    _setupFallbackHandlers(avatarElements, fallbackUrl);
+  }
+
+  function _getFallbackUrl(type, size) {
+    return 'img/fallback-' + type + '-' + size + 'px.png';
+  }
+
+  function _setupFallbackHandlers(elements, fallbackUrl) {
+    $(elements).one('error', function(event) {
+      event.target.src = fallbackUrl;
     });
   }
 
-  return {
-    setupAvatarFallback: setupAvatarFallback
-  }
+  return avatarFallback;
 });

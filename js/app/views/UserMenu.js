@@ -16,10 +16,10 @@
 
 define(function(require) {
   var _ = require('underscore');
+  var avatarFallback = require('app/util/avatarFallback');
   var api = require('app/util/api');
   var Backbone = require('backbone');
   var template = require('text!templates/UserMenu.html');
-  var util = require('app/views/util');
 
   var UserMenu = Backbone.View.extend({
     className: 'user-menu',
@@ -32,7 +32,7 @@ define(function(require) {
         username: username,
         avatar: avatar
       }));
-      util.setupAvatarFallback(this.$('img'), 'personal', 32);
+      avatarFallback(this.$('img'), 'personal', 32);
     },
 
     _logout: function() {

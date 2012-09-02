@@ -17,9 +17,9 @@
 define(function(require) {
   var _ = require('underscore');
   var api = require('app/util/api');
+  var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/FollowerList.html');
-  var util = require('app/views/util');
 
   var FollowerList = Backbone.View.extend({
     tagName: 'aside',
@@ -36,7 +36,7 @@ define(function(require) {
         usernames: usernames,
         avatars: avatars
       }));
-      util.setupAvatarFallback(this.$('img'), 'personal', 32);
+      avatarFallback(this.$('img'), 'personal', 32);
     },
 
     _getAvatars: function(usernames) {
