@@ -83,9 +83,8 @@ define(function(require) {
 
   function fetch(model, credentials) {
     model.fetch({
-      username: credentials.username,
-      password: credentials.password,
-      xhrFields: {withCredentials: this.username ? true : false}
+      headers: {'Authorization': credentials.toAuthHeader()},
+      xhrFields: {withCredentials: true}
     });
   }
 

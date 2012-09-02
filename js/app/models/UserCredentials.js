@@ -60,11 +60,10 @@ define(function(require) {
 
     _sendVerificationRequest: function() {
       var self = this;
-      var auth = 'Basic ' + btoa(this.username + ':' + this.password);
       $.ajax({
-        url: util.apiUrl(''),
         method: 'GET',
-        headers: {'Authorization': auth},
+        url: util.apiUrl(''),
+        headers: {'Authorization': this.toAuthHeader()},
         xhrFields: {withCredentials: true},
         success: function() {
           self.trigger('accepted');
@@ -73,6 +72,10 @@ define(function(require) {
           self.trigger('rejected');
         },
       });
+    },
+
+    toAuthHeader: function() {
+      return 'Basic ' + btoa(this.username + ':' + this.password);
     }
   });
 
