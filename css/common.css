@@ -46,7 +46,7 @@ a:hover {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   width: 100%;
-  padding: 8px;
+  padding: 4px;
   box-shadow: 0 0 8px 0 black;
   background-color: #6993aa;
   background-image: -webkit-linear-gradient(top, #6993aa, #2f5873);
