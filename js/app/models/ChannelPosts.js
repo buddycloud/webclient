@@ -32,7 +32,8 @@ define(function(require) {
       // Explicitly set "Accept: application/json" so that we get the
       // JSON representation instead of an Atom feed.
       options = options || {};
-      options.headers = {'Accept': 'application/json'};
+      options.headers = options.headers || {};
+      options.headers['Accept'] = 'application/json';
       Backbone.Collection.prototype.fetch.call(this, options);
     },
 

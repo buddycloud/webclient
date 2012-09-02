@@ -75,6 +75,14 @@ define(function(require) {
         node.fetch();
         expect($.ajax).toHaveBeenCalled();
       });
+
+      it('should not throw away user-defined headers', function() {
+        spyOn($, 'ajax').andCallFake(function(options) {
+          expect(options.headers['X-Foo']).toBe('bar');
+        });
+        node.fetch({headers: {'X-Foo': 'bar'}});
+        expect($.ajax).toHaveBeenCalled();
+      });
     });
 
     describe('byThread()', function() {
