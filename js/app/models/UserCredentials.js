@@ -16,8 +16,8 @@
 
 define(function(require) {
   var $ = require('jquery');
+  var api = require('app/util/api');
   var Backbone = require('backbone');
-  var util = require('app/models/util');
 
   var UserCredentials = Backbone.Model.extend({
     fetch: function(options) {
@@ -62,7 +62,7 @@ define(function(require) {
       var self = this;
       $.ajax({
         method: 'GET',
-        url: util.apiUrl(''),
+        url: api.rootUrl(),
         headers: {'Authorization': this.toAuthHeader()},
         xhrFields: {withCredentials: true},
         success: function() {

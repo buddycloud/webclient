@@ -15,8 +15,8 @@
  */
 
 define(function(require) {
+  var api = require('app/util/api');
   var Backbone = require('backbone');
-  var util = require('app/models/util');
 
   var ChannelPosts = Backbone.Collection.extend({
     constructor: function(channel) {
@@ -25,7 +25,7 @@ define(function(require) {
     },
 
     url: function() {
-      return util.apiUrl(this.channel, 'content', 'posts');
+      return api.url(this.channel, 'content', 'posts');
     },
 
     fetch: function(options) {

@@ -18,18 +18,23 @@
 define(function(require) {
   var config = require('config');
 
-  function apiUrl() {
+  function url() {
     var components = _.toArray(arguments);
     components.unshift(config.baseUrl);
     return components.join('/');
   }
 
-  function avatarUrl(channelId) {
-    return apiUrl(channelId, 'media', 'avatar');
+  function rootUrl() {
+    return url('');
+  }
+
+  function avatarUrl(channel) {
+    return url(channel, 'media', 'avatar');
   }
 
   return {
-    apiUrl: apiUrl,
+    url: url,
+    rootUrl: rootUrl,
     avatarUrl: avatarUrl
   };
 });

@@ -16,6 +16,7 @@
 
 define(function(require) {
   var _ = require('underscore');
+  var api = require('app/util/api');
   var Backbone = require('backbone');
   var template = require('text!templates/UserMenu.html');
   var util = require('app/views/util');
@@ -26,12 +27,12 @@ define(function(require) {
 
     render: function() {
       var username = this.model.username;
-      var avatar = modelUtil.avatarUrl(username);
+      var avatar = api.avatarUrl(username);
       this.$el.html(_.template(template, {
         username: username,
         avatar: avatar
       }));
-      viewUtil.setupAvatarFallback(this.$('img'), 'personal', 32);
+      util.setupAvatarFallback(this.$('img'), 'personal', 32);
     },
 
     _logout: function() {

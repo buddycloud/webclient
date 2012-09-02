@@ -15,8 +15,8 @@
  */
 
 define(function(require) {
+  var api = require('app/util/api');
   var Backbone = require('backbone');
-  var util = require('app/models/util');
 
   var ChannelMetadata = Backbone.Model.extend({
     constructor: function(channel) {
@@ -25,11 +25,11 @@ define(function(require) {
     },
 
     url: function() {
-      return util.apiUrl(this.channel, 'metadata', 'posts');
+      return api.url(this.channel, 'metadata', 'posts');
     },
 
     avatarUrl: function() {
-      return util.apiUrl(this.channel, 'media', 'avatar');
+      return api.avatarUrl(this.channel);
     },
 
     set: function(attributes) {

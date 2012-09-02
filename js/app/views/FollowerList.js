@@ -16,10 +16,10 @@
 
 define(function(require) {
   var _ = require('underscore');
+  var api = require('app/util/api');
   var Backbone = require('backbone');
-  var modelUtil = require('app/models/util');
   var template = require('text!templates/FollowerList.html');
-  var viewUtil = require('app/views/util');
+  var util = require('app/views/util');
 
   var FollowerList = Backbone.View.extend({
     tagName: 'aside',
@@ -30,12 +30,19 @@ define(function(require) {
     },
 
     render: function() {
-      var followerIds = this.model.usernames();
+      var usernames = this.model.usernames();
+      var avatars = this._getAvatars(usernames);
       this.$el.html(_.template(template, {
-        followerIds: followerIds,
-        avatarUrlFunc: modelUtil.avatarUrl
+        usernames: usernames,
+        avatars: avatars
       }));
-      viewUtil.setupAvatarFallback(this.$('img'), 'personal', 32);
+      util.setupAvatarFallback(this.$('img'), 'personal', 32);
+    },
+
+    _getAvatars: function(usernames) {
+      return _.map(usernames, function(username) {
+        return api.avatarUrl(username);
+      });
     }
   });
 

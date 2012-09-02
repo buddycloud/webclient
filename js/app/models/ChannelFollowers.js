@@ -16,8 +16,8 @@
 
 define(function(require) {
   var _ = require('underscore');
+  var api = require('app/util/api');
   var Backbone = require('backbone');
-  var util = require('app/models/util');
 
   var ChannelFollowers = Backbone.Model.extend({
     constructor: function(channel) {
@@ -26,7 +26,7 @@ define(function(require) {
     },
 
     url: function() {
-      return util.apiUrl(this.channel, 'subscribers', 'posts');
+      return api.url(this.channel, 'subscribers', 'posts');
     },
 
     usernames: function() {
