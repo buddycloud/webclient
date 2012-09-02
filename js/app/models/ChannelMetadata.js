@@ -32,16 +32,6 @@ define(function(require) {
       return util.apiUrl(this.channel, 'media', 'avatar');
     },
 
-    fetch: function(options) {
-      console.log('fetch called');
-      Backbone.Model.prototype.fetch.call(this, _.extend(options || {}, {
-        success: function() {
-          this.set({});
-          if (options && options.success) options.success();
-        }
-      }));
-    },
-
     set: function(attributes) {
       Backbone.Model.prototype.set.call(this, attributes, {silent: true});
       this.title = this.get('title');

@@ -26,30 +26,15 @@ define(function(require) {
 
     initialize: function() {
       this.model.bind('change', this.render, this);
-      this.model.fetch();
     },
 
     render: function() {
-      console.error('render:');
-      console.error(this);
       this.$el.html(_.template(template, {metadata: this.model}));
       util.setupAvatarFallback(
         this.$('img'),
-        this.model.get('channel_type'),
+        this.model.channelType,
         64
       );
-    },
-
-    _setupAvatarFallback: function() {
-      var avatar = this.$('img');
-      var channelType = this.model.get('channel_type');
-      avatar.one('error', function() {
-        var fallbackUrl =
-          (channelType == 'personal') ?
-          'img/user-fallback-64px.png' :
-          'img/topic-fallback-64px.png';
-        avatar.attr('src', fallbackUrl);
-      });
     }
   });
 
