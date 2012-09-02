@@ -123,6 +123,19 @@ define(function(require) {
         expect(credentials.trigger).toHaveBeenCalledWith('rejected');
       });
     });
+
+    describe('toAuthorizationHeader', function() {
+      it('should return credentials as HTTP Basic Authorization header', function() {
+        var auth = 'Basic ' + btoa('bob@example.com:bob');
+        credentials.set({username: 'bob@example.com', password: 'bob'});
+        expect(credentials.toAuthorizationHeader()).toBe(auth);
+      });
+
+      it('should return undefined if username is unset', function() {
+        credentials.set({username: null, password: null});
+        expect(credentials.toAuthorizationHeader()).toBeUndefined();
+      });
+    });
   });
 
 });

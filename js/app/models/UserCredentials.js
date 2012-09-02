@@ -63,7 +63,7 @@ define(function(require) {
       $.ajax({
         method: 'GET',
         url: api.rootUrl(),
-        headers: {'Authorization': this.toAuthHeader()},
+        headers: {'Authorization': this.toAuthorizationHeader()},
         xhrFields: {withCredentials: true},
         success: function() {
           self.trigger('accepted');
@@ -74,8 +74,12 @@ define(function(require) {
       });
     },
 
-    toAuthHeader: function() {
-      return 'Basic ' + btoa(this.username + ':' + this.password);
+    toAuthorizationHeader: function() {
+      if (this.username) {
+        return 'Basic ' + btoa(this.username + ':' + this.password);
+      } else {
+        return undefined;
+      }
     }
   });
 
