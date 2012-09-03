@@ -33,6 +33,10 @@
   padding-left: 0;
 }
 
+.follower-list a {
+  text-decoration: none;
+}
+
 .follower-list li {
   clear: left;
   margin-bottom: 16px;
@@ -60,3 +64,9 @@
   font-size: 80%;
   color: #444;
 }
+
+.follower-list li:hover {
+  background: #ffffff;
+  border-radius: 4px;
+}
+
