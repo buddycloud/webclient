@@ -34,7 +34,7 @@ define(function(require) {
       var avatars = this._getAvatars(usernames);
       this.$el.html(_.template(template, {
         usernames: usernames,
-        avatars: avatars,
+        avatars: avatars
       }));
       avatarFallback(this.$('img'), 'personal', 32);
     },
