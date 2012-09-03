@@ -18,15 +18,25 @@ define(function(require) {
   var Backbone = require('backbone');
 
   var Post = Backbone.Model.extend({
-    set: function(attrs) {
-      Backbone.Model.prototype.set.call(this, attrs, {silent: true});
-      this.author = attrs.author || this.get('author');
-      this.published = attrs.published || this.get('published');
-      this.updated = attrs.updated || this.get('updated');
-      this.replyTo = attrs.replyTo || this.get('replyTo');
-      this.content = attrs.content || this.get('content');
-      this.change();
-    }
+    author: function() {
+      return this.get('author');
+    },
+
+    published: function() {
+      return this.get('published');
+    },
+
+    updated: function() {
+      return this.get('updated');
+    },
+
+    replyTo: function() {
+      return this.get('replyTo');
+    },
+
+    content: function() {
+      return this.get('content');
+    },
   });
 
   return Post;

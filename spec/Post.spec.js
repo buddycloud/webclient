@@ -21,24 +21,21 @@ define(function(require) {
     var post;
 
     beforeEach(function() {
-      post = new Post;
-    });
-
-    describe('set()', function() {
-      it('should set direct attributes on Post', function() {
-        post.set({
+      post = new Post({
           author: 'alice@example.com',
           published: '2012-01-01',
           updated: '2012-01-02',
           replyTo: 'foo',
           content: 'A post from Alice'
         });
-        expect(post.author).toBe('alice@example.com');
-        expect(post.published).toBe('2012-01-01');
-        expect(post.updated).toBe('2012-01-02');
-        expect(post.replyTo).toBe('foo');
-        expect(post.content).toBe('A post from Alice');
-      });
+    });
+
+    it('should have an accessor for each post attribute', function() {
+      expect(post.author()).toBe('alice@example.com');
+      expect(post.published()).toBe('2012-01-01');
+      expect(post.updated()).toBe('2012-01-02');
+      expect(post.replyTo()).toBe('foo');
+      expect(post.content()).toBe('A post from Alice');
     });
   });
 

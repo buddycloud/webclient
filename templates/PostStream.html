@@ -3,23 +3,23 @@
   <header>
     <img class="avatar" alt="" src="<%= avatarUrlFunc(thread[0].get('author')) %>">
     <h2 class="title">
-      <%- thread[0].author.split('@', 2)[0] %>
+      <%- thread[0].author().split('@', 2)[0] %>
       <br>
-      <span class="author-id"><%- thread[0].author %></span>
+      <span class="author-id"><%- thread[0].author() %></span>
     </h2>
   </header>
-  <pre class="content"><%- thread[0].content %></pre>
+  <pre class="content"><%- thread[0].content() %></pre>
   <% _.each(_.rest(thread), function(comment) { %>
   <article class="comment">
     <header>
       <img class="avatar" alt="" src="<%= avatarUrlFunc(comment.get('author')) %>">
       <h3 class="title">
-        <%- comment.author.split('@', 2)[0] %>
+        <%- comment.author().split('@', 2)[0] %>
         <br>
-        <span class="author-id"><%- comment.author %></span>
+        <span class="author-id"><%- comment.author() %></span>
       </h3>
     </header>
-    <pre class="content"><%- comment.content %></pre>
+    <pre class="content"><%- comment.content() %></pre>
   </article>
   <% }) %>
 </article>

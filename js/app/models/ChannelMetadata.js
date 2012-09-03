@@ -32,14 +32,24 @@ define(function(require) {
       return api.avatarUrl(this.channel);
     },
 
-    set: function(attributes) {
-      Backbone.Model.prototype.set.call(this, attributes, {silent: true});
-      this.title = this.get('title');
-      this.description = this.get('description');
-      this.creationDate = this.get('creation_date');
-      this.channelType = this.get('channel_type');
-      this.accessModel = this.get('access_model');
-      this.change();
+    title: function() {
+      return this.get('title');
+    },
+
+    description: function() {
+      return this.get('description');
+    },
+
+    creationDate: function() {
+      return this.get('creation_date');
+    },
+
+    channelType: function() {
+      return this.get('channel_type');
+    },
+
+    accessModel: function() {
+      return this.get('access_model');
     }
   });
 

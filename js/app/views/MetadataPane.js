@@ -30,7 +30,7 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template, {metadata: this.model}));
-      avatarFallback(this.$('img'), this.model.channelType, 64);
+      avatarFallback(this.$('img'), this.model.channelType(), 64);
     }
   });
 

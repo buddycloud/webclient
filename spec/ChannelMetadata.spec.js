@@ -22,6 +22,13 @@ define(function(require) {
 
     beforeEach(function() {
       metadata = new ChannelMetadata('alice@example.com');
+      metadata.set({
+        title: 'Alice',
+        description: 'Your favorite persona',
+        creation_date: '2012-01-01',
+        channel_type: 'personal',
+        access_model: 'authorize'
+      });
     });
 
     it('should initialize correctly', function() {
@@ -33,44 +40,19 @@ define(function(require) {
       expect(metadata.url()).toBe(url);
     });
 
+    it('should have a function for each metadata attribute', function() {
+      expect(metadata.title()).toBe('Alice');
+      expect(metadata.description()).toBe('Your favorite persona');
+      expect(metadata.creationDate()).toBe('2012-01-01');
+      expect(metadata.channelType()).toBe('personal');
+      expect(metadata.accessModel()).toBe('authorize');
+    });
+
     describe('avatarUrl()', function() {
       it('should return /<channel>/media/avatar', function() {
         var url = 'https://example.com/alice@example.com/media/avatar';
         expect(metadata.avatarUrl()).toBe(url);
       });
-    });
-
-    describe('set()', function() {
-      it('should set attributes directly on object', function() {
-        metadata.set({
-          title: 'Alice',
-          description: 'Your favorite persona',
-          creation_date: '2012-01-01',
-          channel_type: 'personal',
-          access_model: 'authorize'
-        });
-        expect(metadata.title).toBe('Alice');
-        expect(metadata.description).toBe('Your favorite persona');
-        expect(metadata.creationDate).toBe('2012-01-01');
-        expect(metadata.channelType).toBe('personal');
-        expect(metadata.accessModel).toBe('authorize');
-      });
-
-      it('should set attributes before triggering "change"', function() {
-        spyOn(metadata, 'trigger').andCallThrough();
-        metadata.on('change:title', function() {
-          expect(metadata.title).toBe('Alice');
-        });
-        metadata.set({
-          title: 'Alice',
-          description: 'Your favorite persona',
-          creation_date: '2012-01-01',
-          channel_type: 'personal',
-          access_model: 'authorize'
-        });
-        expect(metadata.trigger).toHaveBeenCalled();
-      });
-
     });
   });
 
