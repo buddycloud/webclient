@@ -17,8 +17,11 @@
 define(function(require) {
   var api = require('app/util/api');
   var Backbone = require('backbone');
+  var Post = require('app/models/Post');
 
   var ChannelPosts = Backbone.Collection.extend({
+    model: Post,
+
     constructor: function(channel) {
       Backbone.Collection.call(this);
       this.channel = channel;
