@@ -27,7 +27,7 @@ define(function(require) {
     },
 
     updated: function() {
-      return this.get('updated');
+      return this.get('updated') || this.get('published');
     },
 
     replyTo: function() {

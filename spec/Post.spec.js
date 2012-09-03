@@ -37,6 +37,13 @@ define(function(require) {
       expect(post.replyTo()).toBe('foo');
       expect(post.content()).toBe('A post from Alice');
     });
+
+    describe('updated()', function() {
+      it('should equal published() if not explicitly specified', function() {
+        post.set({updated: null});
+        expect(post.updated()).toBe(post.published());
+      });
+    });
   });
 
 });
