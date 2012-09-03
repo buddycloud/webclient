@@ -1,13 +1,15 @@
 <h2>Followers</h2>
 <ul>
   <% _.each(usernames, function(username, index) { %>
-  <li>
-    <img class="avatar" src="<%= avatars[index]  %>" alt="">
-    <div class="text">
-      <span class="name"><%- username.split('@', 2)[0] %></span>
-      <br>
-      <span class="id"><%- username %></span>
-    </div>
-  </li>
+  <a href="?<%- username %>">
+    <li>
+      <img class="avatar" src="<%= avatars[index]  %>" alt="">
+      <div class="text">
+        <span class="name"><%- username.split('@', 2)[0] %></span>
+        <br>
+        <span class="id"><%- username %></span>
+      </div>
+    </li>
+  </a>
   <% }); %>
 </ul>
