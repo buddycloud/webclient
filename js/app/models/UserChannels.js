@@ -17,35 +17,28 @@
 define(function(require) {
   var _ = require('underscore');
   var api = require('app/util/api');
-  var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
-  var template = require('text!templates/FollowerList.html');
 
-  var FollowerList = Backbone.View.extend({
-    tagName: 'aside',
-    className: 'follower-list bordered',
-
-    initialize: function() {
-      this.model.bind('change', this.render, this);
+  var UserChannels = Backbone.Model.extend({
+    constructor: function() {
+      Backbone.Model.call(this);
     },
 
-    render: function() {
-      var usernames = this.model.usernames();
-      var avatars = this._getAvatars(usernames);
-      this.$el.html(_.template(template, {
-        usernames: usernames,
-        avatars: avatars,
-      }));
-      avatarFallback(this.$('img'), 'personal', 32);
+    url: function() {
+      return api.url('subscribed');
     },
 
-    _getAvatars: function(usernames) {
-      return _.map(usernames, function(username) {
-        return api.avatarUrl(username);
-      });
+    channels: function() {
+      var nodes = _.keys(this.attributes);
+      var channelsList = [];
+
+      for (var i = 0; i < nodes.length; i++) {
+	channelsList.push(nodes[i].split("/")[0]);
+      }
+
+      return _.uniq(channelsList);
     }
-
   });
 
-  return FollowerList;
+  return UserChannels;
 });
