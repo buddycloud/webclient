@@ -48,7 +48,7 @@ define(function(require) {
 
     _linkUrls: function(content) {
       content = $('<div/>').text(content).html();
-      return content.replace(URL_REGEX, '<a href="$&">$&</a>');
+      return content.replace(URL_REGEX, '<a href="$&" target="_blank">$&</a>');
     },
 
     _setupAvatarFallbacks: function() {
