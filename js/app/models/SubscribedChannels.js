@@ -31,7 +31,7 @@ define(function(require) {
     channels: function() {
       var nodes = _.keys(this.attributes);
       var channelsList = _.map(nodes, function(node) {
-	return node.split('/')[0];
+        return node.split('/')[0];
       });
 
       return _.uniq(channelsList);

@@ -41,7 +41,7 @@ define(function(require) {
         var channels = subscribedChannels.channels();
         expect(channels.length).toBe(4);
         expect(channels).toContain('alice@example.com');
-	expect(channels).toContain('alice@example2.com');
+        expect(channels).toContain('alice@example2.com');
         expect(channels).toContain('bob@example.com');
         expect(channels).toContain('ron@example.com');
       });
