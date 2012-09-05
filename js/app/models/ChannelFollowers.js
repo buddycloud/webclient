@@ -31,7 +31,15 @@ define(function(require) {
 
     usernames: function() {
       return _.keys(this.attributes);
-    }
+    },
+
+    byType: function() {
+      var result = {};
+      _.each(this.attributes, function(value, index) {
+        (result[value] || (result[value] = [])).push(index);
+      });
+      return result;
+    }    
   });
 
   return ChannelFollowers;

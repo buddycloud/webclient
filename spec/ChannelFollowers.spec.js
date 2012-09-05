@@ -49,6 +49,20 @@ define(function(require) {
         expect(usernames).toContain('eve@example.com');
       });
     });
+
+    describe('followers grouped by type', function() {
+      it('should return followers grouped by type', function() {
+        var followersGroupedBy = followers.byType();
+        expect(followersGroupedBy.owner.length).toBe(1);
+        expect(followersGroupedBy.moderator).toBe(undefined);
+        expect(followersGroupedBy.publisher.length).toBe(2);
+        expect(followersGroupedBy.member.length).toBe(1);
+        expect(followersGroupedBy.owner).toContain('alice@example.com');
+        expect(followersGroupedBy.publisher).toContain('bob@example.com');
+        expect(followersGroupedBy.publisher).toContain('ron@example.com');
+        expect(followersGroupedBy.member).toContain('eve@example.com');
+      });
+    });
   });
 
 });

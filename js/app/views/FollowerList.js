@@ -24,6 +24,11 @@ define(function(require) {
   var FollowerList = Backbone.View.extend({
     tagName: 'aside',
     className: 'follower-list bordered',
+    followerRoles: [{id: 'owner', display: 'Owner'},
+                    {id: 'moderator', display: 'Moderators'},
+                    {id: 'publisher', display: 'Followers+Post'},
+                    {id: 'member', display: 'Followers'},
+                   ],
 
     initialize: function() {
       this.model.bind('change', this.render, this);
@@ -31,18 +36,23 @@ define(function(require) {
 
     render: function() {
       var usernames = this.model.usernames();
+      var followers = this.model.byType();
       var avatars = this._getAvatars(usernames);
+      
       this.$el.html(_.template(template, {
-        usernames: usernames,
+        followerRoles: this.followerRoles,
+        followers: followers,
         avatars: avatars
       }));
       avatarFallback(this.$('img'), 'personal', 32);
     },
 
     _getAvatars: function(usernames) {
-      return _.map(usernames, function(username) {
-        return api.avatarUrl(username);
+      var result = {};
+      _.each(usernames, function(username) {
+        result[username] = api.avatarUrl(username);
       });
+      return result;
     }
 
   });
