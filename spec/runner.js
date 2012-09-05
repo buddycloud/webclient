@@ -26,6 +26,7 @@ define(function(require) {
   require('spec/ChannelFollowers.spec');
   require('spec/ChannelMetadata.spec');
   require('spec/ChannelPosts.spec');
+  require('spec/SubscribedChannels.spec');
   require('spec/Post.spec');
   require('spec/UserCredentials.spec');
   require('spec/util_api.spec');

@@ -32,6 +32,8 @@ define(function(require) {
   var LoginSidebar = require('app/views/LoginSidebar');
   var MetadataPane = require('app/views/MetadataPane');
   var PostStream = require('app/views/PostStream');
+  var SubscribedChannels = require('app/models/SubscribedChannels');
+  var SubscribedChannelsList = require('app/views/SubscribedChannelsList');
   var UserCredentials = require('app/models/UserCredentials');
   var UserMenu = require('app/views/UserMenu');
 
@@ -40,11 +42,13 @@ define(function(require) {
     var metadata = new ChannelMetadata(channel);
     var posts = new ChannelPosts(channel);
     var followers = new ChannelFollowers(channel);
+    var subscribedChannels = new SubscribedChannels();
     getUserCredentials(function(credentials) {
-      setupChannelUI(metadata, posts, followers, credentials);
+      setupChannelUI(metadata, posts, followers, subscribedChannels, credentials);
       fetch(metadata, credentials);
       fetch(posts, credentials);
       fetch(followers, credentials);
+      fetch(subscribedChannels, credentials);
     });
   }
 
@@ -66,7 +70,7 @@ define(function(require) {
     credentials.verify();
   }
 
-  function setupChannelUI(metadata, posts, followers, credentials) {
+  function setupChannelUI(metadata, posts, followers, subscribedChannels, credentials) {
     $('#content').append(new MetadataPane({model: metadata}).el);
     $('#content').append(new PostStream({model: posts}).el);
     $('#right').append(new FollowerList({model: followers}).el);
@@ -74,6 +78,8 @@ define(function(require) {
       var userMenu = new UserMenu({model: credentials});
       $('#toolbar-right').append(userMenu.el);
       userMenu.render();
+
+      $('#left').append(new SubscribedChannelsList({model: subscribedChannels}).el);
     } else {
       var sidebar = new LoginSidebar({model: credentials});
       $('#left').append(sidebar.el);
