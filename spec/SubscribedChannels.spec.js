@@ -24,7 +24,7 @@ define(function(require) {
       subscribedChannels = new SubscribedChannels();
       subscribedChannels.set({
         'alice@example.com/posts': 'owner',
-	'alice@example.com/status': 'owner',
+				'alice@example.com/status': 'owner',
         'bob@example.com/geo': 'publisher',
         'ron@example.com/status': 'publisher',
         'alice@example2.com/posts': 'member'
