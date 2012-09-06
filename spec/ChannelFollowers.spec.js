@@ -19,18 +19,9 @@ define(function(require) {
   var ChannelMetadata = require('app/models/ChannelMetadata');
 
   describe('ChannelFollowers', function() {
-    var followers, resp;
+    var followers;
 
     beforeEach(function() {
-      spyOn(ChannelMetadata.prototype, 'fetch').andCallFake(function()  {
-        this.set({
-          access_model: "open",
-          channel_type: "personal",
-          default_affiliation: "publisher",
-          description: "Welcome to buddycloud!",
-          title: "Lounge"
-        });
-      });
       followers = new ChannelFollowers('alice@example.com');
       followers.set({
         'alice@example.com': 'owner',
@@ -92,10 +83,6 @@ define(function(require) {
 
       it('should remove *@anon.* followers that may exists', function() {
         expect(fixedFollowers['123@anon.buddyclourg.org']).toBe(undefined);
-      });
-
-      it('should apply the channel JID as the owner of the channel if doesn\'t exist', function() {
-        expect(fixedFollowers['alice@example.com']).toBe('owner');
       });
 
       it('should normalize the follower roles', function() {

@@ -24,9 +24,6 @@ define(function(require) {
     constructor: function(channel) {
       Backbone.Model.call(this);
       this.channel = channel;
-      // Temporary necessary for workarounds
-      this.metadata = new ChannelMetadata(this.channel);
-      this.metadata.fetch();
     },
 
     url: function() {
@@ -46,38 +43,18 @@ define(function(require) {
 
     // These are workarounds resultant by server issues
     parse: function(resp, xhr) {
-      var parsed = resp;
-      parsed = this._normalizeTypes(parsed);
-      parsed = this._removeAnonymous(parsed);
-      parsed = this._setOwner(parsed);
-      return parsed;
+      this._normalizeTypes(resp);
+      this._removeAnonymous(resp);
+      return resp;
     },
 
     _removeAnonymous: function(followers) {
       var result = {};
       _.each(followers, function(role, username) {
-        if (username.indexOf('@anon.') === -1) {
-          result[username] = role;
+        if (username.indexOf('@anon.') !== -1) {
+          delete followers[username];
         }
       });
-      return result;
-    },
-
-    _setOwner: function(followers) {
-      if (this._isPersonalChannel() && this._hasNoOwner(followers)) {
-        followers[this.channel] = 'owner';
-      }
-      return followers;
-    },
-
-    _isPersonalChannel: function() {
-      // This might return false if metadata attributes are not filled yet.
-      // It can happen because metadata.fetch() is async
-      return this.metadata && this.metadata.get('channel_type') === 'personal';
-    },
-
-    _hasNoOwner: function(followers) {
-      return !followers[this.channel] && followers[this.channel] !== 'owner';
     },
 
     _normalizeTypes: function(followers) {
@@ -85,11 +62,9 @@ define(function(require) {
         'follower+post': 'publisher',
         'follower': 'member'
       };
-      var result = {};
       _.each(followers, function(role, username) {
-        result[username] = normalizedRolesMap[role] || role;
+        followers[username] = normalizedRolesMap[role] || role;
       });
-      return result;
     }
   });
 

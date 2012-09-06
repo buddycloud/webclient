@@ -32,11 +32,12 @@ define(function(require) {
     ],
 
     initialize: function() {
-      this.model.bind('change', this.render, this);
+      this.model.bind('fetch', this.render, this);
     },
 
     render: function() {
-      var followers = this.model.byType();
+      var followers = this.model.followers.byType();
+      this._determineOwnerIfNeeded(followers);
       var avatars = this._getAvatars(followers);
 
       this.$el.html(_.template(template, {
@@ -53,6 +54,22 @@ define(function(require) {
         result[username] = api.avatarUrl(username);
       });
       return result;
+    },
+
+    // These are workarounds resultant by server issues
+    _determineOwnerIfNeeded: function(followers) {
+      if (this._isPersonalChannel() && this._hasNoOwner(followers)) {
+        followers.owner = [this.model.name];
+      }
+      return followers;
+    },
+
+    _isPersonalChannel: function() {
+      return this.model.metadata && this.model.metadata.get('channel_type') === 'personal';
+    },
+
+    _hasNoOwner: function(followers) {
+      return !followers.owner;
     }
   });
 
