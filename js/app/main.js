@@ -48,7 +48,9 @@ define(function(require) {
       fetch(metadata, credentials);
       fetch(posts, credentials);
       fetch(followers, credentials);
-      fetch(subscribedChannels, credentials);
+      if (credentials.username) {
+        fetch(subscribedChannels, credentials);
+      }
     });
   }
 
