@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-requirejs.config({
-  baseUrl: 'js',
-  paths: {
-    'config': '../spec/config',
-    'spec': '../spec'
-  }
-});
-
 define(function(require) {
-  require('spec/Channel.spec');
-  require('spec/ChannelFollowers.spec');
-  require('spec/ChannelMetadata.spec');
-  require('spec/ChannelPosts.spec');
-  require('spec/SubscribedChannels.spec');
-  require('spec/Post.spec');
-  require('spec/UserCredentials.spec');
-  require('spec/util_api.spec');
-  require('spec/util_avatarFallback.spec');
+  var Backbone = require('backbone');
+  var ChannelFollowers = require('app/models/ChannelFollowers');
+  var ChannelMetadata = require('app/models/ChannelMetadata');
+  var ChannelPosts = require('app/models/ChannelPosts');
 
-  jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
-  jasmine.getEnv().execute();
+  var Channel = Backbone.Model.extend({
+    constructor: function(name) {
+      Backbone.Model.call(this);
+      this.name = name;
+      this.followers = new ChannelFollowers(name);
+      this.metadata = new ChannelMetadata(name);
+      this.posts = new ChannelPosts(name);
+    }
+  });
+
+  return Channel;
 });

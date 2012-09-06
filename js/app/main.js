@@ -24,9 +24,7 @@ requirejs.config({
 
 define(function(require) {
   var $ = require('jquery');
-  var ChannelFollowers = require('app/models/ChannelFollowers');
-  var ChannelMetadata = require('app/models/ChannelMetadata');
-  var ChannelPosts = require('app/models/ChannelPosts');
+  var Channel = require('app/models/Channel');
   var config = require('config');
   var FollowerList = require('app/views/FollowerList');
   var LoginSidebar = require('app/views/LoginSidebar');
@@ -39,21 +37,21 @@ define(function(require) {
 
   function initialize() {
     var channel = getRequestedChannel();
-    var metadata = new ChannelMetadata(channel);
-    var posts = new ChannelPosts(channel);
-    var followers = new ChannelFollowers(channel);
     var subscribedChannels = new SubscribedChannels();
     getUserCredentials(function(credentials) {
-      setupChannelUI(metadata, posts, followers, subscribedChannels, credentials);
-      fetch(metadata, credentials);
-      fetch(posts, credentials);
-      fetch(followers, credentials);
-      fetch(subscribedChannels, credentials);
+      setupChannelUI(channel, subscribedChannels, credentials);
+      fetch(channel.metadata, credentials);
+      fetch(channel.posts, credentials);
+      fetch(channel.followers, credentials);
+      if (credentials.username) {
+        fetch(subscribedChannels, credentials);
+      }
     });
   }
 
   function getRequestedChannel() {
-    return document.location.search.slice(1) || config.defaultChannel;
+    var name = document.location.search.slice(1) || config.defaultChannel;
+    return new Channel(name);
   }
 
   function getUserCredentials(callback) {
@@ -70,16 +68,16 @@ define(function(require) {
     credentials.verify();
   }
 
-  function setupChannelUI(metadata, posts, followers, subscribedChannels, credentials) {
-    $('#content').append(new MetadataPane({model: metadata}).el);
-    $('#content').append(new PostStream({model: posts}).el);
-    $('#right').append(new FollowerList({model: followers}).el);
+  function setupChannelUI(channel, subscribedChannels, credentials) {
+    $('#content').append(new MetadataPane({model: channel.metadata}).el);
+    $('#content').append(new PostStream({model: channel.posts}).el);
+    $('#right').append(new FollowerList({model: channel.followers}).el);
     if (credentials.username) {
       var userMenu = new UserMenu({model: credentials});
+      var channelsList = new SubscribedChannelsList({model: subscribedChannels});
       $('#toolbar-right').append(userMenu.el);
+      $('#left').append(channelsList);
       userMenu.render();
-
-      $('#left').append(new SubscribedChannelsList({model: subscribedChannels}).el);
     } else {
       var sidebar = new LoginSidebar({model: credentials});
       $('#left').append(sidebar.el);
