@@ -54,6 +54,14 @@ define(function(require) {
       this._setupAvatarFallbacks();
     },
 
+    renderBatch: function() {
+      this.$el.append(_.template(template, {
+        threads: this.model.byThread(),
+        avatarUrlFunc: api.avatarUrl,
+        linkUrlsFunc: this._linkUrls
+      }));
+    },
+
     _linkUrls: function(content) {
       content = $('<div/>').text(content).html();
       return content.replace(URL_REGEX, '<a href="$&" target="_blank">$&</a>');
@@ -97,7 +105,7 @@ define(function(require) {
     infiniteScroll: function() {
         var rest = document.height - $(document).scrollTop() - window.innerHeight
         if (rest < 500 && !this.scrollLock) {
-            console.log("new batch")
+            this.renderBatch()
         }
     }
   
