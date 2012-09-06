@@ -38,7 +38,12 @@ define(function(require) {
       this.model.bind('add', this.render, this);
       this.model.bind('remove', this.render, this);
       this._renderSpinningIcon();
+      var that = this;
+      $(window).scroll(function() {
+        that.infiniteScroll();  
+      })
     },
+
 
     render: function() {
       this.$el.html(_.template(template, {
@@ -85,7 +90,17 @@ define(function(require) {
       this.model.on('reset', function() {
         clearTimeout(spin);
       });
+    },
+    
+    scrollLock: false,
+    
+    infiniteScroll: function() {
+        var rest = document.height - $(document).scrollTop() - window.innerHeight
+        if (rest < 500 && !this.scrollLock) {
+            console.log("new batch")
+        }
     }
+  
   });
 
   return PostStream;
