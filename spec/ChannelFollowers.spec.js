@@ -50,7 +50,7 @@ define(function(require) {
       });
     });
 
-    describe('followers grouped by type', function() {
+    describe('byType()', function() {
       it('should return followers grouped by type', function() {
         var followersGroupedBy = followers.byType();
         expect(followersGroupedBy.owner.length).toBe(1);
