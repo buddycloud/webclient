@@ -21,6 +21,9 @@ define(function(require) {
   var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/PostStream.html');
+  
+  require('jquery.embedly');
+  $.embedly.defaults['key'] = '55bafac9655742c1af02b11cb0bd08e4';
 
   // Thanks to John Gruber:
   // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
