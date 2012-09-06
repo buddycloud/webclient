@@ -34,12 +34,11 @@ define(function(require) {
     },
 
     byType: function() {
-      var result = {};
-      _.each(this.attributes, function(value, index) {
-        (result[value] || (result[value] = [])).push(index);
+      var attributes = this.attributes;
+      return _.groupBy(this.usernames(), function(username) {
+        return attributes[username];
       });
-      return result;
-    }    
+    }  
   });
 
   return ChannelFollowers;
