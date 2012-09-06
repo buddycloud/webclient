@@ -38,7 +38,7 @@ define(function(require) {
     render: function() {
       var followers = this.model.byType();
       var avatars = this._getAvatars(followers);
-      
+
       this.$el.html(_.template(template, {
         followerRoles: this.followerRoles,
         followers: followers,

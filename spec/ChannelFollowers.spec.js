@@ -16,11 +16,21 @@
 
 define(function(require) {
   var ChannelFollowers = require('app/models/ChannelFollowers');
+  var ChannelMetadata = require('app/models/ChannelMetadata');
 
   describe('ChannelFollowers', function() {
-    var followers;
+    var followers, resp;
 
     beforeEach(function() {
+      spyOn(ChannelMetadata.prototype, 'fetch').andCallFake(function()  {
+        this.set({
+          access_model: "open",
+          channel_type: "personal",
+          default_affiliation: "publisher",
+          description: "Welcome to buddycloud!",
+          title: "Lounge"
+        });
+      });
       followers = new ChannelFollowers('alice@example.com');
       followers.set({
         'alice@example.com': 'owner',
@@ -61,6 +71,36 @@ define(function(require) {
         expect(followersGroupedBy.publisher).toContain('bob@example.com');
         expect(followersGroupedBy.publisher).toContain('ron@example.com');
         expect(followersGroupedBy.member).toContain('eve@example.com');
+      });
+    });
+
+    describe('parse()', function() {
+      var fixedFollowers, resp;
+
+      beforeEach(function() {
+        resp = {
+          'bob@example.com': 'publisher',
+          'ron@example.com': 'publisher',
+          'eve@example.com': 'member',
+          '123@anon.buddyclourg.org': 'member',
+          'vic@example.com': 'follower',
+          'joe@example.com': 'follower+post',
+          'jon@example.com': 'member'
+        };
+        fixedFollowers = followers.parse(resp);
+      });
+
+      it('should remove *@anon.* followers that may exists', function() {
+        expect(fixedFollowers['123@anon.buddyclourg.org']).toBe(undefined);
+      });
+
+      it('should apply the channel JID as the owner of the channel if doesn\'t exist', function() {
+        expect(fixedFollowers['alice@example.com']).toBe('owner');
+      });
+
+      it('should normalize the follower roles', function() {
+        expect(fixedFollowers['joe@example.com']).toBe('publisher');
+        expect(fixedFollowers['jon@example.com']).toBe('member');
       });
     });
   });
