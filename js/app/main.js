@@ -74,7 +74,7 @@ define(function(require) {
       var userMenu = new UserMenu({model: credentials});
       var channelsList = new SubscribedChannelsList({model: subscribedChannels});
       $('#toolbar-right').append(userMenu.el);
-      $('#left').append(channelsList);
+      $('#left').append(channelsList.el);
       userMenu.render();
     } else {
       var sidebar = new LoginSidebar({model: credentials});
