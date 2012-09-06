@@ -23,6 +23,7 @@ requirejs.config({
 });
 
 define(function(require) {
+  require('spec/Channel.spec');
   require('spec/ChannelFollowers.spec');
   require('spec/ChannelMetadata.spec');
   require('spec/ChannelPosts.spec');
