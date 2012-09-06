@@ -40,9 +40,7 @@ define(function(require) {
     var subscribedChannels = new SubscribedChannels();
     getUserCredentials(function(credentials) {
       setupChannelUI(channel, subscribedChannels, credentials);
-      fetch(channel.metadata, credentials);
-      fetch(channel.posts, credentials);
-      fetch(channel.followers, credentials);
+      fetch(channel, credentials);
       if (credentials.username) {
         fetch(subscribedChannels, credentials);
       }

@@ -36,5 +36,32 @@ define(function(require) {
       expect(channel.metadata.channel).toBe(channel.name);
       expect(channel.posts.channel).toBe(channel.name);
     });
+
+    describe('fetch()', function() {
+      it('should call fetch() om each submodel', function() {
+        spyOn(channel.followers, 'fetch');
+        spyOn(channel.metadata, 'fetch');
+        spyOn(channel.posts, 'fetch');
+        channel.fetch();
+        expect(channel.followers.fetch).toHaveBeenCalled();
+        expect(channel.metadata.fetch).toHaveBeenCalled();
+        expect(channel.posts.fetch).toHaveBeenCalled();
+      });
+
+      it('should trigger "fetch" if all submodels are fetched', function() {
+        spyOn(channel.followers, 'fetch').andCallFake(function(options) {
+          options.success(channel.followers);
+        });
+        spyOn(channel.metadata, 'fetch').andCallFake(function(options) {
+          options.success(channel.metadata);
+        });
+        spyOn(channel.posts, 'fetch').andCallFake(function(options) {
+          options.success(channel.posts);
+        });
+        spyOn(channel, 'trigger');
+        channel.fetch();
+        expect(channel.trigger).toHaveBeenCalledWith('fetch');
+      });
+    });
   });
 });
