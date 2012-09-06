@@ -24,27 +24,53 @@ define(function(require) {
   var FollowerList = Backbone.View.extend({
     tagName: 'aside',
     className: 'follower-list bordered',
+    followerRoles: [
+      {id: 'owner', display: 'Owner'},
+      {id: 'moderator', display: 'Moderators'},
+      {id: 'publisher', display: 'Followers+Post'},
+      {id: 'member', display: 'Followers'},
+    ],
 
     initialize: function() {
-      this.model.bind('change', this.render, this);
+      this.model.bind('fetch', this.render, this);
     },
 
     render: function() {
-      var usernames = this.model.usernames();
-      var avatars = this._getAvatars(usernames);
+      var followers = this.model.followers.byType();
+      this._determineOwnerIfNeeded(followers);
+      var avatars = this._getAvatars(followers);
+
       this.$el.html(_.template(template, {
-        usernames: usernames,
+        followerRoles: this.followerRoles,
+        followers: followers,
         avatars: avatars
       }));
       avatarFallback(this.$('img'), 'personal', 32);
     },
 
-    _getAvatars: function(usernames) {
-      return _.map(usernames, function(username) {
-        return api.avatarUrl(username);
+    _getAvatars: function(followers) {
+      var result = {};
+      _.each(_.flatten(followers), function(username) {
+        result[username] = api.avatarUrl(username);
       });
-    }
+      return result;
+    },
 
+    // These are workarounds resultant by server issues
+    _determineOwnerIfNeeded: function(followers) {
+      if (this._isPersonalChannel() && this._hasNoOwner(followers)) {
+        followers.owner = [this.model.name];
+      }
+      return followers;
+    },
+
+    _isPersonalChannel: function() {
+      return this.model.metadata && this.model.metadata.get('channel_type') === 'personal';
+    },
+
+    _hasNoOwner: function(followers) {
+      return !followers.owner;
+    }
   });
 
   return FollowerList;
