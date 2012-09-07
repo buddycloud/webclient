@@ -67,7 +67,10 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-    $('#content').append(new MetadataPane({model: channel.metadata}).el);
+    $('#content').append(new MetadataPane({
+      model: channel, 
+      credentials: credentials,
+      subscribed: subscribedChannels}).el);
     $('#content').append(new PostStream({model: channel.posts}).el);
     $('#right').append(new FollowerList({model: channel}).el);
     if (credentials.username) {
@@ -92,3 +95,4 @@ define(function(require) {
 
   initialize();
 });
+

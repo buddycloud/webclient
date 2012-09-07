@@ -21,10 +21,7 @@ define(function(require) {
   var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/PostStream.html');
-
-  // Thanks to John Gruber:
-  // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-  var URL_REGEX = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/g;
+  var urlUtil = require('app/util/urlUtil');
 
   var PostStream = Backbone.View.extend({
     tagName: 'div',
@@ -41,14 +38,9 @@ define(function(require) {
       this.$el.html(_.template(template, {
         threads: this.model.byThread(),
         avatarUrlFunc: api.avatarUrl,
-        linkUrlsFunc: this._linkUrls
+        linkUrlsFunc: urlUtil.linkUrls
       }));
       this._setupAvatarFallbacks();
-    },
-
-    _linkUrls: function(content) {
-      content = $('<div/>').text(content).html();
-      return content.replace(URL_REGEX, '<a href="$&" target="_blank">$&</a>');
     },
 
     _setupAvatarFallbacks: function() {
