@@ -67,14 +67,17 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-    $('#content').append(new MetadataPane({model: channel.metadata}).el);
+    $('#content').append(new MetadataPane({
+      model: channel, 
+      credentials: credentials,
+      subscribed: subscribedChannels}).el);
     $('#content').append(new PostStream({model: channel.posts}).el);
-    $('#right').append(new FollowerList({model: channel.followers}).el);
+    $('#right').append(new FollowerList({model: channel}).el);
     if (credentials.username) {
       var userMenu = new UserMenu({model: credentials});
       var channelsList = new SubscribedChannelsList({model: subscribedChannels});
       $('#toolbar-right').append(userMenu.el);
-      $('#left').append(channelsList);
+      $('#left').append(channelsList.el);
       userMenu.render();
     } else {
       var sidebar = new LoginSidebar({model: credentials});
@@ -92,3 +95,4 @@ define(function(require) {
 
   initialize();
 });
+

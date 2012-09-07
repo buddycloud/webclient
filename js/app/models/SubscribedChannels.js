@@ -35,6 +35,27 @@ define(function(require) {
       });
 
       return _.uniq(channelsList);
+    },
+
+    subscribe: function(channel, node) {
+      this.save(channel + '/' + node, 'publisher', {silent: true});
+    },
+
+    unsubscribe: function(channel, node) {
+      this.save(channel + '/' + node, 'none', {silent: true});
+    },
+
+    sync: function(method, model, options) {
+      if (method === 'update' || method === 'create') {
+        // always POST only changed attributes
+        var changed = model.changedAttributes();
+        if (changed) {
+          options.data = JSON.stringify(changed || {});
+          method = 'create';
+        }
+      }
+
+      Backbone.sync.call(this, method, model, options);
     }
   });
 

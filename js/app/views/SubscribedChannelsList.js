@@ -21,7 +21,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/SubscribedChannelsList.html');
 
-  var UserChannelsList = Backbone.View.extend({
+  var SubscribedChannelsList = Backbone.View.extend({
     tagName: 'aside',
     className: 'subscribedchannels-list bordered',
 
@@ -47,5 +47,5 @@ define(function(require) {
 
   });
 
-  return UserChannelsList;
+  return SubscribedChannelsList;
 });
