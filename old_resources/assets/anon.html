@@ -1,0 +1,990 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>buddycloud Anon View</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href='http://fonts.googleapis.com/css?family=Nunito' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="web/css/main.css" type="text/css" media="screen">
+  <script type="text/javascript" src="config.js"></script>
+  <script src="web/js/app.js"></script>
+</head>
+<body class="wideChannelView anon">
+
+
+
+
+  <div class="overlay">
+    <div class="modal twoWindowed">
+      <div class="close">Close</div>
+      <div class="left">
+        <h2>buddycloud login</h2>
+        <p><span>Not yet a 0.?</span> <a href="#">Register</a></p>
+      </div>
+      <form class="right clearfix">
+        <span class="errors"></span>
+        <div>
+          <label for="auth_name">Type in your username</label>
+          <input type="text" id="auth_name" placeholder="film-girl99" name="name" required autofocus />
+        </div>
+        <div>
+          <label for="auth_pwd">and your password</label>
+          <input type="password" id="auth_pwd" name="password" required />
+        </div>
+        <div>
+          <!-- placceholder for the email input field -->
+        </div>
+        <span>
+        <input type="checkbox" id="store_local" />
+          <label for="store_local"> remember password <span>on this computer</span>
+          </label>
+        </span>
+        <span>
+          <a href="#">Forgot your password? Don't worry.</a>
+        </span>
+        <p class="leftBox">
+          <span class="spinner">logging you in</span>
+        </p>
+        <button type="submit" id="auth_submit" class="callToAction">Login</button>
+      </form>
+    </div>
+  </div>
+
+
+
+
+  <div id="sidebar">
+    <div id="channels">
+      <div class="search">
+        <input type="search" results="5" autosave="channelSearch" placeholder="Search Channels ..." />
+      </div>
+      <div class="channel selected">
+        <div class="avatar" title="Daisy's World - daisy@disney.com" style="background-image: url(public/avatars/user2.jpg)">
+          <span class="channelpost counter">2</span>
+        </div>
+        <div class="info">
+          <span class="owner">daisy<span class="domain">@disney.com</span></span>
+          <span class="status">What a wonderful day</span>
+        </div>
+        <div id="active_channel_indicator"><div></div></div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Disney's Beautiful Princesses - princesses@disney.com" style="background-image: url(public/avatars/channel2.jpg)">
+          <span class="channelpost counter admin">1</span>
+        </div>
+        <div class="info">
+          <span class="owner">princesses<span class="domain">@disney.com</span></span>
+          <span class="status">Haters gonna hate</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Disney's Bewitching Fairies - fairies@disney.com" style="background-image: url(public/avatars/channel3.jpg)">
+          <span class="channelpost counter admin">1</span>
+        </div>
+        <div class="info">
+          <span class="owner">fairies<span class="domain">@disney.com</span></span>
+          <span class="status">Hold on, be strong</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Duck's House - ducks@disney.com" style="background-image: url(public/avatars/channel4.jpg)">
+          <span class="channelpost counter">2</span>
+        </div>
+        <div class="info">
+          <span class="owner">ducks<span class="domain">@disney.com</span></span>
+          <span class="status">Donald's out of town. Free crib. Party!!</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+          <span class="status">Get of my lawn!</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+          <span class="status">Dogfood sucks</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+          <span class="status">Wooah, new trailer <a href="http://www.youtube.com/watch?v=TNMpa5yBf5o">http://www.youtube.com/watch?v=TNMpa5yBf5o</a></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+          <span class="status">Mencave</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+          <span class="status">I'm in my wonderland</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+          <span class="status">feeding camels</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+          <span class="status">Where is my romeo when you need him?</span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Get of my lawn!</span>
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Don't mess with us!</span>
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Falcon Punch!</span>
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Mencave</span>
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Wonderland</span>
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Sahara</span>
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Dschungel</span>
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Get of my lawn!</span>
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Don't mess with us!</span>
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Falcon Punch!</span>
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Mencave</span>
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Wonderland</span>
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Sahara</span>
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Dschungel</span>
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Get of my lawn!</span>
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Don't mess with us!</span>
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Falcon Punch!</span>
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Mencave</span>
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Wonderland</span>
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Sahara</span>
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Dschungel</span>
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Get of my lawn!</span>
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Don't mess with us!</span>
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Falcon Punch!</span>
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Mencave</span>
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Wonderland</span>
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Sahara</span>
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Dschungel</span>
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Get of my lawn!</span>
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Don't mess with us!</span>
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Falcon Punch!</span>
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Mencave</span>
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Wonderland</span>
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Sahara</span>
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Dschungel</span>
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Get of my lawn!</span>
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Don't mess with us!</span>
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Falcon Punch!</span>
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Mencave</span>
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Wonderland</span>
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Sahara</span>
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Dschungel</span>
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Get of my lawn!</span>
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Don't mess with us!</span>
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Falcon Punch!</span>
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Mencave</span>
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Wonderland</span>
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Sahara</span>
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Dschungel</span>
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Get of my lawn! - mickey@disney.com" style="background-image: url(public/avatars/user4.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Get of my lawn!</span>
+          <span class="owner">mickey<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Don't mess with us! - cats@disney.com" style="background-image: url(public/avatars/channel6.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Don't mess with us!</span>
+          <span class="owner">cats<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Falcon Punch! - toy-story@disney.com" style="background-image: url(public/avatars/channel7.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Falcon Punch!</span>
+          <span class="owner">toy-story<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Mencave - hercules@disney.com" style="background-image: url(public/avatars/channel8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Mencave</span>
+          <span class="owner">hercules<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Wonderland - sleeping-beauty@disney.com" style="background-image: url(public/avatars/user9.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Wonderland</span>
+          <span class="owner">sleeping-beauty<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Sahara - mulan@disney.com" style="background-image: url(public/avatars/user8.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Sahara</span>
+          <span class="owner">mulan<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+      <div class="channel">
+        <div class="avatar" title="Dschungel - pocahontas@disney.com" style="background-image: url(public/avatars/user11.jpg)">
+        </div>
+        <div class="info">
+          <span class="title">Dschungel</span>
+          <span class="owner">pocahontas<span class="domain">@disney.com</span></span>
+        </div>
+      </div>
+    </div>
+    <div id="more_channels">
+      more...
+    </div>
+  </div>
+  <div id="content">
+    <div class="channelView clearfix">
+      <header class="clearfix">
+        <h2 class="title" title="Daisys World">Daisys World</h2>
+        <!--<span class="status">Hanging out with the world at my feet</span>-->
+        <div class="location">
+          <span class="previous">Home</span> → 
+          <span class="current">Shopping</span> → 
+          <span class="future">Home</span>
+        </div>
+        <nav>
+          <div class="button double"><span>Login</span>Register to follow</div>
+          <div class="infoToggle" title="Channel Info"><span class="icon"></span></div>
+        </nav>
+      </header>
+      <section class="stream clearfix">
+        <article class="topic">
+          <section class="opener">
+            <img class="avatar" src="public/avatars/user2.jpg" />
+            <div class="postmeta">
+              <span class="time" title="5:06pm 06.06.2011">5 minutes</span>
+            </div>
+            <span class="name">Daisy</span><span class="location">from Donald's Place</span>
+            <p>I'm a sociopath; there's not much he can do for me. I have a dark side, too. I will not kill my sister. I will not kill my sister. I will not kill my sister. He taught me a code. To survive. Under normal circumstances, I'd take that as a compliment. I'm generally confused most of the time.</p>
+          </section>
+        </article>
+        <article class="topic">
+          <section class="opener">
+            <img class="avatar" src="public/avatars/user2.jpg" />
+            <div class="postmeta">
+              <span class="time">3 days</span>
+            </div>
+            <span class="name">Daisy</span><span class="location">from Disneyland Paris</span>
+            <p>Pretend. You pretend the feelings are there, for the world, for the people around you.</p>
+          </section>
+          <section class="comments">
+            <section class="comment">
+              <img class="avatar" src="public/avatars/user6.jpg" />
+              <div class="postmeta">
+                <span class="time">3 days</span>
+              </div>
+              <span class="name">Princess Jasmine</span><span class="location">from Disneyland Paris</span>
+              <p>Who knows? Maybe one day they will be. I like seafood.</p>
+            </section>
+            <section class="comment">
+              <img class="avatar" src="public/avatars/user8.jpg" />
+              <div class="postmeta">
+                <span class="time">3 days</span>
+              </div>
+              <span class="name">Mulan</span><span class="location">from Disneyland Paris</span>
+              <p>Finding a needle in a haystack isn't hard when every straw is computerized. I'm really more an apartment person.</p>
+            </section>
+            <section class="comment">
+              <img class="avatar" src="public/avatars/user11.jpg" />
+              <div class="postmeta">
+                <span class="time">3 days</span>
+              </div>
+              <span class="name">Pocahontas</span><span class="location">Disneyland California</span>
+              <p>I feel like a jigsaw puzzle missing a piece. And I'm not even sure what the picture should be.</p>
+            </section>
+            <section class="comment">
+              <img class="avatar" src="public/avatars/user8.jpg" />
+              <div class="postmeta">
+                <span class="time">3 days</span>
+              </div>
+              <span class="name">Mulan</span><span class="location">from Disneyland California</span>
+              <p>I'm going to tell you something that I've never told anyone before.</p>
+            </section>
+          </section>
+        </article>
+        <article class="topic">
+          <section class="opener">
+            <img class="avatar" src="public/avatars/user2.jpg" />
+            <div class="postmeta">
+              <span class="time">3 days</span>
+            </div>
+            <span class="name">Daisy</span><span class="location">from Disneyland Paris</span>
+            <p>Pretend. You pretend the feelings are there, for the world, for the people around you.</p>
+          </section>
+          <section class="comments">
+            <section class="comment">
+              <img class="avatar" src="public/avatars/user6.jpg" />
+              <div class="postmeta">
+                <span class="time">3 days</span>
+              </div>
+              <span class="name">Princess Jasmine</span><span class="location">from Disneyland Paris</span>
+              <p>Who knows? Maybe one day they will be. I like seafood.</p>
+            </section>
+            <section class="comment">
+              <img class="avatar" src="public/avatars/user8.jpg" />
+              <div class="postmeta">
+                <span class="time">3 days</span>
+              </div>
+              <span class="name">Mulan</span><span class="location">from Disneyland Paris</span>
+              <p>Finding a needle in a haystack isn't hard when every straw is computerized. I'm really more an apartment person.</p>
+            </section>
+            <section class="comment">
+              <img class="avatar" src="public/avatars/user11.jpg" />
+              <div class="postmeta">
+                <span class="time">3 days</span>
+              </div>
+              <span class="name">Pocahontas</span><span class="location">Disneyland California</span>
+              <p>I feel like a jigsaw puzzle missing a piece. And I'm not even sure what the picture should be.</p>
+            </section>
+            <section class="comment">
+              <img class="avatar" src="public/avatars/user8.jpg" />
+              <div class="postmeta">
+                <span class="time">3 days</span>
+              </div>
+              <span class="name">Mulan</span><span class="location">from Disneyland California</span>
+              <p>I'm going to tell you something that I've never told anyone before.</p>
+            </section>
+          </section>
+        </article>
+      </section><!-- /stream -->
+      <div class="channelDetails">
+        <!--<div class="infoToggle">
+          <h4 class="title">Channel Info</h4>
+          <span class="icon"></span>
+        </div>-->
+        <div class="holder">
+          <section class="meta">
+            <p>
+              <span class="title">Owner:</span>Vera@disney.com</span>
+            </p>
+            <p>
+              <span class="title">About me:</span>I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend.
+            </p>
+            <p class="open">
+              <span class="title">This Channel is:</span>Public
+            </p>
+            <p class="broadcast">
+              <span class="title">Broadcasting since:</span>188 days
+            </p>
+            <p class="location">
+              <span class="title">Location:</span>
+              <span class="previous">Home</span> → 
+              <span class="current">Shopping</span> → 
+              <span class="future">Home</span>
+            </p>
+          </section>
+          <section class="channelList">
+            <h3>moderators <span class="count">1</count></h3>
+            <div class="list">
+              <img src="public/avatars/user2.jpg" />
+            </div>
+          </section><!-- /followers -->
+          <section class="channelList">
+            <h3>followers <span class="count">20</count></h3>
+            <div class="list">
+              <img src="public/avatars/user3.jpg" class="selected" />
+              <img src="public/avatars/user4.jpg" />
+              <img src="public/avatars/user5.jpg" />
+              <img src="public/avatars/user6.jpg" />
+              <div class="adminAction first choosen role moderator">
+                <div class="arrow"></div>
+                <div class="holder">
+                  <div class="box">
+                    <section class="channelInfo">
+                      <h4>tom@buddycloud.com</h4>
+                      <div class="currentRole">Follower</div>
+                    </section>
+                    <section class="action changeRole">
+                      <h5>Change Role</h5>
+                      <select>
+                        <option value="moderator">Moderator</option>
+                        <option value="followerPlus">Follower+Post</option>
+                        <option value="follower" selected>Follower</option>
+                      </select>
+                      <section class="info">
+                        <div class="moderator">
+                          <ul>
+                            <li>read your channel</li>
+                            <li>write comments &amp; messages</li>
+                            <li>post new topics</li>
+                            <li>add &amp; ban users</li>
+                            <li>set user's roles</li>
+                          </ul>
+                        </div>
+                        <div class="followerPlus">
+                          <ul>
+                            <li>read your channel</li>
+                            <li>write comments &amp; messages</li>
+                            <li>post new topics</li>
+                          </ul>
+                        </div>
+                        <div class="follower">
+                          <ul>
+                            <li>read your channel</li>
+                          </ul>
+                        </div>
+                      </section>
+                    </section>
+                    <section class="action banUser">
+                      <h5>Ban User</h5>
+                      <div class="info">
+                        <ul>
+                          <li class="negative">Remove access to channel.</li>
+                        </ul>
+                      </div>
+                    </section>
+                    <section class="actionRow">
+                      <div>Change Role</div>
+                      <div>Ban User</div>
+                    </section>  
+                    <section class="actionRow confirm">
+                      <div>Cancel</div>
+                      <div>Ok</div>
+                    </section>
+                  </div><!-- /box -->
+                </div>
+              </div>
+              <img src="public/avatars/user7.jpg" />
+              <img src="public/avatars/user8.jpg" />
+              <img src="public/avatars/user9.jpg" />
+              <img src="public/avatars/user10.jpg" />
+              <img src="public/avatars/user11.jpg" />
+              <img src="public/avatars/user12.jpg" />
+              <img src="public/avatars/user13.jpg" />
+              <img src="public/avatars/channel8.jpg" />
+            </div>
+            <div class="showAll">show all</div>
+          </section><!-- /followers -->
+          <section class="channelList">
+            <h3>channels nearby <span class="count">10</count></h3>
+            <div class="list">
+              <img src="public/avatars/channel1.jpg" />
+              <img src="public/avatars/channel2.jpg" />
+              <img src="public/avatars/channel3.jpg" />
+              <img src="public/avatars/channel4.jpg" />
+            </div>
+            <div class="showAll">show all</div>
+          </section><!-- /followers -->
+          <section class="channelList">
+            <h3>similar channels <span class="count">8</count></h3>
+            <div class="list">
+              <img src="public/avatars/channel5.jpg" />
+              <img src="public/avatars/channel6.jpg" />
+              <img src="public/avatars/channel7.jpg" />
+              <img src="public/avatars/channel8.jpg" />
+            </div>
+            <div class="showAll">show all</div>
+          </section><!-- /followers -->
+        </div><!-- /holder -->
+      </div><!-- /detail -->
+    </div><!-- /channelView -->
+  </div><!-- /content -->
+<script type="text/javascript">
+  !function(document){
+
+      // (C) WebReflection (As It Is) - Mit Style
+
+      // we all love function declarations
+      function redraw() {
+
+          // clientHeight returns 0 if not present in the DOM
+          // e.g. document.removeChild(document.documentElement);
+          // also some crazy guy may swap runtime the whole HTML element
+          // this is why the documentElement should be always discovered
+          // and if present, it should be a node of the document
+          // In all these cases the returned value is true
+          // otherwise what is there cannot really be considered as painted
+
+          return !!(document.documentElement || 0).clientHeight;
+      }
+
+      // ideally an Object.defineProperty
+      // unfortunately some engine will complain
+      // if used against DOM objects
+      document.redraw = redraw;
+
+  }(document);
+  
+  /* ###
+  
+    Channel bubbling
+  
+    ### */
+  var channels = $('#channels');
+  var channel = channels.find('.channel');
+  var personal_channel = channels.find('.search');
+  var canidate;
+  var transEndEventNames = {
+    '-webkit-transition' : 'webkitTransitionEnd',
+    '-moz-transition' : 'transitionend',
+    '-o-transition' : 'oTransitionEnd',
+    'transition' : 'transitionEnd'
+  };
+  var prefix = getBrowserPrefix();
+  var transitionendEvent = transEndEventNames[prefix+'transition'];
+  
+  function getBrowserPrefix(){
+      var regex = /^(Moz|Webkit|Khtml|O|ms|Icab)(?=[A-Z])/;
+      var tester = document.getElementsByTagName('script')[0];
+      var prefix = "";
+      for(var prop in tester.style) {
+          if(regex.test(prop)) {
+              prefix = prop.match(regex)[0];
+              break;
+          }
+      }
+      if('WebkitOpacity' in tester.style) prefix = 'Webkit';
+      return prefix === "" ? "" : '-' + prefix.charAt(0).toLowerCase() + prefix.slice(1) +'-';
+  }
+  
+  function bubble(){
+    var offset = $(this).position().top;
+    if(offset === 0) return false; // the channel has an offset of 0 - it should stay where it is. so stop
+    var distance = -offset+20+31; // 31 is searchbar height
+    canidate = $(this);
+    // enable transitions
+    channels.removeClass('curtainsDown');
+    // undock => sets z-index 
+    canidate.addClass('bubbleUp');
+    // bind the transitionend to the reset function which resets the DOM after the animation
+    canidate.one(transitionendEvent, reset);
+    // enable transitions again and start to move the channels above the moved channel to close the gap
+    channels.addClass('makePlace');
+    // animate the channel to bubble up
+    canidate.css(prefix+'transform', "translateY("+distance+"px)");
+  }
+  
+  function reset(event){
+    // disable transitions
+    channels.addClass('curtainsDown');
+    // extract the bubbling channel from the DOM, remove the classes, reset the transformation and add it at the top
+    canidate.detach().removeClass('undock bubbleUp').css(prefix+'transform', "").insertAfter(personal_channel);
+    // move the channels back in place
+    channels.removeClass('makePlace');
+  }
+  
+  channel.bind('click', bubble);
+  
+  /* ###
+    
+    More Channels
+    
+    ### */
+  var moreChannels = $('#more_channels');
+  var areChannelsOpen = false;
+  
+  function channelOverview(){
+    if(areChannelsOpen){
+      $('body').removeClass('stateArrived');
+      document.redraw();
+      $('body').addClass('inTransition');
+      $('body').removeClass('channelOverview');
+      areChannelsOpen = false;
+    } else {
+      $('body').addClass('inTransition');
+      $('body').addClass('channelOverview');
+      areChannelsOpen = true;
+    }
+    channels.one(transitionendEvent, transitionEnd);
+  }
+  
+  function transitionEnd(){
+    $('body').removeClass('inTransition');
+    if($('body').hasClass('channelOverview')) $('body').addClass('stateArrived');
+  }
+  
+  moreChannels.click(channelOverview);
+  
+  /* ###
+    
+    show/hide channel info
+    
+    ### */
+  var channelInfo = $('.channelDetails');  
+  var channelInfoToggle = channelInfo.find('> .toggle');
+  
+  channelInfoToggle.click(function(){ channelInfo.toggleClass('hidden'); });
+  
+  $('.showAll').click(function(){
+    var list = $(this).prev();
+    list.children().clone().appendTo(list);
+    $(this).remove();
+  });
+
+  $('.overlay').show()
+</script>
+</body>
+</html>
