@@ -1,0 +1,38 @@
+<html>
+<head>
+  <style>
+  .outer {
+    width: 100px;
+    height: 100px;
+    border: 1px solid gray;
+    position: relative;
+    -webkit-transition: 500ms;
+  }
+    .outer.bubble {
+      top: 250px;
+    }
+  .inner {
+    top: 500px;
+    width: 100px;
+    height: 100px;
+    background: red;
+    position: absolute;
+    -webkit-transition: 500ms;
+  }
+    .bubble .inner {
+      top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="outer">
+    <div class="inner"></div>
+  </div>
+<script>
+  var outer = document.querySelector('.outer');
+  window.addEventListener('click', function(){
+    outer.classList.toggle('bubble');
+  });
+</script>
+</body>
+</html>

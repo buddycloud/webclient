@@ -22,7 +22,9 @@ define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/PostStream.html');
   var urlUtil = require('app/util/urlUtil');
-
+  
+  require('jquery.embedly');
+  $.embedly.defaults['key'] = '55bafac9655742c1af02b11cb0bd08e4';
   var PostStream = Backbone.View.extend({
     tagName: 'div',
     className: 'post-stream',
@@ -32,7 +34,12 @@ define(function(require) {
       this.model.bind('add', this.render, this);
       this.model.bind('remove', this.render, this);
       this._renderSpinningIcon();
+      var that = this;
+      $(window).scroll(function() {
+        that.infiniteScroll();  
+      })
     },
+
 
     render: function() {
       this.$el.html(_.template(template, {
@@ -41,6 +48,19 @@ define(function(require) {
         linkUrlsFunc: urlUtil.linkUrls
       }));
       this._setupAvatarFallbacks();
+    },
+
+    renderBatch: function() {
+      this.$el.append(_.template(template, {
+        threads: this.model.byThread(),
+        avatarUrlFunc: api.avatarUrl,
+        linkUrlsFunc: this._linkUrls
+      }));
+    },
+
+    _linkUrls: function(content) {
+      content = $('<div/>').text(content).html();
+      return content.replace(URL_REGEX, '<a href="$&" target="_blank">$&</a>');
     },
 
     _setupAvatarFallbacks: function() {
@@ -74,7 +94,17 @@ define(function(require) {
       this.model.on('reset', function() {
         clearTimeout(spin);
       });
+    },
+    
+    scrollLock: false,
+    
+    infiniteScroll: function() {
+        var rest = document.height - $(document).scrollTop() - window.innerHeight
+        if (rest < 500 && !this.scrollLock) {
+            this.renderBatch()
+        }
     }
+  
   });
 
   return PostStream;
