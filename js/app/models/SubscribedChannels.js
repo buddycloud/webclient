@@ -55,8 +55,7 @@ define(function(require) {
     },
 
     _saveChangedAttributes: function(credentials, callback) {
-      this.save({},
-      {
+      this.save({}, {
         headers: {'Authorization': credentials.toAuthorizationHeader()},
         xhrFields: {withCredentials: true},
         silent: true,

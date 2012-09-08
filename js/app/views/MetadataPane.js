@@ -65,12 +65,18 @@ define(function(require) {
 
     _follow: function() {
       this.options.subscribed.subscribe(
-        this.model.name, 'posts', this.options.credentials); 
+        this.model.name,
+        'posts',
+        this.options.credentials
+      );
     },
 
     _unfollow: function() {
       this.options.subscribed.unsubscribe(
-        this.model.name, 'posts', this.options.credentials); 
+        this.model.name,
+        'posts',
+        this.options.credentials
+      );
     }
   });
 
