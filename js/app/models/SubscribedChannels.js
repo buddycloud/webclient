@@ -50,7 +50,7 @@ define(function(require) {
       var channelAndNode = channel + '/' + node;
       this.set(channelAndNode, 'none', {silent: true})
       this._saveChangedAttributes(credentials, function() {
-        delete self.attributes[channelAndNode];
+        self.fetch();
         self.trigger('sync');
       });
     },
