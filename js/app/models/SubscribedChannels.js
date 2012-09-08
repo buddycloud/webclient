@@ -36,12 +36,32 @@ define(function(require) {
       return _.uniq(channelsList);
     },
 
-    subscribe: function(channel, node) {
-      this.save(channel + '/' + node, 'publisher', {silent: true});
+    subscribe: function(channel, node, credentials) {
+      var self = this;
+      this.set(channel + '/' + node, 'publisher', {silent: true})
+      this._saveChangedAttributes(credentials, function() {
+        self.trigger('sync');
+      });
     },
 
-    unsubscribe: function(channel, node) {
-      this.save(channel + '/' + node, 'none', {silent: true});
+    unsubscribe: function(channel, node, credentials) {
+      var self = this;
+      var channelAndNode = channel + '/' + node;
+      this.set(channelAndNode, 'none', {silent: true})
+      this._saveChangedAttributes(credentials, function() {
+        delete self.attributes[channelAndNode];
+        self.trigger('sync');
+      });
+    },
+
+    _saveChangedAttributes: function(credentials, callback) {
+      this.save({},
+      {
+        headers: {'Authorization': credentials.toAuthorizationHeader()},
+        xhrFields: {withCredentials: true},
+        silent: true,
+        success: callback
+      });
     },
 
     sync: function(method, model, options) {
@@ -50,6 +70,8 @@ define(function(require) {
         var changed = model.changedAttributes();
         if (changed) {
           options.data = JSON.stringify(changed || {});
+          options.contentType = 'application/json';
+          options.dataType = 'text';
           method = 'create';
         }
       }
