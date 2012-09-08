@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-    var $ = require('jquery');
+  var $ = require('jquery');
   var _ = require('underscore');
   var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');

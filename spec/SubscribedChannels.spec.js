@@ -16,6 +16,7 @@
 
 define(function(require) {
   var SubscribedChannels = require('app/models/SubscribedChannels');
+  var UserCredentials = require('app/models/UserCredentials');
 
   describe('SubscribedChannels', function() {
     var subscribedChannels;
@@ -37,7 +38,7 @@ define(function(require) {
     });
 
     describe('channels()', function() {
-      it('should return subscribedChannels without affiliations', function() {
+      it('should return subscribed channels without affiliations', function() {
         var channels = subscribedChannels.channels();
         expect(channels.length).toBe(4);
         expect(channels).toContain('alice@example.com');
