@@ -30,7 +30,8 @@ define(function(require) {
       'click .unfollow': '_unfollow'},
 
     initialize: function() {
-      this.model.metadata.bind('change', this.render, this);
+      this.model.bind('fetch', this.render, this);
+      this.options.subscribed.bind('sync', this.render, this);
     },
 
     render: function() {
@@ -63,11 +64,19 @@ define(function(require) {
     },
 
     _follow: function() {
-      this.options.subscribed.subscribe(this.model.name, 'posts');
+      this.options.subscribed.subscribe(
+        this.model.name,
+        'posts',
+        this.options.credentials
+      );
     },
 
     _unfollow: function() {
-      this.options.subscribed.unsubscribe(this.model.name, 'posts');
+      this.options.subscribed.unsubscribe(
+        this.model.name,
+        'posts',
+        this.options.credentials
+      );
     }
   });
 
