@@ -30,7 +30,8 @@ define(function(require) {
       'click .unfollow': '_unfollow'},
 
     initialize: function() {
-      this.model.metadata.bind('change', this.render, this);
+      this.model.bind('fetch', this.render, this);
+      this.options.subscribed.bind('sync', this.render, this);
     },
 
     render: function() {
@@ -48,13 +49,12 @@ define(function(require) {
     },
 
     _userIsFollowing: function() {
-      var username = this.options.credentials.username;
-      var followers = this.model.followers.usernames();
-      return _.include(followers, username);
+      var channel = this.model.metadata.channel;
+      var subcribedChannels = this.options.subscribed.channels();
+      return _.include(subcribedChannels, channel);
     },
 
     _renderButton: function() {
-      var followers = this.model.followers.usernames();
       var button = this._userIsFollowing() ? 
         $('<button class="unfollow">Unfollow</button>') :
         $('<button class="follow">Follow</button>');
@@ -62,11 +62,13 @@ define(function(require) {
     },
 
     _follow: function() {
-      this.options.subscribed.subscribe(this.model.name, 'posts'); 
+      this.options.subscribed.subscribe(
+        this.model.name, 'posts', this.options.credentials); 
     },
 
     _unfollow: function() {
-      this.options.subscribed.unsubscribe(this.model.name, 'posts');
+      this.options.subscribed.unsubscribe(
+        this.model.name, 'posts', this.options.credentials); 
     }
   });
 
