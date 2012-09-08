@@ -37,6 +37,15 @@ define(function(require) {
     content: function() {
       return this.get('content');
     },
+
+    parse: function(resp, xhr) {
+      var location;
+      if (xhr && (location = xhr.getResponseHeader('Location'))) {
+        this.set('id', location.substr(location.lastIndexOf('/')+1));
+        this.set('author', sessionStorage.username);
+      }
+      return resp;
+    }
   });
 
   return Post;

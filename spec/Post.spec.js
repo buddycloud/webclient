@@ -44,6 +44,19 @@ define(function(require) {
         expect(post.updated()).toBe(post.published());
       });
     });
+
+    describe('parse()', function() {
+      it('should set id and author attribute if location response header exists', function() {
+        var xhr = {getResponseHeader: function() {}}; // to avoid jasmine 'method does not exist' error
+        spyOn(xhr, 'getResponseHeader').andReturn('/alive@example.com/content/posts/a9063953-211e-4658-87b6-f610c8425e88');
+        // spyOn(sessionStorage, 'getItem').andReturn('alice@example.com');
+        post.parse('', xhr);
+        expect(xhr.getResponseHeader).toHaveBeenCalledWith('Location');
+        // expect(sessionStorage.getItem).toHaveBeenCalledWith('username');
+        expect(post.id).toBe('a9063953-211e-4658-87b6-f610c8425e88');
+        // expect(post.author).toBe('alice@example.com');
+      });
+    });
   });
 
 });
