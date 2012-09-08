@@ -33,7 +33,6 @@ define(function(require) {
       var channelsList = _.map(nodes, function(node) {
         return node.split('/')[0];
       });
-
       return _.uniq(channelsList);
     },
 
@@ -54,7 +53,6 @@ define(function(require) {
           method = 'create';
         }
       }
-
       Backbone.sync.call(this, method, model, options);
     }
   });

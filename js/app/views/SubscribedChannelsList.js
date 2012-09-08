@@ -44,7 +44,6 @@ define(function(require) {
         return api.avatarUrl(channel);
       });
     }
-
   });
 
   return SubscribedChannelsList;

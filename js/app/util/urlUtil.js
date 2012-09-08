@@ -15,16 +15,16 @@
  */
 
 define(function(require) {
-	// Thanks to John Gruber:
-	// http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-	var URL_REGEX = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/g;
+  // Thanks to John Gruber:
+  // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+  var URL_REGEX = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/g;
 
-	function linkUrls(content) {
-		content = $('<div/>').text(content).html();
-		return content.replace(URL_REGEX, '<a href="$&" target="_blank">$&</a>');
-	}
+  function linkUrls(content) {
+    content = $('<div/>').text(content).html();
+    return content.replace(URL_REGEX, '<a href="$&" target="_blank">$&</a>');
+  }
 
-	return {
+  return {
     linkUrls: linkUrls
   };
 });

@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-    var $ = require('jquery');
+  var $ = require('jquery');
   var _ = require('underscore');
   var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
@@ -36,7 +36,8 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {
         metadata: this.model.metadata,
-        linkUrlsFunc: urlUtil.linkUrls}));
+        linkUrlsFunc: urlUtil.linkUrls
+      }));
       if (this._isLoggedIn()) {
         this._renderButton();
       }
@@ -47,22 +48,22 @@ define(function(require) {
       return !!this.options.credentials.username;
     },
 
+    _renderButton: function() {
+      var followers = this.model.followers.usernames();
+      var button = this._userIsFollowing() ?
+        $('<button class="unfollow">Unfollow</button>') :
+        $('<button class="follow">Follow</button>');
+      this.$el.append(button);
+    },
+
     _userIsFollowing: function() {
       var username = this.options.credentials.username;
       var followers = this.model.followers.usernames();
       return _.include(followers, username);
     },
 
-    _renderButton: function() {
-      var followers = this.model.followers.usernames();
-      var button = this._userIsFollowing() ? 
-        $('<button class="unfollow">Unfollow</button>') :
-        $('<button class="follow">Follow</button>');
-      this.$el.append(button);    
-    },
-
     _follow: function() {
-      this.options.subscribed.subscribe(this.model.name, 'posts'); 
+      this.options.subscribed.subscribe(this.model.name, 'posts');
     },
 
     _unfollow: function() {
