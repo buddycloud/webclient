@@ -62,8 +62,6 @@ define(function(require) {
     _userIsFollowing: function() {
       var username = this.options.credentials.username;
       var subscribedChannels = this.options.subscribed.channels();
-      console.log('vai renderizar o botão');
-      console.log(subscribedChannels);
       return _.include(subscribedChannels, this.model.name);
     },
 

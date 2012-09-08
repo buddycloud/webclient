@@ -83,8 +83,6 @@ define(function(require) {
       if (method === 'update' || method === 'create') {
         // always POST only changed attributes
         var changed = model.changedAttributes();
-        console.log('o que mudou...');
-        console.log(changed);
         if (changed) {
           options.data = JSON.stringify(changed || {});
           options.contentType = 'application/json';
