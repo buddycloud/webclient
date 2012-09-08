@@ -21,6 +21,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/MetadataPane.html');
   var urlUtil = require('app/util/urlUtil');
+  var mediator = Backbone.Events;
 
   var MetadataPane = Backbone.View.extend({
     tagName: 'header',
@@ -31,7 +32,8 @@ define(function(require) {
 
     initialize: function() {
       this.model.bind('fetch', this.render, this);
-      this.options.subscribed.bind('sync', this.render, this);
+      mediator.bind('subscribedChannel', this._renderButton, this);
+      mediator.bind('unsubscribedChannel', this._renderButton, this);
     },
 
     render: function() {
@@ -50,33 +52,31 @@ define(function(require) {
     },
 
     _renderButton: function() {
-      var followers = this.model.followers.usernames();
       var button = this._userIsFollowing() ?
         $('<button class="unfollow">Unfollow</button>') :
         $('<button class="follow">Follow</button>');
+      this.$('button').remove();
       this.$el.append(button);
     },
 
     _userIsFollowing: function() {
       var username = this.options.credentials.username;
-      var followers = this.model.followers.usernames();
-      return _.include(followers, username);
+      var subscribedChannels = this.options.subscribed.channels();
+      console.log('vai renderizar o botão');
+      console.log(subscribedChannels);
+      return _.include(subscribedChannels, this.model.name);
     },
 
     _follow: function() {
-      this.options.subscribed.subscribe(
-        this.model.name,
-        'posts',
-        this.options.credentials
-      );
+      mediator.trigger('subscribeChannel', this.model.name, 'posts', this._defaultChannelRole());
     },
 
     _unfollow: function() {
-      this.options.subscribed.unsubscribe(
-        this.model.name,
-        'posts',
-        this.options.credentials
-      );
+      mediator.trigger('unsubscribeChannel', this.model.name, 'posts');
+    },
+
+    _defaultChannelRole: function() {
+      return this.model.metadata.accessModel() === 'authorize' ? 'member' : 'publisher';
     }
   });
 

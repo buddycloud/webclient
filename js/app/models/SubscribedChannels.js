@@ -36,21 +36,23 @@ define(function(require) {
       return _.uniq(channelsList);
     },
 
-    subscribe: function(channel, node, credentials) {
+    subscribe: function(channel, node, role, credentials) {
       var self = this;
-      this.set(channel + '/' + node, 'publisher', {silent: true})
+      this.set(channel + '/' + node, role, {silent: true});
       this._saveChangedAttributes(credentials, function() {
-        self.trigger('sync');
+        self.trigger('sync', 'subscribedChannel', channel, role);
+        self.change();
       });
     },
 
     unsubscribe: function(channel, node, credentials) {
       var self = this;
       var channelAndNode = channel + '/' + node;
-      this.set(channelAndNode, 'none', {silent: true})
+      this.set(channelAndNode, 'none', {silent: true});
       this._saveChangedAttributes(credentials, function() {
         delete self.attributes[channelAndNode];
-        self.trigger('sync');
+        self.trigger('sync', 'unsubscribedChannel', channel);
+        self.change();
       });
     },
 
@@ -63,10 +65,26 @@ define(function(require) {
       });
     },
 
+    parse: function(resp, xhr) {
+      if (typeof(resp) === 'string') return {};
+      else if (typeof(resp) === 'object') {
+        var result = {};
+        _.each(resp, function(value, node) {
+          if (node.indexOf('/posts') !== -1) {
+            result[node] = value;
+          }
+        });
+        return result;
+      }
+      return resp;
+    },
+
     sync: function(method, model, options) {
       if (method === 'update' || method === 'create') {
         // always POST only changed attributes
         var changed = model.changedAttributes();
+        console.log('o que mudou...');
+        console.log(changed);
         if (changed) {
           options.data = JSON.stringify(changed || {});
           options.contentType = 'application/json';
