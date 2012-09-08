@@ -23,8 +23,49 @@
   padding: 8px;
 }
 
+.post-stream .new-topic {
+  padding: 14px 13px 13px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+
+.post-stream textarea {
+  width: 100%;
+  margin: 0;
+  padding: 5px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  resize: none;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  border: 1px solid rgba(0, 0, 0, 0.13);
+  font: 13px/19.5px sans-serif;
+  outline: 0;
+  z-index: 2;
+}
+
+.post-stream .new-topic .controls, .post-stream .new-comment .controls {
+  text-align: right;
+}
+
+.post-stream .new-topic textarea {
+  height: 84px;
+}
+
+.post-stream .new-comment {
+  margin: 0 0 0 59px;
+}
+
+.post-stream .new-comment textarea {
+  height: 48px;
+}
+
 .post-stream .thread {
-  padding: 16px 24px 0px 24px;
+  padding: 13px;
   border-top: 1px solid #d6d3c7;
 }
 

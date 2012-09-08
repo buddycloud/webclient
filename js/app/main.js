@@ -68,10 +68,10 @@ define(function(require) {
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
     $('#content').append(new MetadataPane({
-      model: channel, 
+      model: channel,
       credentials: credentials,
       subscribed: subscribedChannels}).el);
-    $('#content').append(new PostStream({model: channel.posts}).el);
+    $('#content').append(new PostStream({model: channel, credentials: credentials}).el);
     $('#right').append(new FollowerList({model: channel}).el);
     if (credentials.username) {
       var userMenu = new UserMenu({model: credentials});

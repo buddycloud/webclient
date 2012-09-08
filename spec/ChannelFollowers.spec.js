@@ -16,7 +16,6 @@
 
 define(function(require) {
   var ChannelFollowers = require('app/models/ChannelFollowers');
-  var ChannelMetadata = require('app/models/ChannelMetadata');
 
   describe('ChannelFollowers', function() {
     var followers;
@@ -27,6 +26,7 @@ define(function(require) {
         'alice@example.com': 'owner',
         'bob@example.com': 'publisher',
         'ron@example.com': 'publisher',
+        'joe@example.com': 'moderator',
         'eve@example.com': 'member'
       });
     });
@@ -43,10 +43,11 @@ define(function(require) {
     describe('usernames()', function() {
       it('should return followers without affiliations', function() {
         var usernames = followers.usernames();
-        expect(usernames.length).toBe(4);
+        expect(usernames.length).toBe(5);
         expect(usernames).toContain('alice@example.com');
         expect(usernames).toContain('bob@example.com');
         expect(usernames).toContain('ron@example.com');
+        expect(usernames).toContain('joe@example.com');
         expect(usernames).toContain('eve@example.com');
       });
     });
@@ -55,13 +56,23 @@ define(function(require) {
       it('should return followers grouped by type', function() {
         var followersGroupedBy = followers.byType();
         expect(followersGroupedBy.owner.length).toBe(1);
-        expect(followersGroupedBy.moderator).toBe(undefined);
+        expect(followersGroupedBy.moderator.length).toBe(1);
         expect(followersGroupedBy.publisher.length).toBe(2);
         expect(followersGroupedBy.member.length).toBe(1);
         expect(followersGroupedBy.owner).toContain('alice@example.com');
+        expect(followersGroupedBy.moderator).toContain('joe@example.com');
         expect(followersGroupedBy.publisher).toContain('bob@example.com');
         expect(followersGroupedBy.publisher).toContain('ron@example.com');
         expect(followersGroupedBy.member).toContain('eve@example.com');
+      });
+    });
+
+    describe('isPublisher()', function() {
+      it('should verify if an username is a publisher', function() {
+        expect(followers.isPublisher('alice@example.com')).toBeTruthy();
+        expect(followers.isPublisher('joe@example.com')).toBeTruthy();
+        expect(followers.isPublisher('ron@example.com')).toBeTruthy();
+        expect(followers.isPublisher('eve@example.com')).toBeFalsy();
       });
     });
 

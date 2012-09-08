@@ -19,35 +19,57 @@ define(function(require) {
   var _ = require('underscore');
   var api = require('app/util/api');
   var avatarFallback = require('app/util/avatarFallback');
-  var Backbone = require('backbone');
-  var template = require('text!templates/PostStream.html');
   var urlUtil = require('app/util/urlUtil');
+  var Backbone = require('backbone');
+  var SinglePost = require('app/views/SinglePost');
+  var template = require('text!templates/PostStream.html');
 
   var PostStream = Backbone.View.extend({
     tagName: 'div',
     className: 'post-stream',
+    events: {
+      'click .new-topic button': 'addNewPost'
+    },
 
     initialize: function() {
-      this.model.bind('reset', this.render, this);
-      this.model.bind('add', this.render, this);
-      this.model.bind('remove', this.render, this);
+      this.model.bind('fetch', this.render, this);
+      this.model.posts.bind('add', this.renderPost, this);
+      this.model.posts.bind('add', this._clearTextarea, this);
       this._renderSpinningIcon();
     },
 
-    render: function() {
-      this.$el.html(_.template(template, {
-        threads: this.model.byThread(),
-        avatarUrlFunc: api.avatarUrl,
-        linkUrlsFunc: urlUtil.linkUrls
-      }));
-      this._setupAvatarFallbacks();
+    addNewPost: function() {
+      var content = this.$('.new-topic').find('textarea').val();
+      if (content.length) {
+        this.model.posts.create({content: content}, {headers: {
+            'Authorization': this.options.credentials.toAuthorizationHeader(),
+            'Content-type': 'application/json'
+          },
+          xhrFields: {withCredentials: true},
+          wait: true,
+          dataType: 'text'
+        });
+      }
     },
 
-    _setupAvatarFallbacks: function() {
-      var toplevelAvatars = this.$('.thread > header .avatar');
-      var commentAvatars = this.$('.comment .avatar');
-      avatarFallback(toplevelAvatars, 'personal', 48);
-      avatarFallback(commentAvatars, 'personal', 32);
+    render: function() {
+      var self = this;
+      var canPost = this.model.followers.isPublisher(sessionStorage.username);
+
+      this.$el.html(_.template(template, {canPost: canPost}));
+      _.each(this.model.posts.byThread(), function(thread) {
+        self.$('.threads').append(new SinglePost({model: thread, canPost: canPost}).el);
+      });
+    },
+
+    renderPost: function(thread) {
+      var canPost = this.model.followers.isPublisher(sessionStorage.username);
+
+      this.$('.threads').prepend(new SinglePost({model: [thread], canPost: canPost}).el);
+    },
+
+    _clearTextarea: function() {
+      this.$('.new-topic').find('textarea').val('');
     },
 
     _renderSpinningIcon: function() {
