@@ -41,6 +41,11 @@ define(function(require) {
       });
     },
 
+    isPublisher: function(username) {
+      var role = this.get(username);
+      return role === 'publisher' || role === 'owner' || role === 'moderator';
+    },
+
     // These are workarounds resultant by server issues
     parse: function(resp, xhr) {
       this._normalizeTypes(resp);
