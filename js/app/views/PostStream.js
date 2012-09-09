@@ -23,6 +23,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var SinglePost = require('app/views/SinglePost');
   var template = require('text!templates/PostStream.html');
+  var mediator = Backbone.Events;
 
   var PostStream = Backbone.View.extend({
     tagName: 'div',
@@ -35,6 +36,8 @@ define(function(require) {
       this.model.bind('fetch', this.render, this);
       this.model.posts.bind('add', this.renderPost, this);
       this.model.posts.bind('add', this._clearTextarea, this);
+      mediator.bind('subscribedChannel', this._enablePosting, this);
+      mediator.bind('unsubscribedChannel', this._disablePosting, this);
       this._renderSpinningIcon();
     },
 
@@ -66,6 +69,21 @@ define(function(require) {
       var canPost = this.model.followers.isPublisher(sessionStorage.username);
 
       this.$('.threads').prepend(new SinglePost({model: [thread], canPost: canPost}).el);
+    },
+
+    _enablePosting: function(channel, role) {
+      if (role === 'publisher') {
+        this.$el.prepend('<section class="new-topic"> \
+          <textarea placeholder="New topic..." autocomplete="off"></textarea> \
+          <div class="controls"> \
+            <button>Post</button> \
+          </div> \
+        </section>');
+      }
+    },
+
+    _disablePosting: function() {
+      this.$('.new-topic').remove();
     },
 
     _clearTextarea: function() {
