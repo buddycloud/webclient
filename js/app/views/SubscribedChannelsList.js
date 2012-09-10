@@ -20,6 +20,8 @@ define(function(require) {
   var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/SubscribedChannelsList.html');
+  var subscribedChannelTemplate = require('text!templates/SubscribedChannel.html');
+  var Events = Backbone.Events;
 
   var SubscribedChannelsList = Backbone.View.extend({
     tagName: 'aside',
@@ -27,14 +29,26 @@ define(function(require) {
 
     initialize: function() {
       this.model.bind('change', this.render, this);
+      this.model.bind('sync', this._triggerUpdate, this);
     },
 
     render: function() {
-      var channels = this.model.channels();
-      var avatars = this._getAvatars(channels);
-      this.$el.html(_.template(template, {
-        channels: channels,
-        avatars: avatars
+      if (!this.rendered) {
+        var channels = this.model.channels();
+        var avatars = this._getAvatars(channels);
+        this.$el.html(_.template(template, {
+          channels: channels,
+          avatars: avatars
+        }));
+        avatarFallback(this.$('img'), 'personal', 32);
+        this.rendered = true;
+      }
+    },
+
+    _renderSubscribedChannel: function(channel) {
+      this.$('ul').append(_.template(subscribedChannelTemplate, {
+        channel: channel,
+        avatar: api.avatarUrl(channel)
       }));
       avatarFallback(this.$('img'), 'personal', 32);
     },
@@ -43,6 +57,15 @@ define(function(require) {
       return _.map(channels, function(channel) {
         return api.avatarUrl(channel);
       });
+    },
+
+    _triggerUpdate: function(eventType, channel, role) {
+      if (eventType === 'subscribedChannel') {
+        this._renderSubscribedChannel(channel);
+      } else if (eventType === 'unsubscribedChannel') {
+        this.$('.' + channel.split('@', 2)[0]).remove();
+      }
+      Events.trigger(eventType, channel, role);
     }
   });
 

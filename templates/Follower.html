@@ -1,0 +1,10 @@
+<li class="<%- follower.split('@', 2)[0] %>">
+  <a href="?<%- follower %>">
+    <img class="avatar" src="<%= avatar %>" alt="">
+    <div class="text">
+      <span class="name"><%- follower.split('@', 2)[0] %></span>
+      <br>
+      <span class="id"><%- follower %></span>
+    </div>
+  </a>
+</li>

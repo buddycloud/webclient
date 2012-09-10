@@ -24,7 +24,7 @@ define(function(require) {
       subscribedChannels = new SubscribedChannels();
       subscribedChannels.set({
         'alice@example.com/posts': 'owner',
-				'alice@example.com/status': 'owner',
+        'alice@example.com/status': 'owner',
         'bob@example.com/geo': 'publisher',
         'ron@example.com/status': 'publisher',
         'alice@example2.com/posts': 'member'
@@ -44,6 +44,23 @@ define(function(require) {
         expect(channels).toContain('alice@example2.com');
         expect(channels).toContain('bob@example.com');
         expect(channels).toContain('ron@example.com');
+      });
+    });
+
+    describe('parse()', function() {
+      it('should return only the channels that refers to posts node', function() {
+        var fixedChannels = subscribedChannels.parse({
+          'alice@example.com/posts': 'owner',
+          'alice@example.com/status': 'owner',
+          'bob@example.com/geo': 'publisher',
+          'ron@example.com/status': 'publisher',
+          'alice@example2.com/posts': 'member'
+        });
+        expect(fixedChannels['alice@example.com/posts']).toBe('owner');
+        expect(fixedChannels['alice@example.com/statis']).toBe(undefined);
+        expect(fixedChannels['bob@example.com/geo']).toBe(undefined);
+        expect(fixedChannels['ron@example.com/status']).toBe(undefined);
+        expect(fixedChannels['alice@example2.com/posts']).toBe('member');
       });
     });
   });

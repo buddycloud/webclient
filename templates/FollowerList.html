@@ -1,19 +1,21 @@
 <% _.each(followerRoles, function(followerRole) { %>
-  <% if (followers[followerRole.id]) { %>
-  <h2><%- followerRole.display %></h2>
-  <ul>
-    <% _.each(followers[followerRole.id], function(username) { %>
-    <li>
-      <a href="?<%- username %>">
-        <img class="avatar" src="<%= avatars[username] %>" alt="">
-        <div class="text">
-          <span class="name"><%- username.split('@', 2)[0] %></span>
-          <br>
-          <span class="id"><%- username %></span>
-        </div>
-      </a>
-    </li>
-    <% }); %>
-  </ul>
-  <% } %>
+  <section class="<%- followerRole.id %>">
+    <% if (followers[followerRole.id]) { %>
+    <h2><%- followerRole.display %></h2>
+    <ul>
+      <% _.each(followers[followerRole.id], function(follower) { %>
+      <li class="<%- follower.split('@', 2)[0] %>">
+        <a href="?<%- follower %>">
+          <img class="avatar" src="<%= avatars[follower] %>" alt="">
+          <div class="text">
+            <span class="name"><%- follower.split('@', 2)[0] %></span>
+            <br>
+            <span class="id"><%- follower %></span>
+          </div>
+        </a>
+      </li>
+      <% }); %>
+    </ul>
+    <% } %>
+  </section>
 <% }); %>

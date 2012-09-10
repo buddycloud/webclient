@@ -22,12 +22,15 @@ define(function(require) {
   var urlUtil = require('app/util/urlUtil');
   var Backbone = require('backbone');
   var template = require('text!templates/SinglePost.html');
+  var Events = Backbone.Events;
 
   var SinglePost = Backbone.View.extend({
     tagName: 'article',
     className: 'thread',
 
     initialize: function() {
+      Events.bind('subscribedChannel', this._enablePosting, this);
+      Events.bind('unsubscribedChannel', this._disablePosting, this);
       this.render();
     },
 
@@ -39,6 +42,23 @@ define(function(require) {
         canPost: this.options.canPost
       }));
       this._setupAvatarFallbacks();
+    },
+
+    _enablePosting: function(channel, role) {
+      if (role === 'publisher') {
+        this.$el.append('<section class="new-comment"> \
+          <form> \
+            <textarea placeholder="Add comment..." autocomplete="off"></textarea> \
+            <div class="controls"> \
+              <button>Post</button> \
+            </div> \
+          </form> \
+        </section>');
+      }
+    },
+
+    _disablePosting: function()  {
+      this.$('.new-comment').remove();
     },
 
     _setupAvatarFallbacks: function() {
