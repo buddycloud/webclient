@@ -20,6 +20,9 @@ define(function(require) {
   var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/FollowerList.html');
+  var followerTemplate = require('text!templates/Follower.html');
+  var followerRoleTemplate = require('text!templates/FollowerRole.html');
+  var Events = Backbone.Events;
 
   var FollowerList = Backbone.View.extend({
     tagName: 'aside',
@@ -33,6 +36,8 @@ define(function(require) {
 
     initialize: function() {
       this.model.bind('fetch', this.render, this);
+      Events.bind('subscribedChannel', this._addFollower, this);
+      Events.bind('unsubscribedChannel', this._removeFollower, this);
     },
 
     render: function() {
@@ -54,6 +59,27 @@ define(function(require) {
         result[username] = api.avatarUrl(username);
       });
       return result;
+    },
+
+    _addFollower: function(channel, role) {
+      var $followerRole = this.$('.' + role);
+      var $container = $followerRole.children().length ? $followerRole.find('ul') : $followerRole;
+      var templateToBeRendered = $followerRole.children().length ? followerTemplate : followerRoleTemplate;
+      $container.append(_.template(templateToBeRendered, {
+        followerRole: this.followerRoles[role],
+        follower: sessionStorage.username,
+        avatar: api.avatarUrl(sessionStorage.username)
+      }));
+      avatarFallback(this.$('img'), 'personal', 32);
+    },
+
+    _removeFollower: function(channel) {
+      var $follower = this.$('.' + sessionStorage.username.split('@', 2)[0]);
+      var $followerRole = $follower.closest('section');
+      var $followers = $followerRole.find('ul');
+
+      $follower.remove();
+      if (!$followers.children().length) $followerRole.remove();
     },
 
     // These are workarounds resultant by server issues

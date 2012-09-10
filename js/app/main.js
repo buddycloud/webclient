@@ -75,7 +75,7 @@ define(function(require) {
     $('#right').append(new FollowerList({model: channel}).el);
     if (credentials.username) {
       var userMenu = new UserMenu({model: credentials});
-      var channelsList = new SubscribedChannelsList({model: subscribedChannels});
+      var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
       $('#toolbar-right').append(userMenu.el);
       $('#left').append(channelsList.el);
       userMenu.render();
