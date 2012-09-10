@@ -66,8 +66,12 @@ define(function(require) {
     },
 
     parse: function(resp, xhr) {
-      if (typeof(resp) === 'string') return {};
-      else if (typeof(resp) === 'object') {
+      // This typeof(resp) === 'string') comparison is necessary
+      // because the HTTP API returns a plain text and Backbone
+      // parses it like an attribute
+      if (typeof(resp) === 'string') {
+        return {};
+      } else if (typeof(resp) === 'object') {
         var result = {};
         _.each(resp, function(value, node) {
           if (node.indexOf('/posts') !== -1) {
