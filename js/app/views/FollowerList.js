@@ -22,7 +22,7 @@ define(function(require) {
   var template = require('text!templates/FollowerList.html');
   var followerTemplate = require('text!templates/Follower.html');
   var followerRoleTemplate = require('text!templates/FollowerRole.html');
-  var mediator = Backbone.Events;
+  var Events = Backbone.Events;
 
   var FollowerList = Backbone.View.extend({
     tagName: 'aside',
@@ -36,8 +36,8 @@ define(function(require) {
 
     initialize: function() {
       this.model.bind('fetch', this.render, this);
-      mediator.bind('subscribedChannel', this._addFollower, this);
-      mediator.bind('unsubscribedChannel', this._removeFollower, this);
+      Events.bind('subscribedChannel', this._addFollower, this);
+      Events.bind('unsubscribedChannel', this._removeFollower, this);
     },
 
     render: function() {

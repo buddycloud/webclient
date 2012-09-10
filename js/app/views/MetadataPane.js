@@ -21,7 +21,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/MetadataPane.html');
   var urlUtil = require('app/util/urlUtil');
-  var mediator = Backbone.Events;
+  var Events = Backbone.Events;
 
   var MetadataPane = Backbone.View.extend({
     tagName: 'header',
@@ -30,10 +30,10 @@ define(function(require) {
       'click .follow': '_follow',
       'click .unfollow': '_unfollow'},
 
-    initialize: function() {
+    initialize: function(options) {
       this.model.bind('fetch', this.render, this);
-      mediator.bind('subscribedChannel', this._renderButton, this);
-      mediator.bind('unsubscribedChannel', this._renderButton, this);
+      Events.bind('subscribedChannel', this._renderButton, this);
+      Events.bind('unsubscribedChannel', this._renderButton, this);
     },
 
     render: function() {
@@ -66,11 +66,11 @@ define(function(require) {
     },
 
     _follow: function() {
-      mediator.trigger('subscribeChannel', this.model.name, 'posts', this._defaultChannelRole());
+      this.options.subscribed.subscribe(this.model.name, 'posts', this._defaultChannelRole(), this.options.credentials);
     },
 
     _unfollow: function() {
-      mediator.trigger('unsubscribeChannel', this.model.name, 'posts');
+      this.options.subscribed.unsubscribe(this.model.name, 'posts', this.options.credentials);
     },
 
     _defaultChannelRole: function() {

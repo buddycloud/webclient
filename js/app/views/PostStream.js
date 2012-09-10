@@ -23,7 +23,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var SinglePost = require('app/views/SinglePost');
   var template = require('text!templates/PostStream.html');
-  var mediator = Backbone.Events;
+  var Events = Backbone.Events;
 
   var PostStream = Backbone.View.extend({
     tagName: 'div',
@@ -36,8 +36,8 @@ define(function(require) {
       this.model.bind('fetch', this.render, this);
       this.model.posts.bind('add', this.renderPost, this);
       this.model.posts.bind('add', this._clearTextarea, this);
-      mediator.bind('subscribedChannel', this._enablePosting, this);
-      mediator.bind('unsubscribedChannel', this._disablePosting, this);
+      Events.bind('subscribedChannel', this._enablePosting, this);
+      Events.bind('unsubscribedChannel', this._disablePosting, this);
       this._renderSpinningIcon();
     },
 

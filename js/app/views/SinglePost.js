@@ -22,15 +22,15 @@ define(function(require) {
   var urlUtil = require('app/util/urlUtil');
   var Backbone = require('backbone');
   var template = require('text!templates/SinglePost.html');
-  var mediator = Backbone.Events;
+  var Events = Backbone.Events;
 
   var SinglePost = Backbone.View.extend({
     tagName: 'article',
     className: 'thread',
 
     initialize: function() {
-      mediator.bind('subscribedChannel', this._enablePosting, this);
-      mediator.bind('unsubscribedChannel', this._disablePosting, this);
+      Events.bind('subscribedChannel', this._enablePosting, this);
+      Events.bind('unsubscribedChannel', this._disablePosting, this);
       this.render();
     },
 

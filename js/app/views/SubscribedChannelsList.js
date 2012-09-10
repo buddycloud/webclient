@@ -21,7 +21,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/SubscribedChannelsList.html');
   var subscribedChannelTemplate = require('text!templates/SubscribedChannel.html');
-  var mediator = Backbone.Events;
+  var Events = Backbone.Events;
 
   var SubscribedChannelsList = Backbone.View.extend({
     tagName: 'aside',
@@ -30,8 +30,6 @@ define(function(require) {
     initialize: function() {
       this.model.bind('change', this.render, this);
       this.model.bind('sync', this._triggerUpdate, this);
-      mediator.bind('subscribeChannel', this._subscribe, this);
-      mediator.bind('unsubscribeChannel', this._unsubscribe, this);
     },
 
     render: function() {
@@ -55,14 +53,6 @@ define(function(require) {
       avatarFallback(this.$('img'), 'personal', 32);
     },
 
-    _subscribe: function(channel, node, role) {
-      this.model.subscribe(channel, node, role, this.options.credentials);
-    },
-
-    _unsubscribe: function(channel, node) {
-      this.model.unsubscribe(channel, node, this.options.credentials);
-    },
-
     _getAvatars: function(channels) {
       return _.map(channels, function(channel) {
         return api.avatarUrl(channel);
@@ -75,7 +65,7 @@ define(function(require) {
       } else if (eventType === 'unsubscribedChannel') {
         this.$('.' + channel.split('@', 2)[0]).remove();
       }
-      mediator.trigger(eventType, channel, role);
+      Events.trigger(eventType, channel, role);
     }
   });
 
