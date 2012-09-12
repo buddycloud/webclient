@@ -1,0 +1,11 @@
+<article class="comment">
+    <header>
+      <img class="avatar" alt="" src="<%= avatarUrlFunc(comment.author()) %>">
+      <h3 class="title">
+        <%- comment.author().split('@', 2)[0] %>
+        <br>
+        <span class="author-id"><%- comment.author() %></span>
+      </h3>
+    </header>
+    <pre class="content"><%= linkUrlsFunc(comment.content()) %></pre>
+</article>
