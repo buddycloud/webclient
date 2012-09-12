@@ -30,6 +30,26 @@ define(function(require) {
       }
     },
 
+    register: function(username, password, email) {
+      this.save(username, password);
+
+      var self = this;
+      $.ajax({
+        type: 'POST',
+        url: api.url('account'),
+        data: {'username': username, 'password': password},
+        beforeSend: function(xhr) {
+          console.log(xhr);
+        },
+        success: function() {
+          self.trigger('accepted');
+        },
+        error: function() {
+          self.trigger('rejected');
+        }
+      });   
+    },
+
     set: function() {
       Backbone.Model.prototype.set.apply(this, arguments);
       this.username = this.get('username');
