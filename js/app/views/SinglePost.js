@@ -98,7 +98,7 @@ define(function(require) {
 
     _getCollecetionUrl: function() {
       return this.model[0].collection.url();
-    }
+    },
 
     _setupAvatarFallbacks: function() {
       var toplevelAvatars = this.$('header').find('.avatar');
