@@ -61,14 +61,14 @@ define(function(require) {
 
       this.$el.html(_.template(template, {canPost: canPost}));
       _.each(this.model.posts.byThread(), function(thread) {
-        self.$('.threads').append(new SinglePost({model: thread, canPost: canPost}).el);
+        self.$('.threads').append(new SinglePost({model: thread, canPost: canPost, credentials: self.options.credentials}).el);
       });
     },
 
     renderPost: function(thread) {
       var canPost = this.model.followers.isPublisher(sessionStorage.username);
 
-      this.$('.threads').prepend(new SinglePost({model: [thread], canPost: canPost}).el);
+      this.$('.threads').prepend(new SinglePost({model: [thread], canPost: canPost, credentials: this.options.credentials}).el);
     },
 
     _enablePosting: function(channel, role) {

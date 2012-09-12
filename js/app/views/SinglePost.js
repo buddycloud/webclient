@@ -21,17 +21,41 @@ define(function(require) {
   var avatarFallback = require('app/util/avatarFallback');
   var urlUtil = require('app/util/urlUtil');
   var Backbone = require('backbone');
+  var Post = require('app/models/Post');
   var template = require('text!templates/SinglePost.html');
+  var commentTemplate = require('text!templates/PostComment.html');
   var Events = Backbone.Events;
 
   var SinglePost = Backbone.View.extend({
     tagName: 'article',
     className: 'thread',
+    events: {
+      'click .new-comment button': 'addComment'
+    },
 
     initialize: function() {
       Events.bind('subscribedChannel', this._enablePosting, this);
       Events.bind('unsubscribedChannel', this._disablePosting, this);
       this.render();
+    },
+
+    addComment: function() {
+      var content = this.$('.new-comment').find('textarea').val();
+      if (content.length) {
+        var comment = new Post({content: content, replyTo: this.model[0].id});
+        comment.save({}, {
+          url: this._getCollecetionUrl(),
+          headers: {
+            'Authorization': this.options.credentials.toAuthorizationHeader(),
+            'Content-type': 'application/json'
+          },
+          xhrFields: {withCredentials: true},
+          wait: true,
+          dataType: 'text'
+        });
+        comment.bind('sync', this.renderComment, this);
+        comment.bind('sync', this._clearTextarea, this);
+      }
     },
 
     render: function() {
@@ -44,15 +68,26 @@ define(function(require) {
       this._setupAvatarFallbacks();
     },
 
+    renderComment: function(comment) {
+      this.$('.comments').append(_.template(commentTemplate, {
+        comment: comment,
+        avatarUrlFunc: api.avatarUrl,
+        linkUrlsFunc: urlUtil.linkUrls
+      }));
+      avatarFallback(this.$('.comment').find('.avatar'), 'personal', 32);
+    },
+
+    _clearTextarea: function() {
+      this.$('.new-comment').find('textarea').val('');
+    },
+
     _enablePosting: function(channel, role) {
       if (role === 'publisher') {
         this.$el.append('<section class="new-comment"> \
-          <form> \
-            <textarea placeholder="Add comment..." autocomplete="off"></textarea> \
-            <div class="controls"> \
-              <button>Post</button> \
-            </div> \
-          </form> \
+          <textarea placeholder="Add comment..." autocomplete="off"></textarea> \
+          <div class="controls"> \
+            <button>Post</button> \
+          </div> \
         </section>');
       }
     },
@@ -61,9 +96,13 @@ define(function(require) {
       this.$('.new-comment').remove();
     },
 
+    _getCollecetionUrl: function() {
+      return this.model[0].collection.url();
+    },
+
     _setupAvatarFallbacks: function() {
-      var toplevelAvatars = this.$('header .avatar');
-      var commentAvatars = this.$('.comment .avatar');
+      var toplevelAvatars = this.$('header').find('.avatar');
+      var commentAvatars = this.$('.comment').find('.avatar');
       avatarFallback(toplevelAvatars, 'personal', 48);
       avatarFallback(commentAvatars, 'personal', 32);
     }
