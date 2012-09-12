@@ -64,6 +64,14 @@ define(function(require) {
       credentials.set({username: null, password: null});
       credentials.verify();
     });
+    credentials.on('registrationSuccess', function() {
+      callback(credentials);
+    });
+    credentials.on('registrationError', function() {
+      alert('Registration Error');
+      credentials.set({username: null, password: null});
+      credentials.verify();
+    });
     credentials.verify();
   }
 

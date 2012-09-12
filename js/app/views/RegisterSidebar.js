@@ -24,6 +24,10 @@ define(function(require) {
     className: 'register-sidebar bordered',
     events: {'click input[type=submit]': '_register'},
 
+    initialize: function(options) {
+      this.model.bind('registrationSuccess', this._reloadPage, this);
+    },
+
     render: function() {
       this.$el.html(_.template(template));
     },
@@ -34,6 +38,9 @@ define(function(require) {
       var password = this.$('input[name=password]').attr('value');
       var email = this.$('input[name=email]').attr('value');
       this.model.register(username, password, email);
+    },
+
+    _reloadPage: function() {
       location.reload();
     }
   });

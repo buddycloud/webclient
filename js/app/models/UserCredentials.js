@@ -31,23 +31,20 @@ define(function(require) {
     },
 
     register: function(username, password, email) {
-      this.save(username, password);
-
       var self = this;
       $.ajax({
         type: 'POST',
         url: api.url('account'),
-        data: {'username': username, 'password': password},
-        beforeSend: function(xhr) {
-          console.log(xhr);
-        },
+        contentType: 'application/json',
+        data: JSON.stringify({'username': username, 'password': password}),
         success: function() {
-          self.trigger('accepted');
+          self.save({'username': username, 'password': password});
+          self.trigger('registrationSuccess');
         },
-        error: function() {
-          self.trigger('rejected');
+        error: function(xhr) {
+          self.trigger('registrationError');
         }
-      });   
+      });  
     },
 
     set: function() {
