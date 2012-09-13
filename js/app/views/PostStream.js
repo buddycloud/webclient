@@ -19,7 +19,6 @@ define(function(require) {
   var _ = require('underscore');
   var api = require('app/util/api');
   var avatarFallback = require('app/util/avatarFallback');
-  var urlUtil = require('app/util/urlUtil');
   var Backbone = require('backbone');
   var SinglePost = require('app/views/SinglePost');
   var template = require('text!templates/PostStream.html');
