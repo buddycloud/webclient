@@ -1,0 +1,88 @@
+.overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  background: -webkit-gradient(radial,50% 50%,0,50% 50%,100%,from(rgba(0,0,0,0.55)),to(rgba(0,0,0,0.89)));
+  background: -webkit-radial-gradient(center center,cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
+  background:    -moz-radial-gradient(center center,circle cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
+  background:      -o-radial-gradient(center center,cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
+  background:     -ms-radial-gradient(center center,cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
+  background:         radial-gradient(center center,cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
+  position: fixed;
+  z-index: 10;
+  -webkit-transition: opacity 500ms;
+     -moz-transition: opacity 500ms;
+      -ms-transition: opacity 500ms;
+       -o-transition: opacity 500ms;
+          transition: opacity 500ms;
+  display: none;
+}
+.overlay .left h2 {
+  font-size: 22px;
+}
+.overlay .left span {
+  margin-right: 5px;
+}
+.overlay.visible {
+  opacity: 1;
+}
+.overlay .modal {
+  padding: 21px;
+  top: 50%;
+  left: 50%;
+  margin: -134px 0 0 -138px;
+  text-shadow: 0 1px rgba(255,255,255,0.89);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f7f7f7), color-stop(1, #eee));
+  background: -webkit-linear-gradient(top, #f7f7f7 0%, #eee 100%);
+  background:    -moz-linear-gradient(top, #f7f7f7 0%, #eee 100%);
+  background:     -ms-linear-gradient(top, #f7f7f7 0%, #eee 100%);
+  background:      -o-linear-gradient(top, #f7f7f7 0%, #eee 100%);
+  background:         linear-gradient(to bottom, #f7f7f7 0%, #eee 100%);
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.21),0 1px 8px rgba(0,0,0,0.55),0 1px #fff inset;
+  position: absolute;
+}
+.overlay .modal .close {
+  top: 0;
+  right: 0;
+  height: 24px;
+  width: 55px;
+  line-height: 24px;
+  text-align: center;
+  color: rgba(0,0,0,0.34);
+  border-bottom: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-radius: 0 5px 0 5px;
+  box-shadow: 0 0 2px rgba(0,0,0,0.13) inset;
+  position: absolute;
+  cursor: pointer;
+}
+.overlay .modal .close:hover {
+  color: rgba(0,0,0,0.55);
+  text-shadow: 0 1px rgba(255,255,255,0.13);
+  background: rgba(0,0,0,0.13);
+}
+.overlay .modal .close + form {
+  clear: right;
+}
+.overlay .modal nav {
+  margin-top: 21px;
+}
+.overlay .modal nav > div {
+  margin-left: 8px;
+  float: right;
+}
+.overlay .modal.twoWindowed {
+  padding: 13px;
+  margin-left: -274px;
+}
+.overlay .modal.twoWindowed > .left,.overlay .modal.twoWindowed > .right {
+  padding: 13px;
+  width: 235px;
+  float: left;
+}
+.overlay .modal.twoWindowed > .right {
+  border-left: 1px solid rgba(0,0,0,0.13);
+  box-shadow: -1px 0 #fff;
+  float: right;
+}

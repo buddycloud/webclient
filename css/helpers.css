@@ -1,0 +1,88 @@
+.clearfix:after {
+  content: "";
+  clear: both;
+  display: block;
+  height: 0;
+}
+.floatLeft {
+  float: left;
+}
+.floatRight {
+  float: right;
+}
+
+/* social */
+.social {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  font: 0/0 a;
+  color: transparent;
+  vertical-align: top;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.facebook { background-image: url(../img/facebook_16.png); }
+.twitter { background-image: url(../img/twitter_16.png); }
+.gplus { background-image: url(../img/google_16.png); }
+.reddit { background-image: url(../img/reddit_16.png); }
+.tumblr { background-image: url(../img/tumblr_16.png); }
+
+.centered, .justify, .horizontal {
+  display: -webkit-box;
+  display:    -moz-box;
+  display:     -ms-box;
+  display:      -o-box;
+  display:         box;
+}
+.centered {
+  -webkit-box-align: center;
+     -moz-box-align: center;
+      -ms-box-align: center;
+       -o-box-align: center;
+          box-align: center;
+  -webkit-box-pack: center;
+     -moz-box-pack: center;
+      -ms-box-pack: center;
+       -o-box-pack: center;
+          box-pack: center;
+}
+.justify, .horizontal {
+  width: 100%;
+  -webkit-box-orient: horizontal;
+     -moz-box-orient: horizontal;
+      -ms-box-orient: horizontal;
+       -o-box-orient: horizontal;
+          box-orient: horizontal;
+}
+.vertical {
+  -webkit-box-orient: vertical;
+     -moz-box-orient: vertical;
+      -ms-box-orient: vertical;
+       -o-box-orient: vertical;
+          box-orient: vertical;
+}
+.justify {
+  -webkit-box-pack: justify;
+     -moz-box-pack: justify;
+      -ms-box-pack: justify;
+       -o-box-pack: justify;
+          box-pack: justify;
+  -webkit-box-align: center;
+     -moz-box-align: center;
+      -ms-box-align: center;
+       -o-box-align: center;
+          box-align: center;
+  -webkit-box-lines: multiple;
+     -moz-box-lines: multiple;
+      -ms-box-lines: multiple;
+       -o-box-lines: multiple;
+          box-lines: multiple;
+}
+.fit > * {
+  -webkit-box-flex: 1;
+     -moz-box-flex: 1;
+      -ms-box-flex: 1;
+       -o-box-flex: 1;
+          box-flex: 1;
+}

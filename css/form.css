@@ -1,0 +1,342 @@
+input[type=checkbox] {
+  margin: 3px;
+}
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=search] {
+  padding: 7px 8px;
+  font-size: 18px;
+  vertical-align: bottom;
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.21);
+  box-shadow: 0 1px rgba(0,0,0,0.05) inset,0 2px 3px rgba(0,0,0,0.03) inset,0 1px rgba(255,255,255,0.34);
+  display: block;
+  -webkit-transition: border-color 500ms;
+     -moz-transition: border-color 500ms;
+      -ms-transition: border-color 500ms;
+       -o-transition: border-color 500ms;
+          transition: border-color 500ms;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+      -ms-appearance: none;
+       -o-appearance: none;
+          appearance: none;
+}
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=email]:focus {
+  border-color: rgba(0,0,0,0.21);
+  -webkit-transition: none;
+     -moz-transition: none;
+      -ms-transition: none;
+       -o-transition: none;
+          transition: none;
+}
+input[type=text].small,
+input[type=password].small,
+input[type=email].small {
+  padding: 3px 5px;
+  font-size: 16px;
+  line-height: 18px;
+}
+input[type=search].small {
+  height: 23px;
+  padding: 1px 7px 0;
+  color: #000;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.34);
+  border-radius: 12px;
+  box-shadow: 0 1px rgba(255,255,255,0.34), 0 1px rgba(0,0,0,0.08) inset;
+  display: block;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+  input[type=search].withButton {
+    float: left;
+    border-radius: 3px 0 0 3px;
+    border-right: none;
+  }
+  .button.search {
+    width: 42px;
+    height: 37px;
+    font: 0/0 a;
+    color: transparent;
+    background: url(../img/magnifier.png) no-repeat center;
+    border-radius: 0 3px 3px 0;
+  }
+form .optional {
+  color: gray;
+}
+form label {
+  padding: 2px;
+  color: #666;
+  line-height: 20px;
+  display: inline-block;
+}
+form input[type=text],
+form input[type=password],
+form input[type=email] {
+  width: 215px;
+}
+  form input[type=text].small,
+  form input[type=password].small,
+  form input[type=email].small {
+    width: 150px;
+  }
+form .leftBox {
+  padding-left: 2px;
+  line-height: 26px;
+  float: left;
+}
+form .leftBox .spinner {
+  padding-left: 23px;
+  color: rgba(0,0,0,0.55);
+  background: url("spinner.gif") no-repeat 0 5px;
+  display: none;
+}
+form .leftBox.working .resetPassword,form .leftBox.working input {
+  display: none;
+}
+form .leftBox.working .spinner {
+  display: block;
+}
+form p {
+  padding: 0 2px;
+  color: rgba(0,0,0,0.89);
+}
+form h2 + p {
+  margin-bottom: 13px;
+}
+form a,form a:visited {
+  color: rgba(0,0,0,0.55);
+  text-decoration: underline;
+}
+form a:hover,form a:visited:hover {
+  color: rgba(0,0,0,0.89);
+}
+form button {
+  float: right;
+}
+form button[disabled] {
+  opacity: .55;
+}
+form.stream > div {
+  position: relative;
+}
+form.stream > div:first-child {
+  border-radius: 5px 5px 0 0;
+}
+form.stream > div:first-child label {
+  border-top: none;
+  border-top-left-radius: 5px;
+}
+form.stream > div:first-child input,form.stream > div:first-child div {
+  border-top: none;
+  border-top-right-radius: 5px;
+}
+form.stream > div input[type=text],form.stream > div textarea,form.stream > div > div {
+  top: 0;
+  right: 0;
+  width: 343px;
+  background: #fff;
+  border: none;
+  border-top: 1px solid #eee;
+  border-radius: 0;
+  position: absolute;
+}
+form.stream > div input[type=text],form.stream > div textarea {
+  margin: 0;
+  padding: 13px 8px;
+  font: 13px/17px "Helvetica Neue",Helvetica,Arial,sans-serif;
+  box-shadow: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+      -ms-appearance: none;
+       -o-appearance: none;
+          appearance: none;
+}
+form.stream > div > div {
+  height: 26px;
+  padding: 8px;
+  line-height: 26px;
+}
+form.stream > div.dual input {
+  width: 164px;
+  right: 179px;
+}
+form.stream > div.dual input:last-child {
+  right: 0;
+  border-left: 1px solid #eee;
+}
+form.stream label {
+  width: 114px;
+  padding: 0 13px;
+  color: #000;
+  font-weight: bold;
+  line-height: 42px;
+  border-top: 1px solid #eee;
+  border-right: 1px solid #eee;
+  background: #fff;
+}
+form.stream .area label {
+  height: 100px;
+}
+form.stream .area textarea {
+  height: 74px;
+  resize: none;
+}
+form.stream .gravatar label {
+  height: 65px;
+}
+form.stream .gravatar > div {
+  height: 50px;
+}
+form.stream .gravatar p {
+  left: 64px;
+  line-height: 50px;
+  position: absolute;
+}
+form.stream .gravatar .avatar {
+  left: 8px;
+  width: 50px;
+  height: 50px;
+}
+form.stream .gravatar.inactive {
+  opacity: .34;
+}
+form.stream .gravatar.inactive label {
+  height: 42px;
+}
+form.stream .gravatar.inactive p {
+  line-height: inherit;
+  position: static
+}
+form.stream .hint {
+  margin: 0 8px;
+  color: rgba(0,0,0,0.55);
+  position: relative;
+}
+form.stream .hint > span {
+  width: 247px;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  -webkit-transition: 500ms;
+     -moz-transition: 500ms;
+      -ms-transition: 500ms;
+       -o-transition: 500ms;
+          transition: 500ms;
+}
+form.stream .hint.followerSelected .follower {
+  opacity: 1;
+}
+form.stream .hint.followerPlusSelected .followerPlus {
+  opacity: 1;
+}
+form.stream {
+  border-radius: 5px 5px 0 0;
+  float: none;
+}
+form.stream + nav {
+  width: 484px;
+  margin-top: -1px;
+  padding: 10px 8px 8px;
+  background: #fff;
+  border-radius: 0 0 5px 5px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08),0 0 13px rgba(0,0,0,0.05);
+}
+form.stream + nav > div {
+  margin-left: 8px;
+  float: right;
+}
+
+form.horizontal > div {
+  float: left;
+  margin-right: 13px;
+}
+  form.horizontal > div:last-of-type {
+    margin-right: 0;
+  }
+  form.horizontal button[type=submit] {
+    clear: left;
+    margin-top: 8px;
+  }
+
+.toggle {
+  width: 78px;
+  height: 26px;
+  border: 1px solid rgba(0,0,0,0.21);
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  display: none;
+}
+.toggle + input[type=checkbox] {
+  visibility: visible;
+}
+.toggle .slidePanel {
+  width: 150%;
+  height: 100%;
+  left: -50%;
+  margin: 1px;
+  position: absolute;
+  -webkit-transition: 320ms;
+     -moz-transition: 320ms;
+      -ms-transition: 320ms;
+       -o-transition: 320ms;
+          transition: 320ms;
+}
+.toggle.moving .slidePanel {
+  -webkit-transition: none;
+     -moz-transition: none;
+      -ms-transition: none;
+       -o-transition: none;
+          transition: none;
+}
+.toggle .switch {
+  top: 0;
+  left: 33.33%;
+  width: 33.33%;
+  height: 24px;
+  position: absolute;
+  background: #eee;
+  border: 1px solid rgba(0,0,0,0.21);
+  border-bottom-color: rgba(0,0,0,0.34);
+  border-radius: 3px;
+  box-shadow: 0 1px rgba(255,255,255,0.89) inset,0 1px rgba(0,0,0,0.05);
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.toggle .left,.toggle .right {
+  right: 0;
+  width: 33.33%;
+  height: 100%;
+  line-height: 24px;
+  text-align: center;
+  position: absolute;
+}
+.toggle .left {
+  left: 0;
+  right: auto;
+}
+.auto-suggestion-input {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+.auto-suggestion-preview .auto-suggestion-content {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff;
+}
+.auto-suggestion-preview .auto-suggestion-suffix {
+  color: #999 !important;
+  -webkit-text-fill-color: #999;
+}

@@ -1,0 +1,25 @@
+.bubbleHolder {
+  height: 0;
+  overflow: visible;
+  position: relative;
+  -webkit-transition: height 1s;
+     -moz-transition: height 1s;
+      -ms-transition: height 1s;
+       -o-transition: height 1s;
+          transition: height 1s;
+}
+.bubbleHolder .channel {
+  position: absolute;
+  -webkit-transition: top 1s;
+     -moz-transition: top 1s;
+      -ms-transition: top 1s;
+       -o-transition: top 1s;
+          transition: top 1s;
+}
+.startingArea {
+  -webkit-transition: height 1s;
+     -moz-transition: height 1s;
+      -ms-transition: height 1s;
+       -o-transition: height 1s;
+          transition: height 1s;
+}

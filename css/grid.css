@@ -1,0 +1,22 @@
+/* one element is 377px wide */
+/* gutter is 34px */
+
+.span-1,.span-2,.span-3,.span-4 {
+  float: left;
+  margin-right: 34px;
+}
+.span-1:last-child,.span-2:last-child,.span-3:last-child,.span-4:last-child {
+  margin-right: 0;
+}
+.span-1 {
+  width: 377px;
+}
+.span-2 {
+  width: 788px;
+}
+.span-3 {
+  width: 1199px;
+}
+.span-4 {
+  width: 1610px;
+}

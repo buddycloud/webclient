@@ -1,0 +1,52 @@
+.popup {
+  position: absolute;
+  z-index: 1;
+}
+  .popup ul {
+    border: 1px solid hsl(0,0%,83%);
+    border-radius: 3px;
+    box-shadow:
+      0 1px rgba(0,0,0,.03),
+      0 2px rgba(0,0,0,.02),
+      0 3px rgba(0,0,0,.01);
+  }
+  .popup li {
+    padding: 8px 21px 5px 21px;
+    text-align: left;
+    white-space: nowrap;
+    color: #666;
+    border-bottom: 1px solid hsl(0,0%,93%);
+    background: white;
+    cursor: pointer;
+  }
+  .popup li:first-child {
+    border-radius: 3px 3px 0 0;
+  }
+  .popup li:last-child {
+    padding-bottom: 8px;
+    border-bottom: none;
+    border-radius: 0 0 3px 3px;
+  }
+  .popup li:only-child {
+    border-radius: 3px;
+  }
+  
+  .popup .arrow {
+    position: relative;
+    width: 13px;
+    height: 10px;
+    bottom: -1px;
+    overflow: hidden;
+  }
+    .popup .arrow:before {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      left: 1px;
+      top: 6px;
+      border: 1px solid hsl(0,0%,83%);
+      background: white;
+      -webkit-transform: rotate(45deg);
+      
+    }

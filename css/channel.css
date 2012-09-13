@@ -1,0 +1,791 @@
+#poweredby {
+  right: -89px;
+  top: 41px;
+  margin-top: 2px;
+  width: 76px;
+  height: 26px;
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background: url("../img/poweredby.png") no-repeat;
+  position: absolute;
+}
+.avatar {
+  border-radius: 3px;
+  cursor: pointer;
+}
+.content {
+  min-width: 998px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 234px;
+  color: rgba(0,0,0,0.89);
+  text-shadow: 0 1px rgba(255,255,255,0.34);
+  background: hsl(0,0%,95%);
+  box-shadow: -1px 0 #000,-2px 0 rgba(0,0,0,0.21);
+  position: absolute;
+  overflow: auto;
+  z-index: 1;
+}
+.channelView {
+  margin-right: 13px;
+  padding: 13px 0 13px 13px;
+  min-width: 500px;
+  max-width: 580px;
+  float: left;
+}
+.channelView > header {
+  padding: 5px 21px 10px;
+  position: relative;
+}
+.channelView > header .titleBar td:last-child {
+  padding-right: 0;
+}
+.channelView > header .titleText {
+  width: 100%;
+}
+.channelView > header .titleText h2,
+.channelView > header .titleText .status,
+.channelView > header .titleText .location {
+  white-space: nowrap;
+  overflow: hidden;
+  text-shadow: 0 1px 1px #fff;
+  text-overflow: ellipsis;
+  display: block;
+}
+.channelView > header .titleText h2 {
+  color: #1b1b1b;
+  font-weight: normal;
+  margin-bottom: 2px;
+  line-height: 28px;
+}
+.channelView > header .titleText .status {
+  font-size: 12px;
+  color: #6e6e6e;
+}
+.channelView > header .location {
+  display: none;
+}
+.channelView > header .location .previous {
+  text-decoration: line-through;
+}
+.channelView > header + .topic {
+  border-radius: 3px 3px 0 0;
+}
+.channelView nav {
+  margin-bottom: 5px;
+  white-space: nowrap;
+  float: right;
+}
+.channelView nav > span {
+  margin-left: 5px;
+}
+.channelView nav > span:first-child {
+  margin-left: 0;
+}
+.channelView nav.inChannel .channel {
+  display: none;
+}
+.channelView nav.inMessages .messages {
+  display: none;
+}
+.channelView nav .button {
+  width: 75px;
+  padding: 0;
+  text-align: center;
+}
+.channelView nav .tab {
+  height: 29px;
+  padding: 1px 1px 0;
+  margin-right: -1px;
+  vertical-align: bottom;
+  overflow: hidden;
+  position: relative;
+  display: inline-block;
+}
+.channelView nav .tab .holder {
+  padding: 5px 13px 6px;
+  font-size: 12px;
+  color: rgba(0,0,0,0.76);
+  text-shadow: 0 1px rgba(255,255,255,0.55);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0.03)), color-stop(1, rgba(0,0,0,0.08)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.08) 100%);
+  background:    -moz-linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.08) 100%);
+  background:     -ms-linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.08) 100%);
+  background:      -o-linear-gradient(top, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.08) 100%);
+  background:         linear-gradient(to bottom, rgba(0,0,0,0.03) 0%, rgba(0,0,0,0.08) 100%);
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08),0 0 13px rgba(0,0,0,0.05);
+  display: block;
+  position: relative;
+  cursor: pointer;
+}
+.channelView nav .tab.newMessage .holder {
+  padding-right: 33px;
+}
+.channelView nav .tab.newMessage .counter {
+  right: 10px;
+  top: 4px;
+}
+.channelView nav .tab.active .holder {
+  background: #fff;
+  z-index: 3;
+  cursor: default;
+}
+.stream {
+  border-radius: 5px 5px;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.08),0 0 13px rgba(0,0,0,0.05);
+  position: relative;
+  z-index: 2;
+}
+.stream .topics article {
+  background: #fff;
+  position: relative;
+  box-shadow: inset 0 -1px rgba(0,0,0,0.08);
+}
+.stream .topics article:first-child {
+  border-radius: 5px 5px 0 0;
+}
+.stream .topics article:last-child {
+  border-radius: 0 0 5px 5px;
+  box-shadow: none;
+}
+.stream .topics article:only-child {
+  border-radius: 5px;
+  box-shadow: none;
+}
+.stream .newTopic + .notifications + .topics article:first-child {
+  border-radius: 0;
+}
+.stream .newTopic + .notifications + .topics article:only-child {
+  border-radius: 0 0 5px 5px;
+  box-shadow: none;
+}
+.stream .newTopic {
+  padding: 13px 13px 12px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #eee));
+  background: -webkit-linear-gradient(top, #fff 0%, #eee 100%);
+  background:    -moz-linear-gradient(top, #fff 0%, #eee 100%);
+  background:     -ms-linear-gradient(top, #fff 0%, #eee 100%);
+  background:      -o-linear-gradient(top, #fff 0%, #eee 100%);
+  background:         linear-gradient(to bottom, #fff 0%, #eee 100%);
+  border-bottom: 1px solid rgba(0,0,0,0.13);
+  border-radius: 5px 5px 0 0;
+  display: block;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+.stream .newTopic .avatar {
+  left: 13px;
+  top: 13px;
+  width: 50px;
+  position: absolute;
+  z-index: 2;
+  display: none;
+}
+.stream .newTopic .area {
+  width: 100%;
+  margin: 0;
+  border: 1px solid rgba(0,0,0,0.13);
+  font: 13px/19.5px sans-serif;
+  color: #808080;
+  display: block;
+  float: right;
+  position: relative;
+  z-index: 2;
+  -webkit-transition: 250ms;
+     -moz-transition: 250ms;
+      -ms-transition: 250ms;
+       -o-transition: 250ms;
+          transition: 250ms;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.stream .newTopic .area pre,.stream .newTopic .area textarea {
+  min-height: 50px;
+  padding: 5px;
+}
+.stream .newTopic .area pre,.stream .newTopic .area textarea {
+  font: 13px/19.5px sans-serif;
+}
+.stream .newTopic.write .area {
+  margin-bottom: 33px;
+  color: #000;
+}
+.stream .newTopic.write .area textarea {
+  min-height: 89px;
+}
+.stream .newTopic.write .area pre {
+  min-height: 84px;
+}
+.stream .controls {
+  bottom: 13px;
+  right: 14px;
+  position: absolute;
+}
+.stream .controls .button {
+  margin-left: 3px;
+}
+.stream .controls .postError {
+  margin-left: 5px;
+  color: #f00;
+  display: inline-block;
+}
+.stream .notifications {
+  -webkit-transform-style: preserve-3d;
+     -moz-transform-style: preserve-3d;
+      -ms-transform-style: preserve-3d;
+       -o-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+  -webkit-perspective: 1000;
+     -moz-perspective: 1000;
+      -ms-perspective: 1000;
+       -o-perspective: 1000;
+          perspective: 1000;
+}
+.stream .notification {
+  margin-left: -1px;
+  margin-right: -1px;
+  margin-top: -81px;
+  height: 81px;
+  color: black;
+  text-shadow: none;
+  background: hsl(336,67%,45%);
+  -webkit-transition: 500ms;
+     -moz-transition: 500ms;
+      -ms-transition: 500ms;
+       -o-transition: 500ms;
+          transition: 500ms;
+  -webkit-transform-origin: bottom;
+     -moz-transform-origin: bottom;
+      -ms-transform-origin: bottom;
+       -o-transform-origin: bottom;
+          transform-origin: bottom;
+  -webkit-transform: rotateX(70deg);
+     -moz-transform: rotateX(70deg);
+      -ms-transform: rotateX(70deg);
+       -o-transform: rotateX(70deg);
+          transform: rotateX(70deg);
+  opacity: 0;
+}
+.stream .notification.visible {
+  opacity: 1;
+  margin-top: 0;
+  -webkit-transform: rotateX(0);
+     -moz-transform: rotateX(0);
+      -ms-transform: rotateX(0);
+       -o-transform: rotateX(0);
+          transform: rotateX(0);
+}
+.stream .notification.private {
+  height: 34px;
+  box-shadow: none;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.34);
+}
+.stream .notification.private p img {
+  margin-right: 8px;
+  vertical-align: bottom
+}
+.stream .notification.private section {
+  padding-top: 6px;
+  padding-left: 0;
+  text-align: center;
+}
+.stream .notification section {
+  min-height: 47px;
+  padding: 21px 21px 13px 84px;
+}
+.stream .notification .info {
+  float: left;
+}
+.stream .notification .info .name {
+  display: block;
+  color: black;
+  vertical-align: top;
+  -webkit-transition: 500ms;
+     -moz-transition: 500ms;
+      -ms-transition: 500ms;
+       -o-transition: 500ms;
+          transition: 500ms;
+}
+.stream .notification .info p {
+  color: #fff;
+}
+.stream .notification .controls {
+  margin-top: 9px;
+  float: right;
+  position: static;
+}
+.stream .notification .controls > .button {
+  margin-left: 5px;
+  color: #000;
+  background: #eee;
+  box-shadow: 0 1px rgba(255,255,255,0.89) inset,0 1px rgba(0,0,0,0.21),0 1px 0 2px #b3235d,1px 0 0 2px #b3235d,-1px 0 0 2px #b3235d,0 2px 0 2px rgba(255,255,255,0.21),0 -1px 0 2px #a62156;
+}
+.stream .notification .controls > .button:active {
+  background: #ddd;
+}
+.stream .notification .controls > .postError {
+  margin-left: 5px;
+  color: #f00;
+  display: inline-block;
+}
+.stream .notification .avatar {
+  top: 17px;
+  width: 50px;
+  cursor: pointer;
+  position: absolute;
+}
+.stream .notification.log {
+  min-height: 23px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: rgba(0,0,0,0.55);
+  text-shadow: 0 1px 1px rgba(255,255,255,0.34);
+  background: #f2f2f2;
+  border-bottom-color: rgba(0,0,0,0.08);
+  border-top-color: transparent;
+}
+.stream .notification.log section {
+  padding-top: 0;
+  padding-bottom: 0;
+  line-height: 25px;
+  min-height: 25px;
+}
+.stream .notification.log .avatar {
+  top: 5px;
+  left: 38px;
+  width: 25px;
+}
+.stream .notification.log p {
+  display: none;
+}
+.stream .notification.log .name {
+  opacity: 0;
+}
+.stream .notification.log.granted .name,.stream .notification.log.denied .name {
+  opacity: 1;
+  color: #808080;
+}
+.stream .notification.log .controls {
+  display: none;
+}
+.stream .notification.log.granted .granted,.stream .notification.log.denied .denied {
+  display: inline-block;
+  max-width: 9999px;
+  opacity: 1;
+}
+.stream .notification .granted,.stream .notification .denied {
+  height: 25px;
+  max-width: 0;
+  line-height: 25px;
+  overflow: hidden;
+  opacity: 0;
+  display: none;
+  -webkit-transition: 500ms;
+     -moz-transition: 500ms;
+      -ms-transition: 500ms;
+       -o-transition: 500ms;
+          transition: 500ms;
+}
+.stream .opener {
+  min-height: 47px;
+  padding: 21px 21px 13px 84px;
+}
+.stream .postmeta {
+  float: right;
+  margin: 0 0 0 13px;
+  text-align: right;
+  position: relative;
+}
+.stream .postmeta nav {
+  visibility: hidden;
+}
+.stream .postmeta span,
+.stream .postmeta button,
+.stream .postmeta time {
+  line-height: 19.5px;
+}
+.stream .postmeta time,
+.stream .postmeta span {
+  color: hsl(0,0%,75%);
+  font-size: 11.5px;
+}
+.stream .postmeta .share {
+  position: relative;
+}
+.stream .postmeta .share .action {
+  margin: 6px 10px 0 0;
+  width: 13px;
+  height: 13px;
+  background: white;
+  font-size: 8px;
+  text-align: center;
+  line-height: 14px;
+  border: 1px solid hsl(0,0%,75%);
+  border-radius: 100%;
+  float: right;
+  cursor: pointer;
+}
+.stream .postmeta .share .popup {
+  left: -53px;
+  top: 19px;
+  display: none;
+}
+  .stream .postmeta .popup.visible { 
+    display: -webkit-box;
+  }
+.stream .postmeta button {
+  padding: 0;
+  height: 16px;
+}
+.stream .postmeta button.delete {
+  min-width: 16px;
+}
+.stream .name {
+  color: hsl(81, 40%, 44%);
+  font-weight: bold;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  display: none;
+}
+.stream .name + .location {
+  margin-left: 5px;
+  font-size: 11px;
+  line-height: 19.5px;
+  color: rgba(0,0,0,0.34);
+  display: none;
+}
+.stream .opener:hover nav,.stream .comment:hover nav {
+  visibility: visible;
+}
+.stream .avatar {
+  left: 21px;
+  top: 17px;
+  position: absolute;
+}
+.stream p {
+  color: #333;
+  display: inline;
+}
+.stream section.answer {
+  position: relative;
+}
+  .stream section.answer,
+  .stream section.answer .controls {
+    padding: 13px 89px 0 84px;
+  }
+  .stream section.answer .area {
+    width: 100%;
+    position: relative;
+  }
+  .stream section.answer .area textarea {
+    height: 25px;
+    padding: 4px 5px 2px;
+    resize: none;
+    background: none;
+    font: 12px/18px sans-serif;
+    color: #808080;
+    border: 1px solid rgba(0,0,0,0.13);
+    box-shadow: 1px 1px #fff, inset 1px 1px rgba(0,0,0,0.05);
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+        -ms-box-sizing: border-box;
+         -o-box-sizing: border-box;
+            box-sizing: border-box;
+  }
+  .stream section.answer .area textarea {
+    font: 12px/18px sans-serif;
+  }
+  .stream section.answer .avatar {
+    width: 34px;
+    left: 36px;
+    top: 14px;
+    display: none;
+  }
+  .stream section.answer .controls {
+    bottom: 13px;
+    left: 0;
+    right: 0;
+    display: none;
+  }
+    .stream section.answer .controls .hint { float: left; }
+    .stream section.answer .controls .button { float: right; }
+  .stream section.answer.write .avatar {
+    display: block;
+  }
+  .stream section.answer.write .area textarea {
+    min-height: 53px;
+    margin-bottom: 27px;
+    color: #000;
+    resize: vertical;
+  }
+  .stream section.answer.write .controls {
+    display: block;
+  }
+.stream .comments {
+  border-top: 1px solid hsl(0, 0%, 95%);
+}
+.stream .comments .comment {
+  min-height: 34px;
+  padding: 13px 21px 0 84px;
+  position: relative;
+}
+.stream .comments section.answer:first-child.write .avatar {
+  top: 11px;
+  left: 11px;
+}
+.stream .comments section.answer:first-child .area {
+  margin-top: 8px;
+}
+.stream .comments section:last-child {
+  padding-bottom: 21px;
+}
+.stream .comments .avatar {
+  top: 13px;
+  left: 36px;
+  width: 34px;
+  border-radius: 2px;
+}
+.stream .comments .location {
+  display: none;
+}
+.stream p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.stream .message {
+  min-height: 14px;
+  padding-left: 66px;
+  color: rgba(0,0,0,0.55);
+  cursor: pointer;
+}
+.stream .message.new {
+  background-color: rgba(0,0,0,0.08);
+}
+.stream .message.selected {
+  color: #517312;
+  background: #abe245;
+}
+.stream .message.selected .location,.stream .message.selected .time {
+  color: rgba(81,115,18,0.55);
+}
+.stream .message:last-child {
+  box-shadow: none;
+}
+.stream .message .avatar {
+  width: 40px;
+}
+.stream .message p {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.stream .topic.ghost .name,.stream .topic.ghost .location,.stream .topic.ghost p span {
+  display: inline-block;
+}
+.stream .topic.ghost .name {
+  height: 16px;
+  width: 89px;
+  background: rgba(0,0,0,0.21);
+}
+.stream .topic.ghost .location {
+  width: 144px;
+  height: 14px;
+  background: rgba(0,0,0,0.08);
+}
+.stream .topic.ghost .time {
+  width: 50px;
+  height: 16px;
+  background: rgba(0,0,0,0.08);
+}
+.stream .topic.ghost .avatar {
+  height: 50px;
+  width: 50px;
+  background: rgba(0,0,0,0.13);
+}
+.stream .topic.ghost .comments .avatar {
+  height: 40px;
+  width: 40px;
+}
+.stream .topic.ghost p span {
+  height: 16px;
+  margin-right: 3px;
+  background: rgba(0,0,0,0.21);
+}
+.stream .empty,.stream .tutorial {
+  height: auto;
+  text-align: center;
+  background: #fff;
+}
+.stream .loader {
+  line-height: 50px;
+  text-align: center;
+  color: rgba(0,0,0,0.55);
+  background: #fff;
+  border-radius: 0 0 5px 5px;
+  display: block;
+}
+.stream .loader .spinner {
+  width: 16px;
+  height: 16px;
+  vertical-align: top;
+  background: url("../img/spinner.gif") no-repeat;
+  display: inline-block;
+}
+.stream .expanding.area pre,.stream .expanding.area textarea {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.stream .expanding.area textarea {
+  width: 100%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.stream .expanding.area pre {
+  display: none;
+}
+.stream .expanding.area.active textarea {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  resize: none;
+}
+.stream .expanding.area.active pre {
+  display: block;
+  visibility: hidden;
+}
+.stream .unread .avatar {
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.55) inset,0 0 0 3px #83ac35,0 0 0 4px #90bd3a,0 0 2px 4px rgba(0,0,0,0.34);
+}
+.stream .opener,.stream .comment {
+  -webkit-transition: background-color 200ms;
+     -moz-transition: background-color 200ms;
+      -ms-transition: background-color 200ms;
+       -o-transition: background-color 200ms;
+          transition: background-color 200ms;
+}
+.stream .opener .cancel-delete,.stream .comment .cancel-delete {
+  display: none;
+}
+.stream .dangerZone {
+  box-shadow: 0 1px rgba(255,255,255,0.89),0 1px 0 rgba(0,0,0,0.21) inset,0 0 0 1px rgba(0,0,0,0.13) inset;
+  background-color: #f00;
+  border-radius: 3px;
+}
+.stream .dangerZone .cancel-delete {
+  display: inline-block;
+}
+.stream .dangerZone span,
+.stream .dangerZone time,
+.stream .dangerZone p,
+.stream .dangerZone button {
+  border-radius: 1px;
+  box-shadow: 0 1px rgba(255,255,255,0.89) inset,0 1px 0 rgba(0,0,0,0.21),0 0 0 1px rgba(0,0,0,0.13);
+}
+.stream .dangerZone button {
+  border-radius: 3px;
+}
+.conversation article {
+  min-height: 40px;
+  padding: 13px 13px 13px 64px;
+  box-shadow: 0 -1px rgba(0,0,0,0.13) inset;
+  position: relative;
+}
+.conversation article:last-child {
+  border-radius: 0 0 5px 5px;
+  box-shadow: none;
+}
+.conversation article .avatar {
+  left: 13px;
+  width: 40px;
+  border-radius: 2px;
+  position: absolute;
+}
+.conversation article .postmeta {
+  margin: 0;
+  float: none;
+  text-align: left;
+}
+.conversation article .postmeta .name {
+  color: #000;
+}
+.conversation article .postmeta .location {
+  margin-left: 0;
+  display: none;
+}
+.conversation article p {
+  margin-top: 2px;
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+.conversation article p:last-child {
+  margin-bottom: 0;
+}
+.conversation article p .time {
+  float: right;
+  color: rgba(0,0,0,0.34);
+  font-size: 11.5px;
+  line-height: 19.5px;
+}
+.conversation .you {
+  background: #f7f7f7;
+}
+.moderationPanel {
+  display: none;
+}
+.moderate .moderationPanel {
+  height: 28px;
+  width: 100%;
+  margin: 5px 0 13px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0.08)), color-stop(1, rgba(0,0,0,0.21)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.21) 100%);
+  background:    -moz-linear-gradient(top, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.21) 100%);
+  background:     -ms-linear-gradient(top, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.21) 100%);
+  background:      -o-linear-gradient(top, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.21) 100%);
+  background:         linear-gradient(to bottom, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.21) 100%);
+  color: #000;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.4) inset,0 -1px rgba(0,0,0,0.03),0 -2px rgba(0,0,0,0.03),0 -3px rgba(0,0,0,0.03);
+  border-radius: 0 0 5px 5px;
+}
+.moderate .moderationPanel > div {
+  padding: 5px 0;
+  text-align: center;
+  cursor: pointer;
+  -webkit-box-flex: 1;
+     -moz-box-flex: 1;
+      -ms-box-flex: 1;
+       -o-box-flex: 1;
+          box-flex: 1;
+  -webkit-transition: 500ms;
+     -moz-transition: 500ms;
+      -ms-transition: 500ms;
+       -o-transition: 500ms;
+          transition: 500ms;
+}
+.moderate .moderationPanel > div:first-child {
+  border-bottom-left-radius: 5px;
+}
+.moderate .moderationPanel > div:last-child {
+  border-bottom-right-radius: 5px;
+}
+.moderate .moderationPanel > div:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0.05)), color-stop(1, rgba(0,0,0,0.13)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.13) 100%);
+  background:    -moz-linear-gradient(top, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.13) 100%);
+  background:     -ms-linear-gradient(top, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.13) 100%);
+  background:      -o-linear-gradient(top, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.13) 100%);
+  background:         linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.13) 100%);
+}

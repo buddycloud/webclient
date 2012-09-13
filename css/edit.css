@@ -1,0 +1,124 @@
+.editbar {
+  top: 0;
+  bottom: 0;
+  left: 234px;
+  width: 234px;
+  background: rgba(255,255,255,0.55);
+  -webkit-transition: left 400ms;
+     -moz-transition: left 400ms;
+      -ms-transition: left 400ms;
+       -o-transition: left 400ms;
+          transition: left 400ms;
+  box-shadow: -1px 0 rgba(0,0,0,0.21) inset;
+  position: absolute;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+  overflow-y: auto;
+}
+.editmode .editbar {
+  left: 0;
+}
+.editbar h2 {
+  margin: 13px 13px 0;
+}
+.editbar .edits {
+  margin: 0 13px 13px;
+}
+.editbar .edits nav {
+  margin: 10px 0 34px;
+}
+.editbar .edits nav .button {
+  float: right;
+  margin-left: 5px;
+}
+.editbar .edits .contenteditable {
+  padding: 5px;
+  margin-bottom: 5px;
+}
+.editbar .edits .contenteditable input[type=checkbox] {
+  margin: 3px 5px;
+}
+.editbar .edits .contenteditable input[type=email] {
+  margin-top: 3px;
+  font-size: 16px;
+  width: 100%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.editbar .dangerZone {
+  padding: 0 13px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+}
+.editbar .dangerZone:before,.editbar .dangerZone:after {
+  height: 21px;
+  margin: 13px -13px;
+  content: "";
+  background: -webkit-repeating-linear-gradient(-45deg,#f00,#f00 10px,rgba(255,255,255,0.89) 10px,rgba(255,255,255,0.89) 20px);
+  background:    -moz-repeating-linear-gradient(-45deg,#f00,#f00 10px,rgba(255,255,255,0.89) 10px,rgba(255,255,255,0.89) 20px);
+  background:      -o-repeating-linear-gradient(-45deg,#f00,#f00 10px,rgba(255,255,255,0.89) 10px,rgba(255,255,255,0.89) 20px);
+  background:     -ms-repeating-linear-gradient(-45deg,#f00,#f00 10px,rgba(255,255,255,0.89) 10px,rgba(255,255,255,0.89) 20px);
+  background: repeating-linear-gradient(-45deg,#f00,#f00 10px,rgba(255,255,255,0.89) 10px,rgba(255,255,255,0.89) 20px);
+  box-shadow: 0 0 0 1px #700,0 2px rgba(0,0,0,0.08),0 0 0 1px rgba(255,255,255,0.89) inset;
+  display: block;
+}
+.editbar .dangerZone:after {
+  margin-bottom: 0;
+}
+.editbar .dangerZone p {
+  margin-bottom: 13px;
+  color: rgba(0,0,0,0.55);
+}
+.editbar .dangerZone .button {
+  margin-bottom: 2px;
+}
+.editbar .spinner {
+  margin: inherit auto;
+  width: 16px;
+  height: 16px;
+  vertical-align: top;
+  background: url("../img/spinner.gif") no-repeat;
+  display: inline-block;
+}
+[contenteditable="true"],.contenteditable {
+  text-overflow: clip !important;
+  color: #000 !important;
+  background: #fe0 !important;
+  border-radius: 2px;
+  text-shadow: none !important;
+  -webkit-transition: background 400ms;
+     -moz-transition: background 400ms;
+      -ms-transition: background 400ms;
+       -o-transition: background 400ms;
+          transition: background 400ms;
+}
+[contenteditable="true"]::selection,.contenteditable::selection {
+  background: #000;
+  color: #fff;
+  text-shadow: none;
+}
+.stream button {
+  display: none;
+}
+.editmode .sidebar {
+  left: -234px;
+}
+.editmode .stream p {
+  color: #808080;
+  -webkit-transition: 400ms;
+     -moz-transition: 400ms;
+      -ms-transition: 400ms;
+       -o-transition: 400ms;
+          transition: 400ms;
+}
+.editmode .stream button {
+  display: inline-block;
+}

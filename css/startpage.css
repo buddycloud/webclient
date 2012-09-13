@@ -1,0 +1,93 @@
+body.startpage {
+  background: #eee url("../img/images/Coffee_by_Felix_Niklas.jpg") no-repeat;
+  background: #eee url("../img/images/logo.png") no-repeat center center;
+  -webkit-background-size: cover;
+     -moz-background-size: cover;
+      -ms-background-size: cover;
+       -o-background-size: cover;
+  background-size: cover;
+  overflow: auto;
+}
+.startpage header {
+  border-bottom: 1px solid rgba(0,0,0,0.21);
+  box-shadow: 0 1px rgba(255,255,255,0.34);
+}
+.startpage header .holder {
+  height: 50px;
+}
+.startpage header h1 {
+  padding-right: 21px;
+  float: left;
+}
+.startpage header h1 a {
+  color: #000;
+}
+.startpage header nav {
+  margin-top: 11px;
+}
+.startpage header nav input[type="submit"] {
+  margin-top: 23px;
+}
+.startpage header .search {
+  float: left;
+  margin: 13px 21px;
+  border: 1px solid rgba(0,0,0,0.21);
+  box-shadow: 0 1px rgba(255,255,255,0.89);
+}
+.startpage header form {
+  margin-top: -23px;
+}
+.startpage header form div {
+  margin-left: 13px;
+  float: left;
+}
+.startpage h5 {
+  font-size: 34px;
+  text-align: center;
+  margin: 55px 21px;
+}
+.startpage .content {
+  z-index: -1;
+}
+.startpage .userbar {
+  min-width: 100%;
+  max-width: 100%
+}
+.startpage .holder {
+  padding: 13px 21px;
+}
+.startpage section {
+  width: 431px;
+  margin: 13px 0;
+  padding: 13px 21px;
+  background: rgba(255,255,255,0.55);
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,0.21);
+  box-shadow: 0 1px rgba(255,255,255,0.21) inset,0 0 0 1px rgba(255,255,255,0.13) inset,0 2px 0 -1px rgba(0,0,0,0.08),0 4px 5px -1px rgba(0,0,0,0.13);
+}
+.channelType {
+  margin: 5px 0;
+  padding: 0 5px;
+  border-radius: 8px;
+  background-color: #f00;
+}
+.channelType.personal {
+  background-color: #008000;
+}
+.stats .channelType {
+  float: right;
+}
+.stats .channel .owner,.stats .channel .info,.stats .channel .status {
+  color: #000;
+}
+.about p,.about ul {
+  padding-top: 10px;
+}
+.about ul {
+  padding-left: 16px;
+  list-style-type: circle;
+}
+.about p {
+  white-space: pre-wrap;
+  break-word: break-word;
+}

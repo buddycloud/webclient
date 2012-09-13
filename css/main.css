@@ -1,0 +1,213 @@
+@import "normalize.css";
+@import "reset.css";
+@import "helpers.css";
+@import "grid.css";
+@import "button.css";
+@import "form.css";
+@import "sidebar.css";
+@import "channel.css";
+@import "channelDetails.css";
+@import "overlay.css";
+@import "edit.css";
+@import "startpage.css";
+@import "discover.css";
+@import "bubbling.css";
+@import "singlePost.css";
+@import "anon.css";
+@import "popup.css";
+
+textarea {
+  color: #000;
+  background-color: #fff;
+}
+pre,textarea {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  border: 0;
+}
+@font-face {
+  font-family: 'NunitoRegular';
+  src: url("fonts/Nunito-Regular-webfont.eot");
+  src: url("fonts/Nunito-Regular-webfont.eot?#iefix") format('embedded-opentype'),url("fonts/Nunito-Regular-webfont.woff") format('woff'),url("fonts/Nunito-Regular-webfont.ttf") format('truetype'),url("fonts/Nunito-Regular-webfont.svg#NunitoRegular") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NunitoLight';
+  src: url("fonts/Nunito-Light-webfont.eot");
+  src: url("fonts/Nunito-Light-webfont.eot?#iefix") format('embedded-opentype'),url("fonts/Nunito-Light-webfont.woff") format('woff'),url("fonts/Nunito-Light-webfont.ttf") format('truetype'),url("fonts/Nunito-Light-webfont.svg#NunitoLight") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'NunitoBold';
+  src: url("fonts/Nunito-Bold-webfont.eot");
+  src: url("fonts/Nunito-Bold-webfont.eot?#iefix") format('embedded-opentype'),url("fonts/Nunito-Bold-webfont.woff") format('woff'),url("fonts/Nunito-Bold-webfont.ttf") format('truetype'),url("fonts/Nunito-Bold-webfont.svg#NunitoBold") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+html {
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+  font: 13px/17px "Helvetica Neue",Helvetica,Arial,sans-serif;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #003152), color-stop(1, #3c87aa));
+  background: -webkit-linear-gradient(top, #003152 0%, #3c87aa 100%);
+  background:    -moz-linear-gradient(top, #003152 0%, #3c87aa 100%);
+  background:     -ms-linear-gradient(top, #003152 0%, #3c87aa 100%);
+  background:      -o-linear-gradient(top, #003152 0%, #3c87aa 100%);
+  background:         linear-gradient(to bottom, #003152 0%, #3c87aa 100%);
+  background-attachment: fixed;
+}
+body {
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+  background: rgba(255,255,255,0.34);
+  background: -webkit-gradient(radial,50% 50%,0,50% 50%,100%,from(rgba(255,255,255,0.34)),to(rgba(255,255,255,0)));
+  background: -webkit-radial-gradient(center center,cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
+  background:    -moz-radial-gradient(center center,circle cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
+  background:      -o-radial-gradient(center center,cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
+  background:     -ms-radial-gradient(center center,cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
+  background:         radial-gradient(center center,cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
+  background-attachment: fixed;
+  -webkit-text-size-adjust: none;
+}
+body.anonymous .content {
+  padding-left: 247px;
+  left: 0;
+}
+body.anonymous .userbar .getin {
+  display: block;
+}
+body.anonymous .userbar .getout {
+  display: none;
+}
+body.anonymous .sidebar .search {
+  background: transparent;
+  box-shadow: none;
+}
+body.anonymous .sidebar .search input {
+  box-shadow: 0 1px rgba(255,255,255,0.89);
+  border: 1px solid rgba(0,0,0,0.21);
+}
+body.anonymous .sidebar .actionBar {
+  box-shadow: none;
+}
+body.anonymous .sidebar button {
+  background: none;
+  border: none;
+  color: #000;
+  font-weight: normal;
+}
+.headbar {
+  top: 0;
+  width: 100%;
+  height: 8px;
+  background: url("images/headbar.png");
+  position: absolute;
+  display: none;
+}
+.headbar:after {
+  top: 8px;
+  height: 8px;
+  width: 100%;
+  content: "";
+  position: absolute;
+  background: #f2f2f2;
+  box-shadow: 0 -1px rgba(0,0,0,0.03),0 -2px rgba(0,0,0,0.03),0 -3px rgba(0,0,0,0.03),0 -1px #fff inset;
+}
+h1 {
+  font-size: 34px;
+  font-family: "Nunito",sans-serif;
+}
+h2 {
+  font-size: 26px;
+  font-family: "Nunito",sans-serif;
+}
+h3 {
+  font-size: 18px;
+  font-family: "Nunito",sans-serif;
+}
+h4 {
+  width: 100%;
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(0,0,0,0.89);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+h5 {
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: bold;
+}
+ul {
+  list-style-type: none;
+}
+a,a:visited {
+  color: #83ac35;
+  text-decoration: none;
+}
+a:hover,a:visited:hover {
+  color: light_highligh;
+  text-decoration: underline;
+}
+a.internal,a:visited.internal {
+  padding-left: 12px;
+  background: url("../img/beagle.png") no-repeat left 4px;
+}
+.hint { color: #bbb; }
+table td {
+  padding-right: 13px;
+}
+.loading {
+  display: -webkit-box;
+  display:    -moz-box;
+  display:         box;
+  -webkit-box-orient: horizontal;
+     -moz-box-orient: horizontal;
+      -ms-box-orient: horizontal;
+       -o-box-orient: horizontal;
+  -webkit-box-orient: horizontal;
+     -moz-box-orient: horizontal;
+      -ms-box-orient: horizontal;
+       -o-box-orient: horizontal;
+          box-orient: horizontal;
+  -webkit-box-pack: center;
+     -moz-box-pack: center;
+      -ms-box-pack: center;
+       -o-box-pack: center;
+  -webkit-box-pack: center;
+     -moz-box-pack: center;
+      -ms-box-pack: center;
+       -o-box-pack: center;
+          box-pack: center;
+  -webkit-box-align: center;
+     -moz-box-align: center;
+      -ms-box-align: center;
+       -o-box-align: center;
+  -webkit-box-align: center;
+     -moz-box-align: center;
+      -ms-box-align: center;
+       -o-box-align: center;
+          box-align: center;
+  -webkit-box-lines: multiple;
+     -moz-box-lines: multiple;
+      -ms-box-lines: multiple;
+       -o-box-lines: multiple;
+          box-lines: multiple;
+  display: box;
+  -webkit-box-flex: 1;
+     -moz-box-flex: 1;
+      -ms-box-flex: 1;
+       -o-box-flex: 1;
+          box-flex: 1;
+  font-size: 27px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0 1px rgba(0,0,0,0.89),0 1px 5px rgba(0,0,0,0.55);
+}
