@@ -667,8 +667,8 @@
   display: block;
   visibility: hidden;
 }
-.stream .unread .avatar {
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.55) inset,0 0 0 3px #83ac35,0 0 0 4px #90bd3a,0 0 2px 4px rgba(0,0,0,0.34);
+.stream .unread {
+  box-shadow: 2px 0 hsl(81, 53%, 44%) inset;
 }
 .stream .opener,.stream .comment {
   -webkit-transition: background-color 200ms;
