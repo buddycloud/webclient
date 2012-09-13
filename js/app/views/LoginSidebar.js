@@ -17,7 +17,7 @@
 define(function(require) {
   var _ = require('underscore');
   var Backbone = require('backbone');
-  var template = require('text!templates/LoginSidebar.html');
+  var template = require('text!templates/universal/sidebar.html');
 
   var LoginSidebar = Backbone.View.extend({
     tagName: 'aside',

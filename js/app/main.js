@@ -67,23 +67,9 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-    $('#content').append(new MetadataPane({
-      model: channel, 
-      credentials: credentials,
-      subscribed: subscribedChannels}).el);
-    $('#content').append(new PostStream({model: channel.posts}).el);
-    $('#right').append(new FollowerList({model: channel}).el);
-    if (credentials.username) {
-      var userMenu = new UserMenu({model: credentials});
-      var channelsList = new SubscribedChannelsList({model: subscribedChannels});
-      $('#toolbar-right').append(userMenu.el);
-      $('#left').append(channelsList.el);
-      userMenu.render();
-    } else {
-      var sidebar = new LoginSidebar({model: credentials});
-      $('#left').append(sidebar.el);
+var sidebar = new LoginSidebar({model: credentials});
+      $('#main').append(sidebar.el);
       sidebar.render();
-    }
   }
 
   function fetch(model, credentials) {
