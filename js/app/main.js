@@ -56,22 +56,15 @@ define(function(require) {
   function getUserCredentials(callback) {
     var credentials = new UserCredentials;
     credentials.fetch();
-    credentials.on('accepted', function() {
+    credentials.on('accepted registrationSuccess', function() {
       callback(credentials);
     });
-    credentials.on('rejected', function() {
-      alert('Authentication failed');
+    credentials.on('rejected registrationError', function(message) {
+      alert(message);
       credentials.set({username: null, password: null});
       credentials.verify();
     });
-    credentials.on('registrationSuccess', function() {
-      callback(credentials);
-    });
-    credentials.on('registrationError', function() {
-      alert('Registration Error');
-      credentials.set({username: null, password: null});
-      credentials.verify();
-    });
+    
     credentials.verify();
   }
 

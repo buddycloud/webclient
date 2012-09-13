@@ -30,8 +30,8 @@ define(function(require) {
 
     _login: function(event) {
       event.preventDefault();
-      var username = this.$('input[name=username]').attr('value');
-      var password = this.$('input[name=password]').attr('value');
+      var username = this.$('input[name=username]').val();
+      var password = this.$('input[name=password]').val();
       this.model.save({username: username, password: password});
       location.reload();
     }

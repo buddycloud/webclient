@@ -26,6 +26,7 @@ define(function(require) {
 
     initialize: function(options) {
       this.model.bind('registrationSuccess', this._reloadPage, this);
+      this.model.bind('registrationError', this._reloadPage, this);
     },
 
     render: function() {
@@ -34,9 +35,9 @@ define(function(require) {
 
     _register: function(event) {
       event.preventDefault();
-      var username = this.$('input[name=username]').attr('value');
-      var password = this.$('input[name=password]').attr('value');
-      var email = this.$('input[name=email]').attr('value');
+      var username = this.$('input[name=username]').val();
+      var password = this.$('input[name=password]').val();
+      var email = this.$('input[name=email]').val();
       this.model.register(username, password, email);
     },
 

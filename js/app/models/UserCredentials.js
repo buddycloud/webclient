@@ -42,7 +42,11 @@ define(function(require) {
           self.trigger('registrationSuccess');
         },
         error: function(xhr) {
-          self.trigger('registrationError');
+          var message = 'Registration error'
+          if (xhr.status === 503) {
+            message = 'User "' + username + '" already exists';            
+          }
+          self.trigger('registrationError', message);
         }
       });  
     },
@@ -86,7 +90,7 @@ define(function(require) {
           self.trigger('accepted');
         },
         error: function() {
-          self.trigger('rejected');
+          self.trigger('rejected', 'Authentication failed');
         },
       });
     },
