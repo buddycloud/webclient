@@ -110,7 +110,7 @@ define(function(require) {
         rotation = (rotation + 10) % 360;
       }, 50);
 
-      this.model.on('resetur', function() {
+      this.model.on('reset', function() {
         clearTimeout(spin);
       });
     }
