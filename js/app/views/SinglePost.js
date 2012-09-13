@@ -19,7 +19,7 @@ define(function(require) {
   var _ = require('underscore');
   var api = require('app/util/api');
   var avatarFallback = require('app/util/avatarFallback');
-  var urlUtil = require('app/util/urlUtil');
+  var parseUtil = require('app/util/parseUtil');
   var Backbone = require('backbone');
   var Post = require('app/models/Post');
   var template = require('text!templates/SinglePost.html');
@@ -62,7 +62,9 @@ define(function(require) {
       this.$el.html(_.template(template, {
         thread: this.model,
         avatarUrlFunc: api.avatarUrl,
-        linkUrlsFunc: urlUtil.linkUrls,
+        linkUrlsFunc: parseUtil.linkUrls,
+        linkMentionsFunc: parseUtil.linkMentions,
+        safeString: parseUtil.safeString,
         canPost: this.options.canPost
       }));
       this._setupAvatarFallbacks();
@@ -72,7 +74,9 @@ define(function(require) {
       this.$('.comments').append(_.template(commentTemplate, {
         comment: comment,
         avatarUrlFunc: api.avatarUrl,
-        linkUrlsFunc: urlUtil.linkUrls
+        linkUrlsFunc: parseUtil.linkUrls,
+        linkMentionsFunc: parseUtil.linkMentions,
+        safeString: parseUtil.safeString
       }));
       avatarFallback(this.$('.comment').find('.avatar'), 'personal', 32);
     },

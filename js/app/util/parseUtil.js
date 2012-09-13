@@ -19,12 +19,23 @@ define(function(require) {
   // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
   var URL_REGEX = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/g;
 
+  var CHANNEL_REGEX = /[\w\d][\w\d-_%&<>.]+@[\w\d-]{3,}\.[\w\d-]{2,}(\.[\w]{2,6})?/g;
+
+  function safeString(content) {
+    return $('<div/>').text(content).html();
+  }
+
   function linkUrls(content) {
-    content = $('<div/>').text(content).html();
     return content.replace(URL_REGEX, '<a href="$&" target="_blank">$&</a>');
   }
 
+  function linkMentions(content) {
+    return content.replace(CHANNEL_REGEX, '<a href="/?\$&" target="_blank">\$&</a>');
+  }
+
   return {
-    linkUrls: linkUrls
+    safeString: safeString,
+    linkUrls: linkUrls,
+    linkMentions: linkMentions
   };
 });
