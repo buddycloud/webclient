@@ -6,7 +6,7 @@
     <span class="author-id"><%- thread[0].author() %></span>
   </h2>
 </header>
-<pre class="content"><%= linkUrlsFunc(thread[0].content()) %></pre>
+<pre class="content"><%= linkUrlsFunc(linkMentionsFunc(safeString(thread[0].content()))) %></pre>
 
 <section class="comments">
   <% _.each(_.rest(thread), function(comment) { %>
@@ -19,7 +19,7 @@
         <span class="author-id"><%- comment.author() %></span>
       </h3>
     </header>
-    <pre class="content"><%= linkUrlsFunc(comment.content()) %></pre>
+    <pre class="content"><%= linkUrlsFunc(linkMentionsFunc(safeString(comment.content()))) %></pre>
   </article>
   <% }) %>
 </section> <!-- .comments -->
