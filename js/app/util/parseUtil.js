@@ -30,7 +30,7 @@ define(function(require) {
   }
 
   function linkMentions(content) {
-    return content.replace(CHANNEL_REGEX, '<a href="/?\$&" target="_blank">\$&</a>');
+    return content.replace(CHANNEL_REGEX, '<a href="/?\$&">\$&</a>');
   }
 
   return {
