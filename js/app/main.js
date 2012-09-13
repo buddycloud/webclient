@@ -30,6 +30,7 @@ define(function(require) {
   var LoginSidebar = require('app/views/LoginSidebar');
   var MetadataPane = require('app/views/MetadataPane');
   var PostStream = require('app/views/PostStream');
+  var RegisterSidebar = require('app/views/RegisterSidebar');
   var SubscribedChannels = require('app/models/SubscribedChannels');
   var SubscribedChannelsList = require('app/views/SubscribedChannelsList');
   var UserCredentials = require('app/models/UserCredentials');
@@ -55,14 +56,15 @@ define(function(require) {
   function getUserCredentials(callback) {
     var credentials = new UserCredentials;
     credentials.fetch();
-    credentials.on('accepted', function() {
+    credentials.on('accepted registrationSuccess', function() {
       callback(credentials);
     });
-    credentials.on('rejected', function() {
-      alert('Authentication failed');
+    credentials.on('rejected registrationError', function(message) {
+      alert(message);
       credentials.set({username: null, password: null});
       credentials.verify();
     });
+    
     credentials.verify();
   }
 
@@ -80,9 +82,13 @@ define(function(require) {
       $('#left').append(channelsList.el);
       userMenu.render();
     } else {
-      var sidebar = new LoginSidebar({model: credentials});
-      $('#left').append(sidebar.el);
-      sidebar.render();
+      var loginSidebar = new LoginSidebar({model: credentials});
+      $('#left').append(loginSidebar.el);
+      loginSidebar.render();
+
+      var registerSidebar = new RegisterSidebar({model: credentials});
+      $('#left').append(registerSidebar.el);
+      registerSidebar.render();
     }
   }
 

@@ -17,25 +17,34 @@
 define(function(require) {
   var _ = require('underscore');
   var Backbone = require('backbone');
-  var template = require('text!templates/LoginSidebar.html');
+  var template = require('text!templates/RegisterSidebar.html');
 
-  var LoginSidebar = Backbone.View.extend({
+  var RegisterSidebar = Backbone.View.extend({
     tagName: 'aside',
-    className: 'login-sidebar bordered',
-    events: {'click input[type=submit]': '_login'},
+    className: 'register-sidebar bordered',
+    events: {'click input[type=submit]': '_register'},
+
+    initialize: function(options) {
+      this.model.bind('registrationSuccess', this._reloadPage, this);
+      this.model.bind('registrationError', this._reloadPage, this);
+    },
 
     render: function() {
       this.$el.html(_.template(template));
     },
 
-    _login: function(event) {
+    _register: function(event) {
       event.preventDefault();
       var username = this.$('input[name=username]').val();
       var password = this.$('input[name=password]').val();
-      this.model.save({username: username, password: password});
+      var email = this.$('input[name=email]').val();
+      this.model.register(username, password, email);
+    },
+
+    _reloadPage: function() {
       location.reload();
     }
   });
 
-  return LoginSidebar;
+  return RegisterSidebar;
 });
