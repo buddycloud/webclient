@@ -25,14 +25,14 @@
                     <div class="arrow"></div>
                     <ul>
                       <li class="permalink">Link to this Post
-                      <li class="email">Share via Email
+                      <li class="email"><a href="mailto:?body=$url">Share via Email</a>
                       <li>
                         <div class="justify">
-                          <a class="social twitter" href="#" title="Tweet about it">Tweet about it</a>
-                          <a class="social gplus" href="#" title="Plus it">Google+ it</a>
-                          <a class="social facebook" href="#" title="Like it on Facebook">Like it on Facebook</a>
-                          <a class="social reddit" href="#" title="Share on Reddit">Share on Reddit</a>
-                          <a class="social tumblr" href="#" title="Share on Tumblr">Share on Tumblr</a>
+                          <a class="social twitter" href="https://twitter.com/share?url=$url" title="Tweet about it">Tweet about it</a>
+                          <a class="social gplus" href="https://plus.google.com/share?url=$url" title="Plus it">Google+ it</a>
+                          <a class="social facebook" href="http://www.facebook.com/sharer.php?u=$url" title="Like it on Facebook">Like it on Facebook</a>
+                          <a class="social reddit" href="http://www.reddit.com/submit?url=$url" title="Share on Reddit">Share on Reddit</a>
+                          <a class="social tumblr" href="http://www.tumblr.com/share" title="Share on Tumblr">Share on Tumblr</a>
                         </div>
                       </li>
                     </ul>
@@ -192,9 +192,26 @@
       share popup mockup
 
       ### */
-    $('.action').click(function(){
-      $(this).next('.popup').toggleClass('visible');
+      
+    $('.action').click(function(event){
+      event.stopPropagation();
+      var popup = $(this).next('.popup');
+      
+      if(popup.hasClass('visible')){
+        // close popup
+        popup.removeClass('visible');
+      } else {
+        // open popup
+        popup.addClass('visible');
+        $(document).one('click', { popup: popup }, closePopup);
+      }
     });
+    
+    $('.popup').click(function(event){ event.stopPropagation(); });
+    
+    function closePopup(event){
+      $(event.data.popup).removeClass('visible');
+    }
   </script>
 </body>
 </html>
