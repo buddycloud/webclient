@@ -15,9 +15,9 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
+  var ModelBase = require('app/models/ModelBase');
 
-  var Post = Backbone.Model.extend({
+  var Post = ModelBase.extend({
     author: function() {
       return this.get('author');
     },

@@ -18,10 +18,11 @@ define(function(require) {
   var _ = require('underscore');
   var api = require('app/util/api');
   var Backbone = require('backbone');
+  var ModelBase = require('app/models/ModelBase');
 
-  var SubscribedChannels = Backbone.Model.extend({
+  var SubscribedChannels = ModelBase.extend({
     constructor: function() {
-      Backbone.Model.call(this);
+      ModelBase.call(this);
     },
 
     url: function() {
@@ -58,8 +59,7 @@ define(function(require) {
 
     _saveChangedAttributes: function(credentials, callback) {
       this.save({}, {
-        headers: {'Authorization': credentials.toAuthorizationHeader()},
-        xhrFields: {withCredentials: true},
+        credentials: credentials,
         silent: true,
         success: callback
       });

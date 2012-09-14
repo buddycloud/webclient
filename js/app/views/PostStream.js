@@ -43,11 +43,8 @@ define(function(require) {
     addNewPost: function() {
       var content = this.$('.new-topic').find('textarea').val();
       if (content.length) {
-        this.model.posts.create({content: content}, {headers: {
-            'Authorization': this.options.credentials.toAuthorizationHeader(),
-            'Content-type': 'application/json'
-          },
-          xhrFields: {withCredentials: true},
+        this.model.posts.create({content: content}, {
+          headers: {'Content-type': 'application/json'},
           wait: true,
           dataType: 'text'
         });

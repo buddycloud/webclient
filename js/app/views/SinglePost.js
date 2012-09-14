@@ -45,11 +45,7 @@ define(function(require) {
         var comment = new Post({content: content, replyTo: this.model[0].id});
         comment.save({}, {
           url: this._getCollecetionUrl(),
-          headers: {
-            'Authorization': this.options.credentials.toAuthorizationHeader(),
-            'Content-type': 'application/json'
-          },
-          xhrFields: {withCredentials: true},
+          headers: {'Content-type': 'application/json'},
           wait: true,
           dataType: 'text'
         });

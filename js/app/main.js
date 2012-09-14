@@ -40,9 +40,9 @@ define(function(require) {
     var subscribedChannels = new SubscribedChannels();
     getUserCredentials(function(credentials) {
       setupChannelUI(channel, subscribedChannels, credentials);
-      fetch(channel, credentials);
+      channel.fetch({credentials: credentials});
       if (credentials.username) {
-        fetch(subscribedChannels, credentials);
+        subscribedChannels.fetch({credentials: credentials});
       }
     });
   }
@@ -84,13 +84,6 @@ define(function(require) {
       $('#left').append(sidebar.el);
       sidebar.render();
     }
-  }
-
-  function fetch(model, credentials) {
-    model.fetch({
-      headers: {'Authorization': credentials.toAuthorizationHeader()},
-      xhrFields: {withCredentials: true}
-    });
   }
 
   initialize();

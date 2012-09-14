@@ -17,12 +17,12 @@
 define(function(require) {
   var _ = require('underscore');
   var api = require('app/util/api');
-  var Backbone = require('backbone');
   var ChannelMetadata = require('app/models/ChannelMetadata');
+  var ModelBase = require('app/models/ModelBase');
 
-  var ChannelFollowers = Backbone.Model.extend({
+  var ChannelFollowers = ModelBase.extend({
     constructor: function(channel) {
-      Backbone.Model.call(this);
+      ModelBase.call(this);
       this.channel = channel;
     },
 

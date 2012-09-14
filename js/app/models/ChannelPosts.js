@@ -16,14 +16,14 @@
 
 define(function(require) {
   var api = require('app/util/api');
-  var Backbone = require('backbone');
+  var CollectionBase = require('app/models/CollectionBase');
   var Post = require('app/models/Post');
 
-  var ChannelPosts = Backbone.Collection.extend({
+  var ChannelPosts = CollectionBase.extend({
     model: Post,
 
     constructor: function(channel) {
-      Backbone.Collection.call(this);
+      CollectionBase.call(this);
       this.channel = channel;
     },
 
@@ -37,7 +37,7 @@ define(function(require) {
       options = options || {};
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
-      Backbone.Collection.prototype.fetch.call(this, options);
+      CollectionBase.prototype.fetch.call(this, options);
     },
 
     byThread: function() {
