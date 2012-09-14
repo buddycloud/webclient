@@ -234,57 +234,41 @@
   <div class="content">
     <div class="channelView personal clearfix">
         <!--<div class="banner" style="background-image: url(public/images/vera_bg.jpg);"></div>-->
-        <header>
-          <table class="titleBar">
-            <tbody>
-              <tr>
-                <td><img class="avatar" src="avatars/user2_big.jpg" /></td>
-                <td class="titleText">
-                  <div>
-                    <h2 class="title" data-editmode="singleLine">Vera Meisterkoch's World</h2>
-                    <span class="status" data-editmode="singleLine">Hanging out with the world at my feet</span>
-                  </div>
-                </td>
-                <td>
-                  <nav class="inChannel">
-                    <!--<span class="messages button newMessage">
-                      <span class="holder">Messages</span><span class="message counter">2</span>
-                    </span>-->
-                    <span class="channel button">
-                      <span class="holder">Channel</span>
-                    </span>
-                    <span class="hidden save button">Save</span>
-                    <span class="edit button">Edit</span>
-                  </nav>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <header class="channelHeader justify">
+          <img class="avatar" src="avatars/user2_big.jpg" />
+          <div class="flex titleText">
+            <h2 class="title" data-editmode="singleLine">Vera Meisterkoch's World</h2>
+            <div class="about" data-editmode="multiLine">I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend.</div>
+          </div>
+          <nav class="inChannel">
+            <!--<span class="messages button newMessage">
+              <span class="holder">Messages</span><span class="message counter">2</span>
+            </span>-->
+            <span class="channel button">
+              <span class="holder">Channel</span>
+            </span>
+            <span class="hidden save button">Save</span>
+            <span class="edit button">Edit</span>
+          </nav>
           <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
         </header>
         <section class="stream clearfix">
           <section class="newTopic">
             <img class="avatar" src="avatars/user1.jpg" />
-            <div class="expanding area">
-              <pre></pre>
-              <textarea placeholder="New Topic..."></textarea>
-            </div>
-            <div class="controls">
-              <div class="button checkbox">
-                <input type="checkbox" id="shouldShareLocation" />
-                <label for="shouldShareLocation">Share Location: Home</label>
-              </div>
-              <div class="button prominent" id="createNewTopic">Post</div>
+            <textarea placeholder="New Topic..."></textarea>
+            <div class="controls clearfix">
+              <div class="hint">ctrl + enter to post</div>
+              <div class="button callToAction createComment">Post</div>
             </div>
           </section>
           <!-- this produces some weird bug - some content below
 	    it gets lost when this is visible -->
-	  <div class="notifications">
-	    <article class="notification">
-	      <section>
+      	  <div class="notifications">
+      	    <article class="notification">
+      	      <section>
                 <img class="avatar" src="avatars/user4.jpg" />
                 <div class="info">
-  	        <span class="name">martin<span class="domain">@buddycloud.com</span></span>
+      	          <span class="name">martin<span class="domain">@buddycloud.com</span></span>
                   <p>wants to follow this channel.</p>
                   <span class="granted">started following this channel.</span>
                   <span class="denied">was denied to follow this channel.</span>
@@ -294,8 +278,8 @@
                   <div class="button small positive light">Grant Martin to join</div>
                 </div>
               </section>
-	    </article>
-	  </div>
+      	    </article>
+      	  </div>
           <section class="topics">
             <article class="topic">
               <section class="opener">
@@ -311,10 +295,7 @@
               <section class="comments">
                 <section class="answer">
                   <img class="avatar" src="avatars/user1.jpg" />
-                  <div class="expanding area">
-                    <pre></pre>
-                    <textarea placeholder="comment"></textarea>
-                  </div>
+                  <textarea placeholder="comment"></textarea>
                   <div class="controls clearfix">
                     <div class="hint">ctrl + enter to post</div>
                     <div class="button callToAction createComment">Post</div>
@@ -335,7 +316,7 @@
               <section class="comments">
                 <section class="answer">
                   <img class="avatar" src="avatars/user1.jpg" />
-                  <div class="expanding area"><textarea placeholder="comment"></textarea></div>
+                  <textarea placeholder="comment"></textarea>
                   <div class="controls clearfix">
                     <div class="hint">ctrl + enter to post</div>
                     <div class="button callToAction createComment">Post</div>
@@ -392,7 +373,7 @@
                 </section>
                 <section class="answer">
                   <img class="avatar" src="avatars/user1.jpg" />
-                  <div class="expanding area"><textarea placeholder="comment"></textarea></div>
+                  <textarea placeholder="comment"></textarea>
                   <div class="controls clearfix">
                     <div class="hint">ctrl + enter to post</div>
                     <div class="button callToAction createComment">Post</div>
@@ -446,6 +427,14 @@
                   </div>
                   <span class="name">sebastian<span class="domain">@buddycloud.com</span></span><span class="location">from Passau</span>
                   <p>I'm going to tell you something that I've never told anyone before.</p>
+                </section>
+                <section class="answer">
+                  <img class="avatar" src="avatars/user1.jpg" />
+                  <textarea placeholder="comment"></textarea>
+                  <div class="controls clearfix">
+                    <div class="hint">ctrl + enter to post</div>
+                    <div class="button callToAction createComment">Post</div>
+                  </div>
                 </section>
               </section>
             </article>
@@ -631,7 +620,7 @@
     Channel bubbling
   
     ### */
-  var channelHolder = $('#channels');
+  var channelHolder = $('.channels');
   var innerHolder = channelHolder.find('.scrollHolder');
   var channels = channelHolder.find('.channel:not(".personal")');
   
