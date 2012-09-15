@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>"Anna" Search Results</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen">
+  <script src="../js/jquery.js"></script>
+  <script src="../js/modernizr.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="personal channel">
+      <div class="avatar" style="background-image: url(avatars/user1.jpg)">
+        <span class="channelpost counter">2</span>
+        <span class="message counter">2</span>
+      </div>
+      <div class="info">
+        <span class="owner">felix<span class="domain">@buddycloud.com</span></span>
+        <span class="status">Aww yeah, Lion rocks</span>
+      </div>
+      <nav>
+        <button class="logout">Logout</button>
+      </nav>
+    </div>
+    <nav class="actionBar clearfix">
+      <button class="discover active"><span>Find Channels</span></button>
+    </nav>
+    <div class="search">
+      <input type="search" results="5" autosave="channelSearch" placeholder="Search Channels ..." />
+    </div>
+    <div class="channels" class="antiscroll-wrap">
+      <div class="antiscroll-inner scrollHolder">
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user2.jpg)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">vera<span class="domain">@buddycloud.com</span></span>
+            <span class="status">What a wonderful day</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel2.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">moviefans<span class="domain">@buddycloud.com</span></span>
+            <span class="status">Harry Potter, tonight!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel3.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">on-the-box<span class="domain">@bbc.co.uk</span></span>
+            <span class="status">You gonna love the new Dexter episodes</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/topic.png)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">lolcats<span class="domain">@buddycloud.com</span></span>
+            <span class="status">I can haz your nose?</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user4.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
+            <span class="status">working on the webgl project</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/topic.png)">
+          </div>
+          <div class="info">
+            <span class="owner">music<span class="domain">@buddycloud.com</span></span>
+            <span class="status">New Foo Fighter Album online - check it out!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">verena<span class="domain">@buddycloud.com</span></span>
+            <span class="status">test's are over - party!!!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">fans<span class="domain">@steam.com</span></span>
+            <span class="status">the cake is a lie!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel8.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">cave<span class="domain">@minecraft.com</span></span>
+            <span class="status">Buy minecraft - now!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/anon.png)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">steve<span class="domain">@buddycloud.com</span></span>
+            <span class="status">all your base belongs to us</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel2.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">moviefans<span class="domain">@buddycloud.com</span></span>
+            <span class="status">Harry Potter, tonight!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel3.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">on-the-box<span class="domain">@bbc.co.uk</span></span>
+            <span class="status">You gonna love the new Dexter episodes</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel4.jpg)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">lolcats<span class="domain">@buddycloud.com</span></span>
+            <span class="status">I can haz your nose?</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user4.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
+            <span class="status">working on the webgl project</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel6.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">music<span class="domain">@buddycloud.com</span></span>
+            <span class="status">New Foo Fighter Album online - check it out!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">verena<span class="domain">@buddycloud.com</span></span>
+            <span class="status">test's are over - party!!!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">fans<span class="domain">@steam.com</span></span>
+            <span class="status">the cake is a lie!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel8.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">cave<span class="domain">@minecraft.com</span></span>
+            <span class="status">Buy minecraft - now!</span>
+          </div>
+        </div>
+      </div><!-- /antiscroll-inner -->
+    </div><!-- /channels -->
+    <button id="create_topic_channel"><span>Create Topic Channel</span></button>
+  </div>
+  <div class="content">
+    <div class="searchbar">
+      <form class="centered span-2">
+        <input type="search" name="search" value="Anna" placeholder="Find Channels and Posts" class="withButton">
+        <input type="submit" value="Search" class="search button">
+      </form>
+    </div>
+      <div class="discoverChannels clearfix">
+        <div class="local span-2">
+          <div class="span-1">
+            <h2>Channels</h2>
+            <div class="list">
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user5.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Anna McWalowitz</span>
+                  <span class="about">Hanging out at starbucks</span>
+                </div>
+                <div class="follow button callToAction">Follow</div>
+              </div>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user11.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Anna Robertson</span>
+                  <span class="about">Where is the love?</span>
+                </div>
+                <div class="follow button callToAction">Follow</div>
+              </div>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user13.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Anna Huber</span>
+                  <span class="about">Ich bin ein Berliner!</span>
+                </div>
+                <div class="follow button callToAction">Follow</div>
+              </div>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user6.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Anna Libratov</span>
+                  <span class="about">Listening to Fuadadeimuada</span>
+                </div>
+                <div class="follow button callToAction">Follow</div>
+              </div>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user7.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Anna Bauer</span>
+                  <span class="about">First Season of Game of Thrones was a blast!</span>
+                </div>
+                <div class="follow button callToAction disabled">Follow</div>
+              </div>
+            </div>
+          </div>
+          <div class="span-1">
+            <h2>Posts</h2>
+            <div class="list posts">
+              <article class="post">
+                <section class="opener">
+                  <img class="avatar" src="avatars/user2.jpg" />
+                  <div class="postmeta">
+                    <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                  </div>
+                  <p>Haven't seen <span class="highlight">Anna</span> yet. I'm supposed to get a hug</p>
+                </section>
+              </article>
+              <article class="post">
+                <section class="opener">
+                  <img class="avatar" src="avatars/user3.jpg" />
+                  <div class="postmeta">
+                    <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                  </div>
+                  <p>hey <span class="highlight">anna</span>. it was a pleasure to meet you :D happy birthday – hope we meet again</p>
+                </section>
+              </article>
+              <article class="post">
+                <section class="opener">
+                  <img class="avatar" src="avatars/user4.jpg" />
+                  <div class="postmeta">
+                    <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                  </div>
+                  <p>... and so I was working all night. <span class="highlight">Anna</span> was a great help proofreading the thesis.</p>
+                </section>
+              </article>
+              <article class="post">
+                <section class="opener">
+                  <img class="avatar" src="avatars/user12.jpg" />
+                  <div class="postmeta">
+                    <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                  </div>
+                  <p>... and so I was working all night. <span class="highlight">Anna</span> was a great help proofreading the thesis.</p>
+                </section>
+              </article>
+              <article class="post">
+                <section class="opener">
+                  <img class="avatar" src="avatars/user3.jpg" />
+                  <div class="postmeta">
+                    <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                  </div>
+                  <p>... and so I was working all night. <span class="highlight">Anna</span> was a great help proofreading the thesis.</p>
+                </section>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div><!-- /content -->
+<script type="text/javascript">
+  /* ###
+  
+  redraw function to make sure that transitions are triggered 
+  
+  ### */
+  !function(document){
+
+      // (C) WebReflection (As It Is) - Mit Style
+
+      // we all love function declarations
+      function redraw() {
+
+          // clientHeight returns 0 if not present in the DOM
+          // e.g. document.removeChild(document.documentElement);
+          // also some crazy guy may swap runtime the whole HTML element
+          // this is why the documentElement should be always discovered
+          // and if present, it should be a node of the document
+          // In all these cases the returned value is true
+          // otherwise what is there cannot really be considered as painted
+
+          return !!(document.documentElement || 0).clientHeight;
+      }
+
+      // ideally an Object.defineProperty
+      // unfortunately some engine will complain
+      // if used against DOM objects
+      document.redraw = redraw;
+
+  }(document);
+  
+  /* ###
+  
+    Search Result Interaction
+    
+    ### */
+    
+  $('.post').click(function(){
+    console.log("posted");
+    window.location.href = "singlePost.html";
+  });
+  
+  /* ###
+  
+    Channel bubbling
+  
+    ### */
+  var channelHolder = $('.channels');
+  var innerHolder = channelHolder.find('.scrollHolder');
+  var channels = channelHolder.find('.channel:not(".personal")');
+  
+  // prefixes for cutting edge css properties and javascript events:
+  //
+  //  transition => MozTransition
+  var transition = Modernizr.prefixed('transition');
+  //  transform => MozTransform
+  var transform = Modernizr.prefixed('transform');
+  var transEndEventNames = {
+      'WebkitTransition' : 'webkitTransitionEnd',
+      'MozTransition'    : 'transitionend',
+      'OTransition'      : 'oTransitionEnd',
+      'msTransition'     : 'msTransitionEnd', // maybe?
+      'transition'       : 'transitionEnd'
+  }
+  //  transitionendEvent => transitionend
+  var transitionendEvent = transEndEventNames[ transition ];
+  // cache channelHeight - it's the same for every channel-preview
+  var channelHeight = channels.first().outerHeight();
+  // count of currently moving channels
+  var movingChannels = 0;
+  
+  function bubble(){
+    var bubblingChannel = $(this);
+    
+    // relative offset + absolute offset 
+    var offset = bubblingChannel.position().top + innerHolder.scrollTop();
+    
+    // don't bubble if the channel is..
+    //  - on top
+    //  - bubbling
+    if(offset === 0 || bubblingChannel.parent().hasClass('bubbleHolder')) {
+      return false;
+    }
+    
+    // create a gap where the channel starts off
+    var startingArea = $('<div>').height( channelHeight ).addClass('startingArea');
+    bubblingChannel.before( startingArea );
+    
+    document.redraw();
+    
+    startingArea.bind(transitionendEvent, destroy);
+    
+    // close startingArea
+    startingArea.css('height', 0);
+    
+    // detach the bubbling channel from the DOM
+    // and insert it at the top
+    bubblingChannel.detach().css('top', offset);
+    innerHolder.prepend(bubblingChannel);
+    
+    // wrap a growing holder around it
+    var landingArea = $('<div>').addClass('bubbleHolder');
+    bubblingChannel.wrap(landingArea);
+    
+    document.redraw();
+    
+    // bind the callback on transition end for all bubbling channels
+    bubblingChannel.one(transitionendEvent, reset);
+    
+    // bubble!
+    bubblingChannel.css({ 'top' : 0, 'z-index' : ++movingChannels+1 });
+    // open a gap for the channel to arrive
+    bubblingChannel.parent().css('height', channelHeight);
+  }
+  
+  function destroy(){
+    // remove the gap-div
+    $(this).remove();
+  }
+  
+  function reset(event){
+    // reset the bubbling channel and unwrap it
+    $(this).css({ 'height' : '', 'z-index' : '' }).unwrap();
+    movingChannels--;
+  }
+  
+  channelHolder.on('click', '.channel', bubble);
+  //channels.toggle(function(){ $(this).css('background', 'red'); }, function(){ $(this).css('background', 'green'); });
+  
+  /* ###
+  
+    Rainbow animation
+  
+    ### */
+    
+  var discoverChannels = $('.discoverChannels');
+  
+  discoverChannels.on('click', '.follow:not(.disabled)', follow);
+  
+  function follow(){
+    $(this).addClass('disabled');
+    
+    var avatarUrl = $(this).siblings('.avatar').css('background-image');
+    var owner = $(this).siblings().children('.owner').text();
+    // the status will not be visible in the discovery
+    // using the about for now
+    var status = $(this).siblings().children('.about').text();
+    
+    var bubblingChannel = $('<div class="channel rainbow">')
+      .append(
+        $('<div class="avatar">').css('background-image', avatarUrl)
+      )
+      .append(
+        $('<div class="info">')
+          .append(
+            $('<div class="owner">').text(owner)
+          )
+          .append(
+            $('<div class="status">').text(status)
+          )
+      );
+    
+    var offset = $(this).parent().offset();
+    bubblingChannel.css({
+      left : offset.left - innerHolder.offset().left,
+      top : offset.top - innerHolder.offset().top
+    });
+    innerHolder.prepend(bubblingChannel);
+
+    // wrap a growing holder around it
+    var landingArea = $('<div>').addClass('bubbleHolder rainbowBubble');
+    bubblingChannel.wrap(landingArea);
+
+    document.redraw();
+
+    // bind the callback on transition end for all bubbling channels
+    bubblingChannel.one(transitionendEvent, reset);
+
+    // bubble!
+    bubblingChannel.removeClass('rainbow').css({ 'top' : 0, 'left' : 0, 'z-index' : ++movingChannels+1 });
+    // open a gap for the channel to arrive
+    bubblingChannel.parent().css('height', channelHeight);
+  }
+</script>
+</body>
+</html>
