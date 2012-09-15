@@ -11,6 +11,15 @@
   float: right;
 }
 
+
+.trim {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+
 /* social */
 .social {
   width: 16px;
@@ -79,6 +88,7 @@
        -o-box-lines: multiple;
           box-lines: multiple;
 }
+.flex,
 .fit > * {
   -webkit-box-flex: 1;
      -moz-box-flex: 1;
