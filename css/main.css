@@ -15,11 +15,8 @@
 @import "singlePost.css";
 @import "anon.css";
 @import "popup.css";
+/*@import "lightSidebar.css";*/
 
-textarea {
-  color: #000;
-  background-color: #fff;
-}
 pre,textarea {
   margin: 0;
   padding: 0;
@@ -148,20 +145,19 @@ h5 {
 ul {
   list-style-type: none;
 }
-a,a:visited {
+a, a:visited {
   color: #83ac35;
   text-decoration: none;
 }
-a:hover,a:visited:hover {
-  color: light_highligh;
+a:hover, a:visited:hover {
   text-decoration: underline;
 }
-a.internal,a:visited.internal {
+a.internal, a:visited.internal {
   padding-left: 12px;
   background: url("../img/beagle.png") no-repeat left 4px;
 }
 .hint { color: #bbb; }
-table td {
+table td:not(:last-child) {
   padding-right: 13px;
 }
 .loading {

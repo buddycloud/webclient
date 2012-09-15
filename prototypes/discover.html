@@ -58,14 +58,14 @@
       </nav>
     </div>
     <nav class="actionBar clearfix">
-      <button class="discover active"><span>Find Channels</span></button>
+      <button class="discover"><span>Find Channels</span></button>
     </nav>
     <div class="search">
       <input type="search" results="5" autosave="channelSearch" placeholder="Search Channels ..." />
     </div>
     <div class="channels" class="antiscroll-wrap">
       <div class="antiscroll-inner scrollHolder">
-        <div class="channel selected">
+        <div class="channel">
           <div class="avatar" style="background-image: url(avatars/user2.jpg)">
             <span class="channelpost counter">2</span>
           </div>
@@ -223,91 +223,101 @@
   </div>
   <div class="content">
     <div class="searchbar">
-      <form>
-        <input type="search" placeholder="Search" class="withButton">
+      <form class="centered span-2">
+        <input type="search" name="search" placeholder="Find Channels and Posts" class="withButton" autofocus>
         <input type="submit" value="Search" class="search button">
       </form>
     </div>
-      <div class="discoverChannels">
+      <div class="discoverChannels clearfix">
         <div class="local span-2">
           <h1>Local</h1>
           <div class="mostActive span-1">
             <h2>Most Active</h2>
             <div class="list">
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user12.jpg)"></div>
-                <div class="info">
-                  <span class="owner">franz<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Hanging out at starbucks</span>
+                <div class="info flex">
+                  <span class="owner">Franz</span>
+                  <span class="about">Hanging out at starbucks</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user11.jpg)"></div>
-                <div class="info">
-                  <span class="owner">lisa<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Where is the love?</span>
+                <div class="info flex">
+                  <span class="owner">Lisa</span>
+                  <span class="about">Where is the love?</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user13.jpg)"></div>
-                <div class="info">
-                  <span class="owner">ralf<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Ich bin ein Berliner!</span>
+                <div class="info flex">
+                  <span class="owner">Ralf</span>
+                  <span class="about">Ich bin ein Berliner!</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user6.jpg)"></div>
-                <div class="info">
-                  <span class="owner">steffi<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Listening to Fuadadeimuada</span>
+                <div class="info flex">
+                  <span class="owner">Steffi</span>
+                  <span class="about">Listening to Fuadadeimuada</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user7.jpg)"></div>
-                <div class="info">
-                  <span class="owner">anna<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">First Season of Game of Thrones was a blast!</span>
+                <div class="info flex">
+                  <span class="owner">Anna</span>
+                  <span class="about">First Season of Game of Thrones was a blast!</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
             </div>
           </div>
           <div class="popular span-1">
             <h2>Popular</h2>
             <div class="list">
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user1.jpg)"></div>
-                <div class="info">
-                  <span class="owner">mrflix<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">I don't like cinema</span>
+                <div class="info flex">
+                  <span class="owner">mrflix</span>
+                  <span class="about">I don't like cinema</span>
                 </div>
+                <div class="follow button disabled">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user4.jpg)"></div>
-                <div class="info">
-                  <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Handed in my thesis. Like a boss.</span>
+                <div class="info flex">
+                  <span class="owner">Martin</span>
+                  <span class="about">Handed in my thesis. Like a boss.</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user2.jpg)"></div>
-                <div class="info">
-                  <span class="owner">vera<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Munich here I come.</span>
+                <div class="info flex">
+                  <span class="owner">Vera</span>
+                  <span class="about">Munich here I come.</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user3.jpg)"></div>
-                <div class="info">
-                  <span class="owner">tom<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Island is great. Let's make music</span>
+                <div class="info flex">
+                  <span class="owner">Tom</span>
+                  <span class="about">Island is great. Let's make music</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user5.jpg)"></div>
-                <div class="info">
-                  <span class="owner">josef<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Desmond Myers really knows how to rap</span>
+                <div class="info flex">
+                  <span class="owner">Josef</span>
+                  <span class="about">Desmond Myers really knows how to rap</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
             </div>
           </div>
@@ -317,80 +327,90 @@
           <div class="mostActive span-1">
             <h2>Most Active</h2>
             <div class="list">
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user12.jpg)"></div>
-                <div class="info">
-                  <span class="owner">franz<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Hanging out at starbucks</span>
+                <div class="info flex">
+                  <span class="owner">Franz</span>
+                  <span class="about">Hanging out at starbucks</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user11.jpg)"></div>
-                <div class="info">
-                  <span class="owner">lisa<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Where is the love?</span>
+                <div class="info flex">
+                  <span class="owner">Lisa</span>
+                  <span class="about">Where is the love?</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user13.jpg)"></div>
-                <div class="info">
-                  <span class="owner">ralf<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Ich bin ein Berliner!</span>
+                <div class="info flex">
+                  <span class="owner">Ralf</span>
+                  <span class="about">Ich bin ein Berliner!</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user6.jpg)"></div>
-                <div class="info">
-                  <span class="owner">steffi<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Listening to Fuadadeimuada</span>
+                <div class="info flex">
+                  <span class="owner">Steffi</span>
+                  <span class="about">Listening to Fuadadeimuada</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user7.jpg)"></div>
-                <div class="info">
-                  <span class="owner">anna<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">First Season of Game of Thrones was a blast!</span>
+                <div class="info flex">
+                  <span class="owner">Anna</span>
+                  <span class="about">First Season of Game of Thrones was a blast!</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
             </div>
           </div>
           <div class="popular span-1">
             <h2>Popular</h2>
             <div class="list">
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user1.jpg)"></div>
-                <div class="info">
-                  <span class="owner">mrflix<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">I don't like cinema</span>
+                <div class="info flex">
+                  <span class="owner">mrflix</span>
+                  <span class="about">I don't like cinema</span>
                 </div>
+                <div class="follow button disabled">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user4.jpg)"></div>
-                <div class="info">
-                  <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Handed in my thesis. Like a boss.</span>
+                <div class="info flex">
+                  <span class="owner">Martin</span>
+                  <span class="about">Handed in my thesis. Like a boss.</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user2.jpg)"></div>
-                <div class="info">
-                  <span class="owner">vera<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Munich here I come.</span>
+                <div class="info flex">
+                  <span class="owner">Vera</span>
+                  <span class="about">Munich here I come.</span>
                 </div>
+                <div class="follow button">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user3.jpg)"></div>
-                <div class="info">
-                  <span class="owner">tom<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Island is great. Let's make music</span>
+                <div class="info flex">
+                  <span class="owner">Tom</span>
+                  <span class="about">Island is great. Let's make music</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
-              <div class="channel">
+              <div class="channel justify">
                 <div class="avatar" style="background-image: url(avatars/user5.jpg)"></div>
-                <div class="info">
-                  <span class="owner">josef<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Desmond Myers really knows how to rap</span>
+                <div class="info flex">
+                  <span class="owner">Josef</span>
+                  <span class="about">Desmond Myers really knows how to rap</span>
                 </div>
+                <div class="follow button callToAction">Follow</div>
               </div>
             </div>
           </div>
@@ -400,40 +420,45 @@
           <div class="nearby span-1">
             <h2>Nearby</h2>
             <div class="list">
-              <div class="channel">
-                <div class="avatar" style="background-image: url(avatars/user1.jpg)"></div>
-                <div class="info">
-                  <span class="owner">mrflix<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">I don't like cinema</span>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user12.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Franz</span>
+                  <span class="about">Hanging out at starbucks</span>
                 </div>
+                <div class="follow button">Follow</div>
               </div>
-              <div class="channel">
-                <div class="avatar" style="background-image: url(avatars/user4.jpg)"></div>
-                <div class="info">
-                  <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Handed in my thesis. Like a boss.</span>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user11.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Lisa</span>
+                  <span class="about">Where is the love?</span>
                 </div>
+                <div class="follow button">Follow</div>
               </div>
-              <div class="channel">
-                <div class="avatar" style="background-image: url(avatars/user2.jpg)"></div>
-                <div class="info">
-                  <span class="owner">vera<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Munich here I come.</span>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user13.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Ralf</span>
+                  <span class="about">Ich bin ein Berliner!</span>
                 </div>
+                <div class="follow button">Follow</div>
               </div>
-              <div class="channel">
-                <div class="avatar" style="background-image: url(avatars/user3.jpg)"></div>
-                <div class="info">
-                  <span class="owner">tom<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Island is great. Let's make music</span>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user6.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Steffi</span>
+                  <span class="about">Listening to Fuadadeimuada</span>
                 </div>
+                <div class="follow button">Follow</div>
               </div>
-              <div class="channel">
-                <div class="avatar" style="background-image: url(avatars/user5.jpg)"></div>
-                <div class="info">
-                  <span class="owner">josef<span class="domain">@buddycloud.com</span></span>
-                  <span class="status">Desmond Myers really knows how to rap</span>
+              <div class="channel justify">
+                <div class="avatar" style="background-image: url(avatars/user7.jpg)"></div>
+                <div class="info flex">
+                  <span class="owner">Anna</span>
+                  <span class="about">First Season of Game of Thrones was a blast!</span>
                 </div>
+                <div class="follow button">Follow</div>
               </div>
             </div>
           </div>
@@ -476,7 +501,7 @@
     Channel bubbling
   
     ### */
-  var channelHolder = $('#channels');
+  var channelHolder = $('.channels');
   var innerHolder = channelHolder.find('.scrollHolder');
   var channels = channelHolder.find('.channel:not(".personal")');
   
@@ -563,10 +588,10 @@
     document.redraw();
     
     // bind the callback on transition end for all bubbling channels
-    bubblingChannel.bind(transitionendEvent, reset);
+    bubblingChannel.one(transitionendEvent, reset);
     
     // bubble!
-    bubblingChannel.addClass('bubbling').css({ 'top' : 0, 'z-index' : ++movingChannels+1 });
+    bubblingChannel.css({ 'top' : 0, 'z-index' : ++movingChannels+1 });
     // open a gap for the channel to arrive
     bubblingChannel.parent().css('height', channelHeight);
   }
@@ -576,14 +601,69 @@
     $(this).remove();
   }
   
-  function reset(){
+  function reset(event){
     // reset the bubbling channel and unwrap it
-    $(this).removeClass('bubbling').css({ 'height' : '', 'z-index' : '' }).unwrap();
+    $(this).css({ 'height' : '', 'z-index' : '' }).unwrap();
     movingChannels--;
   }
   
-  channels.click(bubble);
+  channelHolder.on('click', '.channel', bubble);
   //channels.toggle(function(){ $(this).css('background', 'red'); }, function(){ $(this).css('background', 'green'); });
+  
+  /* ###
+  
+    Rainbow animation
+  
+    ### */
+    
+  var discoverChannels = $('.discoverChannels');
+  
+  discoverChannels.on('click', '.follow:not(.disabled)', follow);
+  
+  function follow(){
+    $(this).addClass('disabled');
+    
+    var avatarUrl = $(this).siblings('.avatar').css('background-image');
+    var owner = $(this).siblings().children('.owner').text();
+    // the status will not be visible in the discovery
+    // using the about for now
+    var status = $(this).siblings().children('.about').text();
+    
+    var bubblingChannel = $('<div class="channel rainbow">')
+      .append(
+        $('<div class="avatar">').css('background-image', avatarUrl)
+      )
+      .append(
+        $('<div class="info">')
+          .append(
+            $('<div class="owner">').text(owner)
+          )
+          .append(
+            $('<div class="status">').text(status)
+          )
+      );
+    
+    var offset = $(this).parent().offset();
+    bubblingChannel.css({
+      left : offset.left - innerHolder.offset().left,
+      top : offset.top - innerHolder.offset().top
+    });
+    innerHolder.prepend(bubblingChannel);
+
+    // wrap a growing holder around it
+    var landingArea = $('<div>').addClass('bubbleHolder rainbowBubble');
+    bubblingChannel.wrap(landingArea);
+
+    document.redraw();
+
+    // bind the callback on transition end for all bubbling channels
+    bubblingChannel.one(transitionendEvent, reset);
+
+    // bubble!
+    bubblingChannel.removeClass('rainbow').css({ 'top' : 0, 'left' : 0, 'z-index' : ++movingChannels+1 });
+    // open a gap for the channel to arrive
+    bubblingChannel.parent().css('height', channelHeight);
+  }
   
   /* ###
     
@@ -650,10 +730,6 @@
   
   notificationButtons.click(logNotifaction);
   setTimeout('notify()', 2000);
-  
-  $(function () {
-      $('#channels').antiscroll();
-  });//*/
   
   /* ###
   

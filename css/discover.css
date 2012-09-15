@@ -1,17 +1,22 @@
 .searchbar {
-  padding: 34px;
-  background: hsl(0,0%,93%);
-  border-bottom: 1px solid hsl(0,0%,89%);
+  padding: 19px 34px 20px;
+  background: -webkit-linear-gradient(left, hsl(199, 0%, 85%), hsl(199, 0%, 93%), hsl(199, 0%, 85%));
+  border-bottom: 1px solid hsl(199, 0%, 75%);
+  box-shadow: 0 -1px hsl(199, 0%, 85%) inset, 0 1px white;
 }
+  .searchbar form {
+    float: none;
+  }
   .searchbar input[type=search] {
     width: 300px;
+    float: none;
   }
 
 .disco.content {
   z-index: 2;
 }
 .discoverChannels {
-  padding: 13px 21px;
+  padding: 21px;
 }
 .discoverChannels h1 {
   padding: 0 13px;
@@ -22,7 +27,7 @@
   color: hsl(0,0%,89%);
 }
 .discoverChannels h2 {
-  padding: 0 13px;
+  padding: 0 13px 3px;
   font-size: 21px;
   line-height: 34px;
   color: hsl(0,0%,55%);
@@ -37,35 +42,57 @@
       -ms-box-sizing: border-box;
        -o-box-sizing: border-box;
           box-sizing: border-box;
-  box-shadow: 0 1px rgba(0,0,0,0.08),0 3px 0 -1px rgba(0,0,0,0.03),0 3px 8px -1px rgba(0,0,0,0.03);
+  box-shadow:
+    0 1px rgba(0,0,0,0.05),
+    0 3px 0 -1px rgba(0,0,0,0.03),
+    0 3px 8px -1px rgba(0,0,0,0.02);
 }
 .discoverChannels .channel {
-  padding: 21px 21px 21px 76px;
+  width: 100%;
+  height: auto;
+  padding: 0;
   box-shadow: 0 -1px rgba(0,0,0,0.13) inset,0 1px #fff inset;
   cursor: pointer;
+  table-layout: fixed;
 }
 .discoverChannels .channel:hover {
-  background: #fff;
+  background: white;
 }
-.discoverChannels .channel:first-child {
+.discoverChannels .list > *:first-child {
   border-radius: 5px 5px 0 0;
 }
-.discoverChannels .channel:last-child {
+.discoverChannels .list > *:last-child {
   border-radius: 0 0 5px 5px;
   box-shadow: 0 1px #fff inset;
 }
-.discoverChannels .channel:only-child {
+.discoverChannels .list > *:only-child {
   border-radius: 5px;
   box-shadow: 0 1px #fff inset;
 }
 .discoverChannels .channel .avatar {
-  top: 12px;
+  margin: 13px;
+  position: static;
 }
 .discoverChannels .channel .info .owner {
   color: rgba(0,0,0,0.89);
 }
-.discoverChannels .channel .info .status {
+.discoverChannels .channel .info .about {
   color: rgba(0,0,0,0.65);
+  max-height: 33px;
+  overflow: hidden;
+  display: block;
+}
+  .rainbow .info .owner {
+    color: rgba(0,0,0,0.89);
+  }
+  .rainbow .info .about {
+    color: rgba(0,0,0,0.65);
+  }
+  .rainbow .avatar {
+    top: 13px;
+  }
+.discoverChannels .channel .follow {
+  margin: 0 13px;
 }
 .discover {
   overflow: hidden;
@@ -91,11 +118,11 @@
   left: 50%;
   top: 50%;
   position: absolute;
-  -webkit-transition: top 500ms,left 500ms;
-     -moz-transition: top 500ms,left 500ms;
-      -ms-transition: top 500ms,left 500ms;
-       -o-transition: top 500ms,left 500ms;
-          transition: top 500ms,left 500ms;
+  -webkit-transition: top 500ms, left 500ms;
+     -moz-transition: top 500ms, left 500ms;
+      -ms-transition: top 500ms, left 500ms;
+       -o-transition: top 500ms, left 500ms;
+          transition: top 500ms, left 500ms;
 }
 .discover .channel.personal,.discover .channel.selected {
   background: none;
@@ -117,4 +144,39 @@
 }
 .discover .channel .counter {
   display: none;
+}
+
+/* posts */
+
+.discoverChannels .list .post {
+  background: none;
+  cursor: pointer;
+  height: 76px;
+}
+.discoverChannels .list .post:hover {
+  background: white;
+}
+.discoverChannels .list .post .opener {
+  padding: 19px 13px 13px 76px;
+}
+.discoverChannels .list .avatar {
+  top: 13px;
+  left: 13px;
+}
+.discoverChannels .list .name {
+  display: inline;
+}
+.discoverChannels .list p {
+  height: 36px;
+  overflow: hidden;
+  display: block;
+}
+.post .origin {
+  font-size: 10px;
+  margin-bottom: 0;
+  display: none;
+}
+.highlight {
+  color: black;
+  font-weight: bold;
 }

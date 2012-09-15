@@ -5,14 +5,21 @@ input[type=text],
 input[type=password],
 input[type=email],
 input[type=search] {
-  padding: 7px 8px;
+  padding: 0 8px;
   font-size: 18px;
+  line-height: 37px;
+  height: 37px;
   vertical-align: bottom;
   background: #fff;
   border-radius: 3px;
   border: 1px solid rgba(0,0,0,0.21);
   box-shadow: 0 1px rgba(0,0,0,0.05) inset,0 2px 3px rgba(0,0,0,0.03) inset,0 1px rgba(255,255,255,0.34);
   display: block;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
   -webkit-transition: border-color 500ms;
      -moz-transition: border-color 500ms;
       -ms-transition: border-color 500ms;

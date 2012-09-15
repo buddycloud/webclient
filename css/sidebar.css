@@ -13,29 +13,29 @@
           transition: left 400ms;
 }
 .channels {
-  top: 120px;
+  top: 119px;
   right: 0;
   bottom: 0;
   left: 0;
   position: absolute;
-  overflow-y: auto;
 }
 .channels .scrollHolder {
   margin-bottom: 42px;
 }
 .sidebar nav {
-  box-shadow: 0 1px #000,0 2px rgba(255,255,255,0.21);
   position: relative;
   z-index: 4;
   overflow: hidden;
+  box-shadow: -1px 0 black inset,0 1px hsla(0, 0%, 0%, 0.55),0 2px hsla(0, 0%, 0%, 0.21),0 3px hsla(0, 0%, 0%, 0.13);
 }
 .sidebar button {
   width: 100%;
   height: 42px;
   color: #fff;
   font-weight: bold;
+  line-height: 42px;
   text-shadow: 0 1px rgba(0,0,0,0.21);
-  background: #4a6e88;
+  background: hsl(205,30%,41%);
   border: none;
   border-right: 1px solid #000;
   border-radius: 0;
@@ -53,15 +53,14 @@
           box-sizing: border-box;
 }
 .sidebar button:hover {
+  background: hsl(206,30%,43%);
   text-shadow: 0 1px rgba(0,0,0,0.21);
 }
 .sidebar button:first-child {
   box-shadow: 0 1px rgba(255,255,255,0.21) inset;
 }
-.sidebar button.active,.sidebar button:active {
-  top: 0;
-  background: #2c4151;
-  line-height: 47px;
+.sidebar button:active {
+  background: hsl(206,30%,30%);
   box-shadow: none;
 }
 .sidebar button span {
@@ -115,9 +114,6 @@
   width: 100%;
   border-color: black;
 }
-.sidebar .search + .channel {
-  padding-top: 6px;
-}
 .personal.channel,.personal.channel.selected {
   padding-top: 21px;
   padding-bottom: 21px;
@@ -132,7 +128,8 @@
   position: relative;
   z-index: 5;
 }
-.personal.channel .avatar,.personal.channel.selected .avatar {
+.personal.channel .avatar,
+.personal.channel.selected .avatar {
   top: 13px;
 }
 .personal.channel nav,.personal.channel.selected nav {
@@ -158,6 +155,7 @@
   border-radius: 5px 5px 0 0;
 }
 .channel {
+  width: 145px;
   height: 34px;
   padding: 16px 13px 16px 76px;
   position: relative;
@@ -176,17 +174,17 @@
   opacity: .34;
 }
 .channel.selected {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0.13)), color-stop(0.33333333333333326, rgba(128,128,128,0)), color-stop(1, rgba(255,255,255,0.13)));
-  background: -webkit-linear-gradient(top, rgba(0,0,0,0.13) 0%, rgba(128,128,128,0) 33.33333333333333%, rgba(255,255,255,0.13) 100%);
-  background:    -moz-linear-gradient(top, rgba(0,0,0,0.13) 0%, rgba(128,128,128,0) 33.33333333333333%, rgba(255,255,255,0.13) 100%);
-  background:     -ms-linear-gradient(top, rgba(0,0,0,0.13) 0%, rgba(128,128,128,0) 33.33333333333333%, rgba(255,255,255,0.13) 100%);
-  background:      -o-linear-gradient(top, rgba(0,0,0,0.13) 0%, rgba(128,128,128,0) 33.33333333333333%, rgba(255,255,255,0.13) 100%);
-  background:         linear-gradient(to bottom, rgba(0,0,0,0.13) 0%, rgba(128,128,128,0) 33.33333333333333%, rgba(255,255,255,0.13) 100%);
-  box-shadow: 0 1px rgba(0,0,0,0.55),0 2px rgba(255,255,255,0.21),0 1px rgba(0,0,0,0.55) inset,0 -1px rgba(255,255,255,0.21);
-}
-.channel.bubbleUp {
-  position: absolute;
-  z-index: 2;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(0,0,0,0.13)), color-stop(0.3, rgba(128,128,128,0)), color-stop(1, rgba(255,255,255,0.13)));
+  background: -webkit-linear-gradient(top, rgba(0,0,0,0.13), rgba(128,128,128,0) 33%, rgba(255,255,255,0.13));
+  background:    -moz-linear-gradient(top, rgba(0,0,0,0.13), rgba(128,128,128,0) 33%, rgba(255,255,255,0.13));
+  background:     -ms-linear-gradient(top, rgba(0,0,0,0.13), rgba(128,128,128,0) 33%, rgba(255,255,255,0.13));
+  background:      -o-linear-gradient(top, rgba(0,0,0,0.13), rgba(128,128,128,0) 33%, rgba(255,255,255,0.13));
+  background:         linear-gradient(to bottom, rgba(0,0,0,0.13), rgba(128,128,128,0) 33%, rgba(255,255,255,0.13));
+  box-shadow: 
+    0 1px rgba(0,0,0,0.55),
+    0 2px rgba(255,255,255,0.21),
+    0 1px rgba(0,0,0,0.55) inset,
+    0 -1px rgba(255,255,255,0.21);
 }
 .channel .info {
   font-size: 12px;
@@ -195,12 +193,18 @@
   border-radius: 5px;
   cursor: pointer;
 }
-.channel .info .owner,.channel .info .status {
+.channel .info .owner,
+.channel .info .status {
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
+  -webkit-transition: color 500ms linear;
+     -moz-transition: color 500ms linear;
+      -ms-transition: color 500ms linear;
+       -o-transition: color 500ms linear;
+          transition: color 500ms linear;
 }
 .channel .info .owner {
   font-weight: bold;
@@ -222,7 +226,17 @@
   position: absolute;
   cursor: pointer;
   z-index: 1;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.55),0 1px 1px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.55) inset;
+}
+.sidebar .avatar {
+  box-shadow: 
+    0 0 0 1px rgba(0,0,0,0.55),
+    0 1px 1px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(255,255,255,0.55) inset;    
+  -webkit-transition: top 500ms linear;
+     -moz-transition: top 500ms linear;
+      -ms-transition: top 500ms linear;
+       -o-transition: top 500ms linear;
+          transition: top 500ms linear;
 }
 .tutorial {
   height: 123px;
@@ -246,7 +260,7 @@
   margin-top: 0;
   text-shadow: #000 0 0 1px;
 }
-.selected .avatar {
+.sidebar .selected .avatar {
   box-shadow: 0 0 0 1px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.55) inset,0 0 0 3px #83ac35,0 0 0 4px #90bd3a,0 0 2px 4px rgba(0,0,0,0.34);
 }
 .counter {
