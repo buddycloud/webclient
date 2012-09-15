@@ -16,9 +16,9 @@
 
 define(function(require) {
   var _ = require('underscore');
-  var api = require('app/util/api');
+  var api = require('util/api');
   var Backbone = require('backbone');
-  var ChannelMetadata = require('app/models/ChannelMetadata');
+  var ChannelMetadata = require('models/ChannelMetadata');
 
   var ChannelFollowers = Backbone.Model.extend({
     constructor: function(channel) {

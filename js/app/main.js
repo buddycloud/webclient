@@ -15,10 +15,13 @@
  */
 
 requirejs.config({
-  baseUrl: 'js',
+  baseUrl: 'js/vendor',
   paths: {
-    'config': '../config',
-    'templates': '../templates'
+    'config': '../../config',
+    'templates': '../../templates',
+    'models': '../app/models',
+    'views': '../app/views',
+    'util': '../app/util'
   }
 });
 
@@ -27,16 +30,11 @@ define(function(require) {
 
   var config = require('config');
   
-  var Channel = require('app/models/Channel');
-  var SubscribedChannels = require('app/models/SubscribedChannels');
-  var UserCredentials = require('app/models/UserCredentials');
+  var Channel = require('models/Channel');
+  var SubscribedChannels = require('models/SubscribedChannels');
+  var UserCredentials = require('models/UserCredentials');
   
-  var FollowerList = require('app/views/FollowerList');
-  var LoginSidebar = require('app/views/LoginSidebar');
-  var MetadataPane = require('app/views/MetadataPane');
-  var ChannelView = require('app/views/ChannelView');
-  var SubscribedChannelsList = require('app/views/SubscribedChannelsList');
-  var UserMenu = require('app/views/UserMenu');
+  var Sidebar = require('views/Sidebar');
 
   function initialize() {
     var channel = getRequestedChannel();
@@ -70,12 +68,23 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-      var sidebar = new LoginSidebar({model: credentials});
-      $('#sidebar').append(sidebar.el);
-      sidebar.render();
-      var channelView = new ChannelView();
-      $('#content').append(channelView.el);
-      channelView.render();
+      $('#content').append(new MetadataPane({
+        model: channel,
+        credentials: credentials,
+        subscribed: subscribedChannels}).el)
+    $('#content').append(new PostStream({model: channel, credentials: credentials}).el);
+      //logged in?
+      if (credentials.username) {
+        var userMenu = new UserMenu({model: credentials});
+        var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
+        $('#center').append(userMenu.el);
+        $('#left').append(channelsList.el);
+        userMenu.render();
+      } else {
+        var sidebar = new Sidebar({model: subscribedChannels});
+        $('#left').append(sidebar.el);
+        sidebar.render();
+      }
   }
 
   function fetch(model, credentials) {

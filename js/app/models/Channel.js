@@ -16,9 +16,9 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var ChannelFollowers = require('app/models/ChannelFollowers');
-  var ChannelMetadata = require('app/models/ChannelMetadata');
-  var ChannelPosts = require('app/models/ChannelPosts');
+  var ChannelFollowers = require('models/ChannelFollowers');
+  var ChannelMetadata = require('models/ChannelMetadata');
+  var ChannelPosts = require('models/ChannelPosts');
 
   var Channel = Backbone.Model.extend({
     constructor: function(name) {

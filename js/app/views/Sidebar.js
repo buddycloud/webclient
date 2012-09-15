@@ -16,31 +16,16 @@
 
 define(function(require) {
   var _ = require('underscore');
-  var avatarFallback = require('util/avatarFallback');
-  var api = require('util/api');
   var Backbone = require('backbone');
-  var template = require('text!templates/UserMenu.html');
+  var template = require('text!templates/left/sidebar.html');
 
-  var UserMenu = Backbone.View.extend({
-    className: 'user-menu',
-    events: {'click .logout': '_logout'},
+  var Sidebar = Backbone.View.extend({
 
     render: function() {
-      var username = this.model.username;
-      var avatar = api.avatarUrl(username);
-      this.$el.html(_.template(template, {
-        username: username,
-        avatar: avatar
-      }));
-      avatarFallback(this.$('img'), 'personal', 32);
-    },
-
-    _logout: function() {
-      this.model.set({username: null, password: null});
-      this.model.save();
-      location.reload();
+      this.$el.append(_.template(template, this.model));
+      return this;
     }
-  });
+  })
 
-  return UserMenu;
+  return Sidebar;
 });

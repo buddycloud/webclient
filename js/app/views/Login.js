@@ -16,31 +16,27 @@
 
 define(function(require) {
   var _ = require('underscore');
-  var avatarFallback = require('util/avatarFallback');
-  var api = require('util/api');
   var Backbone = require('backbone');
-  var template = require('text!templates/UserMenu.html');
 
-  var UserMenu = Backbone.View.extend({
-    className: 'user-menu',
-    events: {'click .logout': '_logout'},
+  var template = require('text!templates/left/login.html');
+
+  var Login = Backbone.View.extend({
+    tagName: 'aside',
+    className: 'login',
+    events: {'click input[type=submit]': '_login'},
 
     render: function() {
-      var username = this.model.username;
-      var avatar = api.avatarUrl(username);
-      this.$el.html(_.template(template, {
-        username: username,
-        avatar: avatar
-      }));
-      avatarFallback(this.$('img'), 'personal', 32);
+      this.$el.html(_.template(template));
     },
 
-    _logout: function() {
-      this.model.set({username: null, password: null});
-      this.model.save();
+    _login: function(event) {
+      event.preventDefault();
+      var username = this.$('input[name=username]').attr('value');
+      var password = this.$('input[name=password]').attr('value');
+      this.model.save({username: username, password: password});
       location.reload();
     }
   });
 
-  return UserMenu;
+  return LoginSidebar;
 });

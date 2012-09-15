@@ -16,7 +16,7 @@
 
 define(function(require) {
   var $ = require('jquery');
-  var api = require('app/util/api');
+  var api = require('util/api');
   var Backbone = require('backbone');
 
   var UserCredentials = Backbone.Model.extend({

@@ -16,8 +16,8 @@
 
 define(function(require) {
   var _ = require('underscore');
-  var api = require('app/util/api');
-  var avatarFallback = require('app/util/avatarFallback');
+  var api = require('util/api');
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/SubscribedChannelsList.html');
 

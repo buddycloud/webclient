@@ -17,10 +17,10 @@
 define(function(require) {
     var $ = require('jquery');
   var _ = require('underscore');
-  var avatarFallback = require('app/util/avatarFallback');
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/MetadataPane.html');
-  var urlUtil = require('app/util/urlUtil');
+  var urlUtil = require('util/urlUtil');
 
   var MetadataPane = Backbone.View.extend({
     tagName: 'header',

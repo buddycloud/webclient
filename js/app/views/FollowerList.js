@@ -1,4 +1,4 @@
-/*
+  /*
  * Copyright 2012 Denis Washington <denisw@online.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,8 +16,8 @@
 
 define(function(require) {
   var _ = require('underscore');
-  var api = require('app/util/api');
-  var avatarFallback = require('app/util/avatarFallback');
+  var api = require('util/api');
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/FollowerList.html');
 

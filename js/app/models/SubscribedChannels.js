@@ -16,7 +16,7 @@
 
 define(function(require) {
   var _ = require('underscore');
-  var api = require('app/util/api');
+  var api = require('util/api');
   var Backbone = require('backbone');
 
   var SubscribedChannels = Backbone.Model.extend({
