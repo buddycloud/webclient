@@ -15,6 +15,11 @@ nav a {
   display: inline-block;
   position: relative;
   cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+       -o-user-select: none;
+          user-select: none;
 }
 .button.hidden,
 button.hidden,
@@ -44,7 +49,9 @@ nav a.active:hover {
   border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
   box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
 }
-.button.tall,button.tall,nav a.tall {
+.button.tall,
+button.tall,
+nav a.tall {
   padding: 5px 21px;
   font-size: 13px;
 }
@@ -62,7 +69,9 @@ nav a.active:hover {
   background: transparent;
   box-shadow: none;
 }
-.button.prominent,button.prominent,nav a.prominent {
+.button.prominent,
+button.prominent,
+nav a.prominent {
   color: #fff;
   text-shadow: 0 1px rgba(0,0,0,0.13);
   border-color: rgba(0,0,0,0.34);
@@ -94,23 +103,31 @@ nav a.active:hover {
   border: none;
   box-shadow: 0 1px rgba(255,255,255,0.89) inset,0 1px 0 rgba(0,0,0,0.21),0 0 0 3px rgba(0,0,0,0.13);
 }
-.button.onDark,button.onDark,nav a.onDark {
+.button.onDark,
+button.onDark,
+nav a.onDark {
   color: #fff;
   text-shadow: 0 1px rgba(0,0,0,0.55);
   background: transparent;
   border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.34) rgba(0,0,0,0.55);
   box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset,0 1px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,.21);
 }
-.button.double span,button.double span,nav a.double span {
+.button.double span,
+button.double span,
+nav a.double span {
   margin-right: 12px;
   padding-right: 12px;
   border-right: 1px solid rgba(0,0,0,0.34);
 }
-.button.unfollow123,button.unfollow123,nav a.unfollow123 {
+.button.unfollow123,
+button.unfollow123,
+nav a.unfollow123 {
   padding-left: 21px;
   position: relative;
 }
-.button.unfollow123:before,button.unfollow123:before,nav a.unfollow123:before {
+.button.unfollow123:before,
+button.unfollow123:before,
+nav a.unfollow123:before {
   content: "";
   left: 7px;
   top: 8px;
@@ -119,15 +136,17 @@ nav a.active:hover {
   background: url("minus.png") no-repeat;
   position: absolute;
 }
-.button.callToAction,button.callToAction,nav a.callToAction {
+.button.callToAction,
+button.callToAction,
+nav a.callToAction {
   color: white;
-  text-shadow: 0 -1px hsl(81, 40%, 34%);
-  border-color: hsl(81, 40%, 34%);
-  border-bottom-color: hsl(81, 40%, 21%);
-  background: hsl(81, 40%, 44%);
+  text-shadow: 0 -1px hsl(81, 53%, 34%);
+  border-color: hsl(81, 53%, 34%);
+  border-bottom-color: hsl(81, 53%, 21%);
+  background: hsl(81, 53%, 44%);
   box-shadow: 
-    0 1px 0 hsl(81, 40%, 50%) inset,
-    0 -1px hsl(81, 40%, 40%) inset,
+    0 1px 0 hsl(81, 53%, 50%) inset,
+    0 -1px hsl(81, 53%, 40%) inset,
     0 1px rgba(0,0,0,0.05);
 }
   .button.callToAction:hover,
@@ -138,19 +157,32 @@ nav a.active:hover {
   .button.callToAction:active,
   button.callToAction:active,
   nav a.callToAction:active {
-    background: hsl(81, 40%, 44%);
+    background: hsl(81, 40%, 42%);
     box-shadow: 
       0 1px hsl(81, 40%, 40%) inset,
       0 1px rgba(0,0,0,0.05);
   }
   
-.button.danger,button.danger,nav a.danger {
+.button.danger,
+button.danger,
+nav a.danger {
   color: #fff;
   text-shadow: 0 1px #600;
   background: #f00;
 }
-.button.danger:hover,button.danger:hover,nav a.danger:hover {
+.button.danger:hover,
+button.danger:hover,
+nav a.danger:hover {
   background: #f00;
+}
+.button.disabled, .button.disabled:hover, .button.disabled:active {
+  color: rgba(0,0,0,.34);
+  text-shadow: none;
+  background: transparent;
+  border-color: rgba(0,0,0,0.21);
+  border-top-color: rgba(0,0,0,0.24);
+  box-shadow: 0 1px rgba(255,255,255,0.89);
+  cursor: default;
 }
 
 .button.stickToTop {
