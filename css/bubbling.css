@@ -2,11 +2,19 @@
   height: 0;
   overflow: visible;
   position: relative;
+  z-index: 100;
   -webkit-transition: height 1s;
      -moz-transition: height 1s;
       -ms-transition: height 1s;
        -o-transition: height 1s;
           transition: height 1s;
+}
+.bubbleHolder.rainbowBubble {
+  -webkit-transition: height 500ms linear;
+     -moz-transition: height 500ms linear;
+      -ms-transition: height 500ms linear;
+       -o-transition: height 500ms linear;
+          transition: height 500ms linear;
 }
 .bubbleHolder .channel {
   position: absolute;
@@ -15,6 +23,13 @@
       -ms-transition: top 1s;
        -o-transition: top 1s;
           transition: top 1s;
+}
+.rainbowBubble .channel {
+  -webkit-transition: top 500ms cubic-bezier(0.340, 0.975, 0.585, 1.355), left 500ms linear;
+     -moz-transition: top 500ms cubic-bezier(0.340, 0.975, 0.585, 1.355), left 500ms linear;
+      -ms-transition: top 500ms cubic-bezier(0.340, 0.975, 0.585, 1.355), left 500ms linear;
+       -o-transition: top 500ms cubic-bezier(0.340, 0.975, 0.585, 1.355), left 500ms linear;
+          transition: top 500ms cubic-bezier(0.340, 0.975, 0.585, 1.355), left 500ms linear;
 }
 .startingArea {
   -webkit-transition: height 1s;
