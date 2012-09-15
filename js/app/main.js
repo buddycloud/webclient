@@ -24,15 +24,18 @@ requirejs.config({
 
 define(function(require) {
   var $ = require('jquery');
-  var Channel = require('app/models/Channel');
+
   var config = require('config');
+  
+  var Channel = require('app/models/Channel');
+  var SubscribedChannels = require('app/models/SubscribedChannels');
+  var UserCredentials = require('app/models/UserCredentials');
+  
   var FollowerList = require('app/views/FollowerList');
   var LoginSidebar = require('app/views/LoginSidebar');
   var MetadataPane = require('app/views/MetadataPane');
-  var PostStream = require('app/views/PostStream');
-  var SubscribedChannels = require('app/models/SubscribedChannels');
+  var ChannelView = require('app/views/ChannelView');
   var SubscribedChannelsList = require('app/views/SubscribedChannelsList');
-  var UserCredentials = require('app/models/UserCredentials');
   var UserMenu = require('app/views/UserMenu');
 
   function initialize() {
@@ -67,9 +70,12 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-var sidebar = new LoginSidebar({model: credentials});
-      $('#main').append(sidebar.el);
+      var sidebar = new LoginSidebar({model: credentials});
+      $('#sidebar').append(sidebar.el);
       sidebar.render();
+      var channelView = new ChannelView();
+      $('#content').append(channelView.el);
+      channelView.render();
   }
 
   function fetch(model, credentials) {
