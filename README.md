@@ -1,25 +1,43 @@
-buddycloud HTTP Client
-======================
+buddycloud webclient
+====================
 
-This is an alternative web client for [buddycloud](http://buddycloud.com/),
-the decentralized social network based on [XMPP](http://xmpp.org/). Instead
-of communicating directly with the server via XMPP like the official client,
-it uses buddycloud's [HTTP API](https://github.com/buddycloud/buddycloud-http-api)
-to do its job. This makes it also a good demonstration of how the API is used.
+This is the buddycloud web software for [buddycloud](http://buddycloud.com/).
+This software uses the the buddycloud [HTTP API](https://github.com/buddycloud/buddycloud-http-api)
 
-The client is still missing many features that the official client has. In the
-future, it will be extended to include real-time updates, posting / commenting
-and other goodies that the HTTP interface offers (or is going to offer).
+The code is based on 
+* [jQuery](http://jquery.com/),
+* [Underscore](http://underscorejs.org/) and, 
+* [Backbone.js](http://backbonejs.org/).
+* Unit tests are written with the [Jasmine](http://pivotal.github.com/jasmine/) framework.
 
-The code is based on [jQuery](http://jquery.com/),
-[Underscore](http://underscorejs.org/) and [Backbone.js](http://backbonejs.org/).
-It also includes tests written with the [Jasmine](http://pivotal.github.com/jasmine/)
-framework.
+Setup
+=====
 
-Testing the client is easy. Just download the source and open `index.html` in
+All setup instructions are avaliable on the [buddycloud wiki](https://buddycloud.org/wiki/Install#buddycloud_webclient_setup)
+
+Documentation
+=============
+
+Project documentation, design guides and general help is avalible on the [webclient project page](https://buddycloud.org/wiki/Buddycloud_web_client)
+
+API Access
+==========
+You can change `config.js` to point it to another buddycloud API server.
+* ideally you will run your own API server
+* for read-only API access you can use api.buddycloud.org
+* for read-write API access you will need to install the buddycloud [HTTP API](https://github.com/buddycloud/buddycloud-http-api) 
+on your own domain
+
+Testing
+=======
+
+Testing the client is easy. Download the source and open `index.html` in
 your favorite browser. It will then load the *lounge@topics.buddycloud.org*
-channel and display it. To view another channel, append `?channel=<channel-id>`
+channel and display it. To view another channel, append `/<channel-id>`
 to the URL. By default, the client uses *https://api.buddycloud.org/* as its
-HTTP API endpoint; you can change `config.js` to point it to another buddycloud
-API server. *****Note:*** Due to cross-origin restrictions in browsers, some
-features (such as login) require the client to be served from a server.**
+HTTP API endpoint; 
+
+License and Copyright
+=====================
+
+This code is Apache 2 licensed and copyright buddycloud.

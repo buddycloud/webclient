@@ -41,9 +41,9 @@ define(function(require) {
     var subscribedChannels = new SubscribedChannels();
     getUserCredentials(function(credentials) {
       setupChannelUI(channel, subscribedChannels, credentials);
-      fetch(channel, credentials);
+      channel.fetch({credentials: credentials});
       if (credentials.username) {
-        fetch(subscribedChannels, credentials);
+        subscribedChannels.fetch({credentials: credentials});
       }
     });
   }
@@ -68,6 +68,7 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
+<<<<<<< HEAD
       $('#content').append(new MetadataPane({
         model: channel,
         credentials: credentials,
@@ -85,13 +86,25 @@ define(function(require) {
         $('#left').append(sidebar.el);
         sidebar.render();
       }
-  }
-
-  function fetch(model, credentials) {
-    model.fetch({
-      headers: {'Authorization': credentials.toAuthorizationHeader()},
-      xhrFields: {withCredentials: true}
-    });
+=======
+    $('#content').append(new MetadataPane({
+      model: channel,
+      credentials: credentials,
+      subscribed: subscribedChannels}).el);
+    $('#content').append(new PostStream({model: channel, credentials: credentials}).el);
+    $('#right').append(new FollowerList({model: channel}).el);
+    if (credentials.username) {
+      var userMenu = new UserMenu({model: credentials});
+      var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
+      $('#toolbar-right').append(userMenu.el);
+      $('#left').append(channelsList.el);
+      userMenu.render();
+    } else {
+      var sidebar = new LoginSidebar({model: credentials});
+      $('#left').append(sidebar.el);
+      sidebar.render();
+    }
+>>>>>>> master
   }
 
   initialize();

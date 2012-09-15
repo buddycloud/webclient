@@ -16,13 +16,19 @@
 
 define(function(require) {
   var _ = require('underscore');
+<<<<<<< HEAD
   var api = require('util/api');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
+=======
+  var api = require('app/util/api');
+  var ChannelMetadata = require('app/models/ChannelMetadata');
+  var ModelBase = require('app/models/ModelBase');
+>>>>>>> master
 
-  var ChannelFollowers = Backbone.Model.extend({
+  var ChannelFollowers = ModelBase.extend({
     constructor: function(channel) {
-      Backbone.Model.call(this);
+      ModelBase.call(this);
       this.channel = channel;
     },
 
@@ -39,6 +45,11 @@ define(function(require) {
       return _.groupBy(this.usernames(), function(username) {
         return roles[username];
       });
+    },
+
+    isPublisher: function(username) {
+      var role = this.get(username);
+      return role === 'publisher' || role === 'owner' || role === 'moderator';
     },
 
     // These are workarounds resultant by server issues

@@ -15,15 +15,21 @@
  */
 
 define(function(require) {
+<<<<<<< HEAD
   var api = require('util/api');
   var Backbone = require('backbone');
   var Post = require('models/Post');
+=======
+  var api = require('app/util/api');
+  var CollectionBase = require('app/models/CollectionBase');
+  var Post = require('app/models/Post');
+>>>>>>> master
 
-  var ChannelPosts = Backbone.Collection.extend({
+  var ChannelPosts = CollectionBase.extend({
     model: Post,
 
     constructor: function(channel) {
-      Backbone.Collection.call(this);
+      CollectionBase.call(this);
       this.channel = channel;
     },
 
@@ -37,7 +43,7 @@ define(function(require) {
       options = options || {};
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
-      Backbone.Collection.prototype.fetch.call(this, options);
+      CollectionBase.prototype.fetch.call(this, options);
     },
 
     byThread: function() {

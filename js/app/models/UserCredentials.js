@@ -16,10 +16,15 @@
 
 define(function(require) {
   var $ = require('jquery');
+<<<<<<< HEAD
   var api = require('util/api');
   var Backbone = require('backbone');
+=======
+  var api = require('app/util/api');
+  var ModelBase = require('app/models/ModelBase');
+>>>>>>> master
 
-  var UserCredentials = Backbone.Model.extend({
+  var UserCredentials = ModelBase.extend({
     fetch: function(options) {
       this.set({
         username: sessionStorage.username,
@@ -60,21 +65,26 @@ define(function(require) {
 
     _sendVerificationRequest: function() {
       var self = this;
-      $.ajax({
+      var options = {
         method: 'GET',
         url: api.rootUrl(),
-        headers: {'Authorization': this.toAuthorizationHeader()},
-        xhrFields: {withCredentials: true},
-        success: function() {
-          self.trigger('accepted');
-        },
-        error: function() {
-          self.trigger('rejected');
-        },
-      });
+        success: function() { self.trigger('accepted'); },
+        error: function() { self.trigger('rejected'); }
+      };
+      this.addAuthorizationToAjaxOptions(options);
+      $.ajax(options);
     },
 
-    toAuthorizationHeader: function() {
+    addAuthorizationToAjaxOptions: function(options) {
+      if (options) {
+        options.headers = options.headers || {};
+        options.headers['Authorization'] = this._authorizationHeader();
+        options.xhrFields = options.xhrFields || {};
+        options.xhrFields.withCredentials = true;
+      }
+    },
+
+    _authorizationHeader: function() {
       if (this.username) {
         return 'Basic ' + btoa(this.username + ':' + this.password);
       } else {

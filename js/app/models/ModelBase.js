@@ -15,27 +15,23 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var Backbone = require('backbone');
-  var template = require('text!templates/sidebar/sidebar.html');
 
-  var LoginSidebar = Backbone.View.extend({
-    tagName: 'aside',
-    className: 'login-sidebar bordered',
-    events: {'click input[type=submit]': '_login'},
-
-    render: function() {
-      this.$el.html(_.template(template));
+  var ModelBase = Backbone.Model.extend({
+    fetch: function(options) {
+      if (options && options.credentials) {
+        options.credentials.addAuthorizationToAjaxOptions(options);
+      }
+      Backbone.Model.prototype.fetch.call(this, options);
     },
 
-    _login: function(event) {
-      event.preventDefault();
-      var username = this.$('input[name=username]').attr('value');
-      var password = this.$('input[name=password]').attr('value');
-      this.model.save({username: username, password: password});
-      location.reload();
+    save: function(attributes, options) {
+      if (options && options.credentials) {
+        options.credentials.addAuthorizationToAjaxOptions(options);
+      }
+      Backbone.Model.prototype.save.call(this, attributes, options);
     }
   });
 
-  return LoginSidebar;
+  return ModelBase;
 });

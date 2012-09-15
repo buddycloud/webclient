@@ -15,14 +15,21 @@
  */
 
 define(function(require) {
+<<<<<<< HEAD
   var Backbone = require('backbone');
   var ChannelFollowers = require('models/ChannelFollowers');
   var ChannelMetadata = require('models/ChannelMetadata');
   var ChannelPosts = require('models/ChannelPosts');
+=======
+  var ChannelFollowers = require('app/models/ChannelFollowers');
+  var ChannelMetadata = require('app/models/ChannelMetadata');
+  var ChannelPosts = require('app/models/ChannelPosts');
+  var ModelBase = require('app/models/ModelBase');
+>>>>>>> master
 
-  var Channel = Backbone.Model.extend({
+  var Channel = ModelBase.extend({
     constructor: function(name) {
-      Backbone.Model.call(this);
+      ModelBase.call(this);
       this.name = name;
       this.followers = new ChannelFollowers(name);
       this.metadata = new ChannelMetadata(name);

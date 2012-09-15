@@ -124,17 +124,21 @@ define(function(require) {
       });
     });
 
-    describe('toAuthorizationHeader', function() {
-      it('should return credentials as HTTP Basic Authorization header', function() {
-        var auth = 'Basic ' + btoa('bob@example.com:bob');
-        credentials.set({username: 'bob@example.com', password: 'bob'});
-        expect(credentials.toAuthorizationHeader()).toBe(auth);
+    describe('addAuthorizationToAjaxOptions()', function() {
+      it('should add "withCredentials: true" to options', function() {
+        var options = {};
+        credentials.addAuthorizationToAjaxOptions(options);
+        expect(options.xhrFields.withCredentials).toBe(true);
       });
 
-      it('should return undefined if username is unset', function() {
-        credentials.set({username: null, password: null});
-        expect(credentials.toAuthorizationHeader()).toBeUndefined();
+      it('should add HTTP Basic Authorization header to options', function() {
+        var auth = 'Basic ' + btoa('bob@example.com:bob');
+        credentials.set({username: 'bob@example.com', password: 'bob'});
+        var options = {};
+        credentials.addAuthorizationToAjaxOptions(options);
+        expect(options.headers['Authorization']).toBe(auth);
       });
+
     });
   });
 

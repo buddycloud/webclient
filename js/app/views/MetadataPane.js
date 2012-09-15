@@ -15,12 +15,17 @@
  */
 
 define(function(require) {
-    var $ = require('jquery');
+  var $ = require('jquery');
   var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/MetadataPane.html');
+<<<<<<< HEAD
   var urlUtil = require('util/urlUtil');
+=======
+  var parseUtil = require('app/util/parseUtil');
+  var Events = Backbone.Events;
+>>>>>>> master
 
   var MetadataPane = Backbone.View.extend({
     tagName: 'header',
@@ -29,14 +34,18 @@ define(function(require) {
       'click .follow': '_follow',
       'click .unfollow': '_unfollow'},
 
-    initialize: function() {
-      this.model.metadata.bind('change', this.render, this);
+    initialize: function(options) {
+      this.model.bind('fetch', this.render, this);
+      Events.bind('subscribedChannel', this._renderButton, this);
+      Events.bind('unsubscribedChannel', this._renderButton, this);
     },
 
     render: function() {
       this.$el.html(_.template(template, {
         metadata: this.model.metadata,
-        linkUrlsFunc: urlUtil.linkUrls}));
+        linkUrlsFunc: parseUtil.linkUrls,
+        safeString: parseUtil.safeString
+      }));
       if (this._isLoggedIn()) {
         this._renderButton();
       }
@@ -47,26 +56,30 @@ define(function(require) {
       return !!this.options.credentials.username;
     },
 
-    _userIsFollowing: function() {
-      var username = this.options.credentials.username;
-      var followers = this.model.followers.usernames();
-      return _.include(followers, username);
-    },
-
     _renderButton: function() {
-      var followers = this.model.followers.usernames();
-      var button = this._userIsFollowing() ? 
+      var button = this._userIsFollowing() ?
         $('<button class="unfollow">Unfollow</button>') :
         $('<button class="follow">Follow</button>');
-      this.$el.append(button);    
+      this.$('button').remove();
+      this.$el.append(button);
+    },
+
+    _userIsFollowing: function() {
+      var username = this.options.credentials.username;
+      var subscribedChannels = this.options.subscribed.channels();
+      return _.include(subscribedChannels, this.model.name);
     },
 
     _follow: function() {
-      this.options.subscribed.subscribe(this.model.name, 'posts'); 
+      this.options.subscribed.subscribe(this.model.name, 'posts', this._defaultChannelRole(), this.options.credentials);
     },
 
     _unfollow: function() {
-      this.options.subscribed.unsubscribe(this.model.name, 'posts');
+      this.options.subscribed.unsubscribe(this.model.name, 'posts', this.options.credentials);
+    },
+
+    _defaultChannelRole: function() {
+      return this.model.metadata.accessModel() === 'authorize' ? 'member' : 'publisher';
     }
   });
 

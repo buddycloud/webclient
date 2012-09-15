@@ -18,10 +18,11 @@ define(function(require) {
   var _ = require('underscore');
   var api = require('util/api');
   var Backbone = require('backbone');
+  var ModelBase = require('app/models/ModelBase');
 
-  var SubscribedChannels = Backbone.Model.extend({
+  var SubscribedChannels = ModelBase.extend({
     constructor: function() {
-      Backbone.Model.call(this);
+      ModelBase.call(this);
     },
 
     url: function() {
@@ -33,16 +34,53 @@ define(function(require) {
       var channelsList = _.map(nodes, function(node) {
         return node.split('/')[0];
       });
-
       return _.uniq(channelsList);
     },
 
-    subscribe: function(channel, node) {
-      this.save(channel + '/' + node, 'publisher', {silent: true});
+    subscribe: function(channel, node, role, credentials) {
+      var self = this;
+      this.set(channel + '/' + node, role, {silent: true});
+      this._saveChangedAttributes(credentials, function() {
+        self.trigger('sync', 'subscribedChannel', channel, role);
+        self.change();
+      });
     },
 
-    unsubscribe: function(channel, node) {
-      this.save(channel + '/' + node, 'none', {silent: true});
+    unsubscribe: function(channel, node, credentials) {
+      var self = this;
+      var channelAndNode = channel + '/' + node;
+      this.set(channelAndNode, 'none', {silent: true});
+      this._saveChangedAttributes(credentials, function() {
+        delete self.attributes[channelAndNode];
+        self.trigger('sync', 'unsubscribedChannel', channel);
+        self.change();
+      });
+    },
+
+    _saveChangedAttributes: function(credentials, callback) {
+      this.save({}, {
+        credentials: credentials,
+        silent: true,
+        success: callback
+      });
+    },
+
+    parse: function(resp, xhr) {
+      // This typeof(resp) === 'string') comparison is necessary
+      // because the HTTP API returns a plain text and Backbone
+      // parses it like an attribute
+      if (typeof(resp) === 'string') {
+        return {};
+      } else if (typeof(resp) === 'object') {
+        var result = {};
+        _.each(resp, function(value, node) {
+          if (node.indexOf('/posts') !== -1) {
+            result[node] = value;
+          }
+        });
+        return result;
+      }
+      return resp;
     },
 
     sync: function(method, model, options) {
@@ -51,10 +89,11 @@ define(function(require) {
         var changed = model.changedAttributes();
         if (changed) {
           options.data = JSON.stringify(changed || {});
+          options.contentType = 'application/json';
+          options.dataType = 'text';
           method = 'create';
         }
       }
-
       Backbone.sync.call(this, method, model, options);
     }
   });
