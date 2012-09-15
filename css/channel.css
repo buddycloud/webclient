@@ -13,6 +13,7 @@
 .avatar {
   border-radius: 3px;
   cursor: pointer;
+  vertical-align: bottom;
 }
 .content {
   min-width: 998px;
@@ -35,46 +36,56 @@
   max-width: 580px;
   float: left;
 }
-.channelView > header {
-  padding: 5px 21px 10px;
+.channelHeader {
+  padding: 0 21px 13px;
   position: relative;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
-.channelView > header .titleBar td:last-child {
-  padding-right: 0;
+.channelHeader .titleText {
+  margin: 0 13px;
 }
-.channelView > header .titleText {
-  width: 100%;
-}
-.channelView > header .titleText h2,
-.channelView > header .titleText .status,
-.channelView > header .titleText .location {
+.channelHeader h2,
+.channelHeader .status,
+.channelHeader .location {
   white-space: nowrap;
   overflow: hidden;
   text-shadow: 0 1px 1px #fff;
   text-overflow: ellipsis;
   display: block;
 }
-.channelView > header .titleText h2 {
+.channelHeader .titleText h2 {
   color: #1b1b1b;
   font-weight: normal;
   margin-bottom: 2px;
   line-height: 28px;
 }
-.channelView > header .titleText .status {
+.channelHeader .titleText .about {
   font-size: 12px;
   color: #6e6e6e;
 }
-.channelView > header .location {
-  display: none;
-}
-.channelView > header .location .previous {
-  text-decoration: line-through;
-}
-.channelView > header + .topic {
-  border-radius: 3px 3px 0 0;
-}
+  .channelHeader .metadata {
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid hsl(0,0%,85%);
+    color: hsl(0,0%,70%);
+    text-shadow: none;
+  }
+    .channelHeader .metadata .key,
+    .channelHeader .metadata .value {
+      text-align: center;
+    }
+    .channelHeader .metadata .key {
+      font-size: 10px;
+      color: hsl(0,0%,50%);
+      line-height: 1;
+    }
+    .channelHeader .metadata .value {
+      color: #333;
+      line-height: 2;
+    }
+
 .channelView nav {
-  margin-bottom: 5px;
   white-space: nowrap;
   float: right;
 }
@@ -139,31 +150,31 @@
   position: relative;
   z-index: 2;
 }
-.stream .topics article {
+.post {
   background: #fff;
   position: relative;
   box-shadow: inset 0 -1px rgba(0,0,0,0.08);
 }
-.stream .topics article:first-child {
+.post:first-child {
   border-radius: 5px 5px 0 0;
 }
-.stream .topics article:last-child {
+.post:last-child {
   border-radius: 0 0 5px 5px;
   box-shadow: none;
 }
-.stream .topics article:only-child {
+.post:only-child {
   border-radius: 5px;
   box-shadow: none;
 }
-.stream .newTopic + .notifications + .topics article:first-child {
+.stream .newTopic + .notifications + .posts .post:first-child {
   border-radius: 0;
 }
-.stream .newTopic + .notifications + .topics article:only-child {
+.stream .newTopic + .notifications + .posts .post:only-child {
   border-radius: 0 0 5px 5px;
   box-shadow: none;
 }
 .stream .newTopic {
-  padding: 13px 13px 12px;
+  padding: 13px 21px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #eee));
   background: -webkit-linear-gradient(top, #fff 0%, #eee 100%);
   background:    -moz-linear-gradient(top, #fff 0%, #eee 100%);
@@ -178,59 +189,77 @@
   z-index: 1;
 }
 .stream .newTopic .avatar {
-  left: 13px;
-  top: 13px;
-  width: 50px;
+  left: 36px;
+  top: 12px;
+  width: 34px;
   position: absolute;
   z-index: 2;
-  display: none;
+  -webkit-transition: width 250ms, left 250ms;
+     -moz-transition: width 250ms, left 250ms;
+      -ms-transition: width 250ms, left 250ms;
+       -o-transition: width 250ms, left 250ms;
+          transition: width 250ms, left 250ms;
 }
-.stream .newTopic .area {
-  width: 100%;
+  .stream .newTopic.write .avatar {
+    left: 21px;
+    width: 50px;
+  }
+.stream .newTopic textarea,
+.stream .answer textarea {
+  width: 474px;
+  height: 34px;
+  padding: 6px 5px;
   margin: 0;
-  border: 1px solid rgba(0,0,0,0.13);
   font: 13px/19.5px sans-serif;
   color: #808080;
   display: block;
-  float: right;
   position: relative;
   z-index: 2;
-  -webkit-transition: 250ms;
-     -moz-transition: 250ms;
-      -ms-transition: 250ms;
-       -o-transition: 250ms;
-          transition: 250ms;
+  resize: none;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.13);
+  box-shadow: inset 1px 1px rgba(0,0,0,0.05);
+  -webkit-transition: height 250ms, margin 250ms;
+     -moz-transition: height 250ms, margin 250ms;
+      -ms-transition: height 250ms, margin 250ms;
+       -o-transition: height 250ms, margin 250ms;
+          transition: height 250ms, margin 250ms;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
       -ms-box-sizing: border-box;
        -o-box-sizing: border-box;
           box-sizing: border-box;
 }
-.stream .newTopic .area pre,.stream .newTopic .area textarea {
-  min-height: 50px;
-  padding: 5px;
-}
-.stream .newTopic .area pre,.stream .newTopic .area textarea {
-  font: 13px/19.5px sans-serif;
-}
-.stream .newTopic.write .area {
-  margin-bottom: 33px;
-  color: #000;
-}
-.stream .newTopic.write .area textarea {
-  min-height: 89px;
-}
-.stream .newTopic.write .area pre {
-  min-height: 84px;
-}
-.stream .controls {
-  bottom: 13px;
-  right: 14px;
-  position: absolute;
-}
-.stream .controls .button {
-  margin-left: 3px;
-}
+  /* this disables transitions while resizing the textarea */
+  .stream .answer textarea:active {
+    -webkit-transition: none;
+       -moz-transition: none;
+        -ms-transition: none;
+         -o-transition: none;
+            transition: none;
+  }
+  .stream .newTopic textarea {
+    float: right;
+  }
+  .stream .newTopic.write textarea,
+  .stream .answer.write textarea {
+    height: 50px;
+    margin-bottom: 34px;
+    color: #000;
+    resize: vertical;
+  }
+  .stream .controls {
+    bottom: 14px;
+    right: 21px;
+    width: 100%;
+    position: absolute;
+  }
+  .stream .newTopic .controls {
+    width: 474px;
+  }
+    .stream .controls .hint { float: left; }
+    .stream .controls .button { float: right; }
+
 .stream .controls .postError {
   margin-left: 5px;
   color: #f00;
@@ -375,12 +404,14 @@
 .stream .notification.log .controls {
   display: none;
 }
-.stream .notification.log.granted .granted,.stream .notification.log.denied .denied {
+.stream .notification.log.granted .granted,
+.stream .notification.log.denied .denied {
   display: inline-block;
   max-width: 9999px;
   opacity: 1;
 }
-.stream .notification .granted,.stream .notification .denied {
+.stream .notification .granted,
+.stream .notification .denied {
   height: 25px;
   max-width: 0;
   line-height: 25px;
@@ -393,33 +424,33 @@
        -o-transition: 500ms;
           transition: 500ms;
 }
-.stream .opener {
+.post .opener {
   min-height: 47px;
   padding: 21px 21px 13px 84px;
 }
-.stream .postmeta {
+.post .postmeta {
   float: right;
   margin: 0 0 0 13px;
   text-align: right;
   position: relative;
 }
-.stream .postmeta nav {
+.post .postmeta nav {
   visibility: hidden;
 }
-.stream .postmeta span,
-.stream .postmeta button,
-.stream .postmeta time {
+.post .postmeta span,
+.post .postmeta button,
+.post .postmeta time {
   line-height: 19.5px;
 }
-.stream .postmeta time,
-.stream .postmeta span {
+.post .postmeta time,
+.post .postmeta span {
   color: hsl(0,0%,75%);
   font-size: 11.5px;
 }
-.stream .postmeta .share {
+.post .postmeta .share {
   position: relative;
 }
-.stream .postmeta .share .action {
+.post .postmeta .share .action {
   margin: 6px 10px 0 0;
   width: 13px;
   height: 13px;
@@ -432,22 +463,22 @@
   float: right;
   cursor: pointer;
 }
-.stream .postmeta .share .popup {
+.post .postmeta .share .popup {
   left: -53px;
   top: 19px;
   display: none;
 }
-  .stream .postmeta .popup.visible { 
+  .post .postmeta .popup.visible { 
     display: -webkit-box;
   }
-.stream .postmeta button {
+.post .postmeta button {
   padding: 0;
   height: 16px;
 }
-.stream .postmeta button.delete {
+.post .postmeta button.delete {
   min-width: 16px;
 }
-.stream .name {
+.post .name {
   color: hsl(81, 40%, 44%);
   font-weight: bold;
   overflow: hidden;
@@ -456,108 +487,90 @@
   cursor: pointer;
   display: none;
 }
-.stream .name + .location {
+.post .name + .location {
   margin-left: 5px;
   font-size: 11px;
   line-height: 19.5px;
   color: rgba(0,0,0,0.34);
   display: none;
 }
-.stream .opener:hover nav,.stream .comment:hover nav {
+.post .opener:hover nav,
+.post .comment:hover nav {
   visibility: visible;
 }
-.stream .avatar {
+.post .avatar {
   left: 21px;
   top: 17px;
   position: absolute;
 }
-.stream p {
+.post p {
   color: #333;
   display: inline;
 }
-.stream section.answer {
+.post .answer {
+  margin-top: -5px;
+  padding: 13px 89px 0 84px;
   position: relative;
 }
-  .stream section.answer,
-  .stream section.answer .controls {
-    padding: 13px 89px 0 84px;
+  .post.noComments .answer {
+    margin-top: -13px;
   }
-  .stream section.answer .area {
+  .post .answer .area {
     width: 100%;
     position: relative;
   }
-  .stream section.answer .area textarea {
-    height: 25px;
-    padding: 4px 5px 2px;
-    resize: none;
-    background: none;
-    font: 12px/18px sans-serif;
-    color: #808080;
-    border: 1px solid rgba(0,0,0,0.13);
-    box-shadow: 1px 1px #fff, inset 1px 1px rgba(0,0,0,0.05);
-    -webkit-box-sizing: border-box;
-       -moz-box-sizing: border-box;
-        -ms-box-sizing: border-box;
-         -o-box-sizing: border-box;
-            box-sizing: border-box;
+  .post .answer textarea {
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: none;
   }
-  .stream section.answer .area textarea {
-    font: 12px/18px sans-serif;
+    .post .answer.write textarea {
+      border-color: rgba(0,0,0,0.13);
+      box-shadow: 
+        1px 1px white, 
+        inset 1px 1px rgba(0,0,0,0.05);
+    }
+  .post .answer textarea,
+  .post .answer .controls {
+    width: 407px;
   }
-  .stream section.answer .avatar {
+  .post .comments .answer .avatar {
     width: 34px;
-    left: 36px;
-    top: 14px;
-    display: none;
+    left: 84px;
+    top: 13px;
+    -webkit-transition: left 250ms;
+       -moz-transition: left 250ms;
+        -ms-transition: left 250ms;
+         -o-transition: left 250ms;
+            transition: left 250ms;
   }
-  .stream section.answer .controls {
-    bottom: 13px;
-    left: 0;
-    right: 0;
-    display: none;
+    .post .comments .answer.write .avatar {
+      left: 36px;
+    }
+  .post .answer .controls {
+    bottom: 22px;
+    right: 89px;
   }
-    .stream section.answer .controls .hint { float: left; }
-    .stream section.answer .controls .button { float: right; }
-  .stream section.answer.write .avatar {
-    display: block;
-  }
-  .stream section.answer.write .area textarea {
-    min-height: 53px;
-    margin-bottom: 27px;
-    color: #000;
-    resize: vertical;
-  }
-  .stream section.answer.write .controls {
-    display: block;
-  }
-.stream .comments {
+.post:not('.noComments') .comments {
   border-top: 1px solid hsl(0, 0%, 95%);
 }
-.stream .comments .comment {
+.post .comments .comment {
   min-height: 34px;
   padding: 13px 21px 0 84px;
   position: relative;
 }
-.stream .comments section.answer:first-child.write .avatar {
-  top: 11px;
-  left: 11px;
-}
-.stream .comments section.answer:first-child .area {
-  margin-top: 8px;
-}
-.stream .comments section:last-child {
+.post .comments section:last-child {
   padding-bottom: 21px;
 }
-.stream .comments .avatar {
+.post .comments .avatar {
   top: 13px;
   left: 36px;
   width: 34px;
   border-radius: 2px;
 }
-.stream .comments .location {
+.post .comments .location {
   display: none;
 }
-.stream p {
+.post p {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
@@ -588,7 +601,9 @@
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-.stream .topic.ghost .name,.stream .topic.ghost .location,.stream .topic.ghost p span {
+.stream .topic.ghost .name,
+.stream .topic.ghost .location,
+.stream .topic.ghost p span {
   display: inline-block;
 }
 .stream .topic.ghost .name {
@@ -640,44 +655,20 @@
   background: url("../img/spinner.gif") no-repeat;
   display: inline-block;
 }
-.stream .expanding.area pre,.stream .expanding.area textarea {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-.stream .expanding.area textarea {
-  width: 100%;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-      -ms-box-sizing: border-box;
-       -o-box-sizing: border-box;
-          box-sizing: border-box;
-}
-.stream .expanding.area pre {
-  display: none;
-}
-.stream .expanding.area.active textarea {
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  resize: none;
-}
-.stream .expanding.area.active pre {
-  display: block;
-  visibility: hidden;
-}
-.stream .unread {
+
+.post .unread {
   box-shadow: 2px 0 hsl(81, 53%, 44%) inset;
 }
-.stream .opener,.stream .comment {
+.post .opener,
+.post .comment {
   -webkit-transition: background-color 200ms;
      -moz-transition: background-color 200ms;
       -ms-transition: background-color 200ms;
        -o-transition: background-color 200ms;
           transition: background-color 200ms;
 }
-.stream .opener .cancel-delete,.stream .comment .cancel-delete {
+.post .opener .cancel-delete,
+.post .comment .cancel-delete {
   display: none;
 }
 .stream .dangerZone {
