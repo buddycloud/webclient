@@ -1,3 +1,59 @@
 <div class="content">
-	<p><%= name %></p>
+	   <div class="channelView personal clearfix">
+        <!--<div class="banner" style="background-image: url(public/images/vera_bg.jpg);"></div>-->
+        <header class="channelHeader justify">
+          <div class="avatar" style="background-image: url(avatars/user2_big.jpg)"></div>
+          <div class="flex titleText">
+            <h2 class="owner" data-editmode="singleLine"><%= metadata.attributes.title %></h2>
+            <div class="about" data-editmode="multiLine"><%= metadata.attributes.description %></div>
+          </div>
+          <nav class="inChannel">
+            <!--<span class="messages button newMessage">
+              <span class="holder">Messages</span><span class="message counter">2</span>
+            </span>-->
+            <span class="channel button">
+              <span class="holder">Channel</span>
+            </span>
+            <span class="hidden save button">Save</span>
+            <!--<span class="edit button">Edit</span>-->
+            <span class="unfollow button">Unfollow</span>
+          </nav>
+          <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
+        </header>
+        <section class="stream clearfix">
+          <section class="newTopic">
+            <img class="avatar" src="avatars/user1.jpg" />
+            <textarea placeholder="New Topic..."></textarea>
+            <div class="controls clearfix">
+              <div class="hint">ctrl + enter to post</div>
+              <div class="button callToAction createComment">Post</div>
+            </div>
+          </section>
+          <!-- this produces some weird bug - some content below
+	    it gets lost when this is visible -->
+      	  <div class="notifications">
+      	    <article class="notification">
+      	      <section>
+                <img class="avatar" src="avatars/user4.jpg" />
+                <div class="info">
+      	          <span class="name">martin<span class="domain">@buddycloud.com</span></span>
+                  <p>wants to follow this channel.</p>
+                  <span class="granted">started following this channel.</span>
+                  <span class="denied">was denied to follow this channel.</span>
+                </div>
+                <div class="controls">
+                  <div class="button small negative light">Deny</div>
+                  <div class="button small positive light">Grant Martin to join</div>
+                </div>
+              </section>
+      	    </article>
+      	  </div>
+          <section class="posts">
+          	
+          </section>
+          <p class="loader">
+            <span class="spinner"></span>
+          </p>
+        </section><!-- /stream -->
+      </div>
 </div>
