@@ -59,7 +59,7 @@ define(function(require) {
       var self = this;
       var canPost = this.model.followers.isPublisher(sessionStorage.username);
 
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(template, this.model));
     },
 
     renderPost: function(thread) {

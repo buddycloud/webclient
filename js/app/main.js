@@ -68,7 +68,7 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-    $('#content').append(new cChannel({model: channel, credentials: credentials}).el);
+    $('#center').append(new cChannel({model: channel, credentials: credentials}).el);
     /*  //logged in?
       if (credentials.username) {
         var userMenu = new UserMenu({model: credentials});
