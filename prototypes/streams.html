@@ -235,9 +235,9 @@
     <div class="channelView personal clearfix">
         <!--<div class="banner" style="background-image: url(public/images/vera_bg.jpg);"></div>-->
         <header class="channelHeader justify">
-          <img class="avatar" src="avatars/user2_big.jpg" />
+          <div class="avatar" style="background-image: url(avatars/user2_big.jpg)"></div>
           <div class="flex titleText">
-            <h2 class="title" data-editmode="singleLine">Vera Meisterkoch's World</h2>
+            <h2 class="owner" data-editmode="singleLine">Vera Maier</h2>
             <div class="about" data-editmode="multiLine">I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend.</div>
           </div>
           <nav class="inChannel">
@@ -249,7 +249,7 @@
             </span>
             <span class="hidden save button">Save</span>
             <!--<span class="edit button">Edit</span>-->
-            <span class="follow button">Follow</span>
+            <span class="unfollow button">Unfollow</span>
           </nav>
           <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
         </header>
@@ -456,10 +456,6 @@
               <span class="title">Address:</span>
               <span class="data">vera@buddycloud.com</span>
             </p>
-            <p class="description">
-              <span class="title">About:</span>
-	<span class="data" data-editmode="multiLine">I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend.</span>
-            </p>
             <p class="open">
               <span class="title">This Channel is:</span>
 	<span class="data accessModel" data-editmode="boolean">Public</span>
@@ -471,12 +467,6 @@
 	      title="5:06pm 06.06.2011"
 	      data-strftime="%f"
 	      data-strftitle="%A %d %B %Y %H:%M">188 days</time>
-            </p>
-            <p class="location">
-              <span class="title">Location:</span>
-              <span class="previous">Home</span> → 
-              <span class="current">Shopping</span> → 
-              <span class="next">Home</span>
             </p>
           </section>
           <section class="channelList">
@@ -716,12 +706,14 @@
     bubblingChannel.parent().css('height', channelHeight);
   }
 
-  function destroy(){
-    // remove the gap-div
-    $(this).remove();
+  function destroy(event){
+    var propertyToWaitFor = event.data.propertyName;
+    if(propertyToWaitFor !== undefined && event.originalEvent.propertyName === propertyToWaitFor)
+      $(this).remove();
   }
 
-  function reset(){
+  function reset(event){
+    if(event.data.callback) event.data.callback();
     // reset the bubbling channel and unwrap it
     $(this).removeClass('bubbling').css({ 'height' : '', 'z-index' : '' }).unwrap();
     movingChannels--;
@@ -913,6 +905,97 @@
       };
     });
   }
+  
+  /* ###
+  
+    unfollow
+    
+    ### */
+  
+  $('.inChannel').on('click', '.unfollow', function(){
+    // rename button
+    $(this).text('Follow').removeClass('unfollow').addClass('follow');
+    
+    var channelToRemove = $('.channel.selected');
+    channelToRemove.bind(transitionendEvent, { propertyName : 'height' }, destroy);
+    
+    document.redraw();
+    
+    channelToRemove.addClass('remove');
+    
+    /* ###
+    
+      follow
+      
+    ### */
+    
+    function channelTemplate(avatarUrl, owner, status, animationClassName){
+      return $('<div class="channel">')
+        .addClass(animationClassName ? animationClassName : "")
+        .append(
+          $('<div class="avatar">').css('background-image', avatarUrl)
+        )
+        .append(
+          $('<div class="info">')
+            .append(
+              $('<div class="owner">').text(owner)
+            )
+            .append(
+              $('<div class="status">').text(status)
+            )
+        );
+    }
+    
+    $('.inChannel').on('click', '.follow', follow);
+    
+    function follow(){
+      $(this).text('Unfollow').removeClass('follow').addClass('unfollow');
+      
+      var avatarUrl = $(this).parent().siblings('.avatar').css('background-image');
+      var owner = $(this).parent().siblings().children('.owner').text();
+      // the status will not be visible in the discovery
+      // using the about for now
+      var status = $(this).parent().siblings().children('.about').text();
+      var animationClassName = 'channelHeader';
+      
+      // create new channel from template for the sidebar
+      var newChannel = new channelTemplate(avatarUrl, owner, status, animationClassName);
+      
+      // get the start offset
+      var offset = $(this).parent().parent().offset();
+      var callback = function(){ 
+        $('.channels').removeClass('rainbowAnimationRunning');
+        $(this).addClass('selected');
+      }.bind(newChannel);
+      
+      $('.channels').addClass('rainbowAnimationRunning');
+      
+      // start the animation
+      rainbowAnimation(newChannel, offset, animationClassName, callback);
+    }
+
+    function rainbowAnimation(channel, offset, animationClassName, callback){
+      channel.css({
+        left : offset.left - innerHolder.offset().left,
+        top : offset.top - innerHolder.offset().top
+      });
+      innerHolder.prepend(channel);
+
+      // wrap a growing holder around it
+      var landingArea = $('<div>').addClass('bubbleHolder rainbowBubble');
+      channel.wrap(landingArea);
+
+      document.redraw();
+
+      // bind the callback on transition end for all bubbling channels
+      channel.one(transitionendEvent, { callback : callback }, reset);
+
+      // bubble!
+      channel.removeClass(animationClassName).css({ 'top' : '', 'left' : '', 'z-index' : ++movingChannels+1 });
+      // open a gap for the channel to arrive
+      channel.parent().css('height', channelHeight);
+    }
+  });
 </script>
 </body>
 </html>
