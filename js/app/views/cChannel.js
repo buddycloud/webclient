@@ -17,14 +17,18 @@
 define(function(require) {
   var $ = require('jquery');
   var _ = require('underscore');
-  var api = require('app/util/api');
-  var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
-  var SinglePost = require('app/views/SinglePost');
-  var template = require('text!templates/PostStream.html');
+  
+  var api = require('util/api');
+  var avatarFallback = require('util/avatarFallback');
+  
+  //var SinglePost = require('app/views/SinglePost');
+  
+  var template = require('text!templates/cChannel.html');
+  
   var Events = Backbone.Events;
 
-  var PostStream = Backbone.View.extend({
+  var cChannel = Backbone.View.extend({
     tagName: 'div',
     className: 'post-stream',
     events: {
@@ -55,10 +59,7 @@ define(function(require) {
       var self = this;
       var canPost = this.model.followers.isPublisher(sessionStorage.username);
 
-      this.$el.html(_.template(template, {canPost: canPost}));
-      _.each(this.model.posts.byThread(), function(thread) {
-        self.$('.threads').append(new SinglePost({model: thread, canPost: canPost, credentials: self.options.credentials}).el);
-      });
+      this.$el.html(_.template(template));
     },
 
     renderPost: function(thread) {
@@ -113,5 +114,5 @@ define(function(require) {
     }
   });
 
-  return PostStream;
+  return cChannel;
 });

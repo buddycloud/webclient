@@ -18,7 +18,7 @@ define(function(require) {
   var _ = require('underscore');
   var api = require('util/api');
   var Backbone = require('backbone');
-  var ModelBase = require('app/models/ModelBase');
+  var ModelBase = require('models/ModelBase');
 
   var SubscribedChannels = ModelBase.extend({
     constructor: function() {

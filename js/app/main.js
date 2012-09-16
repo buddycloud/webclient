@@ -34,7 +34,7 @@ define(function(require) {
   var SubscribedChannels = require('models/SubscribedChannels');
   var UserCredentials = require('models/UserCredentials');
   
-  var Sidebar = require('views/Sidebar');
+  var cChannel = require('views/cChannel');
 
   function initialize() {
     var channel = getRequestedChannel();
@@ -68,13 +68,8 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-<<<<<<< HEAD
-      $('#content').append(new MetadataPane({
-        model: channel,
-        credentials: credentials,
-        subscribed: subscribedChannels}).el)
-    $('#content').append(new PostStream({model: channel, credentials: credentials}).el);
-      //logged in?
+    $('#content').append(new cChannel({model: channel, credentials: credentials}).el);
+    /*  //logged in?
       if (credentials.username) {
         var userMenu = new UserMenu({model: credentials});
         var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
@@ -85,26 +80,7 @@ define(function(require) {
         var sidebar = new Sidebar({model: subscribedChannels});
         $('#left').append(sidebar.el);
         sidebar.render();
-      }
-=======
-    $('#content').append(new MetadataPane({
-      model: channel,
-      credentials: credentials,
-      subscribed: subscribedChannels}).el);
-    $('#content').append(new PostStream({model: channel, credentials: credentials}).el);
-    $('#right').append(new FollowerList({model: channel}).el);
-    if (credentials.username) {
-      var userMenu = new UserMenu({model: credentials});
-      var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
-      $('#toolbar-right').append(userMenu.el);
-      $('#left').append(channelsList.el);
-      userMenu.render();
-    } else {
-      var sidebar = new LoginSidebar({model: credentials});
-      $('#left').append(sidebar.el);
-      sidebar.render();
-    }
->>>>>>> master
+      }*/
   }
 
   initialize();

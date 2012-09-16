@@ -15,15 +15,11 @@
  */
 
 define(function(require) {
-<<<<<<< HEAD
   var api = require('util/api');
   var Backbone = require('backbone');
   var Post = require('models/Post');
-=======
-  var api = require('app/util/api');
-  var CollectionBase = require('app/models/CollectionBase');
-  var Post = require('app/models/Post');
->>>>>>> master
+
+  var CollectionBase = require('models/CollectionBase')
 
   var ChannelPosts = CollectionBase.extend({
     model: Post,

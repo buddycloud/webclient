@@ -17,9 +17,9 @@
 define(function(require) {
   var $ = require('jquery');
   var _ = require('underscore');
-  var api = require('app/util/api');
-  var avatarFallback = require('app/util/avatarFallback');
-  var parseUtil = require('app/util/parseUtil');
+  var api = require('util/api');
+  var avatarFallback = require('util/avatarFallback');
+  var parseUtil = require('util/parseUtil');
   var Backbone = require('backbone');
   var Post = require('app/models/Post');
   var template = require('text!templates/SinglePost.html');

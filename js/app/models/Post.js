@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var ModelBase = require('app/models/ModelBase');
+  var ModelBase = require('models/ModelBase');
 
   var Post = ModelBase.extend({
     author: function() {
