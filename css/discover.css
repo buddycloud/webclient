@@ -149,6 +149,7 @@
 /* posts */
 
 .discoverChannels .list .post {
+  font-size: 12px;
   background: none;
   cursor: pointer;
   height: 76px;

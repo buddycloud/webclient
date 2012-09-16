@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>buddycloud Create Channel</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen">
+  <script src="../js/jquery.js"></script>
+  <script src="../js/modernizr.js"></script>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="personal channel">
+      <div class="avatar" style="background-image: url(avatars/user1.jpg)">
+        <span class="channelpost counter">2</span>
+        <span class="message counter">2</span>
+      </div>
+      <div class="info">
+        <span class="owner">felix<span class="domain">@buddycloud.com</span></span>
+        <span class="status">Aww yeah, Lion rocks</span>
+      </div>
+      <nav>
+        <button class="logout">Logout</button>
+      </nav>
+    </div>
+    <nav class="actionBar clearfix">
+      <button class="discover"><span>Find Channels</span></button>
+    </nav>
+    <div class="search">
+      <input type="search" results="5" autosave="channelSearch" placeholder="Go to a channel ..." />
+    </div>
+    <div class="channels" class="antiscroll-wrap">
+      <div class="antiscroll-inner scrollHolder">
+        <div class="channel selected">
+          <div class="avatar" style="background-image: url(avatars/user2.jpg)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">vera<span class="domain">@buddycloud.com</span></span>
+            <span class="status">What a wonderful day</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel2.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">moviefans<span class="domain">@buddycloud.com</span></span>
+            <span class="status">Harry Potter, tonight!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel3.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">on-the-box<span class="domain">@bbc.co.uk</span></span>
+            <span class="status">You gonna love the new Dexter episodes</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/topic.png)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">lolcats<span class="domain">@buddycloud.com</span></span>
+            <span class="status">I can haz your nose?</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user4.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
+            <span class="status">working on the webgl project</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/topic.png)">
+          </div>
+          <div class="info">
+            <span class="owner">music<span class="domain">@buddycloud.com</span></span>
+            <span class="status">New Foo Fighter Album online - check it out!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">verena<span class="domain">@buddycloud.com</span></span>
+            <span class="status">test's are over - party!!!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">fans<span class="domain">@steam.com</span></span>
+            <span class="status">the cake is a lie!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel8.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">cave<span class="domain">@minecraft.com</span></span>
+            <span class="status">Buy minecraft - now!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/anon.png)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">steve<span class="domain">@buddycloud.com</span></span>
+            <span class="status">all your base belongs to us</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel2.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">moviefans<span class="domain">@buddycloud.com</span></span>
+            <span class="status">Harry Potter, tonight!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel3.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">on-the-box<span class="domain">@bbc.co.uk</span></span>
+            <span class="status">You gonna love the new Dexter episodes</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel4.jpg)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">lolcats<span class="domain">@buddycloud.com</span></span>
+            <span class="status">I can haz your nose?</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user4.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
+            <span class="status">working on the webgl project</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel6.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">music<span class="domain">@buddycloud.com</span></span>
+            <span class="status">New Foo Fighter Album online - check it out!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">verena<span class="domain">@buddycloud.com</span></span>
+            <span class="status">test's are over - party!!!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">fans<span class="domain">@steam.com</span></span>
+            <span class="status">the cake is a lie!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel8.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">cave<span class="domain">@minecraft.com</span></span>
+            <span class="status">Buy minecraft - now!</span>
+          </div>
+        </div>
+      </div><!-- /antiscroll-inner -->
+    </div><!-- /channels -->
+    <button id="create_topic_channel"><span>Create Topic Channel</span></button>
+  </div>
+  <div class="content" class="clearfix">
+    <div class="channelView">
+      <header class="channelHeader justify">
+        <div class="avatar" style="background-image: url(avatars/user1_big.jpg)"></div>
+        <div class="flex titleText">
+          <h2 class="owner" data-editmode="singleLine">Felix Niklas</h2>
+          <div class="about" data-editmode="multiLine">Hey whats up world? I'm buddyclouds interface designer</div>
+        </div>
+        <nav class="inChannel">
+        </nav>
+        <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
+      </header>
+      <form class="stream clearfix">
+        <div class="gravatar">
+          <label>Avatar</label>
+          <div>
+            <div class="avatar" style="background-image: url(public/avatars/user2.jpg)"></div>
+            <p>change avatar on <a href="http://gravatar.com/">gravatar.com</a></p>
+          </div>
+        </div>
+        <div class="title">
+          <label for="channel_name">Name</label>
+          <input type="text" id="channel_name" placeholder="Your Realname or Alias" />
+        </div>
+        <div class="description area">
+          <label for="channel_description">Description</label>
+          <textarea id="channel_description" placeholder="A short self description"></textarea>
+        </div>
+        <div class="mood">
+          <label for="channel_mood">Mood</label>
+          <input type="text" id="channel_mood" placeholder="How are you doing?" />
+        </div>
+        <div class="location">
+          <label for="channel_location">Current Location</label>
+          <input type="text" id="channel_location" />
+        </div>
+        <div class="access">
+          <label for="channel_public_access">Public Access</label>
+          <div>
+            <input type="checkbox" id="channel_public_access"/>
+          </div>
+        </div>
+        <div class="role">
+          <label for="channel_default_role">Default Role</label>
+          <div>
+            <select id="channel_default_role">
+              <option value="follower">follower</option>
+              <option value="followerPlus">follower+</option>
+            </select>
+            <span class="hint followerSelected">
+              <span class="follower">
+                can only read your channel
+              </span>
+              <span class="followerPlus">
+                can read and write your channel
+              </span>
+            </span> 
+          </div>
+        </div>
+      </form>  
+      <nav class="bottom clearfix">
+        <div class="button callToAction">Save</div>
+        <div class="button">Don't Save</div>
+      </nav>
+    </div><!-- /channelView -->
+  </div><!-- /content -->
+<script type="text/javascript">
+  /* ###
+  
+  channel_default_role hint switch
+  
+  ### */
+  
+  var select = $('#channel_default_role');
+  var label = select.next('.hint');
+  
+  function switchLabel(){
+    label.removeClass('followerPlusSelected followerSelected').addClass($(this).val()+"Selected");
+  }
+  
+  select.change(switchLabel);
+  
+  /* ###
+  
+  UI Toggle
+  
+  ### */
+  var toggle = {
+      _treshhold: 2,
+      _moving: false,
+      _on: false,
+      init: function(el){
+          this.$el = $(el);
+          this.$slider = this.$el.find('.slidePanel');
+          this.width = this.$el.width();
+          this.$select = this.$el.next('select');
+          
+          this.render();
+          this.$el.bind('mousedown', $.proxy( this, "start" ) );
+      },
+      start: function(event){
+          event.preventDefault();
+          this._startPos = event.pageX - this.$el.offset().left;
+          this.$el.addClass('down');
+          $(document).bind('mousemove.global', $.proxy( this, "move") );
+          $(document).one('mouseup', $.proxy( this, "stop") );
+      },
+      move: function(event){
+          var distance = event.pageX - this._startPos;
+          if(!this._moving && Math.abs(distance) > this._treshhold){
+              this.$el.addClass('moving');
+              this._moving = true;
+          }
+          if(this._moving){
+              this._pos = Math.min(0, Math.max(-this.width/2, this._offset + distance));
+              this.$slider.css('left', this._pos);
+          }
+      },
+      render: function(){
+          this._offset = this._on ? 0 : -this.width/2;
+          this.$slider.css('left', this._offset);
+      },
+      stop: function(event){
+          this.$el.removeClass('down');
+          if(this._moving){
+              this._moving = false;
+              this.$el.removeClass('moving');
+              if(this._pos >= -this.width/4){
+                  this._on = true;
+              } else {
+                  this._on = false;
+              }
+          } else {
+              this._on = !this._on;
+          }    
+          this.render();
+      }
+  };
+  //toggle.init('.toggle');
+  
+  /* ###
+  
+  redraw function to make sure that transitions are triggered 
+  
+  ### */
+  !function(document){
+
+      // (C) WebReflection (As It Is) - Mit Style
+
+      // we all love function declarations
+      function redraw() {
+
+          // clientHeight returns 0 if not present in the DOM
+          // e.g. document.removeChild(document.documentElement);
+          // also some crazy guy may swap runtime the whole HTML element
+          // this is why the documentElement should be always discovered
+          // and if present, it should be a node of the document
+          // In all these cases the returned value is true
+          // otherwise what is there cannot really be considered as painted
+
+          return !!(document.documentElement || 0).clientHeight;
+      }
+
+      // ideally an Object.defineProperty
+      // unfortunately some engine will complain
+      // if used against DOM objects
+      document.redraw = redraw;
+
+  }(document);
+  
+  /* ###
+  
+    Channel bubbling
+  
+    ### */
+  var channels = $('#channels');
+  var channel = channels.find('.channel');
+  var personal_channel = channels.find('.search');
+  var canidate;
+  var transEndEventNames = {
+    '-webkit-transition' : 'webkitTransitionEnd',
+    '-moz-transition' : 'transitionend',
+    '-o-transition' : 'oTransitionEnd',
+    'transition' : 'transitionEnd'
+  };
+  var prefix = getBrowserPrefix();
+  var transitionendEvent = transEndEventNames[prefix+'transition'];
+  
+  function getBrowserPrefix(){
+      var regex = /^(Moz|Webkit|Khtml|O|ms|Icab)(?=[A-Z])/;
+      var tester = document.getElementsByTagName('script')[0];
+      var prefix = "";
+      for(var prop in tester.style) {
+          if(regex.test(prop)) {
+              prefix = prop.match(regex)[0];
+              break;
+          }
+      }
+      if('WebkitOpacity' in tester.style) prefix = 'Webkit';
+      return prefix === "" ? "" : '-' + prefix.charAt(0).toLowerCase() + prefix.slice(1) +'-';
+  }
+  
+  function bubble(){
+    var offset = $(this).position().top;
+    if(offset === 0) return false; // the channel has an offset of 0 - it should stay where it is. so stop
+    var distance = -offset+20+31; // 31 is searchbar height
+    canidate = $(this);
+    // enable transitions
+    channels.removeClass('curtainsDown');
+    // undock => sets z-index 
+    canidate.addClass('bubbleUp');
+    // bind the transitionend to the reset function which resets the DOM after the animation
+    canidate.one(transitionendEvent, reset);
+    // enable transitions again and start to move the channels above the moved channel to close the gap
+    channels.addClass('makePlace');
+    // animate the channel to bubble up
+    canidate.css(prefix+'transform', "translateY("+distance+"px)");
+  }
+  
+  function reset(event){
+    // disable transitions
+    channels.addClass('curtainsDown');
+    // extract the bubbling channel from the DOM, remove the classes, reset the transformation and add it at the top
+    canidate.detach().removeClass('undock bubbleUp').css(prefix+'transform', "").insertAfter(personal_channel);
+    // move the channels back in place
+    channels.removeClass('makePlace');
+  }
+  
+  channel.bind('click', bubble);
+  
+  /* ###
+    
+    More Channels
+    
+    ### */
+  var moreChannels = $('#more_channels');
+  var areChannelsOpen = false;
+  
+  function channelOverview(){
+    if(areChannelsOpen){
+      $('body').removeClass('stateArrived');
+      document.redraw();
+      $('body').addClass('inTransition');
+      $('body').removeClass('channelOverview');
+      areChannelsOpen = false;
+    } else {
+      $('body').addClass('inTransition');
+      $('body').addClass('channelOverview');
+      areChannelsOpen = true;
+    }
+    channels.one(transitionendEvent, transitionEnd);
+  }
+  
+  function transitionEnd(){
+    $('body').removeClass('inTransition');
+    if($('body').hasClass('channelOverview')) $('body').addClass('stateArrived');
+  }
+  
+  moreChannels.click(channelOverview);
+  
+  /* ###
+    
+    show/hide channel info
+    
+    ### */
+  var channelInfo = $('.channelDetails');  
+  var channelInfoToggle = channelInfo.find('> .toggle');
+  
+  channelInfoToggle.click(function(){ channelInfo.toggleClass('hidden'); });
+  
+  $('.showAll').click(function(){
+    var list = $(this).prev();
+    list.children().clone().appendTo(list);
+    $(this).remove();
+  });
+  
+  /* ###
+    
+    new topic animation
+    
+    ### */
+  
+  // works for both new topic field and all the small answer fields
+  var newTopic = $('.newTopic, .answer');
+  var topicTextarea = newTopic.find('textarea');
+  
+  function openArea(event){
+    // prevent bubbling!
+    event.stopPropagation();
+    if(!$(this).hasClass('write')){
+      $(this).addClass('write');
+      $(document).one('click', {self: this}, closeArea);
+    }
+  }
+  
+  function closeArea(event){
+    var self = event.data.self;
+    var textarea = $(self).find('textarea');
+    // minimize the textarea only if the textarea is empty
+    if(textarea.val() === ""){
+      $(self).removeClass('write');
+    }
+  }
+  
+  newTopic.click(openArea);
+  
+  /* ###
+    
+    notification animation
+
+    ### */
+  var notification = $('.notification');
+  var notificationButtons = notification.find('.controls > div');
+  
+  function notify(){
+    notification.addClass('visible');
+  }
+  
+  function logNotifaction(){
+    var reaction = $(this).hasClass('positive') ? 'granted' : 'denied';
+    notification.addClass('log '+reaction);
+  }
+  
+  notificationButtons.click(logNotifaction);
+  setTimeout('notify()', 2000);
+</script>
+</body>
+</html>

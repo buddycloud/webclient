@@ -42,10 +42,14 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
+.channelHeader .avatar {
+  width: 75px;
+  height: 75px;
+}
 .channelHeader .titleText {
   margin: 0 13px;
 }
-.channelHeader h2,
+.channelHeader .owner,
 .channelHeader .status,
 .channelHeader .location {
   white-space: nowrap;
@@ -54,7 +58,7 @@
   text-overflow: ellipsis;
   display: block;
 }
-.channelHeader .titleText h2 {
+.channelHeader .titleText .owner {
   color: #1b1b1b;
   font-weight: normal;
   margin-bottom: 2px;

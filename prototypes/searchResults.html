@@ -204,7 +204,7 @@
                 <div class="avatar" style="background-image: url(avatars/user5.jpg)"></div>
                 <div class="info flex">
                   <span class="owner">Anna McWalowitz</span>
-                  <span class="about">Hanging out at starbucks</span>
+                  <span class="about">23/w/deggendorf</span>
                 </div>
                 <div class="follow button callToAction">Follow</div>
               </div>
@@ -238,7 +238,7 @@
                   <span class="owner">Anna Bauer</span>
                   <span class="about">First Season of Game of Thrones was a blast!</span>
                 </div>
-                <div class="follow button callToAction disabled">Follow</div>
+                <div class="follow button callToAction disabled">follow</div>
               </div>
             </div>
           </div>
@@ -426,24 +426,13 @@
   
   /* ###
   
-    Rainbow animation
-  
-    ### */
+    follow
     
-  var discoverChannels = $('.discoverChannels');
+  ### */
   
-  discoverChannels.on('click', '.follow:not(.disabled)', follow);
-  
-  function follow(){
-    $(this).addClass('disabled');
-    
-    var avatarUrl = $(this).siblings('.avatar').css('background-image');
-    var owner = $(this).siblings().children('.owner').text();
-    // the status will not be visible in the discovery
-    // using the about for now
-    var status = $(this).siblings().children('.about').text();
-    
-    var bubblingChannel = $('<div class="channel rainbow">')
+  function channelTemplate(avatarUrl, owner, status, animationClassName){
+    return $('<div class="channel">')
+      .addClass(animationClassName ? animationClassName : "")
       .append(
         $('<div class="avatar">').css('background-image', avatarUrl)
       )
@@ -456,27 +445,57 @@
             $('<div class="status">').text(status)
           )
       );
+  }
+  
+  var discoverChannels = $('.discoverChannels');
+  
+  discoverChannels.on('click', '.follow:not(.disabled)', follow);
+  
+  function follow(){
+    $(this).addClass('disabled');
     
+    var avatarUrl = $(this).siblings('.avatar').css('background-image');
+    var owner = $(this).siblings().children('.owner').text();
+    // the status will not be visible in the discovery
+    // using the about for now
+    var status = $(this).siblings().children('.about').text();
+    var animationClassName = 'rainbow';
+    
+    // create new channel from template for the sidebar
+    var newChannel = new channelTemplate(avatarUrl, owner, status, animationClassName);
+    
+    // get the start offset
     var offset = $(this).parent().offset();
-    bubblingChannel.css({
+    var callback = function(){ 
+      $('.channels').removeClass('rainbowAnimationRunning');
+    }.bind(newChannel);
+    
+    $('.channels').addClass('rainbowAnimationRunning');
+    
+    // start the animation
+    rainbowAnimation(newChannel, offset, animationClassName, callback);
+  }
+
+  function rainbowAnimation(channel, offset, animationClassName, callback){
+    channel.css({
       left : offset.left - innerHolder.offset().left,
       top : offset.top - innerHolder.offset().top
     });
-    innerHolder.prepend(bubblingChannel);
+    innerHolder.prepend(channel);
 
     // wrap a growing holder around it
     var landingArea = $('<div>').addClass('bubbleHolder rainbowBubble');
-    bubblingChannel.wrap(landingArea);
+    channel.wrap(landingArea);
 
     document.redraw();
 
     // bind the callback on transition end for all bubbling channels
-    bubblingChannel.one(transitionendEvent, reset);
+    channel.one(transitionendEvent, { callback : callback }, reset);
 
     // bubble!
-    bubblingChannel.removeClass('rainbow').css({ 'top' : 0, 'left' : 0, 'z-index' : ++movingChannels+1 });
+    channel.removeClass(animationClassName).css({ 'top' : '', 'left' : '', 'z-index' : ++movingChannels+1 });
     // open a gap for the channel to arrive
-    bubblingChannel.parent().css('height', channelHeight);
+    channel.parent().css('height', channelHeight);
   }
 </script>
 </body>

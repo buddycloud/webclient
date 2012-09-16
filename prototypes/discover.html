@@ -602,8 +602,9 @@
   }
   
   function reset(event){
+    if(event.data.callback) event.data.callback();
     // reset the bubbling channel and unwrap it
-    $(this).css({ 'height' : '', 'z-index' : '' }).unwrap();
+    $(this).removeClass('bubbling').css({ 'height' : '', 'z-index' : '' }).unwrap();
     movingChannels--;
   }
   
@@ -612,24 +613,13 @@
   
   /* ###
   
-    Rainbow animation
-  
-    ### */
+    follow
     
-  var discoverChannels = $('.discoverChannels');
+  ### */
   
-  discoverChannels.on('click', '.follow:not(.disabled)', follow);
-  
-  function follow(){
-    $(this).addClass('disabled');
-    
-    var avatarUrl = $(this).siblings('.avatar').css('background-image');
-    var owner = $(this).siblings().children('.owner').text();
-    // the status will not be visible in the discovery
-    // using the about for now
-    var status = $(this).siblings().children('.about').text();
-    
-    var bubblingChannel = $('<div class="channel rainbow">')
+  function channelTemplate(avatarUrl, owner, status, animationClassName){
+    return $('<div class="channel">')
+      .addClass(animationClassName ? animationClassName : "")
       .append(
         $('<div class="avatar">').css('background-image', avatarUrl)
       )
@@ -642,192 +632,57 @@
             $('<div class="status">').text(status)
           )
       );
+  }
+  
+  var discoverChannels = $('.discoverChannels');
+  
+  discoverChannels.on('click', '.follow:not(.disabled)', follow);
+  
+  function follow(){
+    $(this).addClass('disabled');
     
+    var avatarUrl = $(this).siblings('.avatar').css('background-image');
+    var owner = $(this).siblings().children('.owner').text();
+    // the status will not be visible in the discovery
+    // using the about for now
+    var status = $(this).siblings().children('.about').text();
+    var animationClassName = 'rainbow';
+    
+    // create new channel from template for the sidebar
+    var newChannel = new channelTemplate(avatarUrl, owner, status, animationClassName);
+    
+    // get the start offset
     var offset = $(this).parent().offset();
-    bubblingChannel.css({
+    var callback = function(){ 
+      $('.channels').removeClass('rainbowAnimationRunning');
+    }.bind(newChannel);
+    
+    $('.channels').addClass('rainbowAnimationRunning');
+    
+    // start the animation
+    rainbowAnimation(newChannel, offset, animationClassName, callback);
+  }
+
+  function rainbowAnimation(channel, offset, animationClassName, callback){
+    channel.css({
       left : offset.left - innerHolder.offset().left,
       top : offset.top - innerHolder.offset().top
     });
-    innerHolder.prepend(bubblingChannel);
+    innerHolder.prepend(channel);
 
     // wrap a growing holder around it
     var landingArea = $('<div>').addClass('bubbleHolder rainbowBubble');
-    bubblingChannel.wrap(landingArea);
+    channel.wrap(landingArea);
 
     document.redraw();
 
     // bind the callback on transition end for all bubbling channels
-    bubblingChannel.one(transitionendEvent, reset);
+    channel.one(transitionendEvent, { callback : callback }, reset);
 
     // bubble!
-    bubblingChannel.removeClass('rainbow').css({ 'top' : 0, 'left' : 0, 'z-index' : ++movingChannels+1 });
+    channel.removeClass(animationClassName).css({ 'top' : '', 'left' : '', 'z-index' : ++movingChannels+1 });
     // open a gap for the channel to arrive
-    bubblingChannel.parent().css('height', channelHeight);
-  }
-  
-  /* ###
-    
-    show/hide channel info
-    
-    ### */
-  var channelInfo = $('.channelDetails');  
-  var channelInfoToggle = channelInfo.find('> .infoToggle');
-  
-  channelInfoToggle.click(function(){ channelInfo.toggleClass('hidden'); });
-  
-  $('.showAll').click(function(){
-    var list = $(this).prev();
-    list.children().clone().appendTo(list);
-    $(this).remove();
-  });
-  
-  /* ###
-    
-    new topic animation
-    
-    ### */
-  
-  // works for both new topic field and all the small answer fields
-  var newTopic = $('.newTopic, .answer');
-  var topicTextarea = newTopic.find('textarea');
-  
-  function openArea(event){
-    // prevent bubbling!
-    event.stopPropagation();
-    if(!$(this).hasClass('write')){
-      $(this).addClass('write');
-      $(document).one('click', {self: this}, closeArea);
-    }
-  }
-  
-  function closeArea(event){
-    var self = event.data.self;
-    var textarea = $(self).find('textarea');
-    // minimize the textarea only if the textarea is empty
-    if(textarea.val() === ""){
-      $(self).removeClass('write');
-    }
-  }
-  
-  newTopic.click(openArea);
-  
-  /* ###
-    
-    notification animation
-
-    ### */
-  var notification = $('.notification');
-  var notificationButtons = notification.find('.controls > div');
-  
-  function notify(){
-    notification.addClass('visible');
-  }
-  
-  function logNotifaction(){
-    var reaction = $(this).hasClass('positive') ? 'granted' : 'denied';
-    notification.addClass('log '+reaction);
-  }
-  
-  notificationButtons.click(logNotifaction);
-  setTimeout('notify()', 2000);
-  
-  /* ###
-  
-      edit mode
-      
-  */
-  
-  var editableElements = [ 
-    'header .title',
-    'header .status',
-    '.meta .description',
-    '.meta .accessModel',
-    '.location .previous',
-    '.location .current',
-    '.location .next'
-  ];
-  
-  function fauxLoadEditedStuff(){
-    for(var i = 0, l = editableElements.length; i < l; i++){
-      var el = editableElements[i];
-      if($(el).data('editmode') !== 'boolean') {
-        if(localStorage[el]) $(el).text( localStorage[el] );
-      }
-    }
-  }
-  
-  fauxLoadEditedStuff();
-  
-  $('.edit.button').click(function(){
-    if(!$('html').hasClass('editmode')){
-      $('html').addClass('editmode');
-      startEditMode();
-    } else {
-      $('html').removeClass('editmode');
-      stopEditMode(false);
-    }
-  });
-  $('#editbar .save').click(function(){ $('html').removeClass('editmode'); stopEditMode(true); });
-  $('#editbar .cancel').click(function(){ $('html').removeClass('editmode'); stopEditMode(false); });
-
-  function startEditMode(){
-    for(var i = 0, l = editableElements.length; i < l; i++){
-      var el = editableElements[i];
-      if($(el).data('editmode') !== 'boolean') {
-        // store the current state
-        localStorage[el] = $(el).text();
-
-        // add designMode & contenteditable
-        $(el)
-          .prop('contenteditable', true)
-          .input(function(){
-            var text = $(this).text();
-            if(text === "") $(this).html("&nbsp;");
-          }).keydown(function (ev) {
-            var code = ev.keyCode || ev.which;
-            if ($(this).data('editmode') === 'singleLine' && code == 13) {
-                ev.preventDefault();
-                return false;
-            } else return true;
-          });
-        // only allow enter when the target is not singleLine
-      }
-    }
-    $(editableElements[0]).focus();
-  }
-
-  function stopEditMode(save){
-    for(var i = 0, l = editableElements.length; i < l; i++){
-      var el = editableElements[i];
-      if($(el).data('editmode') !== 'boolean') {
-
-        // remove designMode & contenteditable
-        $(el).prop('contenteditable', false);
-
-        // compare the current state with the pre-edit state and store the changed elements
-        if($(el).text() != localStorage[el]){
-          if(save){
-              localStorage[el] = $(el).text();
-          } else {
-            $(el).text( localStorage[el] );
-          }
-        }
-      }
-    }
-  }
-  
-  
-  /* ###
-  
-      search
-      
-  ### */
-  
-  $('input[type=search]').bind('input', search);
-  // channels = $('#channels .channel');
-  
-  function search(){
-    
+    channel.parent().css('height', channelHeight);
   }
 </script>
 </body>

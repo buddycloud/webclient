@@ -18,7 +18,11 @@
   bottom: 0;
   left: 0;
   position: absolute;
+  overflow-y: auto;
 }
+  .channels.rainbowAnimationRunning {
+    overflow-y: visible;
+  }
 .channels .scrollHolder {
   margin-bottom: 42px;
 }
@@ -114,7 +118,8 @@
   width: 100%;
   border-color: black;
 }
-.personal.channel,.personal.channel.selected {
+.personal.channel,
+.personal.channel.selected {
   padding-top: 21px;
   padding-bottom: 21px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #60859d), color-stop(1, #4a6e88));
@@ -164,12 +169,20 @@
       -ms-transform-origin: top;
        -o-transform-origin: top;
           transform-origin: top;
-  -webkit-transition: opacity 200ms;
-     -moz-transition: opacity 200ms;
-      -ms-transition: opacity 200ms;
-       -o-transition: opacity 200ms;
-          transition: opacity 200ms;
+  -webkit-transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
+     -moz-transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
+      -ms-transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
+       -o-transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
+          transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
 }
+  .channel.remove {
+    left: -234px;
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+  }
 .channel.hidden {
   opacity: .34;
 }
@@ -223,9 +236,15 @@
   top: 8px;
   left: 13px;
   border-radius: 3px;
+  background-size: cover;
   position: absolute;
   cursor: pointer;
   z-index: 1;
+  -webkit-transition: width 500ms, height 500ms;
+     -moz-transition: width 500ms, height 500ms;
+      -ms-transition: width 500ms, height 500ms;
+       -o-transition: width 500ms, height 500ms;
+          transition: width 500ms, height 500ms;
 }
 .sidebar .avatar {
   box-shadow: 
