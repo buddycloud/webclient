@@ -27,38 +27,32 @@ requirejs.config({
 
 define(function(require) {
   var $ = require('jquery');
+  var _ = require('underscore');
+  var Backbone = require('backbone');
+
   var config = require('config');
-/*  var Channel = require('models/Channel');
+
   var ChannelView = require('views/ChannelView');
-  var SubscribedChannels = require('models/SubscribedChannels');
-  var UserCredentials = require('models/UserCredentials');
 
-  function initialize() {
-       getUserCredentials(function(credentials) {
-  }
+  var Router = Backbone.router.extend({
+    routes: {
+      "": "defaultChannel",
+      ":channel": "channel"
+    },
 
-  function getUserCredentials(callback) {
-    var credentials = new UserCredentials;
-    credentials.fetch();
-    credentials.on('accepted', function() {
-      callback(credentials);
-    });
-    credentials.on('rejected', function() {
-      alert('Authentication failed');
-      credentials.set({username: null, password: null});
-      credentials.verify();
-    });
-    credentials.verify();
-  }
+    defaultChannel: function() {
+      this.channel(config.defaultChannel)
+    },
 
-  function setupChannelUI(channel, subscribedChannels, credentials) {
-    var view = new ChannelView({
-      model: channel,
-      credentials: credentials
-    });
-    $('#content').append(view.el);
-  }
+    channel: function(channel) {
+      new ChannelView()
+    }
 
-  initialize();
+  });
+
+  new Router();
+
+  Backbone.history.start({pushState: true});
+
 });
 
