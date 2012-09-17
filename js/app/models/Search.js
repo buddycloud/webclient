@@ -27,19 +27,9 @@ define(function(require) {
       return api.url('search');
     },
 
-    doQuery: function(type, query, max, index) {
-      if (type && query) {
-        var data = {'type': type, 'q': query};
-        if (max) {
-          data.max = max;
-        }
-
-        if (index) {
-          data.index = index;
-        }
-
-        var options = {'data': data};
-        this.fetch(options);
+    doQuery: function(data) {
+      if (data.type && data.query) {
+        this.fetch({'data': data});
       }
     }
   });
