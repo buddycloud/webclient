@@ -45,7 +45,7 @@ define(function(require) {
     },
 
     channel: function(channel) {
-      new ChannelView()
+      new ChannelView({model: channel})
     }
 
   });

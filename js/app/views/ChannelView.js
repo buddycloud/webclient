@@ -26,7 +26,6 @@ define(function(require) {
     className: 'channelView clearfix',
 
     initialize: function() {
-      this.model = new ChannelModel()
       this.header = new ChannelHeader({model: this.model});
       this.stream = new PostStream({model: this.model});
       this.$el.append(this.header.el);
