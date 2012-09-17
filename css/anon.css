@@ -1,25 +1,20 @@
-body.anonView {
+.anonView body {
   background: hsl(0, 0%, 95%);
   overflow: visible;
   height: auto;
 }
 
-.anonView > .content {
+.anonView .content {
   min-width: 0;
-  width: 580px;
-  margin: 0 auto;
   position: relative;
   left: 0;
   box-shadow: none;
+  overflow: visible;
 }
 
 .anonView .channelView {
-  margin-right: 0;
 }
 
 .anonView .channelDetails {
-  float: none;
-  position: absolute;
-  left: 500px;
-  top: 0;
+  width: auto;
 }

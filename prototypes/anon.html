@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="anonView">
 <head>
-  <title>buddycloud Streams</title>
+  <title>Anon</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -9,238 +9,26 @@
   <script src="../js/vendor/jquery.js"></script>
   <script src="../js/vendor/modernizr.js"></script>
 </head>
-<body>
-  <div class="sidebar">
-    <div class="personal channel">
-      <div class="avatar" style="background-image: url(avatars/user1.jpg)">
-        <span class="channelpost counter">2</span>
-        <span class="message counter">2</span>
-      </div>
-      <div class="info">
-        <span class="owner">Felix Niklas</span>
-        <span class="status">Aww yeah, Mountain Lion rocks</span>
-      </div>
-      <div class="settings noSelect">
-        <div class="popup centered vertical">
-          <div class="arrow"></div>
-          <ul>
-            <li class="preferences">Preferences
-            <li class="logout">Logout
-          </ul>
-        </div>
-      </div>
-    </div>
-    <nav class="actionBar clearfix">
-      <button class="discover"><span>Find Channels</span></button>
-    </nav>
-    <div class="channels" class="antiscroll-wrap">
-      <div class="antiscroll-inner scrollHolder">
-        <div class="channel selected">
-          <div class="avatar" style="background-image: url(avatars/user2.jpg)">
-            <span class="channelpost counter">2</span>
-          </div>
-          <div class="info">
-            <span class="owner">Vera Maier</span>
-            <span class="status">What a wonderful day</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel2.jpg)">
-            <span class="channelpost counter admin">1</span>
-          </div>
-          <div class="info">
-            <span class="owner">Moviefans</span>
-            <span class="status">Harry Potter, tonight!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel3.jpg)">
-            <span class="channelpost counter admin">1</span>
-          </div>
-          <div class="info">
-            <span class="owner">On the Box</span>
-            <span class="status">You gonna love the new Dexter episodes</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/topic.png)">
-            <span class="channelpost counter">2</span>
-          </div>
-          <div class="info">
-            <span class="owner">Lolcats</span>
-            <span class="status">I can haz your nose?</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/user4.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">Martin Rackel</span>
-            <span class="status">working on the webgl project</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/topic.png)">
-          </div>
-          <div class="info">
-            <span class="owner">music<span class="domain">@buddycloud.com</span></span>
-            <span class="status">New Foo Fighter Album online - check it out!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/user7.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">verena<span class="domain">@buddycloud.com</span></span>
-            <span class="status">test's are over - party!!!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel7.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">fans<span class="domain">@steam.com</span></span>
-            <span class="status">the cake is a lie!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel8.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">cave<span class="domain">@minecraft.com</span></span>
-            <span class="status">Buy minecraft - now!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/anon.png)">
-            <span class="channelpost counter">2</span>
-          </div>
-          <div class="info">
-            <span class="owner">steve<span class="domain">@buddycloud.com</span></span>
-            <span class="status">all your base belongs to us</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel2.jpg)">
-            <span class="channelpost counter admin">1</span>
-          </div>
-          <div class="info">
-            <span class="owner">moviefans<span class="domain">@buddycloud.com</span></span>
-            <span class="status">Harry Potter, tonight!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel3.jpg)">
-            <span class="channelpost counter admin">1</span>
-          </div>
-          <div class="info">
-            <span class="owner">on-the-box<span class="domain">@bbc.co.uk</span></span>
-            <span class="status">You gonna love the new Dexter episodes</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel4.jpg)">
-            <span class="channelpost counter">2</span>
-          </div>
-          <div class="info">
-            <span class="owner">lolcats<span class="domain">@buddycloud.com</span></span>
-            <span class="status">I can haz your nose?</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/user4.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
-            <span class="status">working on the webgl project</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel6.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">music<span class="domain">@buddycloud.com</span></span>
-            <span class="status">New Foo Fighter Album online - check it out!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/user7.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">verena<span class="domain">@buddycloud.com</span></span>
-            <span class="status">test's are over - party!!!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel7.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">fans<span class="domain">@steam.com</span></span>
-            <span class="status">the cake is a lie!</span>
-          </div>
-        </div>
-        <div class="channel">
-          <div class="avatar" style="background-image: url(avatars/channel8.jpg)">
-          </div>
-          <div class="info">
-            <span class="owner">cave<span class="domain">@minecraft.com</span></span>
-            <span class="status">Buy minecraft - now!</span>
-          </div>
-        </div>
-      </div><!-- /antiscroll-inner -->
-    </div><!-- /channels -->
-    <button id="create_topic_channel"><span>Create Topic Channel</span></button>
-  </div>
+<body class="centered">
   <div class="content">
     <div class="channelView personal clearfix">
         <!--<div class="banner" style="background-image: url(public/images/vera_bg.jpg);"></div>-->
         <header class="channelHeader justify">
           <div class="avatar" style="background-image: url(avatars/user2_big.jpg)"></div>
           <div class="flex titleText">
-            <h2 class="owner" data-editmode="singleLine">Vera Maier</h2>
-            <div class="about" data-editmode="multiLine">I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend.</div>
+            <h2 class="owner">Vera Maier</h2>
+            <div class="about">
+              I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend. 
+              I live in Munich together with my roomie Jessy and I'm currently doing an internship with BMW.
+              <span class="readMore">more</span>
+            </div>
           </div>
-          <nav class="inChannel">
-            <!--<span class="messages button newMessage">
-              <span class="holder">Messages</span><span class="message counter">2</span>
-            </span>-->
-            <span class="channel button">
-              <span class="holder">Channel</span>
-            </span>
-            <span class="hidden save button">Save</span>
-            <!--<span class="edit button">Edit</span>-->
-            <span class="unfollow button">Unfollow</span>
+          <nav>
+            <span class="login button">Login / Join buddycloud</span>
           </nav>
           <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
         </header>
         <section class="stream clearfix">
-          <section class="newTopic">
-            <img class="avatar" src="avatars/user1.jpg" />
-            <textarea placeholder="New Topic..."></textarea>
-            <div class="controls clearfix">
-              <div class="hint">ctrl + enter to post</div>
-              <div class="button callToAction createComment">Post</div>
-            </div>
-          </section>
-          <!-- this produces some weird bug - some content below
-	    it gets lost when this is visible -->
-      	  <div class="notifications">
-      	    <article class="notification">
-      	      <section>
-                <img class="avatar" src="avatars/user4.jpg" />
-                <div class="info">
-      	          <span class="name">martin<span class="domain">@buddycloud.com</span></span>
-                  <p>wants to follow this channel.</p>
-                  <span class="granted">started following this channel.</span>
-                  <span class="denied">was denied to follow this channel.</span>
-                </div>
-                <div class="controls">
-                  <div class="button small negative light">Deny</div>
-                  <div class="button small positive light">Grant Martin to join</div>
-                </div>
-              </section>
-      	    </article>
-      	  </div>
           <section class="posts">
             <article class="post noComments">
               <section class="opener">
@@ -254,14 +42,6 @@
                 <p>So it looks like Andi finally joined: <a class="internal" href="buddycloud.com/andi@buddycloud.com">andi<span class="domain">@buddycloud.com</span></a></p>
               </section>
               <section class="comments">
-                <section class="answer">
-                  <img class="avatar" src="avatars/user1.jpg" />
-                  <textarea placeholder="comment"></textarea>
-                  <div class="controls clearfix">
-                    <div class="hint">ctrl + enter to post</div>
-                    <div class="button callToAction createComment">Post</div>
-                  </div>
-                </section>
               </section>
             </article>
             <article class="post noComments">
@@ -275,14 +55,6 @@
                 <p>I'm a sociopath; there's not much he can do for me. I have a dark side, too. I will not kill my sister. I will not kill my sister. I will not kill my sister. He taught me a code. To survive. Under normal circumstances, I'd take that as a compliment. I'm generally confused most of the time.</p>
               </section>
               <section class="comments">
-                <section class="answer">
-                  <img class="avatar" src="avatars/user1.jpg" />
-                  <textarea placeholder="comment"></textarea>
-                  <div class="controls clearfix">
-                    <div class="hint">ctrl + enter to post</div>
-                    <div class="button callToAction createComment">Post</div>
-                  </div>
-                </section>
               </section>
             </article>
             <article class="post">
@@ -332,14 +104,6 @@
                   <span class="name">daniel<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
                   <p>I'm going to tell you something that I've never told anyone before.</p>
                 </section>
-                <section class="answer">
-                  <img class="avatar" src="avatars/user1.jpg" />
-                  <textarea placeholder="comment"></textarea>
-                  <div class="controls clearfix">
-                    <div class="hint">ctrl + enter to post</div>
-                    <div class="button callToAction createComment">Post</div>
-                  </div>
-                </section>
               </section>
             </article>
             <article class="post">
@@ -388,14 +152,6 @@
                   </div>
                   <span class="name">sebastian<span class="domain">@buddycloud.com</span></span><span class="location">from Passau</span>
                   <p>I'm going to tell you something that I've never told anyone before.</p>
-                </section>
-                <section class="answer">
-                  <img class="avatar" src="avatars/user1.jpg" />
-                  <textarea placeholder="comment"></textarea>
-                  <div class="controls clearfix">
-                    <div class="hint">ctrl + enter to post</div>
-                    <div class="button callToAction createComment">Post</div>
-                  </div>
                 </section>
               </section>
             </article>
@@ -967,6 +723,15 @@
   });
   $('.settings li').click(function(event){
     event.stopPropagation();
+  });
+  
+  /* ###
+  
+    Show Full About Text
+    
+    ### */
+  $('.about').click(function(){
+    $(this).toggleClass('fullText');
   });
 </script>
 </body>
