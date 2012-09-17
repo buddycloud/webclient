@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var ChannelPosts = require('app/models/ChannelPosts');
+  var ChannelPosts = require('models/ChannelPosts');
 
   describe('ChannelPosts', function() {
     var node;

@@ -15,10 +15,10 @@
  */
 
 define(function(require) {
-  var Channel = require('app/models/Channel');
-  var ChannelFollowers = require('app/models/ChannelFollowers');
-  var ChannelMetadata = require('app/models/ChannelMetadata');
-  var ChannelPosts = require('app/models/ChannelPosts');
+  var Channel = require('models/Channel');
+  var ChannelFollowers = require('models/ChannelFollowers');
+  var ChannelMetadata = require('models/ChannelMetadata');
+  var ChannelPosts = require('models/ChannelPosts');
 
   describe('Channel', function() {
     var channel;

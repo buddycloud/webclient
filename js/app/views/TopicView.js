@@ -15,15 +15,28 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
+  var avatarFallback = require('util/avatarFallback');
+  var Backbone = require('backbone');
+  var template = require('text!templates/TopicView.html');
 
-  var FALLBACK_IMAGE = 'img/anon.png';
+  var TopicView = Backbone.View.extend({
+    tagName: 'article',
+    className: 'post',
 
-  function avatarFallback(avatarElements) {
-    $(avatarElements).one('error', function(event) {
-      event.target.src = FALLBACK_IMAGE;
-    });
-  }
+    render: function() {
+      this.$el.html(_.template(template, {topic: this.model}));
+      avatarFallback(this.$('.avatar'));
+      this._addNoCommentsClassIfNeeded();
+    },
 
-  return avatarFallback;
+    _addNoCommentsClassIfNeeded: function() {
+      if (this.model.length == 1) {
+        this.$el.addClass('noComments');
+      } else {
+        this.$el.removeClass('noComments');
+      }
+    }
+  });
+
+  return TopicView;
 });

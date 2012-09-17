@@ -20,21 +20,18 @@ requirejs.config({
     'config': '../../config',
     'templates': '../../templates',
     'models': '../app/models',
-    'views': '../app/views',
-    'util': '../app/util'
+    'util': '../app/util',
+    'views': '../app/views'
   }
 });
 
 define(function(require) {
   var $ = require('jquery');
-
   var config = require('config');
-  
 /*  var Channel = require('models/Channel');
+  var ChannelView = require('views/ChannelView');
   var SubscribedChannels = require('models/SubscribedChannels');
   var UserCredentials = require('models/UserCredentials');
-*/  
-  var cChannel = require('views/cChannel');
 
   function initialize() {
        getUserCredentials(function(credentials) {
@@ -55,20 +52,11 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-    console.log(channel)
-    $('#center').append(new cChannel({model: channel, credentials: credentials}).el);
-    /*  //logged in?
-      if (credentials.username) {
-        var userMenu = new UserMenu({model: credentials});
-        var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
-        $('#center').append(userMenu.el);
-        $('#left').append(channelsList.el);
-        userMenu.render();
-      } else {
-        var sidebar = new Sidebar({model: subscribedChannels});
-        $('#left').append(sidebar.el);
-        sidebar.render();
-      }*/
+    var view = new ChannelView({
+      model: channel,
+      credentials: credentials
+    });
+    $('#content').append(view.el);
   }
 
   initialize();

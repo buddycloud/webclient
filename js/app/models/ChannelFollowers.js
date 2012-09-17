@@ -16,7 +16,6 @@
 
 define(function(require) {
   var _ = require('underscore');
-
   var api = require('util/api');
   var ChannelMetadata = require('models/ChannelMetadata');
   var ModelBase = require('models/ModelBase');

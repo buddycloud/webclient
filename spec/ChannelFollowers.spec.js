@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var ChannelFollowers = require('app/models/ChannelFollowers');
+  var ChannelFollowers = require('models/ChannelFollowers');
 
   describe('ChannelFollowers', function() {
     var followers;

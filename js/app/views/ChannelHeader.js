@@ -15,15 +15,29 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
+  var avatarFallback = require('util/avatarFallback');
+  var Backbone = require('backbone');
+  var template = require('text!templates/ChannelHeader.html');
 
-  var FALLBACK_IMAGE = 'img/anon.png';
+  var ChannelHeader = Backbone.View.extend({
+    tagName: 'header',
+    className: 'channelHeader justify',
 
-  function avatarFallback(avatarElements) {
-    $(avatarElements).one('error', function(event) {
-      event.target.src = FALLBACK_IMAGE;
-    });
-  }
+    initialize: function() {
+      this.model.bind('fetch', this.render, this);
+    },
 
-  return avatarFallback;
+    render: function() {
+      var metadata = this.model.metadata;
+      this.$el.html(_.template(template, {metadata: metadata}));
+      avatarFallback(this.$('.avatar'));
+      this._renderButtons();
+    },
+
+    _renderButtons: function() {
+
+    }
+  });
+
+  return ChannelHeader;
 });
