@@ -42,6 +42,10 @@ define(function(require) {
       this.posts.fetch(options);
     },
 
+    fetchPosts: function(num) {
+      alert("load" + num)
+    },
+
     _triggerFetchCallback: function() {
       var self = this;
       var fetched = [];
