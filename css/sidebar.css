@@ -137,28 +137,36 @@
 .personal.channel.selected .avatar {
   top: 13px;
 }
-.personal.channel nav,.personal.channel.selected nav {
-  width: 200px;
-  border: 1px solid #000;
-  border-radius: 5px;
-  box-shadow: 0 1px 8px #000;
-  position: absolute;
-  display: none;
+.personal.channel .info {
+  width: 110px;
 }
-.personal.channel nav button,.personal.channel.selected nav button {
-  background: #fff;
-  border-bottom: 1px solid #000;
-}
-.personal.channel nav button:last-child,.personal.channel.selected nav button:last-child {
-  border-bottom: none;
-  border-radius: 0 0 5px 5px;
-}
-.personal.channel nav button:only-child,.personal.channel.selected nav button:only-child {
-  border-radius: 5px;
-}
-.personal.channel nav button:first-child,.personal.channel.selected nav button:first-child {
-  border-radius: 5px 5px 0 0;
-}
+  .personal.channel .settings {
+    width: 35px;
+    height: 76px;
+    background: url(../img/settings_dropdown.png);
+    position: absolute;
+    right: 0;
+    top: 0;
+    cursor: pointer;
+  }
+  .personal.channel .settings:hover {
+    background-position: 0 -76px;
+  }
+  .personal.channel .popup {
+    top: 70px;
+    left: -65px;
+    display: none;
+  }
+  .personal.channel .popup li {
+    width: 120px;
+  }
+  .personal.channel .showSettings .popup {
+    display: -webkit-box;
+    display:    -moz-box;
+    display:     -ms-box;
+    display:      -o-box;
+    display:         box;
+  }
 .channel {
   width: 145px;
   height: 34px;
