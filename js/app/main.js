@@ -41,7 +41,7 @@ define(function(require) {
     },
 
     defaultChannel: function() {
-      this.channel(config.defaultChannel)
+      this.route(config.defaultChannel)
     },
 
     channel: function(channel) {
