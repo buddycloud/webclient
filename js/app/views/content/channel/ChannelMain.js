@@ -15,29 +15,23 @@
  */
 
 define(function(require) {
-  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
-  var template = require('text!templates/ChannelHeader.html');
 
-  var ChannelHeader = Backbone.View.extend({
-    tagName: 'header',
-    className: 'channelHeader justify',
+  var ChannelModel = require('models/Channel')
+
+  var ChannelHeader = require('views/ChannelHeader');
+  var PostStream = require('views/PostStream');
+
+  var ChannelView = Backbone.View.extend({
+    className: 'channelView clearfix',
 
     initialize: function() {
-      this.model.bind('fetch', this.render, this);
-    },
-
-    render: function() {
-      var metadata = this.model.metadata;
-      this.$el.html(_.template(template, {metadata: metadata}));
-      avatarFallback(this.$('.avatar'));
-      this._renderButtons();
-    },
-
-    _renderButtons: function() {
-
+      this.header = new ChannelHeader({model: this.model});
+      this.stream = new PostStream({model: this.model});
+      this.$el.append(this.header.el);
+      this.$el.append(this.stream.el);
     }
   });
 
-  return ChannelHeader;
+  return ChannelView;
 });
