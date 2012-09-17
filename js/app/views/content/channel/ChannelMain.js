@@ -28,6 +28,7 @@ define(function(require) {
   var ChannelView = Backbone.View.extend({
 
     initialize: function() {
+      this.model = new ChannelModel({model: this.channel})
     },
 
     render: function() {

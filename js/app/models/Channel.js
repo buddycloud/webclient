@@ -43,7 +43,9 @@ define(function(require) {
     },
 
     fetchPosts: function(num) {
-      alert("load" + num)
+      var oldnum = this.posts.length
+      this.posts.push(new ChannelPosts(this.name))
+      return this.posts.slice(oldnum - 1)
     },
 
     _triggerFetchCallback: function() {
