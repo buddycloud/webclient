@@ -34,8 +34,8 @@ define(function(require) {
     register: function(username, password, email) {
       if (username && password && email) {
         var self = this;
-        $.ajax({
-          type: 'POST',
+        var options = {
+          method: 'POST',
           url: api.url('account'),
           contentType: 'application/json',
           data: JSON.stringify(
@@ -55,7 +55,8 @@ define(function(require) {
             }
             self.trigger('registrationError', message);
           }
-        });         
+        };
+        $.ajax(options);         
       }
     },
 
