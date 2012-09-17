@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var UserCredentials = require('app/models/UserCredentials');
+  var UserCredentials = require('models/UserCredentials');
 
   describe('UserCredentials', function() {
     var realSessionStorage = sessionStorage;

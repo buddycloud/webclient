@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var api = require('app/util/api');
+  var api = require('util/api');
 
   describe('util/api', function() {
     describe('url()', function() {

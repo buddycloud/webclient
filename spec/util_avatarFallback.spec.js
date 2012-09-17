@@ -16,7 +16,7 @@
 
 define(function(require) {
   var $ = require('jquery');
-  var avatarFallback = require('app/util/avatarFallback');
+  var avatarFallback = require('util/avatarFallback');
 
   describe('util/avatarFallback', function() {
     var image;
