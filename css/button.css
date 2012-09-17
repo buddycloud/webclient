@@ -1,4 +1,3 @@
-
 .button,
 button,
 nav a {
@@ -32,7 +31,7 @@ nav a.active,
 .button.active:hover,
 button.active:hover,
 nav a.active:hover {
-  color: #fff;
+  color: white;
   text-shadow: 0 1px rgba(0,0,0,0.34);
   background: rgba(0,0,0,.21);
   border-color: rgba(0,0,0,0.34);
@@ -40,14 +39,18 @@ nav a.active:hover {
   box-shadow: 0 1px 3px rgba(0,0,0,0.21) inset,0 1px rgba(255,255,255,0.89);
   cursor: default;
 }
-.button:hover,button:hover,nav a:hover {
-  background: rgba(255,255,255,.55);
-}
-.button:active,button:active,nav a:active {
+.button:active,
+button:active,
+nav a:active {
   color: rgba(0,0,0,0.55);
-  background: rgba(0,0,0,.08);
+  background: rgba(0,0,0,.13);
   border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
   box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+}
+.button.white,
+button.white,
+nav a.white {
+  background: white;
 }
 .button.tall,
 button.tall,
@@ -106,11 +109,10 @@ nav a.prominent {
 .button.onDark,
 button.onDark,
 nav a.onDark {
-  color: #fff;
+  color: white;
   text-shadow: 0 1px rgba(0,0,0,0.55);
-  background: transparent;
   border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.34) rgba(0,0,0,0.55);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset,0 1px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,.21);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset,0 1px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,.13);
 }
 .button.double span,
 button.double span,
@@ -140,6 +142,7 @@ nav a.unfollow123:before {
 button.callToAction,
 nav a.callToAction {
   color: white;
+  font-weight: bold;
   text-shadow: 0 -1px hsl(81, 53%, 34%);
   border-color: hsl(81, 53%, 34%);
   border-bottom-color: hsl(81, 53%, 21%);
@@ -162,18 +165,36 @@ nav a.callToAction {
       0 1px hsl(81, 40%, 40%) inset,
       0 1px rgba(0,0,0,0.05);
   }
+.button.onDark.callToAction,
+button.onDark.callToAction,
+nav a.onDark.callToAction {
+  border-color: hsl(81, 53%, 8%);
+  border-bottom-color: hsl(81, 53%, 5%);
+  box-shadow: 
+    0 1px 0 hsl(81, 53%, 50%) inset,
+    0 -1px hsl(81, 53%, 30%) inset,
+    0 1px rgba(0,0,0,0.05);
+}
   
 .button.danger,
 button.danger,
 nav a.danger {
   color: #fff;
-  text-shadow: 0 1px #600;
-  background: #f00;
+  text-shadow: none;
+  background: hsl(0,100%,50%);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.55) inset,0 1px rgba(0,0,0,0.05);
 }
 .button.danger:hover,
 button.danger:hover,
 nav a.danger:hover {
-  background: #f00;
+  background: hsl(0,100%,50%);
+}
+.button.danger:active,
+button.danger:active,
+nav a.danger:active {
+  box-shadow: 
+    0 1px 0 rgba(255,255,255,0.55),
+    0 1px rgba(0,0,0,0.05) inset;
 }
 .button.disabled, .button.disabled:hover, .button.disabled:active {
   color: rgba(0,0,0,.34);
@@ -198,9 +219,6 @@ nav a {
 nav a:hover {
   text-decoration: none;
 }
-nav a:visited {
-  color: rgba(0,0,0,0.67);
-}
 nav a:not(:first-child):not(:last-child) {
   border-left: none;
   border-right: none;
@@ -215,8 +233,12 @@ nav a:not(:first-child):after {
   background: rgba(0,0,0,0.13);
   box-shadow: 1px 0 rgba(255,255,255,0.34);
 }
-nav a.active:not(:first-child):after,
-nav a.active + a:not(:first-child):after {
+nav a.onDark:not(:first-child):after {
+  background: rgba(0,0,0,0.21);
+  box-shadow: 1px 0 rgba(255,255,255,0.05);
+}
+nav a:active:not(:first-child):after,
+nav a:active + a:not(:first-child):after {
   top: 0;
   height: 100%;
 }
@@ -235,4 +257,7 @@ nav a:first-child {
 }
 nav a:last-child {
   border-radius: 0 3px 3px 0;
+}
+nav a:only-child {
+  border-radius: 3px;
 }
