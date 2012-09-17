@@ -26,6 +26,15 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {topic: this.model}));
       avatarFallback(this.$('.avatar'));
+      this._addNoCommentsClassIfNeeded();
+    },
+
+    _addNoCommentsClassIfNeeded: function() {
+      if (this.model.length == 1) {
+        this.$el.addClass('noComments');
+      } else {
+        this.$el.removeClass('noComments');
+      }
     }
   });
 

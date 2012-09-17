@@ -5,3 +5,14 @@
   <div class="postmeta"></div>
   <p><%- topic[0].content() %></p>
 </section>
+<section class="comments">
+  <% for (var i = 1; i < topic.length; i++) { %>
+     <section class="comment">
+       <img class="avatar"
+            title="<%= topic[i].author() %>"
+            src="<%= topic[i].authorAvatarUrl() %>">       
+       <div class="postmeta"></div>
+       <p><%- topic[i].content() %></p>
+     </section>
+  <% } %>
+</section>
