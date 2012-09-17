@@ -32,7 +32,7 @@ define(function(require) {
 
   var config = require('config');
 
-  var ChannelView = require('views/ChannelView');
+  var ChannelView = require('views/content/channel/ChannelMain');
 
   var Router = Backbone.Router.extend({
     routes: {
@@ -45,7 +45,7 @@ define(function(require) {
     },
 
     channel: function(channel) {
-      new ChannelView({model: channel})
+      new ChannelView({channel: channel})
     }
 
   });

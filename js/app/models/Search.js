@@ -15,33 +15,34 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
-  var _ = require('underscore')
-  var Backbone = require('backbone');
+  var api = require('util/api');
+  var ModelBase = require('models/ModelBase');
 
-  var ChannelModel = require('models/Channel')
-
-  var PostView = require('views/content/channel/Post')
-
-  var ChannelTemplate = require('text!templates/content/channel.html')
-
-  var ChannelView = Backbone.View.extend({
-
-    initialize: function() {
-      this.model = new ChannelModel({model: this.channel})
+  var Search = ModelBase.extend({
+    constructor: function() {
+      ModelBase.call(this);
     },
 
-    render: function() {
-      $('content').html(_.template(ChannelTemplate, this.model))
+    url: function() {
+      return api.url('search');
     },
 
-    appendPosts: function(num) {
-      var newPosts = ChannelModel.fetchPosts(num);
-      _.each(newPosts, function() {
-        new 
-      })
+    doQuery: function(type, query, max, index) {
+      if (type && query) {
+        var data = {'type': type, 'q': query};
+        if (max) {
+          data.max = max;
+        }
+
+        if (index) {
+          data.index = index;
+        }
+
+        var options = {'data': data};
+        this.fetch(options);
+      }
     }
   });
 
-  return ChannelView;
+  return Search;
 });
