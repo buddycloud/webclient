@@ -17,7 +17,6 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
-
   var ModelBase = require('models/ModelBase')
 
   var ChannelMetadata = ModelBase.extend({

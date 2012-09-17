@@ -16,10 +16,10 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var ModelBase = require('models/ModelBase');
   var ChannelFollowers = require('models/ChannelFollowers');
   var ChannelMetadata = require('models/ChannelMetadata');
   var ChannelPosts = require('models/ChannelPosts');
+  var ModelBase = require('models/ModelBase');
 
   var Channel = ModelBase.extend({
     constructor: function(name) {

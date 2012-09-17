@@ -18,14 +18,14 @@ define(function(require) {
   var $ = require('jquery');
   var _ = require('underscore');
   var Backbone = require('backbone');
-  
+
   var api = require('util/api');
   var avatarFallback = require('util/avatarFallback');
-  
+
   //var SinglePost = require('app/views/SinglePost');
-  
+
   var template = require('text!templates/cChannel.html');
-  
+
   var Events = Backbone.Events;
 
   var cChannel = Backbone.View.extend({

@@ -17,9 +17,8 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
-  var Post = require('models/Post');
-
   var CollectionBase = require('models/CollectionBase')
+  var Post = require('models/Post');
 
   var ChannelPosts = CollectionBase.extend({
     model: Post,

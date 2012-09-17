@@ -20,21 +20,18 @@ requirejs.config({
     'config': '../../config',
     'templates': '../../templates',
     'models': '../app/models',
-    'views': '../app/views',
-    'util': '../app/util'
+    'util': '../app/util',
+    'views': '../app/views'
   }
 });
 
 define(function(require) {
   var $ = require('jquery');
-
   var config = require('config');
-  
   var Channel = require('models/Channel');
+  var cChannel = require('views/cChannel');
   var SubscribedChannels = require('models/SubscribedChannels');
   var UserCredentials = require('models/UserCredentials');
-  
-  var cChannel = require('views/cChannel');
 
   function initialize() {
     var channel = getRequestedChannel();
