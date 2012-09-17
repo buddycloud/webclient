@@ -37,8 +37,8 @@ define(function(require) {
 
     appendPosts: function(num) {
       var newPosts = ChannelModel.fetchPosts(num);
-      _.each(newPosts, function() {
-        new 
+      _.each(newPosts, function(element, index) {
+        this.$el.append(new PostView(model: element))
       })
     }
   });
