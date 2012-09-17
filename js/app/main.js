@@ -34,14 +34,14 @@ define(function(require) {
 
   var ChannelView = require('views/ChannelView');
 
-  var Router = Backbone.router.extend({
+  var Router = Backbone.Router.extend({
     routes: {
       "": "defaultChannel",
       ":channel": "channel"
     },
 
     defaultChannel: function() {
-      this.route(config.defaultChannel)
+      this.navigate(config.defaultChannel)
     },
 
     channel: function(channel) {
