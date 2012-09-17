@@ -1,17 +1,8 @@
-<table class="titleBar">
-  <tr>
-    <td>
-      <img class="avatar"
-           src="<%= metadata.avatarUrl() %>"
-           title="<%= metadata.title() %>">
-    </td>
-    <td>
-      <h2 class="title"><%- metadata.title() %></h2>
-      <span class="status"><%- metadata.description() %></span>
-    </td>
-    <td>
-      <nav class="inChannel">
-      </nav>
-    </td>
-  </tr>
-</table>
+<img class="avatar" src="<%= metadata.avatarUrl() %>">
+<div class="flex titleText">
+  <h2 class="owner"><%= metadata.title() %></h2>
+  <div class="about"><%- metadata.description() %></div>
+  <a id="poweredby" href="http://buddycloud.com/">
+    <%- metadata.description() %>
+  </a>  
+</div>
