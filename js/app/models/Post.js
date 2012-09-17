@@ -15,11 +15,16 @@
  */
 
 define(function(require) {
+  var api = require('util/api');
   var ModelBase = require('models/ModelBase');
 
   var Post = ModelBase.extend({
     author: function() {
       return this.get('author');
+    },
+
+    authorAvatarUrl: function() {
+      return api.avatarUrl(this.author());
     },
 
     published: function() {

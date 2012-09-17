@@ -29,7 +29,7 @@ define(function(require) {
   var $ = require('jquery');
   var config = require('config');
   var Channel = require('models/Channel');
-  var cChannel = require('views/cChannel');
+  var ChannelView = require('views/ChannelView');
   var SubscribedChannels = require('models/SubscribedChannels');
   var UserCredentials = require('models/UserCredentials');
 
@@ -65,19 +65,11 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
-    $('#content').append(new cChannel({model: channel, credentials: credentials}).el);
-    /*  //logged in?
-      if (credentials.username) {
-        var userMenu = new UserMenu({model: credentials});
-        var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
-        $('#center').append(userMenu.el);
-        $('#left').append(channelsList.el);
-        userMenu.render();
-      } else {
-        var sidebar = new Sidebar({model: subscribedChannels});
-        $('#left').append(sidebar.el);
-        sidebar.render();
-      }*/
+    var view = new ChannelView({
+      model: channel,
+      credentials: credentials
+    });
+    $('#content').append(view.el);
   }
 
   initialize();

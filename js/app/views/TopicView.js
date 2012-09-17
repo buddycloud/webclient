@@ -15,15 +15,19 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
+  var avatarFallback = require('util/avatarFallback');
+  var Backbone = require('backbone');
+  var template = require('text!templates/TopicView.html');
 
-  var FALLBACK_IMAGE = 'img/anon.png';
+  var TopicView = Backbone.View.extend({
+    tagName: 'article',
+    className: 'post',
 
-  function avatarFallback(avatarElements) {
-    $(avatarElements).one('error', function(event) {
-      event.target.src = FALLBACK_IMAGE;
-    });
-  }
+    render: function() {
+      this.$el.html(_.template(template, {topic: this.model}));
+      avatarFallback(this.$('.avatar'));
+    }
+  });
 
-  return avatarFallback;
+  return TopicView;
 });
