@@ -1,0 +1,20 @@
+.left[type=submit] {
+  float: none;
+  margin-top: 8px;
+}
+
+form.login > div,
+form.register > div {
+  margin-bottom: 5px;
+}
+
+.join.button {
+  margin: 0 12px 13px;
+  right: 13px;
+  position: absolute;
+}
+  .action-open .join.button {
+    display: none;
+  }
+  
+.subview-login .email { display: none; }
