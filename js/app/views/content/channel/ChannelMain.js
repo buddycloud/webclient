@@ -15,21 +15,30 @@
  */
 
 define(function(require) {
+  var $ = require('jquery');
+  var _ = require('underscore')
   var Backbone = require('backbone');
 
   var ChannelModel = require('models/Channel')
 
-  var ChannelHeader = require('views/ChannelHeader');
-  var PostStream = require('views/PostStream');
+  var PostView = require('views/content/channel/Post')
+
+  var ChannelTemplate = require('text!templates/content/channel.html')
 
   var ChannelView = Backbone.View.extend({
-    className: 'channelView clearfix',
 
     initialize: function() {
-      this.header = new ChannelHeader({model: this.model});
-      this.stream = new PostStream({model: this.model});
-      this.$el.append(this.header.el);
-      this.$el.append(this.stream.el);
+    },
+
+    render: function() {
+      $('content').html(_.template(ChannelTemplate, this.model))
+    },
+
+    appendPosts: function(num) {
+      var newPosts = ChannelModel.fetchPosts(num);
+      _.each(newPosts, function() {
+        new 
+      })
     }
   });
 
