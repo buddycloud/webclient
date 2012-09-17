@@ -1,5 +1,5 @@
 #poweredby {
-  right: -89px;
+  right: -95px;
   top: 24px;
   margin-top: 2px;
   width: 76px;
@@ -67,6 +67,12 @@
 .channelHeader .titleText .about {
   font-size: 12px;
   color: #6e6e6e;
+  position: relative;
+  cursor: pointer;
+}
+.channelHeader .titleText .about:not(.fullText) {
+  max-height: 36px;
+  overflow: hidden;
 }
   .channelHeader .metadata {
     margin-top: 5px;
