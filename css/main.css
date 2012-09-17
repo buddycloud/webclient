@@ -15,6 +15,8 @@
 @import "singlePost.css";
 @import "anon.css";
 @import "popup.css";
+@import "homepage.css";
+@import "login.css";
 /*@import "lightSidebar.css";*/
 
 pre,textarea {

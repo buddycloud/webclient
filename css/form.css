@@ -47,6 +47,7 @@ input[type=email].small {
   padding: 3px 5px;
   font-size: 16px;
   line-height: 18px;
+  height: 30px;
 }
 input[type=search].small {
   height: 23px;
@@ -95,6 +96,11 @@ form input[type=email] {
   form input[type=email].small {
     width: 150px;
   }
+  form input[type=text].small.xl,
+  form input[type=password].small.xl,
+  form input[type=email].small.xl {
+    width: 215px;
+  }
 form .leftBox {
   padding-left: 2px;
   line-height: 26px;
@@ -114,7 +120,6 @@ form .leftBox.working .spinner {
 }
 form p {
   padding: 0 2px;
-  color: rgba(0,0,0,0.89);
 }
 form h2 + p {
   margin-bottom: 13px;
@@ -132,21 +137,32 @@ form button {
 form button[disabled] {
   opacity: .55;
 }
+form .forgot {
+  float: right;
+}
+
+form.stream {
+  color: #333;
+}
+
 form.stream > div {
   position: relative;
 }
-form.stream > div:first-child {
+form.stream > *:first-child {
   border-radius: 5px 5px 0 0;
 }
-form.stream > div:first-child label {
+form.stream > *:first-child label {
   border-top: none;
   border-top-left-radius: 5px;
 }
-form.stream > div:first-child input,form.stream > div:first-child div {
+form.stream > *:first-child input,
+form.stream > *:first-child div {
   border-top: none;
   border-top-right-radius: 5px;
 }
-form.stream > div input[type=text],form.stream > div textarea,form.stream > div > div {
+form.stream > div input[type=text],
+form.stream > div textarea,
+form.stream > div > div {
   top: 0;
   right: 0;
   width: 343px;
@@ -156,6 +172,8 @@ form.stream > div input[type=text],form.stream > div textarea,form.stream > div 
   border-radius: 0;
   position: absolute;
 }
+form.stream > div input[type=text] { width: 359px; height: 43px; }
+
 form.stream > div input[type=text],form.stream > div textarea {
   margin: 0;
   padding: 13px 8px;
@@ -168,7 +186,7 @@ form.stream > div input[type=text],form.stream > div textarea {
           appearance: none;
 }
 form.stream > div > div {
-  height: 26px;
+  min-height: 26px;
   padding: 8px;
   line-height: 26px;
 }
@@ -181,9 +199,11 @@ form.stream > div.dual input:last-child {
   border-left: 1px solid #eee;
 }
 form.stream label {
+  color: #000;
+}
+form.stream > div > label {
   width: 114px;
   padding: 0 13px;
-  color: #000;
   font-weight: bold;
   line-height: 42px;
   border-top: 1px solid #eee;
@@ -203,29 +223,15 @@ form.stream .gravatar label {
 form.stream .gravatar > div {
   height: 50px;
 }
-form.stream .gravatar p {
-  left: 64px;
-  line-height: 50px;
-  position: absolute;
-}
-form.stream .gravatar .avatar {
-  left: 8px;
-  width: 50px;
-  height: 50px;
-}
-form.stream .gravatar.inactive {
-  opacity: .34;
-}
-form.stream .gravatar.inactive label {
-  height: 42px;
-}
 form.stream .gravatar.inactive p {
   line-height: inherit;
   position: static
 }
+form.stream .notify { height: 147px; }
+form.stream .notify > label { height: 146px; }
 form.stream .hint {
   margin: 0 8px;
-  color: rgba(0,0,0,0.55);
+  color: gray;
   position: relative;
 }
 form.stream .hint > span {
@@ -233,11 +239,11 @@ form.stream .hint > span {
   left: 0;
   opacity: 0;
   position: absolute;
-  -webkit-transition: 500ms;
-     -moz-transition: 500ms;
-      -ms-transition: 500ms;
-       -o-transition: 500ms;
-          transition: 500ms;
+  -webkit-transition: opacity 500ms;
+     -moz-transition: opacity 500ms;
+      -ms-transition: opacity 500ms;
+       -o-transition: opacity 500ms;
+          transition: opacity 500ms;
 }
 form.stream .hint.followerSelected .follower {
   opacity: 1;
@@ -257,9 +263,24 @@ form.stream + nav {
   border-radius: 0 0 5px 5px;
   box-shadow: 0 0 0 1px rgba(0,0,0,0.08),0 0 13px rgba(0,0,0,0.05);
 }
-form.stream + nav > div {
+form.stream + nav > .button {
   margin-left: 8px;
   float: right;
+}
+
+.twoStepConfirmation .stepOne {
+  z-index: 1;
+}
+.twoStepConfirmation .stepTwo {
+  margin-left: -87px;
+  -webkit-transition: margin 250ms;
+     -moz-transition: margin 250ms;
+      -ms-transition: margin 250ms;
+       -o-transition: margin 250ms;
+          transition: margin 250ms;
+}
+.twoStepConfirmation.confirmed .stepTwo {
+  margin-left: 0;
 }
 
 form.horizontal > div {

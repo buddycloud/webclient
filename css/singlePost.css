@@ -86,18 +86,3 @@ html.singlePost {
     margin: 13px 0 8px;
     color: #333;
   }
-  .joinBuddycloud [type=submit] {
-    float: none;
-    margin-top: 21px;
-  }
-
-.join.button {
-  margin: 0 12px 13px;
-  right: 13px;
-  position: absolute;
-}
-  .action-open .join.button {
-    display: none;
-  }
-  
-.subview-login .email { display: none; }

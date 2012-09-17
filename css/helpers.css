@@ -44,6 +44,9 @@
   display:      -o-box;
   display:         box;
 }
+.stretch {
+  width: 100%;
+}
 .centered {
   -webkit-box-align: center;
      -moz-box-align: center;
@@ -95,4 +98,11 @@
       -ms-box-flex: 1;
        -o-box-flex: 1;
           box-flex: 1;
+}
+.noSelect {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+       -o-user-select: none;
+          user-select: none;
 }
