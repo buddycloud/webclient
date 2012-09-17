@@ -30,27 +30,14 @@ define(function(require) {
 
   var config = require('config');
   
-  var Channel = require('models/Channel');
+/*  var Channel = require('models/Channel');
   var SubscribedChannels = require('models/SubscribedChannels');
   var UserCredentials = require('models/UserCredentials');
-  
+*/  
   var cChannel = require('views/cChannel');
 
   function initialize() {
-    var channel = getRequestedChannel();
-    var subscribedChannels = new SubscribedChannels();
-    getUserCredentials(function(credentials) {
-      setupChannelUI(channel, subscribedChannels, credentials);
-      channel.fetch({credentials: credentials});
-      if (credentials.username) {
-        subscribedChannels.fetch({credentials: credentials});
-      }
-    });
-  }
-
-  function getRequestedChannel() {
-    var name = document.location.search.slice(1) || config.defaultChannel;
-    return new Channel(name);
+       getUserCredentials(function(credentials) {
   }
 
   function getUserCredentials(callback) {
@@ -68,6 +55,7 @@ define(function(require) {
   }
 
   function setupChannelUI(channel, subscribedChannels, credentials) {
+    console.log(channel)
     $('#center').append(new cChannel({model: channel, credentials: credentials}).el);
     /*  //logged in?
       if (credentials.username) {

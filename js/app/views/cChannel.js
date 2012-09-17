@@ -36,6 +36,16 @@ define(function(require) {
     },
 
     initialize: function() {
+        var channel = getRequestedChannel();
+    var subscribedChannels = new SubscribedChannels();
+    getUserCredentials(function(credentials) {
+      setupChannelUI(channel, subscribedChannels, credentials);
+      channel.fetch({credentials: credentials});
+      if (credentials.username) {
+        subscribedChannels.fetch({credentials: credentials});
+      }
+      });
+  
       this.model.bind('fetch', this.render, this);
       this.model.posts.bind('add', this.renderPost, this);
       this.model.posts.bind('add', this._clearTextarea, this);
@@ -43,6 +53,11 @@ define(function(require) {
       Events.bind('unsubscribedChannel', this._disablePosting, this);
       this._renderSpinningIcon();
     },
+
+      function getRequestedChannel() {
+    var name = document.location.search.slice(1) || config.defaultChannel;
+    return new Channel(name);
+  }
 
     addNewPost: function() {
       var content = this.$('.new-topic').find('textarea').val();
