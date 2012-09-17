@@ -22,11 +22,7 @@ define(function(require) {
   var PostTemplate = require('text!templates/content/channel.html')
 
   var PostView = Backbone.View.extend({
-
-    initialize: function() {
-      this.render()
-    },
-
+    
     render: function() {
       this.el.html(_.template(PostTemplate, this.model))
     }

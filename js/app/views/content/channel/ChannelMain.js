@@ -28,17 +28,20 @@ define(function(require) {
   var ChannelView = Backbone.View.extend({
 
     initialize: function() {
-      this.model = new ChannelModel({model: this.channel})
+      this.model = new ChannelModel(this.options.channel)
+      this.render()
     },
 
     render: function() {
-      $('content').html(_.template(ChannelTemplate, this.model))
+      $('.content').html(_.template(ChannelTemplate, this.model))
+      this.appendPosts(80)
     },
 
     appendPosts: function(num) {
-      var newPosts = ChannelModel.fetchPosts(num);
+      that = this;
+      var newPosts = that.model.fetchPosts(num);
       _.each(newPosts, function(element, index) {
-        this.$el.append(new PostView(model: element))
+        that.$el.append(new PostView({model: element}));
       })
     }
   });
