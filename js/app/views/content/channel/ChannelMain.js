@@ -34,6 +34,7 @@ define(function(require) {
 
     render: function() {
       $('.content').html(_.template(ChannelTemplate, this.model))
+      console.log(this.model)
       this.appendPosts(80)
     },
 
