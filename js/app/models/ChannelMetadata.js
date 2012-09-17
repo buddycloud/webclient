@@ -15,13 +15,9 @@
  */
 
 define(function(require) {
-<<<<<<< HEAD
   var api = require('util/api');
   var Backbone = require('backbone');
-=======
-  var api = require('app/util/api');
-  var ModelBase = require('app/models/ModelBase');
->>>>>>> master
+  var ModelBase = require('models/ModelBase')
 
   var ChannelMetadata = ModelBase.extend({
     constructor: function(channel) {

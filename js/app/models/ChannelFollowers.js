@@ -16,15 +16,9 @@
 
 define(function(require) {
   var _ = require('underscore');
-<<<<<<< HEAD
   var api = require('util/api');
-  var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
-=======
-  var api = require('app/util/api');
-  var ChannelMetadata = require('app/models/ChannelMetadata');
-  var ModelBase = require('app/models/ModelBase');
->>>>>>> master
+  var ModelBase = require('models/ModelBase');
 
   var ChannelFollowers = ModelBase.extend({
     constructor: function(channel) {

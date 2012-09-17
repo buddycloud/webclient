@@ -15,17 +15,24 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var Backbone = require('backbone');
-  var template = require('text!templates/left/sidebar.html');
 
-  var Sidebar = Backbone.View.extend({
+  var ChannelModel = require('models/Channel')
 
-    render: function() {
-      this.$el.append(_.template(template, this.model));
-      return this;
+  var ChannelHeader = require('views/ChannelHeader');
+  var PostStream = require('views/PostStream');
+
+  var ChannelView = Backbone.View.extend({
+    className: 'channelView clearfix',
+
+    initialize: function() {
+      this.model = new ChannelModel()
+      this.header = new ChannelHeader({model: this.model});
+      this.stream = new PostStream({model: this.model});
+      this.$el.append(this.header.el);
+      this.$el.append(this.stream.el);
     }
-  })
+  });
 
-  return Sidebar;
+  return ChannelView;
 });

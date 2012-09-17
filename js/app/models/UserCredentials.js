@@ -16,13 +16,9 @@
 
 define(function(require) {
   var $ = require('jquery');
-<<<<<<< HEAD
   var api = require('util/api');
   var Backbone = require('backbone');
-=======
-  var api = require('app/util/api');
-  var ModelBase = require('app/models/ModelBase');
->>>>>>> master
+  var ModelBase = require('models/ModelBase')
 
   var UserCredentials = ModelBase.extend({
     fetch: function(options) {

@@ -17,18 +17,11 @@
 define(function(require) {
   var $ = require('jquery');
 
-  function avatarFallback(avatarElements, type, size) {
-    var fallbackUrl = _getFallbackUrl(type, size);
-    _setupFallbackHandlers(avatarElements, fallbackUrl);
-  }
+  var FALLBACK_IMAGE = 'img/anon.png';
 
-  function _getFallbackUrl(type, size) {
-    return 'img/fallback-' + type + '-' + size + 'px.png';
-  }
-
-  function _setupFallbackHandlers(elements, fallbackUrl) {
-    $(elements).one('error', function(event) {
-      event.target.src = fallbackUrl;
+  function avatarFallback(avatarElements) {
+    $(avatarElements).one('error', function(event) {
+      event.target.src = FALLBACK_IMAGE;
     });
   }
 

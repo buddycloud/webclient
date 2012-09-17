@@ -15,17 +15,29 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
-  var template = require('text!templates/left/sidebar.html');
+  var template = require('text!templates/ChannelHeader.html');
 
-  var Sidebar = Backbone.View.extend({
+  var ChannelHeader = Backbone.View.extend({
+    tagName: 'header',
+    className: 'channelHeader justify',
+
+    initialize: function() {
+      this.model.bind('fetch', this.render, this);
+    },
 
     render: function() {
-      this.$el.append(_.template(template, this.model));
-      return this;
-    }
-  })
+      var metadata = this.model.metadata;
+      this.$el.html(_.template(template, {metadata: metadata}));
+      avatarFallback(this.$('.avatar'));
+      this._renderButtons();
+    },
 
-  return Sidebar;
+    _renderButtons: function() {
+
+    }
+  });
+
+  return ChannelHeader;
 });

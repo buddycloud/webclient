@@ -1,11 +1,10 @@
-<% if (canPost) { %>
-  <section class="new-topic">
-    <textarea placeholder="New topic..." autocomplete="off"></textarea>
-    <div class="controls">
-      <button>Post</button>
-    </div>
-  </section>
-<% } %>
-
-<section class="threads">
+<section class="newTopic">
+  <div class="active expanding area">
+    <textarea placeholder="New topic…"></textarea>
+  </div>
+  <div class="controls">
+    <div id="createNewTopic" class="button prominent">Post</div>
+  </div>
 </section>
+<div class="notifications"></div>
+<section class="posts"></section>

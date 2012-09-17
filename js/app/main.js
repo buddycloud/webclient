@@ -20,93 +20,39 @@ requirejs.config({
     'config': '../../config',
     'templates': '../../templates',
     'models': '../app/models',
-    'views': '../app/views',
-    'util': '../app/util'
+    'util': '../app/util',
+    'views': '../app/views'
   }
 });
 
 define(function(require) {
   var $ = require('jquery');
+  var _ = require('underscore');
+  var Backbone = require('backbone');
 
   var config = require('config');
-  
-  var Channel = require('models/Channel');
-  var SubscribedChannels = require('models/SubscribedChannels');
-  var UserCredentials = require('models/UserCredentials');
-  
-  var Sidebar = require('views/Sidebar');
 
-  function initialize() {
-    var channel = getRequestedChannel();
-    var subscribedChannels = new SubscribedChannels();
-    getUserCredentials(function(credentials) {
-      setupChannelUI(channel, subscribedChannels, credentials);
-      channel.fetch({credentials: credentials});
-      if (credentials.username) {
-        subscribedChannels.fetch({credentials: credentials});
-      }
-    });
-  }
+  var ChannelView = require('views/ChannelView');
 
-  function getRequestedChannel() {
-    var name = document.location.search.slice(1) || config.defaultChannel;
-    return new Channel(name);
-  }
+  var Router = Backbone.Router.extend({
+    routes: {
+      "": "defaultChannel",
+      ":channel": "channel"
+    },
 
-  function getUserCredentials(callback) {
-    var credentials = new UserCredentials;
-    credentials.fetch();
-    credentials.on('accepted', function() {
-      callback(credentials);
-    });
-    credentials.on('rejected', function() {
-      alert('Authentication failed');
-      credentials.set({username: null, password: null});
-      credentials.verify();
-    });
-    credentials.verify();
-  }
+    defaultChannel: function() {
+      this.navigate(config.defaultChannel)
+    },
 
-  function setupChannelUI(channel, subscribedChannels, credentials) {
-<<<<<<< HEAD
-      $('#content').append(new MetadataPane({
-        model: channel,
-        credentials: credentials,
-        subscribed: subscribedChannels}).el)
-    $('#content').append(new PostStream({model: channel, credentials: credentials}).el);
-      //logged in?
-      if (credentials.username) {
-        var userMenu = new UserMenu({model: credentials});
-        var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
-        $('#center').append(userMenu.el);
-        $('#left').append(channelsList.el);
-        userMenu.render();
-      } else {
-        var sidebar = new Sidebar({model: subscribedChannels});
-        $('#left').append(sidebar.el);
-        sidebar.render();
-      }
-=======
-    $('#content').append(new MetadataPane({
-      model: channel,
-      credentials: credentials,
-      subscribed: subscribedChannels}).el);
-    $('#content').append(new PostStream({model: channel, credentials: credentials}).el);
-    $('#right').append(new FollowerList({model: channel}).el);
-    if (credentials.username) {
-      var userMenu = new UserMenu({model: credentials});
-      var channelsList = new SubscribedChannelsList({model: subscribedChannels, credentials: credentials});
-      $('#toolbar-right').append(userMenu.el);
-      $('#left').append(channelsList.el);
-      userMenu.render();
-    } else {
-      var sidebar = new LoginSidebar({model: credentials});
-      $('#left').append(sidebar.el);
-      sidebar.render();
+    channel: function(channel) {
+      new ChannelView()
     }
->>>>>>> master
-  }
 
-  initialize();
+  });
+
+  new Router();
+
+  Backbone.history.start({pushState: true});
+
 });
 

@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var ChannelMetadata = require('app/models/ChannelMetadata');
+  var ChannelMetadata = require('models/ChannelMetadata');
 
   describe('ChannelMetadata', function() {
     var metadata;

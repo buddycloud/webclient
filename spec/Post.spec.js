@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var Post = require('app/models/Post');
+  var Post = require('models/Post');
 
   describe('Post', function() {
     var post;

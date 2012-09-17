@@ -15,10 +15,12 @@
  */
 
 requirejs.config({
-  baseUrl: 'js',
+  baseUrl: 'js/vendor',
   paths: {
-    'config': '../spec/config',
-    'spec': '../spec'
+    'config': '../../spec/config',
+    'spec': '../../spec',
+    'models': '../app/models',
+    'util': '../app/util'
   }
 });
 

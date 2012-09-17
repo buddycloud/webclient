@@ -15,100 +15,35 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
-  var _ = require('underscore');
-  var api = require('app/util/api');
-  var avatarFallback = require('app/util/avatarFallback');
   var Backbone = require('backbone');
-  var SinglePost = require('app/views/SinglePost');
   var template = require('text!templates/PostStream.html');
-  var Events = Backbone.Events;
+  var TopicView = require('views/TopicView');
 
   var PostStream = Backbone.View.extend({
-    tagName: 'div',
-    className: 'post-stream',
-    events: {
-      'click .new-topic button': 'addNewPost'
-    },
+    tagName: 'section',
+    className: 'stream clearfix',
 
     initialize: function() {
-      this.model.bind('fetch', this.render, this);
-      this.model.posts.bind('add', this.renderPost, this);
-      this.model.posts.bind('add', this._clearTextarea, this);
-      Events.bind('subscribedChannel', this._enablePosting, this);
-      Events.bind('unsubscribedChannel', this._disablePosting, this);
-      this._renderSpinningIcon();
+      this.model.bind('fetch', this._setUp, this);
     },
 
-    addNewPost: function() {
-      var content = this.$('.new-topic').find('textarea').val();
-      if (content.length) {
-        this.model.posts.create({content: content}, {
-          headers: {'Content-type': 'application/json'},
-          wait: true,
-          dataType: 'text'
-        });
-      }
+    _setUp: function() {
+      var topics = this.model.posts.byThread();
+      this._topics = _.map(topics, function(topic) {
+        return new TopicView({model: topic});
+      });
+      this.render();
     },
 
     render: function() {
-      var self = this;
-      var canPost = this.model.followers.isPublisher(sessionStorage.username);
-
-      this.$el.html(_.template(template, {canPost: canPost}));
-      _.each(this.model.posts.byThread(), function(thread) {
-        self.$('.threads').append(new SinglePost({model: thread, canPost: canPost, credentials: self.options.credentials}).el);
-      });
+      this.$el.html(_.template(template));
+      this._renderTopics();
     },
 
-    renderPost: function(thread) {
-      var canPost = this.model.followers.isPublisher(sessionStorage.username);
-
-      this.$('.threads').prepend(new SinglePost({model: [thread], canPost: canPost, credentials: this.options.credentials}).el);
-    },
-
-    _enablePosting: function(channel, role) {
-      if (role === 'publisher') {
-        this.$el.prepend('<section class="new-topic"> \
-          <textarea placeholder="New topic..." autocomplete="off"></textarea> \
-          <div class="controls"> \
-            <button>Post</button> \
-          </div> \
-        </section>');
-      }
-    },
-
-    _disablePosting: function() {
-      this.$('.new-topic').remove();
-    },
-
-    _clearTextarea: function() {
-      this.$('.new-topic').find('textarea').val('');
-    },
-
-    _renderSpinningIcon: function() {
-      var icon =
-        $('<div class="loading"><img src="img/bc-icon.png"></div>');
-
-      this.$el.html(icon);
-      this._startSpinning(icon);
-    },
-
-    _startSpinning: function(icon) {
-      var rotation = 0;
-
-      var spin = setInterval(function() {
-        var rotate = 'rotate(' + rotation + 'deg)';
-        icon.find('img').css({
-          'transform': rotate,
-          '-moz-transform': rotate,
-          '-webkit-transform': rotate
-        });
-        rotation = (rotation + 10) % 360;
-      }, 50);
-
-      this.model.on('reset', function() {
-        clearTimeout(spin);
+    _renderTopics: function() {
+      _.each(this._topics, function(topic) {
+        topic.render();
+        this.$('.posts').append(topic.el);
       });
     }
   });

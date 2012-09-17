@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var parseUtil = require('app/util/parseUtil');
+  var parseUtil = require('util/parseUtil');
 
   describe('util/parseUtil', function() {
     describe('linkMentions()', function() {

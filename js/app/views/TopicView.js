@@ -15,32 +15,28 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
-  var api = require('util/api');
   var Backbone = require('backbone');
-  var template = require('text!templates/UserMenu.html');
+  var template = require('text!templates/TopicView.html');
 
-  var UserMenu = Backbone.View.extend({
-    className: 'user-menu',
-    events: {'click .logout': '_logout'},
+  var TopicView = Backbone.View.extend({
+    tagName: 'article',
+    className: 'post',
 
     render: function() {
-      var username = this.model.username;
-      var avatar = api.avatarUrl(username);
-      this.$el.html(_.template(template, {
-        username: username,
-        avatar: avatar
-      }));
-      avatarFallback(this.$('img'), 'personal', 32);
+      this.$el.html(_.template(template, {topic: this.model}));
+      avatarFallback(this.$('.avatar'));
+      this._addNoCommentsClassIfNeeded();
     },
 
-    _logout: function() {
-      this.model.set({username: null, password: null});
-      this.model.save();
-      location.reload();
+    _addNoCommentsClassIfNeeded: function() {
+      if (this.model.length == 1) {
+        this.$el.addClass('noComments');
+      } else {
+        this.$el.removeClass('noComments');
+      }
     }
   });
 
-  return UserMenu;
+  return TopicView;
 });

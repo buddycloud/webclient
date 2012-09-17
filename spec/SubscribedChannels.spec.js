@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var SubscribedChannels = require('app/models/SubscribedChannels');
+  var SubscribedChannels = require('models/SubscribedChannels');
 
   describe('SubscribedChannels', function() {
     var subscribedChannels;
