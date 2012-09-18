@@ -30,7 +30,7 @@ define(function(require) {
     doSearch: function(data, callback) {
       if (data.q) {
         var params = _.extend(data, {
-          type: 'content';
+          type: 'content'
         });
         this.fetch({'data': params, success: callback});
       }

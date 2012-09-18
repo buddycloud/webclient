@@ -30,7 +30,7 @@ define(function(require) {
     doSearch: function(data, callback) {
       if (data.q) {
         var params = _.extend(data, {
-          type: 'metadata';
+          type: 'metadata'
         });
         this.fetch({'data': params, success: callback});
       }
