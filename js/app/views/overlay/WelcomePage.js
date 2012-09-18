@@ -9,7 +9,7 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template));
-      $('.content').append(this.el)
+      $('.content').html(this.el);
     }
   });
 
