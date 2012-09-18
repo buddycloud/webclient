@@ -23,8 +23,8 @@ define(function(require) {
       return this.get('author');
     },
 
-    authorAvatarUrl: function() {
-      return api.avatarUrl(this.author());
+    authorAvatarUrl: function(size) {
+      return api.avatarUrl(this.author(), size);
     },
 
     published: function() {

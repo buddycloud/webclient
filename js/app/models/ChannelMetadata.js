@@ -29,8 +29,8 @@ define(function(require) {
       return api.url(this.channel, 'metadata', 'posts');
     },
 
-    avatarUrl: function() {
-      return api.avatarUrl(this.channel);
+    avatarUrl: function(size) {
+      return api.avatarUrl(this.channel, size);
     },
 
     title: function() {
