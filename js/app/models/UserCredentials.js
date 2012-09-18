@@ -38,12 +38,11 @@ define(function(require) {
           method: 'POST',
           url: api.url('account'),
           contentType: 'application/json',
-          data: JSON.stringify(
-            {
-              'username': username, 
-              'password': password,
-              'email': email
-            }),
+          data: JSON.stringify({
+            'username': username,
+            'password': password,
+            'email': email
+          }),
           success: function() {
             self.save({'username': username, 'password': password});
             self.trigger('registrationSuccess');
@@ -51,12 +50,12 @@ define(function(require) {
           error: function(xhr) {
             var message = 'Registration error'
             if (xhr.status === 503) {
-              message = 'User "' + username + '" already exists';            
+              message = 'User "' + username + '" already exists';
             }
             self.trigger('registrationError', message);
           }
         };
-        $.ajax(options);         
+        $.ajax(options);
       }
     },
 

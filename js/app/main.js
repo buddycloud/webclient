@@ -48,6 +48,6 @@ define(function(require) {
   });
 
   new Router();
-  Backbone.history.start({root: window.location.pathname,pushState: true});
+  Backbone.history.start({root: window.location.pathname, pushState: true});
 });
 
