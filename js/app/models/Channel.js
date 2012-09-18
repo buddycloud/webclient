@@ -42,12 +42,12 @@ define(function(require) {
       this.posts.fetch(options);
     },
 
-    fetchPosts: function(num) {
+/*    fetchPosts: function(num) {
       var oldnum = this.posts.length
       this.posts.push(new ChannelPosts(this.name))
       return this.posts.slice(oldnum - 1)
     },
-
+*/
     _triggerFetchCallback: function() {
       var self = this;
       var fetched = [];
