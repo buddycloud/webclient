@@ -39,7 +39,7 @@ define(function(require) {
         fetched.push(model);
         if (_.include(fetched, self.channels) &&
             _.include(fetched, self.posts)) {
-          self.trigger('fetch');
+          self.trigger('searchSuccess');
         }
       }
     }
