@@ -1,0 +1,6 @@
+<h3><%- title %></h3>
+<div class="list">
+  <% _.each(channels, function(channel) { %>
+  <img title="<%= channel %>" src="<%= avatarUrl(channel, 50) %>">
+  <% }) %>
+</div>

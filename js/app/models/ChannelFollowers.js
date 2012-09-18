@@ -50,6 +50,7 @@ define(function(require) {
     parse: function(resp, xhr) {
       this._normalizeTypes(resp);
       this._removeAnonymous(resp);
+      this._ensureHasOwner(resp);
       return resp;
     },
 
@@ -69,6 +70,23 @@ define(function(require) {
       };
       _.each(followers, function(role, username) {
         followers[username] = normalizedRolesMap[role] || role;
+      });
+    },
+
+    _ensureHasOwner: function(followers) {
+      if (!this._hasOwner(followers)) {
+        // Assume that the channel name is the owner name unless
+        // it's domain starts with "topics.". Yes, this is ugly,
+        // but hey it's a legacy version workaround.
+        if (this.channel.indexOf('@topics.') == -1) {
+          followers[this.channel] = 'owner';
+        }
+      }
+    },
+
+    _hasOwner: function(followers) {
+      return _.any(followers, function(role) {
+        return role == 'owner';
       });
     }
   });

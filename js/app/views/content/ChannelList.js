@@ -14,31 +14,27 @@
  * limitations under the License.
  */
 
-
 define(function(require) {
-  var config = require('config');
+  var api = require('util/api');
+  var avatarFallback = require('util/avatarFallback');
+  var Backbone = require('backbone');
+  var template = require('text!templates/content/channelList.html')
 
-  function url() {
-    var components = _.toArray(arguments);
-    components.unshift(config.baseUrl);
-    return components.join('/');
-  }
+  var ChannelList = Backbone.View.extend({
+    tagName: 'section',
+    className: 'channelList',
 
-  function rootUrl() {
-    return url('');
-  }
-
-  function avatarUrl(channel, size) {
-    var ret = url(channel, 'media', 'avatar');
-    if (size) {
-      ret += '?maxwidth=' + size + '&maxheight=' + size;
+    render: function() {
+      if (this.model.length > 0) {
+        this.$el.html(_.template(template, {
+          title: this.options.title,
+          channels: this.model,
+          avatarUrl: api.avatarUrl
+        }));
+        avatarFallback(this.$('img'));
+      }
     }
-    return ret;
-  }
+  });
 
-  return {
-    url: url,
-    rootUrl: rootUrl,
-    avatarUrl: avatarUrl
-  };
+  return ChannelList;
 });
