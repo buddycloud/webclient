@@ -8,7 +8,8 @@ define(function(require) {
     className: 'discoverChannels middle clearfix',
 
     render: function() {
-      $('.content').append(_.template(template));
+      this.$el.html(_.template(template));
+      $('.content').append(this.el)
     }
   });
 
