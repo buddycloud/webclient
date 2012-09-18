@@ -41,7 +41,7 @@ define(function(require) {
     },
 
     defaultChannel: function() {
-      this.navigate(config.defaultChannel)
+      new ChannelView(config.defaultChannel)
     },
 
     channel: function(channel) {
