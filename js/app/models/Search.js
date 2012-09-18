@@ -28,11 +28,11 @@ define(function(require) {
     },
 
     doSearch: function(params) {
-      this.channels.doSearch(params, this._triggerFetchCallback());
-      this.posts.doSearch(params, this._triggerFetchCallback());
+      this.channels.doSearch(params, this._triggerSearchCallback());
+      this.posts.doSearch(params, this._triggerSearchCallback());
     },
 
-    _triggerFetchCallback: function() {
+    _triggerSearchCallback: function() {
       var self = this;
       var fetched = [];
       return function(model) {
