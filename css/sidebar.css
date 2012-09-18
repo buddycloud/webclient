@@ -46,16 +46,14 @@
   left: 0;
   position: absolute;
   overflow-y: auto;
+  z-index: 2;
 }
   .channels.rainbowAnimationRunning {
     overflow-y: visible;
   }
-.channels .scrollHolder {
-  margin-bottom: 42px;
-}
 .sidebar nav {
   position: relative;
-  z-index: 4;
+  z-index: 1;
   overflow: hidden;
   box-shadow: -1px 0 black inset,0 1px hsla(0, 0%, 0%, 0.55),0 2px hsla(0, 0%, 0%, 0.21),0 3px hsla(0, 0%, 0%, 0.13);
 }
@@ -158,7 +156,7 @@
   border-bottom: 1px solid #000;
   box-shadow: -1px 0 #000 inset;
   position: relative;
-  z-index: 5;
+  z-index: 1;
 }
 .personal.channel .avatar,
 .personal.channel.selected .avatar {
@@ -199,6 +197,7 @@
   height: 34px;
   padding: 16px 13px 16px 76px;
   position: relative;
+  cursor: pointer;
   -webkit-transform-origin: top;
      -moz-transform-origin: top;
       -ms-transform-origin: top;
@@ -239,7 +238,6 @@
   line-height: 17px;
   text-shadow: 0 0 1px rgba(0,0,0,0.13);
   border-radius: 5px;
-  cursor: pointer;
 }
 .channel .info .owner,
 .channel .info .status {
@@ -273,7 +271,6 @@
   border-radius: 3px;
   background-size: cover;
   position: absolute;
-  cursor: pointer;
   z-index: 1;
   -webkit-transition: width 500ms, height 500ms;
      -moz-transition: width 500ms, height 500ms;
