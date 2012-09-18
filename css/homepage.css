@@ -1,15 +1,8 @@
-html.homepage {
-  height: auto;
+.content.homepage {
+  left: 0;
   background: white;
 }
-.homepage body {
-  height: auto;
-}
-.homepage .content {
-  position: static;
-  background: white;
-}
-.homepage .content:before {
+.content.homepage:before {
   content: "";
   height: 530px;
   width: 100%;
