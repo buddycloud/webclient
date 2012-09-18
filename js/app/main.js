@@ -31,11 +31,13 @@ define(function(require) {
   var Backbone = require('backbone');
   var config = require('config');
   var ChannelPage = require('views/content/ChannelPage');
+  var DiscoverPage = require('views/DiscoverPage');
 
   var Router = Backbone.Router.extend({
     routes: {
       '': 'defaultChannel',
-      ':channel': 'channel'
+      ':channel': 'channel',
+      ':discover': 'discover'
     },
 
     defaultChannel: function() {
@@ -44,6 +46,10 @@ define(function(require) {
 
     channel: function(channel) {
       new ChannelPage({channel: channel});
+    },
+
+    discover: function() {
+      new DiscoverPage();
     }
   });
 
