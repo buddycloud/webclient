@@ -7,20 +7,24 @@ define(function(require) {
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
 
-    events: {
-      'click form.login [type=submit]': '_login'/*,
-      'click form.register': '_register'*/
+   initialize: function() {
+        _.bindAll(this, 'login');
     },
 
-    _login: function() {
+    events: {
+      'click #login_submit': 'login'//,
+      //'click form.register': '_register'
+    },
+
+    login: function(event) {
       event.preventDefault();
-      var username = this.$('#login_name').attr('value');
-      var password = this.$('#login_password').attr('value');
+      var username = $('#login_name').attr('value');
+      var password = $('#login_password').attr('value');
       this.model.save({username: username, password: password});
       location.reload();
     },
 /*
-    _register: function() {
+    _register: function(event) {
       event.preventDefault();
       var username = this.$('#register_name').attr('value');
       var password = this.$('#register_password').attr('value');
@@ -30,9 +34,13 @@ define(function(require) {
     },
 */
     render: function() {
+      that = this;
       this.$el.html(_.template(template));
       $('.content').addClass('homepage').html(this.el);
       
+      
+
+
       var formHolder = $('.formHolder');
       $('nav a.login').click(function(event){ return toggleView(event, 'Login'); });  
       $('nav a.register').click(function(event){ return toggleView(event, 'Register'); });
@@ -60,10 +68,13 @@ define(function(require) {
         }
       }
       
+
       function hideForm(){
         formHolder.removeClass('showLogin showRegister');
       }
-    },
+/*
+      $('#login_submit').click(that._login)
+  */},
 
 
     remove: function() {
