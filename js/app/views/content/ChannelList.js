@@ -31,7 +31,7 @@ define(function(require) {
           channels: this.model,
           avatarUrl: api.avatarUrl
         }));
-        avatarFallback(this.$('img'));
+        avatarFallback(this.$('img'), 'personal', 50);
       }
     }
   });

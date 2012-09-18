@@ -31,7 +31,7 @@ define(function(require) {
         post: this.model,
         linkify: linkify
       }));
-      avatarFallback(this.$('.avatar'));
+      avatarFallback(this.$('.avatar'), 'personal', 50);
     }
   });
 
