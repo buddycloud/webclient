@@ -12,6 +12,9 @@
   background:      -o-linear-gradient(top,       #003152, #3c87aa);
   background:         linear-gradient(to bottom, #003152, #3c87aa);
   position: absolute;
+  box-shadow: 
+    -1px 0 black inset,
+    -2px 0 rgba(0,0,0,0.21) inset;
   -webkit-transition: left 400ms;
      -moz-transition: left 400ms;
       -ms-transition: left 400ms;
@@ -32,6 +35,9 @@
     background:      -o-radial-gradient(center center, rgba(255,255,255,0.34), rgba(255,255,255,0));
     background:     -ms-radial-gradient(center center, rgba(255,255,255,0.34), rgba(255,255,255,0));
     background:         radial-gradient(center center, rgba(255,255,255,0.34), rgba(255,255,255,0));
+  }
+  .sidebar.hidden {
+    left: -234px;
   }
 .channels {
   top: 119px;
