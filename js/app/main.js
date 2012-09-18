@@ -32,7 +32,7 @@ define(function(require) {
   var config = require('config');
 
   var ChannelPage = require('views/content/ChannelPage');
-  var DiscoverPage = require('views/content/DiscoverPage');
+  var ExplorePage = require('views/content/ExplorePage');
   var WelcomePage = require('views/overlay/WelcomePage');
 
   var Router = Backbone.Router.extend({
@@ -55,7 +55,7 @@ define(function(require) {
     },
 
     explore: function() {
-      new DiscoverPage();
+      new ExplorePage();
     },
 
     preferences: function() {
