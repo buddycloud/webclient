@@ -21,21 +21,27 @@ define(function(require) {
 
   var CHANNEL_REGEX = /[\w\d][\w\d-_%&<>.]+@[\w\d-]{3,}\.[\w\d-]{2,}(\.[\w]{2,6})?/g;
 
+  function linkify(content) {
+    return linkMentions(linkUrls(content));
+  }
+
   function safeString(content) {
     return $('<div/>').text(content).html();
   }
 
   function linkUrls(content) {
-    return content.replace(URL_REGEX, '<a href="$&" target="_blank">$&</a>');
+    return content.replace(
+      URL_REGEX,
+      '<a href="$&" target="_blank">$&</a>'
+    );
   }
 
   function linkMentions(content) {
-    return content.replace(CHANNEL_REGEX, '<a href="/?\$&">\$&</a>');
+    return content.replace(
+      CHANNEL_REGEX,
+      '<a class="internal" href="/#\$&">\$&</a>'
+    );
   }
 
-  return {
-    safeString: safeString,
-    linkUrls: linkUrls,
-    linkMentions: linkMentions
-  };
+  return linkify;
 });

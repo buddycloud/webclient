@@ -34,7 +34,7 @@ define(function(require) {
   require('spec/UserCredentials.spec');
   require('spec/util_api.spec');
   require('spec/util_avatarFallback.spec');
-  require('spec/util_parse.spec');
+  require('spec/util_linkify.spec');
 
   jasmine.getEnv().addReporter(new jasmine.HtmlReporter());
   jasmine.getEnv().execute();

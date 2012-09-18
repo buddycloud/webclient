@@ -25,24 +25,24 @@ define(function(require) {
       image = new Image;
     });
 
-    it('should set fallback URL on DOM image if avatar fails to load', function() {
-      avatarFallback(image, 'personal', 32);
+    it('should set fallback URL on image if avatar fails to load', function() {
+      avatarFallback(image);
       $(image).trigger('error');
-      expect(image.src).toContain('img/fallback-personal-32px.png');
+      expect(image.src).toContain('img/anon.png');
     });
 
-    it('should not change the passed DOM image before an "error" event', function() {
-      avatarFallback(image, 'personal', 32);
+    it('should not change the passed image before an "error" event', function() {
+      avatarFallback(image);
       expect(image.src).toBe('');
     });
 
     it('should accept jQuery selectors', function() {
       var image2 = new Image;
-      avatarFallback($([image, image2]), 'topic', 64);
+      avatarFallback($([image, image2]));
       $(image).trigger('error');
       $(image2).trigger('error');
-      expect(image.src).toContain('img/fallback-topic-64px.png');
-      expect(image2.src).toContain('img/fallback-topic-64px.png');
+      expect(image.src).toContain('img/anon.png');
+      expect(image2.src).toContain('img/anon.png');
     });
   });
 

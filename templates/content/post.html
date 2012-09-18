@@ -3,7 +3,7 @@
   <div class="postmeta">
     <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011"></time>
   </div>
-  <p><%- post[0].content() %></p>
+  <p><%= linkify(post[0].content()) %></p>
 </section>
 <section class="comments">
   <% for (var i = 1; i < post.length; i++) { %>
@@ -12,7 +12,7 @@
        <div class="postmeta">
          <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011"></time>
        </div>
-       <p><%- post[i].content() %></p>
+       <p><%= linkify(post[i].content()) %></p>
      </section>
   <% } %>
   <section class="answer">

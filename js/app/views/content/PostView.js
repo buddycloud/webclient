@@ -19,6 +19,7 @@ define(function(require) {
   var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html')
 
   var PostView = Backbone.View.extend({
@@ -26,7 +27,10 @@ define(function(require) {
     className: 'post',
 
     render: function() {
-      this.$el.html(_.template(template, {post: this.model}));
+      this.$el.html(_.template(template, {
+        post: this.model,
+        linkify: linkify
+      }));
       avatarFallback(this.$('.avatar'));
     }
   });
