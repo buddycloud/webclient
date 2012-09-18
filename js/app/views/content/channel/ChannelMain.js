@@ -29,6 +29,7 @@ define(function(require) {
 
     initialize: function() {
       this.model = new ChannelModel(this.options.channel)
+      this.model.fetch()
       this.render()
     },
 
