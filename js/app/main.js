@@ -39,16 +39,6 @@ define(function(require) {
 
   var Router = Backbone.Router.extend({
 
-    initalize: function() {
-      this.loggedIn = false;
-      var credentials = new Credentials();
-      credentials.fetch();
-      credentials.verify();
-      credentials.on('accepted', function() {
-        this.loggedIn = true;
-      });
-    },
-
     routes: {
       '': 'default',
       'explore': 'explore',
@@ -82,7 +72,16 @@ define(function(require) {
     }
   });
 
-  new Router();
+  var defRouter = new Router();
+  defRouter.loggedIn = false;
+
+  var credentials = new Credentials();
+  credentials.fetch();
+  credentials.verify();
+  credentials.on('accepted', function() {
+    defRouter.loggedIn = true;
+  });
+
   Backbone.history.start({root: window.location.pathname/*, pushState: true*/});
 });
 
