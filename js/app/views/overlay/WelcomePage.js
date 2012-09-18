@@ -8,14 +8,14 @@ define(function(require) {
     className: 'discoverChannels middle clearfix',
 
     events: {
-      'click form.login': '_login',
-      'click form.register': '_register'
+      'click form.login': '_login'/*,
+      'click form.register': '_register'*/
     },
 
     _login: function() {
       event.preventDefault();
       var username = this.$('#login_name').attr('value');
-      var password = this.$('#ligon').attr('value');
+      var password = this.$('#login_password').attr('value');
       this.model.save({username: username, password: password});
       location.reload();
     },

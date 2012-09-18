@@ -31,11 +31,23 @@ define(function(require) {
   var Backbone = require('backbone');
   var config = require('config');
 
+  var Credentials = require('models/UserCredentials');
+
   var ChannelPage = require('views/content/ChannelPage');
   var ExplorePage = require('views/content/ExplorePage');
   var WelcomePage = require('views/overlay/WelcomePage');
 
   var Router = Backbone.Router.extend({
+
+    initalize: function() {
+      this.loggedIn = false;
+      var credentials = new Credentials();
+      credentials.fetch();
+      credentials.verify();
+      credentials.on('accepted', function() {
+        this.loggedIn = true;
+      });
+    },
 
     routes: {
       '': 'default',
@@ -46,12 +58,11 @@ define(function(require) {
     },
 
     default: function() {
-      // if logged in
-      new WelcomePage().render()
-      // if followed channels < 5
-      // this.navigate("explore")
-      // else
-      // this.navigate("mychannel@example.com")
+      if (this.loggedIn) {
+        this.navigate(config.defaultChannel);
+      } else {
+        new WelcomePage().render();
+      }
     },
 
     explore: function() {
