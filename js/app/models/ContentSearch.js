@@ -17,33 +17,29 @@
 define(function(require) {
   var api = require('util/api');
   var ModelBase = require('models/ModelBase');
-  var MetadataSearch = require('models/MetadataSearch');
-  var ContentSearch = require('models/ContentSearch');
 
-  var Search = ModelBase.extend({
+  var ContentSearch = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
-      this.channels = new MetadataSearch();
-      this.posts = new ContentSearch();
     },
 
-    doSearch: function(params) {
-      this.channels.doSearch(params, this._triggerFetchCallback());
-      this.posts.doSearch(params, this._triggerFetchCallback());
+    url: function() {
+      return api.url('search');
     },
 
-    _triggerFetchCallback: function() {
-      var self = this;
-      var fetched = [];
-      return function(model) {
-        fetched.push(model);
-        if (_.include(fetched, self.channels) &&
-            _.include(fetched, self.posts)) {
-          self.trigger('fetch');
-        }
+    doSearch: function(data, callback) {
+      if (data.q) {
+        var params = _.extend(data, {
+          type: 'content';
+        });
+        this.fetch({'data': params, success: callback});
       }
+    },
+
+    items: function() {
+      return this.attributes;
     }
   });
 
-  return Search;
+  return ContentSearch;
 });
