@@ -16,24 +16,17 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var ChannelHeader = require('views/content/ChannelHeader');
-  var ChannelStream = require('views/content/ChannelStream');
+  var template = require('text!templates/content/channelDetails.html')
 
-  var ChannelView = Backbone.View.extend({
-    className: 'channelView clearfix',
-
-    initialize: function() {
-      this.header = new ChannelHeader({model: this.model});
-      this.stream = new ChannelStream({model: this.model});
-    },
+  var ChannelDetails = Backbone.View.extend({
+    className: 'channelDetails',
 
     render: function() {
-      this.header.render();
-      this.stream.render();
-      this.$el.append(this.header.el);
-      this.$el.append(this.stream.el);
+      this.$el.html(_.template(template, {
+        metadata: this.model.metadata
+      }));
     }
   });
 
-  return ChannelView;
+  return ChannelDetails;
 });

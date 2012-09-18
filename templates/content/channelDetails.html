@@ -1,0 +1,20 @@
+<div class="infoToggle">
+  <h4 class="title">Info</h4>
+  <span class="icon"></span>
+</div>
+<div class="holder">
+  <section class="meta">
+    <p class="address">
+      <span class="title">Address:</span>
+      <span class="data"><%= metadata.channel %></span>
+    </p>
+    <p class="<%= metadata.accessModel() == 'open' ? 'open' : 'closed' %>">
+      <span class="title">This channel is:</span>
+      <span class="data"><%= metadata.accessModel() == 'open' ? 'Public' : 'Private' %></span>
+    </p>
+    <p class="broadcast">
+      <span class="title">Broadcasting for:</span>
+      <span class="data"></span>
+    </p>
+  </section>
+</div>

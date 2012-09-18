@@ -30,7 +30,7 @@ define(function(require) {
   var _ = require('underscore');
   var Backbone = require('backbone');
   var config = require('config');
-  var ChannelView = require('views/content/ChannelView');
+  var ChannelPage = require('views/content/ChannelPage');
 
   var Router = Backbone.Router.extend({
     routes: {
@@ -39,11 +39,11 @@ define(function(require) {
     },
 
     defaultChannel: function() {
-      new ChannelView({channel: config.defaultChannel})
+      new ChannelPage({channel: config.defaultChannel});
     },
 
     channel: function(channel) {
-      new ChannelView({channel: channel})
+      new ChannelPage({channel: channel});
     }
   });
 
