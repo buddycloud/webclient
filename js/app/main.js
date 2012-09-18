@@ -42,7 +42,7 @@ define(function(require) {
       'prefs': 'preferences',
       ':channel': 'channel',
       ':channel/edit' : 'channelEdit'
-},
+    },
 
     default: function() {
       // if logged in
@@ -64,7 +64,7 @@ define(function(require) {
     channel: function(channel) {
       new ChannelPage({channel: channel});
     },
-    
+
     channelEdit: function(channel) {
       new ChannelPage({channel: channel, edit: true})
   });
