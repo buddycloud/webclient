@@ -19,6 +19,7 @@ define(function(require) {
   var DiscoverView = require('views/content/DiscoverView');
   var Search = require('models/Search');
   var SearchBar = require('views/content/SearchBar');
+  var SearchView = require('views/content/SearchView');
 
   var DiscoverPage = Backbone.View.extend({
     className: 'discoverPage clearfix',
@@ -27,7 +28,7 @@ define(function(require) {
       this.model = new Search();
       this.searchbar = new SearchBar();
       this.discover = new DiscoverView();
-      this.search = new SearchView({model: model});
+      this.search = new SearchView({model: this.model});
       this.model.bind('change', this.render, this);
       this.render();
     },
@@ -37,9 +38,9 @@ define(function(require) {
     	this.$el.append(this.searchbar.el);
 
       if (!this.model.items()) {
-        _renderDiscover();
+        this._renderDiscover();
       } else {
-        _renderSearch();
+        this._renderSearch();
       }
 
       $('.content').append(this.el);
@@ -47,12 +48,12 @@ define(function(require) {
 
     _renderDiscover: function() {
       this.discover.render();
-      this.$el.append(this.discover.el);      
+      this.$el.append(this.discover.el);
     },
 
     _renderSearch: function() {
       this.search.render();
-      this.$el.append(this.search.el);            
+      this.$el.append(this.search.el);
     }
   });
 
