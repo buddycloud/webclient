@@ -14,40 +14,22 @@
  * limitations under the License.
  */
 
-requirejs.config({
-  baseUrl: 'js/vendor',
-  paths: {
-    'config': '../../config',
-    'templates': '../../templates',
-    'models': '../app/models',
-    'util': '../app/util',
-    'views': '../app/views'
-  }
-});
-
 define(function(require) {
   var $ = require('jquery');
-  var _ = require('underscore');
+  var _ = require('underscore')
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
-  var config = require('config');
-  var ChannelView = require('views/content/ChannelView');
+  var template = require('text!templates/content/post.html')
 
-  var Router = Backbone.Router.extend({
-    routes: {
-      '': 'defaultChannel',
-      ':channel': 'channel'
-    },
+  var PostView = Backbone.View.extend({
+    tagName: 'article',
+    className: 'post',
 
-    defaultChannel: function() {
-      new ChannelView({channel: config.defaultChannel})
-    },
-
-    channel: function(channel) {
-      new ChannelView({channel: channel})
+    render: function() {
+      this.$el.html(_.template(template, {post: this.model}));
+      avatarFallback(this.$('.avatar'));
     }
   });
 
-  new Router();
-  Backbone.history.start({root: window.location.pathname,pushState: true});
+  return PostView;
 });
-

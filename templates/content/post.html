@@ -1,20 +1,28 @@
-<article class="post">
-  <section class="opener">
-    <img class="avatar" src="avatars/user2.jpg" />
-    <div class="postmeta">
-      <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-    </div>
-    <p>Pretend. You pretend the feelings are there, for the world, for the people around you.</p>
-  </section>
-  <section class="comments">
-    <!-- comment.html -->
-    <section class="answer">
-      <img class="avatar" src="avatars/user1.jpg" />
+<section class="opener">
+  <img class="avatar" src="<%= post[0].authorAvatarUrl() %>" />
+  <div class="postmeta">
+    <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011"></time>
+  </div>
+  <p><%- post[0].content() %></p>
+</section>
+<section class="comments">
+  <% for (var i = 1; i < post.length; i++) { %>
+     <section class="comment">
+       <img class="avatar" src="<%= post[i].authorAvatarUrl() %>" />
+       <div class="postmeta">
+         <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011"></time>
+       </div>
+       <p><%- post[i].content() %></p>
+     </section>
+  <% } %>
+  <section class="answer">
+    <img class="avatar" src="">
+    <div class="holder">
       <textarea placeholder="comment"></textarea>
       <div class="controls clearfix">
         <div class="hint">ctrl + enter to post</div>
         <div class="button callToAction createComment">Post</div>
       </div>
-    </section>
+    </div>
   </section>
-</article>
+</section>

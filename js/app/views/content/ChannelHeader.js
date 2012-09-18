@@ -15,19 +15,20 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
-  var _ = require('underscore')
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var template = require('text!templates/content/header.html')
 
-  var PostTemplate = require('text!templates/content/post.html')
+  var ChannelHeader = Backbone.View.extend({
+    className: 'channelHeader justify',
 
-  var PostView = Backbone.View.extend({
     render: function() {
-      this.$el.html(_.template(PostTemplate, this.model));
-      return this;
+      this.$el.html(_.template(template, {
+        metadata: this.model.metadata
+      }));
+      avatarFallback(this.$('.avatar'));
     }
-
   });
 
-  return PostView;
+  return ChannelHeader;
 });
