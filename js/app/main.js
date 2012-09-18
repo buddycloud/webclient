@@ -41,7 +41,7 @@ define(function(require) {
     },
 
     defaultChannel: function() {
-      new ChannelView(config.defaultChannel)
+      new ChannelView({channel: config.defaultChannel})
     },
 
     channel: function(channel) {
