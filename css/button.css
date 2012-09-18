@@ -109,11 +109,16 @@ nav a.prominent {
 .button.onDark,
 button.onDark,
 nav a.onDark {
-  color: white;
+  color: rgba(255,255,255,.75);
   text-shadow: 0 1px rgba(0,0,0,0.55);
   border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.34) rgba(0,0,0,0.55);
   box-shadow: 0 1px 0 rgba(255,255,255,0.34) inset,0 1px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,.13);
 }
+  .button.onDark:hover,
+  button.onDark:hover,
+  nav a.onDark:hover {
+    color: white;
+  }
 .button.double span,
 button.double span,
 nav a.double span {
@@ -206,7 +211,8 @@ nav a.danger:active {
   cursor: default;
 }
 
-.button.stickToTop {
+.button.stickToTop,
+nav a.stickToTop {
   border-top: none;
   border-radius: 0 0 5px 5px;
 }
@@ -238,10 +244,13 @@ nav a.onDark:not(:first-child):after {
   box-shadow: 1px 0 rgba(255,255,255,0.05);
 }
 nav a:active:not(:first-child):after,
-nav a:active + a:not(:first-child):after {
+nav a:active + a:not(:first-child):after,
+nav a.active:not(:first-child):after,
+nav a.active + a:not(:first-child):after {
   top: 0;
   height: 100%;
 }
+nav a:active:not(:first-child):after,
 nav a.active:not(:first-child):after {
   left: 0;
   box-shadow: -1px 0 rgba(255,255,255,0.34);
@@ -255,9 +264,18 @@ nav a:not(:last-child) {
 nav a:first-child {
   border-radius: 3px 0 0 3px;
 }
+  nav a.stickToTop:first-child {
+    border-radius: 0 0 0 3px;
+  }
 nav a:last-child {
   border-radius: 0 3px 3px 0;
 }
+  nav a.stickToTop:last-child {
+    border-radius: 0 0 3px 0;
+  }
 nav a:only-child {
   border-radius: 3px;
 }
+  nav a.stickToTop:only-child {
+    border-radius: 0 0 3px 3px;
+  }
