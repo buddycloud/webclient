@@ -165,14 +165,17 @@ form.stream > div textarea,
 form.stream > div > div {
   top: 0;
   right: 0;
-  width: 343px;
+  width: 423px;
   background: #fff;
   border: none;
   border-top: 1px solid #eee;
   border-radius: 0;
   position: absolute;
 }
-form.stream > div input[type=text] { width: 359px; height: 43px; }
+form.stream > div input[type=text] { 
+  width: 439px;
+  height: 43px;
+}
 
 form.stream > div input[type=text],form.stream > div textarea {
   margin: 0;
@@ -199,7 +202,7 @@ form.stream > div.dual input:last-child {
   border-left: 1px solid #eee;
 }
 form.stream label {
-  color: #000;
+  color: black;
 }
 form.stream > div > label {
   width: 114px;
@@ -256,7 +259,7 @@ form.stream {
   float: none;
 }
 form.stream + nav {
-  width: 484px;
+  width: 564px;
   margin-top: -1px;
   padding: 10px 8px 8px;
   background: #fff;
@@ -268,11 +271,15 @@ form.stream + nav > .button {
   float: right;
 }
 
+.twoStepConfirmation .button {
+  float: left;
+  margin-right: 8px;
+}
 .twoStepConfirmation .stepOne {
   z-index: 1;
 }
 .twoStepConfirmation .stepTwo {
-  margin-left: -87px;
+  margin-left: -100px;
   -webkit-transition: margin 250ms;
      -moz-transition: margin 250ms;
       -ms-transition: margin 250ms;
