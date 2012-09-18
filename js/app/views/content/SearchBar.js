@@ -21,6 +21,14 @@ define(function(require) {
   var SearchBar = Backbone.View.extend({
     className: 'searchbar',
 
+    events: {'submit form': 'search'},
+
+    search: function(e) {
+      var q = this.$el.find('input[type=search]').val();
+      e.preventDefault();
+      this.model.doSearch({q: q});
+    },
+
     render: function() {
       this.$el.html(_.template(template));
     }

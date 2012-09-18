@@ -21,8 +21,15 @@ define(function(require) {
   var SearchView = Backbone.View.extend({
     className: 'discoverChannels clearfix',
 
-    render: function() {
-      //this.$el.html(_.template(template));
+    initialize: function() {
+      this.model.bind('searchSuccess', this.render, this);
+    },
+
+    render: function(collection) {
+      this.$el.html(_.template(template, {
+        channels: this.model.channels,
+        posts: this.model.posts,
+      }));
     }
   });
 
