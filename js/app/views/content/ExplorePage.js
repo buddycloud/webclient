@@ -21,41 +21,34 @@ define(function(require) {
   var SearchBar = require('views/content/SearchBar');
   var SearchView = require('views/content/SearchView');
 
-  var DiscoverPage = Backbone.View.extend({
+  var ExplorePage = Backbone.View.extend({
     className: 'discoverPage clearfix',
 
     initialize: function() {
       this.model = new Search();
-      this.searchbar = new SearchBar();
       this.discover = new DiscoverView();
+      this.searchbar = new SearchBar({model: this.model});
       this.search = new SearchView({model: this.model});
-      this.model.bind('change', this.render, this);
+      this.model.bind('searchSuccess', this._renderSeach, this);
       this.render();
     },
 
     render: function() {
-    	this.searchbar.render();
-    	this.$el.append(this.searchbar.el);
-
-      if (!this.model.items()) {
-        this._renderDiscover();
-      } else {
-        this._renderSearch();
-      }
-
+      this.searchbar.render();
+      this.discover.render();
+      this.$el.append(this.searchbar.el);
+      this.$el.append(this.discover.el);
       $('.content').append(this.el);
     },
 
-    _renderDiscover: function() {
-      this.discover.render();
-      this.$el.append(this.discover.el);
-    },
-
     _renderSearch: function() {
-      this.search.render();
-      this.$el.append(this.search.el);
+      // Remember: Backbone 0.9.2 stable version has a memory issue on remove()
+      this.discover.remove();
+      if (!this.$el.find(this.search).length) {
+        this.$el.append(this.search.el);
+      }
     }
   });
 
-  return DiscoverPage;
+  return ExplorePage;
 });

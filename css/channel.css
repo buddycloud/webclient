@@ -31,11 +31,12 @@
   }
 .channelView {
   margin-right: 13px;
-  padding: 13px 0 13px 13px;
+  padding: 0 0 13px 13px;
   float: left;
 }
 .channelHeader {
-  padding: 0 21px 13px;
+  width: 580px;
+  padding: 13px 21px;
   position: relative;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -93,23 +94,23 @@
       line-height: 2;
     }
 
-.channelView nav {
+.channelView header nav {
   white-space: nowrap;
   float: right;
 }
-.channelView nav > span {
+.channelView header nav > span {
   margin-left: 5px;
 }
-.channelView nav > span:first-child {
+.channelView header nav > span:first-child {
   margin-left: 0;
 }
-.channelView nav.inChannel .channel {
+.channelView header nav.inChannel .channel {
   display: none;
 }
-.channelView nav.inMessages .messages {
+.channelView header nav.inMessages .messages {
   display: none;
 }
-.channelView nav .tab {
+.channelView header nav .tab {
   height: 29px;
   padding: 1px 1px 0;
   margin-right: -1px;
@@ -118,7 +119,7 @@
   position: relative;
   display: inline-block;
 }
-.channelView nav .tab .holder {
+.channelView header nav .tab .holder {
   padding: 5px 13px 6px;
   font-size: 12px;
   color: rgba(0,0,0,0.76);
@@ -135,14 +136,14 @@
   position: relative;
   cursor: pointer;
 }
-.channelView nav .tab.newMessage .holder {
+.channelView header nav .tab.newMessage .holder {
   padding-right: 33px;
 }
-.channelView nav .tab.newMessage .counter {
+.channelView header nav .tab.newMessage .counter {
   right: 10px;
   top: 4px;
 }
-.channelView nav .tab.active .holder {
+.channelView header nav .tab.active .holder {
   background: #fff;
   z-index: 3;
   cursor: default;
@@ -154,7 +155,7 @@
     0 0 0 1px rgba(0,0,0,0.08),
     0 0 13px rgba(0,0,0,0.05);
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 .pageName {
   padding: 8px 13px 5px;

@@ -27,12 +27,10 @@ define(function(require) {
       return api.url('search');
     },
 
-    doSearch: function(data, callback) {
-      if (data.q) {
-        var params = _.extend(data, {
-          type: 'metadata'
-        });
-        this.fetch({'data': params, success: callback});
+    doSearch: function(query, callback) {
+      if (query.q) {
+        query = _.extend({type: 'metadata', max: 5}, query);
+        this.fetch({data: query, success: callback});
       }
     },
 
