@@ -28,9 +28,6 @@ define(function(require) {
       this.followers = new ChannelFollowers(name);
       this.metadata = new ChannelMetadata(name);
       this.posts = new ChannelPosts(name);
-      this.followers.bind('change', this._triggerFetchIfDone, this);
-      this.metadata.bind('change', this._triggerFetchIfDone, this);
-      this.posts.bind('change', this._triggerFetchIfDone, this);
     },
 
     fetch: function(options) {

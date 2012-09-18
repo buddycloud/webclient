@@ -35,16 +35,18 @@ define(function(require) {
     },
 
     render: function() {
-      $('.content').html(_.template(ChannelTemplate, this.model))
-      console.log(this.model)
-      this.appendPosts(80)
+      this.$el.html(_.template(ChannelTemplate, this.model));
+      $('.content').append(this.el)
+      this.appendPosts(80);
     },
 
     appendPosts: function(num) {
       that = this;
-      var newPosts = that.model.fetchPosts(num);
-      _.each(newPosts, function(element, index) {
-        that.$el.append(new PostView({model: element}));
+      var posts = that.model.posts.models;
+      _.each(posts, function(element, index) {
+        var post = new PostView({model: element})
+        post.render()
+        that.$el.append(post.el);
       })
     }
   });

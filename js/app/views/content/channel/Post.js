@@ -19,12 +19,12 @@ define(function(require) {
   var _ = require('underscore')
   var Backbone = require('backbone');
 
-  var PostTemplate = require('text!templates/content/channel.html')
+  var PostTemplate = require('text!templates/content/post.html')
 
   var PostView = Backbone.View.extend({
-    
     render: function() {
-      this.el.html(_.template(PostTemplate, this.model))
+      this.$el.html(_.template(PostTemplate, this.model));
+      return this;
     }
 
   });
