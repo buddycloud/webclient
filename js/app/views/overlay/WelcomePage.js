@@ -8,7 +8,7 @@ define(function(require) {
     className: 'discoverChannels middle clearfix',
 
     events: {
-      'click form.login': '_login'/*,
+      'click form.login [type=submit]': '_login'/*,
       'click form.register': '_register'*/
     },
 
@@ -32,7 +32,39 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template));
       $('.content').addClass('homepage').html(this.el);
+      
+      var formHolder = $('.formHolder');
+      $('nav a.login').click(function(event){ return toggleView(event, 'Login'); });  
+      $('nav a.register').click(function(event){ return toggleView(event, 'Register'); });
+      formHolder.find('form').click(function(event){ event.stopPropagation(); });
+  
+      function toggleView(event, form){
+        event.stopPropagation();
+        var className = 'show'+form;
+        
+        if(formHolder.hasClass(className)){
+          // hide form if its already visible
+          formHolder.removeClass(className);
+        } else {
+          // hide possibly open forms
+          hideForm();
+          
+          // show this form
+          formHolder.addClass(className);
+          
+          // focus first input field
+          formHolder.find('form:visible input').first().focus();
+          
+          // hide if the user clickes into empty space
+          $(document).one('click', hideForm);
+        }
+      }
+      
+      function hideForm(){
+        formHolder.removeClass('showLogin showRegister');
+      }
     },
+
 
     remove: function() {
       $('.content').removeClass('homepage')
