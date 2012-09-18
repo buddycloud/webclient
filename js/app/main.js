@@ -32,6 +32,7 @@ define(function(require) {
   var config = require('config');
 
   var ChannelPage = require('views/content/ChannelPage');
+  var DiscoverPage = require('views/content/DiscoverPage');
   var WelcomePage = require('views/overlay/WelcomePage');
 
   var Router = Backbone.Router.extend({
@@ -40,8 +41,8 @@ define(function(require) {
       'explore': 'explore',
       'prefs': 'preferences',
       ':channel': 'channel',
-      ':channel/edit' : 'channelEdit',
-    },
+      ':channel/edit' : 'channelEdit'
+},
 
     default: function() {
       // if logged in
@@ -53,7 +54,7 @@ define(function(require) {
     },
 
     explore: function() {
-
+      new DiscoverPage();
     },
 
     prefs: function() {
@@ -63,10 +64,9 @@ define(function(require) {
     channel: function(channel) {
       new ChannelPage({channel: channel});
     },
-
+    
     channelEdit: function(channel) {
       new ChannelPage({channel: channel, edit: true})
-    }
   });
 
   new Router();
