@@ -16,18 +16,19 @@
   vertical-align: bottom;
 }
 .content {
-  min-width: 998px;
   top: 0;
   right: 0;
   bottom: 0;
+  min-width: 897px;
   left: 234px;
   color: rgba(0,0,0,0.89);
   text-shadow: 0 1px rgba(255,255,255,0.34);
-  box-shadow: -1px 0 #000,-2px 0 rgba(0,0,0,0.21);
   position: absolute;
   overflow: auto;
-  z-index: 1;
 }
+  .content.docked {
+    left: 234px;
+  }
 .channelView {
   margin-right: 13px;
   padding: 13px 0 13px 13px;
