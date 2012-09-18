@@ -13,6 +13,7 @@ nav a {
   box-shadow: 0 1px 0 rgba(255,255,255,0.89) inset,0 1px rgba(0,0,0,0.05);
   display: inline-block;
   position: relative;
+  white-space: nowrap;
   cursor: pointer;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -20,33 +21,47 @@ nav a {
        -o-user-select: none;
           user-select: none;
 }
-.button.hidden,
-button.hidden,
-nav a.hidden {
-  display: none;
+  .button.hidden,
+  button.hidden,
+  nav a.hidden {
+    display: none;
+  }
+  .button.active,
+  button.active,
+  nav a.active,
+  .button.active:hover,
+  button.active:hover,
+  nav a.active:hover {
+    color: white;
+    text-shadow: 0 1px rgba(0,0,0,0.34);
+    background: rgba(0,0,0,.21);
+    border-color: rgba(0,0,0,0.34);
+    border-top-color: rgba(0,0,0,0.34);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.21) inset,0 1px rgba(255,255,255,0.89);
+    cursor: default;
+  }
+  .button:active,
+  button:active,
+  nav a:active {
+    color: rgba(0,0,0,0.55);
+    background: rgba(0,0,0,.13);
+    border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
+  }
+.button.inlay,
+nav a.inlay {
+  border-bottom-color: rgba(0,0,0,0.21);
+  box-shadow: 
+    0 1px white,
+    0 1px white inset;
 }
-.button.active,
-button.active,
-nav a.active,
-.button.active:hover,
-button.active:hover,
-nav a.active:hover {
-  color: white;
-  text-shadow: 0 1px rgba(0,0,0,0.34);
-  background: rgba(0,0,0,.21);
-  border-color: rgba(0,0,0,0.34);
-  border-top-color: rgba(0,0,0,0.34);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.21) inset,0 1px rgba(255,255,255,0.89);
-  cursor: default;
-}
-.button:active,
-button:active,
-nav a:active {
-  color: rgba(0,0,0,0.55);
-  background: rgba(0,0,0,.13);
-  border-color: rgba(0,0,0,0.34) rgba(0,0,0,0.21) rgba(0,0,0,0.21);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.89),0 1px rgba(0,0,0,0.05) inset;
-}
+  .button.inlay:active,
+  nav a.inlay:active {
+    border-color: rgba(0,0,0,0.21);
+    box-shadow: 
+      0 1px white,
+      0 1px rgba(0,0,0,.08) inset;
+  }
 .button.white,
 button.white,
 nav a.white {
@@ -211,10 +226,12 @@ nav a.danger:active {
   cursor: default;
 }
 
-.button.stickToTop,
-nav a.stickToTop {
+.button.stickToTop {
   border-top: none;
   border-radius: 0 0 5px 5px;
+}
+nav a.stickToTop {
+  border-top: none;
 }
 
 nav a {
@@ -239,10 +256,6 @@ nav a:not(:first-child):after {
   background: rgba(0,0,0,0.13);
   box-shadow: 1px 0 rgba(255,255,255,0.34);
 }
-nav a.onDark:not(:first-child):after {
-  background: rgba(0,0,0,0.21);
-  box-shadow: 1px 0 rgba(255,255,255,0.05);
-}
 nav a:active:not(:first-child):after,
 nav a:active + a:not(:first-child):after,
 nav a.active:not(:first-child):after,
@@ -254,6 +267,13 @@ nav a:active:not(:first-child):after,
 nav a.active:not(:first-child):after {
   left: 0;
   box-shadow: -1px 0 rgba(255,255,255,0.34);
+}
+nav a.onDark:not(:first-child):after {
+  background: rgba(0,0,0,0.21);
+  box-shadow: 1px 0 rgba(255,255,255,0.05);
+}
+nav a.onDark:active:not(:first-child):after {
+  box-shadow: -1px 0 rgba(255,255,255,0.13);
 }
 nav a:not(:first-child) {
   border-left: none;

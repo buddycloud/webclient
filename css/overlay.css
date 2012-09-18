@@ -1,35 +1,40 @@
 .overlay {
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0,0,0,0.55);
   background: -webkit-gradient(radial,50% 50%,0,50% 50%,100%,from(rgba(0,0,0,0.55)),to(rgba(0,0,0,0.89)));
-  background: -webkit-radial-gradient(center center,cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
-  background:    -moz-radial-gradient(center center,circle cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
-  background:      -o-radial-gradient(center center,cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
-  background:     -ms-radial-gradient(center center,cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
-  background:         radial-gradient(center center,cover,rgba(0,0,0,0.55),rgba(0,0,0,0.89));
+  background: -webkit-radial-gradient(center center, cover, rgba(0,0,0,0.55), rgba(0,0,0,0.89));
+  background:    -moz-radial-gradient(center center, cover, rgba(0,0,0,0.55), rgba(0,0,0,0.89));
+  background:      -o-radial-gradient(center center, cover, rgba(0,0,0,0.55), rgba(0,0,0,0.89));
+  background:     -ms-radial-gradient(center center, cover, rgba(0,0,0,0.55), rgba(0,0,0,0.89));
+  background:         radial-gradient(center center, cover, rgba(0,0,0,0.55), rgba(0,0,0,0.89));
   position: fixed;
   z-index: 10;
+  display: none;
+  opacity: 0;
   -webkit-transition: opacity 500ms;
      -moz-transition: opacity 500ms;
       -ms-transition: opacity 500ms;
        -o-transition: opacity 500ms;
           transition: opacity 500ms;
-  display: none;
 }
+  .overlay.visible {
+    opacity: 1;
+  }
+
 .overlay .left h2 {
   font-size: 22px;
 }
 .overlay .left span {
   margin-right: 5px;
 }
-.overlay.visible {
-  opacity: 1;
-}
 .overlay .modal {
   padding: 21px;
-  top: 50%;
+  top: 0;
   left: 50%;
+  opacity: 0;
   margin: -134px 0 0 -138px;
   text-shadow: 0 1px rgba(255,255,255,0.89);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f7f7f7), color-stop(1, #eee));
@@ -39,9 +44,23 @@
   background:      -o-linear-gradient(top, #f7f7f7 0%, #eee 100%);
   background:         linear-gradient(to bottom, #f7f7f7 0%, #eee 100%);
   border-radius: 5px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.21),0 1px 8px rgba(0,0,0,0.55),0 1px #fff inset;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.21),0 1px 8px rgba(0,0,0,0.55),0 1px white inset;
   position: absolute;
+  -webkit-transition: opacity 500ms, top 500ms;
+     -moz-transition: opacity 500ms, top 500ms;
+      -ms-transition: opacity 500ms, top 500ms;
+       -o-transition: opacity 500ms, top 500ms;
+          transition: opacity 500ms, top 500ms;
 }
+  .overlay.visible .modal {
+    top: 50%;
+    opacity: 1;
+    -webkit-transition: opacity 500ms 250ms, top 500ms 250ms;
+       -moz-transition: opacity 500ms 250ms, top 500ms 250ms;
+        -ms-transition: opacity 500ms 250ms, top 500ms 250ms;
+         -o-transition: opacity 500ms 250ms, top 500ms 250ms;
+            transition: opacity 500ms 250ms, top 500ms 250ms;
+  }
 .overlay .modal .close {
   top: 0;
   right: 0;
@@ -50,8 +69,9 @@
   line-height: 24px;
   text-align: center;
   color: rgba(0,0,0,0.34);
-  border-bottom: 1px solid #fff;
-  border-left: 1px solid #fff;
+  background: rgba(0,0,0,.05);
+  border-bottom: 1px solid white;
+  border-left: 1px solid white;
   border-radius: 0 5px 0 5px;
   box-shadow: 0 0 2px rgba(0,0,0,0.13) inset;
   position: absolute;
@@ -83,6 +103,17 @@
 }
 .overlay .modal.twoWindowed > .right {
   border-left: 1px solid rgba(0,0,0,0.13);
-  box-shadow: -1px 0 #fff;
+  box-shadow: -1px 0 white;
   float: right;
+}
+.overlay form input[type="text"],
+.overlay form input[type="password"],
+.overlay form input[type="email"] {
+  width: 234px;
+}
+.overlay .modal form > div {
+  margin-bottom: 5px;
+}
+.overlay form .submit {
+  margin-top: 18px;
 }

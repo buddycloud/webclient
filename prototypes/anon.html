@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="anonView">
+<html lang="en">
 <head>
   <title>Anon</title>
   <meta charset="utf-8">
@@ -9,260 +9,449 @@
   <script src="../js/vendor/jquery.js"></script>
   <script src="../js/vendor/modernizr.js"></script>
 </head>
-<body class="centered vertical">
-  <div class="content">
-    <div class="userbar">
-      <div class="navigation clearfix">
-        <nav class="floatLeft">
-          <a href="#" class="stickToTop">buddycloud.org</a>
-          <a href="#" class="stickToTop">Find Channels</a>
-        </nav>
-        <nav>
-          <a class="floatRight stickToTop join">Login/Join <span class="buddycloud">buddycloud</span></a>
-        </nav>
+<body>
+  <div class="sidebar hidden">
+    <div class="personal channel">
+      <div class="avatar" style="background-image: url(avatars/user1.jpg)">
+        <span class="channelpost counter">2</span>
+        <span class="message counter">2</span>
       </div>
-      <div class="joinBuddycloud">
-        <nav class="clearfix">
-          <a class="active signup" data-subview="signup">Sign-Up</a>
-          <a class="login" data-subview="login">Login</a>
-        </nav>
-        <h3>Join buddycloud to take part in this conversation!</h3>
-        <form class="clearfix login subview-register">
-          <div class="horizontal fit">
-            <div>
-              <label for="auth_name">Username</label>
-              <input type="text" id="auth_name" class="small" placeholder="film-girl99" name="name" required="required" autofocus="autofocus">
-            </div>
-            <div>
-              <label for="auth_pwd">Password</label>
-              <input type="password" id="auth_pwd" class="small" name="password" required="required">
-            </div>
-            <div class="email">
-              <label for="auth_email">Email</label>
-              <input id="auth_email" class="small" type="email">
-            </div>
+      <div class="info">
+        <span class="owner">Felix Niklas</span>
+        <span class="status">Aww yeah, Mountain Lion rocks</span>
+      </div>
+      <div class="settings noSelect">
+        <div class="popup centered vertical">
+          <div class="arrow"></div>
+          <ul>
+            <li class="newChannel"><a href="editChannel.html">Create Topic Channel</a>
+            <li class="preferences"><a href="preferences.html">Preferences</a>
+            <li class="logout">Logout
+          </ul>
+        </div>
+      </div>
+    </div>
+    <nav class="actionBar clearfix">
+      <button class="discover"><span>Find Channels</span></button>
+    </nav>
+    <div class="channels" class="antiscroll-wrap">
+      <div class="antiscroll-inner scrollHolder">
+        <div class="channel selected">
+          <div class="avatar" style="background-image: url(avatars/user2.jpg)">
+            <span class="channelpost counter">2</span>
           </div>
-          <button type="submit" id="auth_submit" class="left callToAction">Join buddycloud</button>
+          <div class="info">
+            <span class="owner">Vera Maier</span>
+            <span class="status">What a wonderful day</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel2.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">Moviefans</span>
+            <span class="status">Harry Potter, tonight!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel3.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">On the Box</span>
+            <span class="status">You gonna love the new Dexter episodes</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(../img/topic-50px.jpg)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">Lolcats</span>
+            <span class="status">I can haz your nose?</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(../img/personal-50px.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">Martin Rackel</span>
+            <span class="status">working on the webgl project</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(../img/topic-50px.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">music<span class="domain">@buddycloud.com</span></span>
+            <span class="status">New Foo Fighter Album online - check it out!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">verena<span class="domain">@buddycloud.com</span></span>
+            <span class="status">test's are over - party!!!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">fans<span class="domain">@steam.com</span></span>
+            <span class="status">the cake is a lie!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel8.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">cave<span class="domain">@minecraft.com</span></span>
+            <span class="status">Buy minecraft - now!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(../img/personal-50px.jpg)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">steve<span class="domain">@buddycloud.com</span></span>
+            <span class="status">all your base belongs to us</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel2.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">moviefans<span class="domain">@buddycloud.com</span></span>
+            <span class="status">Harry Potter, tonight!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel3.jpg)">
+            <span class="channelpost counter admin">1</span>
+          </div>
+          <div class="info">
+            <span class="owner">on-the-box<span class="domain">@bbc.co.uk</span></span>
+            <span class="status">You gonna love the new Dexter episodes</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel4.jpg)">
+            <span class="channelpost counter">2</span>
+          </div>
+          <div class="info">
+            <span class="owner">lolcats<span class="domain">@buddycloud.com</span></span>
+            <span class="status">I can haz your nose?</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user4.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">martin<span class="domain">@buddycloud.com</span></span>
+            <span class="status">working on the webgl project</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel6.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">music<span class="domain">@buddycloud.com</span></span>
+            <span class="status">New Foo Fighter Album online - check it out!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/user7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">verena<span class="domain">@buddycloud.com</span></span>
+            <span class="status">test's are over - party!!!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel7.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">fans<span class="domain">@steam.com</span></span>
+            <span class="status">the cake is a lie!</span>
+          </div>
+        </div>
+        <div class="channel">
+          <div class="avatar" style="background-image: url(avatars/channel8.jpg)">
+          </div>
+          <div class="info">
+            <span class="owner">cave<span class="domain">@minecraft.com</span></span>
+            <span class="status">Buy minecraft - now!</span>
+          </div>
+        </div>
+      </div><!-- /antiscroll-inner -->
+    </div><!-- /channels -->
+  </div>
+  <div class="content centered anonView">
+    <div class="overlay">
+      <div class="modal twoWindowed">
+        <div class="close">Close</div>
+        <div class="left">
+          <h2>buddycloud login</h2>
+          <p><span>Not yet a user?</span> <a href="#" class="register">Register</a></p>
+        </div>
+        <form class="right clearfix">
+          <span class="errors"></span>
+          <div>
+            <label for="auth_name">Username</label>
+            <input type="text" id="auth_name" name="name" required autofocus />
+          </div>
+          <div>
+            <label for="auth_pwd">Password</label>
+            <input type="password" id="auth_pwd" name="password" required />
+          </div>
+          <div>
+            <!-- placceholder for the email input field -->
+            <!--<label for="auth_email">Email</label>
+            <input type="password" id="auth_email" name="password" />-->
+          </div>
+          <div class="submit">
+            <span class="storePassword">
+              <input type="checkbox" id="store_local" />
+              <label for="store_local">remember password</label>
+            </span>
+            <p class="leftBox">
+              <span class="spinner"></span>
+            </p>
+            <button type="submit" id="auth_submit" class="callToAction">Login</button>
+          </div>
         </form>
       </div>
     </div>
     <div class="channelView personal clearfix">
-        <!--<div class="banner" style="background-image: url(public/images/vera_bg.jpg);"></div>-->
-        <header class="channelHeader justify">
-          <div class="avatar" style="background-image: url(avatars/user2_big.jpg)"></div>
-          <div class="flex titleText">
-            <h2 class="owner">Vera Maier</h2>
-            <div class="about">
-              I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend. 
-              I live in Munich together with my roomie Jessy and I'm currently doing an internship with BMW.
-              <span class="readMore">more</span>
-            </div>
+      <div class="navigation clearfix">
+        <nav class="floatLeft">
+          <a href="#" class="inlay">Home</a>
+          <a href="#" class="inlay">Find Channels</a>
+        </nav>
+        <nav class="floatRight">
+          <a class="join inlay">Login/Join <span class="buddycloud">buddycloud</span></a>
+        </nav>
+      </div>
+      <header class="channelHeader justify">
+        <div class="avatar" style="background-image: url(avatars/user2_big.jpg)"></div>
+        <div class="flex titleText">
+          <h2 class="owner">Vera Maier</h2>
+          <div class="about">
+            I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend. 
+            I live in Munich together with my roomie Jessy and I'm currently doing an internship with BMW.
+            <span class="readMore">more</span>
           </div>
-          <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
-        </header>
-        <section class="stream clearfix">
-          <section class="posts">
-            <article class="post noComments">
-              <section class="opener">
-                <img class="avatar" src="avatars/user2.jpg" />
+        </div>
+        <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
+      </header>
+      <section class="stream clearfix">
+        <section class="posts">
+          <article class="post noComments">
+            <section class="opener">
+              <img class="avatar" src="avatars/user2.jpg" />
+              <div class="postmeta">
+                <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">1 minute</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
+                <button class="flat cancel-delete button" title="Don't Delete Post">no!</button>
+              </div>
+              <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
+              <p>So it looks like Andi finally joined: <a class="internal" href="buddycloud.com/andi@buddycloud.com">andi<span class="domain">@buddycloud.com</span></a></p>
+            </section>
+            <section class="comments">
+            </section>
+          </article>
+          <article class="post noComments">
+            <section class="opener">
+              <img class="avatar" src="avatars/user2.jpg" />
+              <div class="postmeta">
+                <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">5 minutes</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
+              </div>
+              <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
+              <p>I'm a sociopath; there's not much he can do for me. I have a dark side, too. I will not kill my sister. I will not kill my sister. I will not kill my sister. He taught me a code. To survive. Under normal circumstances, I'd take that as a compliment. I'm generally confused most of the time.</p>
+            </section>
+            <section class="comments">
+            </section>
+          </article>
+          <article class="post">
+            <section class="opener">
+              <img class="avatar" src="avatars/user2.jpg" />
+              <div class="postmeta">
+                <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
+              </div>
+              <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Campus Library</span>
+              <p>Pretend. You pretend the feelings are there, for the world, for the people around you.</p>
+            </section>
+            <section class="comments">
+              <section class="comment">
+                <img class="avatar" src="avatars/user6.jpg" />
                 <div class="postmeta">
-                  <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">1 minute</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  <button class="flat cancel-delete button" title="Don't Delete Post">no!</button>
+                  <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
                 </div>
-                <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
-                <p>So it looks like Andi finally joined: <a class="internal" href="buddycloud.com/andi@buddycloud.com">andi<span class="domain">@buddycloud.com</span></a></p>
+                <span class="name">mona<span class="domain">@buddycloud.com</span></span><span class="location">from Cafe Extra</span>
+                <p>Who knows? Maybe one day they will be. I like seafood.</p>
               </section>
-              <section class="comments">
-              </section>
-            </article>
-            <article class="post noComments">
-              <section class="opener">
-                <img class="avatar" src="avatars/user2.jpg" />
+              <section class="comment">
+                <img class="avatar" src="avatars/user7.jpg" />
                 <div class="postmeta">
-                  <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">5 minutes</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
+                  <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
                 </div>
-                <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
-                <p>I'm a sociopath; there's not much he can do for me. I have a dark side, too. I will not kill my sister. I will not kill my sister. I will not kill my sister. He taught me a code. To survive. Under normal circumstances, I'd take that as a compliment. I'm generally confused most of the time.</p>
+                <span class="name">verena<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
+                <p>Finding a needle in a haystack isn't hard when every straw is computerized. I'm really more an apartment person.</p>
               </section>
-              <section class="comments">
-              </section>
-            </article>
-            <article class="post">
-              <section class="opener">
-                <img class="avatar" src="avatars/user2.jpg" />
+              <section class="comment">
+                <img class="avatar" src="avatars/user11.jpg" />
                 <div class="postmeta">
-                  <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
+                  <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
                 </div>
-                <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Campus Library</span>
-                <p>Pretend. You pretend the feelings are there, for the world, for the people around you.</p>
+                <span class="name">betty<span class="domain">@buddycloud.com</span></span><span class="location">from Donau</span>
+                <p>I feel like a jigsaw puzzle missing a piece. And I'm not even sure what the picture should be.</p>
               </section>
-              <section class="comments">
-                <section class="comment">
-                  <img class="avatar" src="avatars/user6.jpg" />
-                  <div class="postmeta">
-                    <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  </div>
-                  <span class="name">mona<span class="domain">@buddycloud.com</span></span><span class="location">from Cafe Extra</span>
-                  <p>Who knows? Maybe one day they will be. I like seafood.</p>
-                </section>
-                <section class="comment">
-                  <img class="avatar" src="avatars/user7.jpg" />
-                  <div class="postmeta">
-                    <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  </div>
-                  <span class="name">verena<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
-                  <p>Finding a needle in a haystack isn't hard when every straw is computerized. I'm really more an apartment person.</p>
-                </section>
-                <section class="comment">
-                  <img class="avatar" src="avatars/user11.jpg" />
-                  <div class="postmeta">
-                    <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  </div>
-                  <span class="name">betty<span class="domain">@buddycloud.com</span></span><span class="location">from Donau</span>
-                  <p>I feel like a jigsaw puzzle missing a piece. And I'm not even sure what the picture should be.</p>
-                </section>
-                <section class="comment">
-                  <img class="avatar" src="avatars/user13.jpg" />
-                  <div class="postmeta">
-                    <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  </div>
-                  <span class="name">daniel<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
-                  <p>I'm going to tell you something that I've never told anyone before.</p>
-                </section>
+              <section class="comment">
+                <img class="avatar" src="avatars/user13.jpg" />
+                <div class="postmeta">
+                  <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
+                </div>
+                <span class="name">daniel<span class="domain">@buddycloud.com</span></span><span class="location">from Home</span>
+                <p>I'm going to tell you something that I've never told anyone before.</p>
               </section>
-            </article>
-            <article class="post">
-              <section class="opener">
+            </section>
+          </article>
+          <article class="post">
+            <section class="opener">
+              <img class="avatar" src="avatars/user2.jpg" />
+              <div class="postmeta">
+                <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
+              </div>
+              <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Munich</span>
+              <p>Pretend. You pretend the feelings are there, for the world, for the people around you.</p>
+            </section>
+            <section class="comments">
+              <section class="comment">
+                <img class="avatar" src="avatars/user3.jpg" />
+                <div class="postmeta">
+                  <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
+                </div>
+                <span class="name">Tom</span><span class="location">from Men's Cave</span>
+                <p>Who knows? Maybe one day they will be. I like seafood.</p>
+              </section>
+              <section class="comment">
+                <img class="avatar" src="avatars/user5.jpg" />
+                <div class="postmeta">
+                  <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
+                </div>
+                <span class="name">gero<span class="domain">@buddycloud.com</span></span><span class="location">from Regensburg</span>
+                <p>Finding a needle in a haystack isn't hard when every straw is computerized. I'm really more an apartment person.</p>
+              </section>
+              <section class="comment">
                 <img class="avatar" src="avatars/user2.jpg" />
                 <div class="postmeta">
                   <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
+                <button class="flat delete button" title="Delete Post">✖</button>
                 </div>
                 <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Munich</span>
-                <p>Pretend. You pretend the feelings are there, for the world, for the people around you.</p>
+                <p>I feel like a jigsaw puzzle missing a piece. And I'm not even sure what the picture should be.</p>
               </section>
-              <section class="comments">
-                <section class="comment">
-                  <img class="avatar" src="avatars/user3.jpg" />
-                  <div class="postmeta">
-                    <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  </div>
-                  <span class="name">Tom</span><span class="location">from Men's Cave</span>
-                  <p>Who knows? Maybe one day they will be. I like seafood.</p>
-                </section>
-                <section class="comment">
-                  <img class="avatar" src="avatars/user5.jpg" />
-                  <div class="postmeta">
-                    <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  </div>
-                  <span class="name">gero<span class="domain">@buddycloud.com</span></span><span class="location">from Regensburg</span>
-                  <p>Finding a needle in a haystack isn't hard when every straw is computerized. I'm really more an apartment person.</p>
-                </section>
-                <section class="comment">
-                  <img class="avatar" src="avatars/user2.jpg" />
-                  <div class="postmeta">
-                    <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  </div>
-                  <span class="name">vera<span class="domain">@buddycloud.com</span></span><span class="location">from Munich</span>
-                  <p>I feel like a jigsaw puzzle missing a piece. And I'm not even sure what the picture should be.</p>
-                </section>
-                <section class="unread comment">
-                  <img class="avatar" src="avatars/user12.jpg" />
-                  <div class="postmeta">
-                    <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
-                  <button class="flat delete button" title="Delete Post">✖</button>
-                  </div>
-                  <span class="name">sebastian<span class="domain">@buddycloud.com</span></span><span class="location">from Passau</span>
-                  <p>I'm going to tell you something that I've never told anyone before.</p>
-                </section>
+              <section class="unread comment">
+                <img class="avatar" src="avatars/user12.jpg" />
+                <div class="postmeta">
+                  <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <button class="flat delete button" title="Delete Post">✖</button>
+                </div>
+                <span class="name">sebastian<span class="domain">@buddycloud.com</span></span><span class="location">from Passau</span>
+                <p>I'm going to tell you something that I've never told anyone before.</p>
               </section>
-            </article>
-          </section>
-          <p class="loader">
-            <span class="spinner"></span>
+            </section>
+          </article>
+        </section>
+        <p class="loader">
+          <span class="spinner"></span>
+        </p>
+      </section><!-- /stream -->
+    </div><!-- /channelView -->
+    <div class="channelDetails hidden">
+      <div class="infoToggle">
+        <h4 class="title">Info</h4>
+        <span class="icon"></span>
+      </div>
+      <div class="holder">
+        <section class="meta">
+          <p class="address">
+            <span class="title">Address:</span>
+            <span class="data">vera@buddycloud.com</span>
           </p>
-        </section><!-- /stream -->
-      </div><!-- /channelView -->
-      <div class="channelDetails hidden">
-        <div class="infoToggle">
-          <h4 class="title">Info</h4>
-          <span class="icon"></span>
-        </div>
-        <div class="holder">
-          <section class="meta">
-            <p class="address">
-              <span class="title">Address:</span>
-              <span class="data">vera@buddycloud.com</span>
-            </p>
-            <p class="open">
-              <span class="title">This Channel is:</span>
-	<span class="data accessModel" data-editmode="boolean">Public</span>
-            </p>
-            <p class="broadcast">
-              <span class="title">Broadcasting for:</span>
-	<time class="data"
-	      datetime="2011-06-06T05:06:00.000Z"
-	      title="5:06pm 06.06.2011"
-	      data-strftime="%f"
-	      data-strftitle="%A %d %B %Y %H:%M">188 days</time>
-            </p>
-          </section>
-          <section class="channelList">
-            <h3>moderators <span class="count">1</count></h3>
-            <div class="list">
-              <img src="avatars/user2.jpg" />
-            </div>
-          </section><!-- /followers -->
-          <section class="channelList">
-            <h3>followers <span class="count">20</count></h3>
-            <div class="list">
-              <img src="../img/personal-50px.jpg" />
-              <img src="avatars/user4.jpg" />
-              <img src="avatars/user5.jpg" />
-              <img src="avatars/user6.jpg" />
-              <img src="avatars/user7.jpg" />
-              <img src="avatars/user8.jpg" />
-              <img src="avatars/user9.jpg" />
-              <img src="avatars/user10.jpg" />
-              <img src="avatars/user11.jpg" />
-              <img src="avatars/user12.jpg" />
-              <img src="avatars/user13.jpg" />
-              <img src="avatars/channel8.jpg" />
-            </div>
-            <div class="showAll">show all</div>
-          </section><!-- /followers -->
-          <section class="channelList">
-            <h3>channels nearby <span class="count">10</count></h3>
-            <div class="list">
-              <img src="avatars/channel1.jpg" />
-              <img src="avatars/channel2.jpg" />
-              <img src="avatars/channel3.jpg" />
-              <img src="avatars/channel4.jpg" />
-            </div>
-            <div class="showAll">show all</div>
-          </section><!-- /followers -->
-          <section class="channelList">
-            <h3>similar channels <span class="count">8</count></h3>
-            <div class="list">
-              <img src="avatars/channel5.jpg" />
-              <img src="avatars/channel6.jpg" />
-              <img src="avatars/channel7.jpg" />
-              <img src="avatars/channel8.jpg" />
-            </div>
-            <div class="showAll">show all</div>
-          </section><!-- /followers -->
-        </div><!-- /holder -->
-      </div><!-- /detail -->
+          <p class="open">
+            <span class="title">This Channel is:</span>
+<span class="data accessModel" data-editmode="boolean">Public</span>
+          </p>
+          <p class="broadcast">
+            <span class="title">Broadcasting for:</span>
+<time class="data"
+      datetime="2011-06-06T05:06:00.000Z"
+      title="5:06pm 06.06.2011"
+      data-strftime="%f"
+      data-strftitle="%A %d %B %Y %H:%M">188 days</time>
+          </p>
+        </section>
+        <section class="channelList">
+          <h3>moderators <span class="count">1</count></h3>
+          <div class="list">
+            <img src="avatars/user2.jpg" />
+          </div>
+        </section><!-- /followers -->
+        <section class="channelList">
+          <h3>followers <span class="count">20</count></h3>
+          <div class="list">
+            <img src="../img/personal-50px.jpg" />
+            <img src="avatars/user4.jpg" />
+            <img src="avatars/user5.jpg" />
+            <img src="avatars/user6.jpg" />
+            <img src="avatars/user7.jpg" />
+            <img src="avatars/user8.jpg" />
+            <img src="avatars/user9.jpg" />
+            <img src="avatars/user10.jpg" />
+            <img src="avatars/user11.jpg" />
+            <img src="avatars/user12.jpg" />
+            <img src="avatars/user13.jpg" />
+            <img src="avatars/channel8.jpg" />
+          </div>
+          <div class="showAll">show all</div>
+        </section><!-- /followers -->
+        <section class="channelList">
+          <h3>channels nearby <span class="count">10</count></h3>
+          <div class="list">
+            <img src="avatars/channel1.jpg" />
+            <img src="avatars/channel2.jpg" />
+            <img src="avatars/channel3.jpg" />
+            <img src="avatars/channel4.jpg" />
+          </div>
+          <div class="showAll">show all</div>
+        </section><!-- /followers -->
+        <section class="channelList">
+          <h3>similar channels <span class="count">8</count></h3>
+          <div class="list">
+            <img src="avatars/channel5.jpg" />
+            <img src="avatars/channel6.jpg" />
+            <img src="avatars/channel7.jpg" />
+            <img src="avatars/channel8.jpg" />
+          </div>
+          <div class="showAll">show all</div>
+        </section><!-- /followers -->
+      </div><!-- /holder -->
+    </div><!-- /detail -->
   </div><!-- /content -->
 <script type="text/javascript">
   /* ###
@@ -295,50 +484,69 @@
 
   }(document);
   
+  // prefixes for cutting edge css properties and javascript events:
+  //
+  //  transition => MozTransition
+  var transition = Modernizr.prefixed('transition');
+  //  transform => MozTransform
+  var transform = Modernizr.prefixed('transform');
+  var transEndEventNames = {
+      'WebkitTransition' : 'webkitTransitionEnd',
+      'MozTransition'    : 'transitionend',
+      'OTransition'      : 'oTransitionEnd',
+      'msTransition'     : 'msTransitionEnd', // maybe?
+      'transition'       : 'transitionEnd'
+  }
+  //  transitionendEvent => transitionend
+  var transitionendEvent = transEndEventNames[ transition ];
+  
   /* ###
 
     Slidedown Signup/Login Form
 
     ### */
-  var container = $('.userbar');
-  var trigger = $('nav a.join');
+  var overlay = $('.overlay');
   
-  trigger.click(function(){ 
-    container.toggleClass('action-open');
-    if(container.hasClass('action-open')){
-      $('input').first().focus();
+  $('nav a.join').click(showOverlay);
+  $('.overlay').click(hideOverlay);
+  $('.overlay .modal .close').click(hideOverlay);
+  
+  // prevent bubbling of unwanted events
+  $('.overlay .modal').bind('click', function(e){ e.stopPropagation(); });
+  $('.overlay .modal').bind(transitionendEvent, true, false);
+  
+  
+  function showOverlay(){
+    overlay.show();
+    document.redraw();
+    overlay.addClass('visible');
+    overlay.find('input').first().focus();
+  };
+  
+  function hideOverlay(options){
+    var callback;
+    
+    if(options && options.callback){
+      callback = options.callback;
     }
-  });
+    
+    overlay.one(transitionendEvent, { callback : callback }, closeOverlay);
+    overlay.removeClass('visible');
+  }
+  
+  function closeOverlay(event){
+    overlay.hide();
+    if(event.data.callback) event.data.callback();
+  }
     
   /* ###
 
-    Signup/Login Tabs
+    overlay modal register
 
     ### */
-  var form = $('form');
-  var tabs = $('.joinBuddycloud nav a');
-  var currentSubview = "register";
-  var joinButton = $('#auth_submit');
-  var joinText = joinButton.text();
   
-  tabs.click(function(){
-    $(this).addClass('active').siblings('.active').removeClass('active');
-    
-    form.removeClass('subview-'+currentSubview);
-    currentSubview = $(this).data('subview');
-    form.addClass('subview-'+currentSubview);
-    
-    // specifics
-    if(currentSubview === 'login'){
-      joinButton.text('Login to buddycloud');
-      $('form > div').removeClass('fit');
-    } else {
-      joinButton.text(joinText);
-      $('form > div').addClass('fit');
-    }  
-    
-    $('input').first().focus();
-  });
+  var registerBtn = $('.modal .register');
+  
 
   /* ###
 
@@ -364,6 +572,26 @@
   $('.about').click(function(){
     $(this).toggleClass('fullText');
   });
+  
+  /* ###
+  
+    Anon -> Streams interaction
+    
+    ### */
+    
+  $('.modal [type=submit]').click(login);
+  
+  function login(event){
+    event.preventDefault();
+    
+    hideOverlay({ callback : showSidebar });
+  }
+  
+  function showSidebar(){
+    $('.content').removeClass('centered anonView');
+    $('.navigation').remove();
+    $('.sidebar').removeClass('hidden');
+  }
 </script>
 </body>
 </html>
