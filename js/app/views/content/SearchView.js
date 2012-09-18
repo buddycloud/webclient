@@ -16,7 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var template = require('text!templates/discover.html')
+  var template = require('text!templates/content/searchResults.html')
 
   var DiscoverView = Backbone.View.extend({
     className: 'discoverChannels clearfix',

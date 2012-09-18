@@ -16,7 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var template = require('text!templates/searchBar.html')
+  var template = require('text!templates/content/searchBar.html')
 
   var SearchBar = Backbone.View.extend({
     className: 'searchbar',
