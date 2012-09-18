@@ -35,7 +35,7 @@ define(function(require) {
     },
 
     items: function() {
-      return this.attributes;
+      return this.get('items');
     }
   });
 

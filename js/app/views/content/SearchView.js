@@ -16,20 +16,28 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var template = require('text!templates/content/searchResults.html')
+  var avatarFallback = require('util/avatarFallback');
+  var template = require('text!templates/content/searchResults.html');
+  var api = require('util/api');
 
   var SearchView = Backbone.View.extend({
     className: 'discoverChannels clearfix',
 
     initialize: function() {
-      this.model.bind('searchSuccess', this.render, this);
+      this.model.bind('fetch', this.render, this);
     },
 
-    render: function(collection) {
+    render: function() {
       this.$el.html(_.template(template, {
-        channels: this.model.channels,
-        posts: this.model.posts,
+        channels: this.model.channels.items(),
+        posts: this.model.posts.items(),
+        avatar: this._avatarUrl
       }));
+      avatarFallback(this.$('.avatar'), 'personal', 50);
+    },
+
+    _avatarUrl: function(user) {
+      return api.avatarUrl(user, 50);
     }
   });
 

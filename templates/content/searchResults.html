@@ -6,10 +6,10 @@
       <div class="list">
         <% _.each(channels, function(channel) { %>
         <div class="channel justify">
-          <img class="avatar" src="<%= avatars[channel.name] %>"></img>
+          <img class="avatar" src="<%= avatar(channel.jid) %>"></img>
           <div class="info flex">
-            <span class="owner"><%- channel.name %></span>
-            <span class="about"><%- channel.about %></span>
+            <span class="owner"><%- channel.title %></span>
+            <span class="about"><%- channel.description %></span>
           </div>
           <div class="follow button callToAction">Follow</div>
         </div>
@@ -24,11 +24,11 @@
         <% _.each(posts, function(post) { %>
         <article class="post">
           <section class="opener">
-            <img class="avatar" src="<%= avatars[post.channel] %>"></img>
+            <img class="avatar" src="<%= avatar(post.author) %>"></img>
               <div class="postmeta">
-                <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011">3 days</time>
+                <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%= post.creationDate %>" title="5:06pm 06.06.2011">3 days</time>
               </div>
-            <p>Haven't seen <span class="highlight">Anna</span> yet. I'm supposed to get a hug</p>
+            <p><%- post.content %></p>
           </section>
         </article>
         <% }); %>

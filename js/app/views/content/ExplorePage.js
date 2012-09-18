@@ -29,7 +29,7 @@ define(function(require) {
       this.discover = new DiscoverView();
       this.searchbar = new SearchBar({model: this.model});
       this.search = new SearchView({model: this.model});
-      this.model.bind('searchSuccess', this._renderSeach, this);
+      this.model.bind('fetch', this._renderSearch, this);
       this.render();
     },
 
