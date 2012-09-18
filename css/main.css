@@ -60,50 +60,6 @@ body {
   background: hsl(0,0%,95%);
   -webkit-text-size-adjust: none;
 }
-body.anonymous .content {
-  padding-left: 247px;
-  left: 0;
-}
-body.anonymous .userbar .getin {
-  display: block;
-}
-body.anonymous .userbar .getout {
-  display: none;
-}
-body.anonymous .sidebar .search {
-  background: transparent;
-  box-shadow: none;
-}
-body.anonymous .sidebar .search input {
-  box-shadow: 0 1px rgba(255,255,255,0.89);
-  border: 1px solid rgba(0,0,0,0.21);
-}
-body.anonymous .sidebar .actionBar {
-  box-shadow: none;
-}
-body.anonymous .sidebar button {
-  background: none;
-  border: none;
-  color: #000;
-  font-weight: normal;
-}
-.headbar {
-  top: 0;
-  width: 100%;
-  height: 8px;
-  background: url("images/headbar.png");
-  position: absolute;
-  display: none;
-}
-.headbar:after {
-  top: 8px;
-  height: 8px;
-  width: 100%;
-  content: "";
-  position: absolute;
-  background: #f2f2f2;
-  box-shadow: 0 -1px rgba(0,0,0,0.03),0 -2px rgba(0,0,0,0.03),0 -3px rgba(0,0,0,0.03),0 -1px #fff inset;
-}
 h1 {
   font-size: 34px;
   font-family: "Nunito",sans-serif;
