@@ -47,7 +47,7 @@ define(function(require) {
 
     default: function() {
       // if logged in
-      //new WelcomePage().render()
+      new WelcomePage().render()
       // if followed channels < 5
       // this.navigate("explore")
       // else

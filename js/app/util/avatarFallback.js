@@ -17,11 +17,10 @@
 define(function(require) {
   var $ = require('jquery');
 
-  var FALLBACK_IMAGE = 'img/anon.png';
-
-  function avatarFallback(avatarElements) {
+  function avatarFallback(avatarElements, type, size) {
+    var fallbackImage = 'img/' + type + '-' + size + 'px.jpg';
     $(avatarElements).one('error', function(event) {
-      event.target.src = FALLBACK_IMAGE;
+      event.target.src = fallbackImage;
     });
   }
 

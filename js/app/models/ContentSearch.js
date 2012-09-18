@@ -16,25 +16,30 @@
 
 define(function(require) {
   var api = require('util/api');
-  var avatarFallback = require('util/avatarFallback');
-  var Backbone = require('backbone');
-  var template = require('text!templates/content/channelList.html')
+  var ModelBase = require('models/ModelBase');
 
-  var ChannelList = Backbone.View.extend({
-    tagName: 'section',
-    className: 'channelList',
+  var ContentSearch = ModelBase.extend({
+    constructor: function() {
+      ModelBase.call(this);
+    },
 
-    render: function() {
-      if (this.model.length > 0) {
-        this.$el.html(_.template(template, {
-          title: this.options.title,
-          channels: this.model,
-          avatarUrl: api.avatarUrl
-        }));
-        avatarFallback(this.$('img'), 'personal', 50);
+    url: function() {
+      return api.url('search');
+    },
+
+    doSearch: function(data, callback) {
+      if (data.q) {
+        var params = _.extend(data, {
+          type: 'content'
+        });
+        this.fetch({'data': params, success: callback});
       }
+    },
+
+    items: function() {
+      return this.attributes;
     }
   });
 
-  return ChannelList;
+  return ContentSearch;
 });

@@ -23,10 +23,9 @@ define(function(require) {
     className: 'channelHeader justify',
 
     render: function() {
-      this.$el.html(_.template(template, {
-        metadata: this.model.metadata
-      }));
-      avatarFallback(this.$('.avatar'));
+      var metadata = this.model.metadata;
+      this.$el.html(_.template(template, {metadata: metadata}));
+      avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
     }
   });
 

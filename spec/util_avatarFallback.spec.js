@@ -26,23 +26,23 @@ define(function(require) {
     });
 
     it('should set fallback URL on image if avatar fails to load', function() {
-      avatarFallback(image);
+      avatarFallback(image, 'personal', 50);
       $(image).trigger('error');
-      expect(image.src).toContain('img/anon.png');
+      expect(image.src).toContain('img/personal-50px.png');
     });
 
     it('should not change the passed image before an "error" event', function() {
-      avatarFallback(image);
+      avatarFallback(image, 'personal', 50);
       expect(image.src).toBe('');
     });
 
     it('should accept jQuery selectors', function() {
       var image2 = new Image;
-      avatarFallback($([image, image2]));
+      avatarFallback($([image, image2]), 'topic', 75);
       $(image).trigger('error');
       $(image2).trigger('error');
-      expect(image.src).toContain('img/anon.png');
-      expect(image2.src).toContain('img/anon.png');
+      expect(image.src).toContain('img/topic-75px.png');
+      expect(image2.src).toContain('img/topic-75px.png');
     });
   });
 
