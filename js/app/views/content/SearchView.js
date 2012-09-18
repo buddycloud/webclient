@@ -22,7 +22,7 @@ define(function(require) {
     className: 'discoverChannels clearfix',
 
     render: function() {
-      this.$el.html(_.template(template));
+      //this.$el.html(_.template(template));
     }
   });
 
