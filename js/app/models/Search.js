@@ -27,10 +27,14 @@ define(function(require) {
       return api.url('search');
     },
 
-    doQuery: function(data) {
-      if (data.type && data.query) {
+    doSearch: function(data) {
+      if (data.type && data.q) {
         this.fetch({'data': data});
       }
+    },
+
+    items: function() {
+      return this.attributes;
     }
   });
 
