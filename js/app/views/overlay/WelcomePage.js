@@ -12,8 +12,8 @@ define(function(require) {
     },
 
     events: {
-      'click #login_submit': 'login'//,
-      //'click form.register': '_register'
+      'submit form.login': 'login'//,
+      //'submit form.register': '_register'
     },
 
     login: function(event) {
@@ -37,9 +37,6 @@ define(function(require) {
       that = this;
       this.$el.html(_.template(template));
       $('.content').addClass('homepage').html(this.el);
-      
-      
-
 
       var formHolder = $('.formHolder');
       $('nav a.login').click(function(event){ return toggleView(event, 'Login'); });  
