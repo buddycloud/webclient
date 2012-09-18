@@ -26,7 +26,7 @@ define(function(require) {
     search: function(e) {
       var q = this.$el.find('input[type=search]').val();
       e.preventDefault();
-      this.model.doSearch({q: q});
+      this.model.doSearch({q: q, max: 10});
     },
 
     render: function() {

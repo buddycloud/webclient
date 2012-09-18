@@ -28,8 +28,9 @@ define(function(require) {
     },
 
     doSearch: function(params) {
-      this.channels.doSearch(params, this._triggerSearchCallback());
-      this.posts.doSearch(params, this._triggerSearchCallback());
+      var callback = this._triggerSearchCallback();
+      this.channels.doSearch(params, callback);
+      this.posts.doSearch(params, callback);
     },
 
     _triggerSearchCallback: function() {
