@@ -28,18 +28,19 @@ define(function(require) {
     },
 
     doSearch: function(params) {
-      this.channels.doSearch(params, this._triggerFetchCallback());
-      this.posts.doSearch(params, this._triggerFetchCallback());
+      var callback = this._triggerSearchCallback();
+      this.channels.doSearch(params, callback);
+      this.posts.doSearch(params, callback);
     },
 
-    _triggerFetchCallback: function() {
+    _triggerSearchCallback: function() {
       var self = this;
       var fetched = [];
       return function(model) {
         fetched.push(model);
         if (_.include(fetched, self.channels) &&
             _.include(fetched, self.posts)) {
-          self.trigger('searchSuccess');
+          self.trigger('fetch');
         }
       }
     }
