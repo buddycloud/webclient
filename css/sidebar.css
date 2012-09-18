@@ -5,6 +5,12 @@
   width: 234px;
   color: #fff;
   border-right: 0 1px #000;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #003152), color-stop(1, #3c87aa));
+  background: -webkit-linear-gradient(top,       #003152, #3c87aa);
+  background:    -moz-linear-gradient(top,       #003152, #3c87aa);
+  background:     -ms-linear-gradient(top,       #003152, #3c87aa);
+  background:      -o-linear-gradient(top,       #003152, #3c87aa);
+  background:         linear-gradient(to bottom, #003152, #3c87aa);
   position: absolute;
   -webkit-transition: left 400ms;
      -moz-transition: left 400ms;
@@ -12,6 +18,21 @@
        -o-transition: left 400ms;
           transition: left 400ms;
 }
+  .sidebar:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1000px;
+    background: rgba(255,255,255,0.34);
+    background: -webkit-gradient(radial,50% 50%,0,50% 50%,100%,from(rgba(255,255,255,0.34)),to(rgba(255,255,255,0)));
+    background: -webkit-radial-gradient(center center, rgba(255,255,255,0.34), rgba(255,255,255,0));
+    background:    -moz-radial-gradient(center center, rgba(255,255,255,0.34), rgba(255,255,255,0));
+    background:      -o-radial-gradient(center center, rgba(255,255,255,0.34), rgba(255,255,255,0));
+    background:     -ms-radial-gradient(center center, rgba(255,255,255,0.34), rgba(255,255,255,0));
+    background:         radial-gradient(center center, rgba(255,255,255,0.34), rgba(255,255,255,0));
+  }
 .channels {
   top: 119px;
   right: 0;

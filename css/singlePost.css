@@ -63,13 +63,15 @@ html.singlePost {
 }
 
 .joinBuddycloud {
-  height: 173px;
+  height: 211px;
   margin: -217px 12px 0;
   padding: 21px;
   background: hsl(0,0%,90%);
   border: 1px solid rgba(0,0,0,.13);
   border-radius: 0 0 5px 5px;
   box-shadow: 0 0 5px rgba(0,0,0,.08) inset;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   -webkit-transition: margin 500ms;
      -moz-transition: margin 500ms;
       -ms-transition: margin 500ms;

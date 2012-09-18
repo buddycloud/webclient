@@ -13,8 +13,38 @@
 }
 
 .anonView .channelView {
+  width: 580px;
 }
 
 .anonView .channelDetails {
   width: auto;
 }
+
+.userbar {
+  margin: 0 13px 8px;
+  width: 580px;
+  box-sizing: border-box;
+}
+.navigation {
+  position: relative;
+}
+  .navigation .buddycloud123 {
+    margin: 3px 0 0 5px;
+    width: 71px;
+    height: 18px;
+    font: 0/0 a;
+    color: transparent;
+    vertical-align: top;
+    background: url("../img/buddycloud.png") no-repeat center;
+    display: inline-block;
+  }
+.userbar .joinBuddycloud {
+  width: 580px;
+  margin: -272px 0 34px;
+  padding-top: 55px;
+  height: 245px;
+  border-top: none;
+}
+  .userbar.action-open .joinBuddycloud {
+    margin-top: -26px;
+  }

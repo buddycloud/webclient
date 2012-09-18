@@ -142,7 +142,7 @@ form .forgot {
 }
 
 form.stream {
-  color: #333;
+  color: hsl(0, 0%, 11%);
 }
 
 form.stream > div {

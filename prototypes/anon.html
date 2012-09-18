@@ -9,8 +9,43 @@
   <script src="../js/vendor/jquery.js"></script>
   <script src="../js/vendor/modernizr.js"></script>
 </head>
-<body class="centered">
+<body class="centered vertical">
   <div class="content">
+    <div class="userbar">
+      <div class="navigation clearfix">
+        <nav class="floatLeft">
+          <a href="#" class="stickToTop">buddycloud.org</a>
+          <a href="#" class="stickToTop">Find Channels</a>
+        </nav>
+        <nav>
+          <a class="floatRight stickToTop join">Login/Join <span class="buddycloud">buddycloud</span></a>
+        </nav>
+      </div>
+      <div class="joinBuddycloud">
+        <nav class="clearfix">
+          <a class="active signup" data-subview="signup">Sign-Up</a>
+          <a class="login" data-subview="login">Login</a>
+        </nav>
+        <h3>Join buddycloud to take part in this conversation!</h3>
+        <form class="clearfix login subview-register">
+          <div class="horizontal fit">
+            <div>
+              <label for="auth_name">Username</label>
+              <input type="text" id="auth_name" class="small" placeholder="film-girl99" name="name" required="required" autofocus="autofocus">
+            </div>
+            <div>
+              <label for="auth_pwd">Password</label>
+              <input type="password" id="auth_pwd" class="small" name="password" required="required">
+            </div>
+            <div class="email">
+              <label for="auth_email">Email</label>
+              <input id="auth_email" class="small" type="email">
+            </div>
+          </div>
+          <button type="submit" id="auth_submit" class="left callToAction">Join buddycloud</button>
+        </form>
+      </div>
+    </div>
     <div class="channelView personal clearfix">
         <!--<div class="banner" style="background-image: url(public/images/vera_bg.jpg);"></div>-->
         <header class="channelHeader justify">
@@ -23,9 +58,6 @@
               <span class="readMore">more</span>
             </div>
           </div>
-          <nav>
-            <span class="login button">Login / Join buddycloud</span>
-          </nav>
           <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
         </header>
         <section class="stream clearfix">
@@ -161,7 +193,7 @@
           </p>
         </section><!-- /stream -->
       </div><!-- /channelView -->
-      <div class="channelDetails">
+      <div class="channelDetails hidden">
         <div class="infoToggle">
           <h4 class="title">Info</h4>
           <span class="icon"></span>
@@ -194,69 +226,10 @@
           <section class="channelList">
             <h3>followers <span class="count">20</count></h3>
             <div class="list">
-              <img src="avatars/user3.jpg" class="selected" />
+              <img src="../img/personal-50px.jpg" />
               <img src="avatars/user4.jpg" />
               <img src="avatars/user5.jpg" />
               <img src="avatars/user6.jpg" />
-              <div class="adminAction first">
-                <div class="arrow"></div>
-                <div class="holder">
-                  <div class="box">
-                    <section class="channelInfo">
-                      <h4>tom@buddycloud.com</h4>
-                      <div class="currentRole">Follower</div>
-                    </section>
-                    <section class="action changeRole">
-                      <h5>Change Role</h5>
-                      <select>
-                        <option value="moderator">Moderator</option>
-                        <option value="followerPlus">Follower+Post</option>
-                        <option value="follower" selected>Follower</option>
-                      </select>
-                      <section class="info">
-                        <div class="moderator">
-                          <ul>
-                            <li>read your channel</li>
-                            <li>write comments &amp; messages</li>
-                            <li>post new topics</li>
-                            <li>approve new followers</li>
-                            <li>set user's roles</li>
-                            <li>delete posts</li>
-                          </ul>
-                        </div>
-                        <div class="followerPlus">
-                          <ul>
-                            <li>read your channel</li>
-                            <li>write comments &amp; messages</li>
-                            <li>post new topics</li>
-                          </ul>
-                        </div>
-                        <div class="follower">
-                          <ul>
-                            <li>read your channel</li>
-                          </ul>
-                        </div>
-                      </section>
-                    </section>
-                    <section class="action banUser">
-                      <h5>Ban User</h5>
-                      <div class="info">
-                        <ul>
-                          <li class="negative">Remove access to channel.</li>
-                        </ul>
-                      </div>
-                    </section>
-                    <section class="actionRow choose">
-                      <div class="changeRoleButton">Change Role</div>
-                      <div class="banUserButton">Ban User</div>
-                    </section>
-                    <section class="actionRow confirm">
-                      <div class="cancelButton">Cancel</div>
-                      <div class="okButton">Ok</div>
-                    </section>
-                  </div><!-- /box -->
-                </div>
-              </div>
               <img src="avatars/user7.jpg" />
               <img src="avatars/user8.jpg" />
               <img src="avatars/user9.jpg" />
@@ -323,120 +296,49 @@
   }(document);
   
   /* ###
-  
-    Channel bubbling
-  
+
+    Slidedown Signup/Login Form
+
     ### */
-  var channelHolder = $('.channels');
-  var innerHolder = channelHolder.find('.scrollHolder');
-  var channels = channelHolder.find('.channel:not(".personal")');
+  var container = $('.userbar');
+  var trigger = $('nav a.join');
   
-  // prefixes for cutting edge css properties and javascript events:
-  //
-  //  transition => MozTransition
-  var transition = Modernizr.prefixed('transition');
-  //  transform => MozTransform
-  var transform = Modernizr.prefixed('transform');
-  var transEndEventNames = {
-      'WebkitTransition' : 'webkitTransitionEnd',
-      'MozTransition'    : 'transitionend',
-      'OTransition'      : 'oTransitionEnd',
-      'msTransition'     : 'msTransitionEnd', // maybe?
-      'transition'       : 'transitionEnd'
-  }
-  //  transitionendEvent => transitionend
-  var transitionendEvent = transEndEventNames[ transition ];
-  // cache channelHeight - it's the same for every channel-preview
-  var channelHeight = channels.first().outerHeight();
-  // count of currently moving channels
-  var movingChannels = 0;
-
-  /*
-
-  Stress test:
-
-  $('.channel:not(".personal")').each(function(i, channel){
-      setTimeout( function(){ $(this).click() }.bind(this), i*250);
-  });
-
-  Reality test:
-
-  $('.channel:not(".personal")').each(function(i, channel){
-      setTimeout( function(){ $(this).click() }.bind(this), i*Math.round(Math.random()*2500));
-  });
-
-  An even more real test:
-
-  time = 5000;
-
-  function goCrazy(){
-  var allChannels = $('.channel:not(".personal")');
-  allChannels.eq( Math.round( Math.random()*allChannels.size() ) ).click();
-    timer = setTimeout(goCrazy, Math.random()*time);
-  }
-  goCrazy();
-
-  */
-
-  function bubble(){
-    var bubblingChannel = $(this);
-
-    // relative offset + absolute offset
-    var offset = bubblingChannel.position().top + innerHolder.scrollTop();
-
-    // don't bubble if the channel is..
-    //  - on top
-    //  - bubbling
-    if(offset === 0 || bubblingChannel.parent().hasClass('bubbleHolder')) {
-      return false;
+  trigger.click(function(){ 
+    container.toggleClass('action-open');
+    if(container.hasClass('action-open')){
+      $('input').first().focus();
     }
+  });
+    
+  /* ###
 
-    // create a gap where the channel starts off
-    var startingArea = $('<div>').height( channelHeight ).addClass('startingArea');
-    bubblingChannel.before( startingArea );
+    Signup/Login Tabs
 
-    document.redraw();
-
-    startingArea.bind(transitionendEvent, destroy);
-
-    // close startingArea
-    startingArea.css('height', 0);
-
-    // detach the bubbling channel from the DOM
-    // and insert it at the top
-    bubblingChannel.detach().css('top', offset);
-    innerHolder.prepend(bubblingChannel);
-
-    // wrap a growing holder around it
-    var landingArea = $('<div>').addClass('bubbleHolder');
-    bubblingChannel.wrap(landingArea);
-
-    document.redraw();
-
-    // bind the callback on transition end for all bubbling channels
-    bubblingChannel.bind(transitionendEvent, reset);
-
-    // bubble!
-    bubblingChannel.addClass('bubbling').css({ 'top' : 0, 'z-index' : ++movingChannels+1 });
-    // open a gap for the channel to arrive
-    bubblingChannel.parent().css('height', channelHeight);
-  }
-
-  function destroy(event){
-    var propertyToWaitFor = event.data.propertyName;
-    if(propertyToWaitFor !== undefined && event.originalEvent.propertyName === propertyToWaitFor)
-      $(this).remove();
-  }
-
-  function reset(event){
-    if(event.data.callback) event.data.callback();
-    // reset the bubbling channel and unwrap it
-    $(this).removeClass('bubbling').css({ 'height' : '', 'z-index' : '' }).unwrap();
-    movingChannels--;
-  }
-
-  channels.click(bubble);
-  //channels.toggle(function(){ $(this).css('background', 'red'); }, function(){ $(this).css('background', 'green'); });
+    ### */
+  var form = $('form');
+  var tabs = $('.joinBuddycloud nav a');
+  var currentSubview = "register";
+  var joinButton = $('#auth_submit');
+  var joinText = joinButton.text();
+  
+  tabs.click(function(){
+    $(this).addClass('active').siblings('.active').removeClass('active');
+    
+    form.removeClass('subview-'+currentSubview);
+    currentSubview = $(this).data('subview');
+    form.addClass('subview-'+currentSubview);
+    
+    // specifics
+    if(currentSubview === 'login'){
+      joinButton.text('Login to buddycloud');
+      $('form > div').removeClass('fit');
+    } else {
+      joinButton.text(joinText);
+      $('form > div').addClass('fit');
+    }  
+    
+    $('input').first().focus();
+  });
 
   /* ###
 
@@ -452,277 +354,6 @@
     var list = $(this).prev();
     list.children().clone().appendTo(list);
     $(this).remove();
-  });
-
-  /* ###
-
-    new topic animation
-
-    ### */
-
-  $('.opener, .comment').each(function () {
-    var post = $(this);
-    post.find('button.delete').click(function () {
-      post.toggleClass('dangerZone');
-    });
-  });
-
-  // works for both new topic field and all the small answer fields
-  var newTopic = $('.newTopic, .answer');
-  var topicTextarea = newTopic.find('textarea');
-
-  function openArea(event){
-    // prevent bubbling!
-    event.stopPropagation();
-    if(!$(this).hasClass('write')){
-      $(this).addClass('write');
-      $(document).one('click', {self: this}, closeArea);
-    }
-  }
-  
-  function closeArea(event){
-    var self = event.data.self;
-    var textarea = $(self).find('textarea');
-    // minimize the textarea only if the textarea is empty
-    if(textarea.val() === ""){
-      $(self).removeClass('write');
-    }
-  }
-  
-  newTopic.click(openArea);
-  
-  /* ###
-    
-    notification animation
-
-    ### */
-    
-  var notification = $('.notification');
-  var notificationButtons = notification.find('.controls > div');
-  
-  function notify(){
-    notification.addClass('visible');
-  }
-  
-  function logNotifaction(){
-    var reaction = $(this).hasClass('positive') ? 'granted' : 'denied';
-    notification.addClass('log '+reaction);
-  }
-  
-  notificationButtons.click(logNotifaction);
-  //setTimeout('notify()', 2000);
-  
-  $(function () {
-      //$('#channels').antiscroll();
-  });//*/
-  
-  /* ###
-  
-      edit mode
-      
-  */
-  
-  var editableElements = [ 
-    'header .title',
-    'header .status',
-    '.meta .description',
-    '.meta .accessModel',
-    '.location .previous',
-    '.location .current',
-    '.location .next'
-  ];
-  
-  function fauxLoadEditedStuff(){
-    for(var i = 0, l = editableElements.length; i < l; i++){
-      var el = editableElements[i];
-      if($(el).data('editmode') !== 'boolean') {
-        if(localStorage[el]) $(el).text( localStorage[el] );
-      }
-    }
-  }
-  
-  fauxLoadEditedStuff();
-  
-  $('.edit.button').click(function(){
-    if(!$('html').hasClass('editmode')){
-      $('html').addClass('editmode');
-      startEditMode();
-    } else {
-      $('html').removeClass('editmode');
-      stopEditMode(true);
-    }
-  });
-
-  function startEditMode(){
-    for(var i = 0, l = editableElements.length; i < l; i++){
-      var el = editableElements[i];
-      if($(el).data('editmode') !== 'boolean') {
-        // store the current state
-        localStorage[el] = $(el).text();
-
-        // add designMode & contenteditable
-        $(el)
-          .prop('contenteditable', true)
-          .input(function(){
-            var text = $(this).text();
-            if(text === "") $(this).html("&nbsp;");
-          }).keydown(function (ev) {
-            var code = ev.keyCode || ev.which;
-            if ($(this).data('editmode') === 'singleLine' && code == 13) {
-                ev.preventDefault();
-                return false;
-            } else return true;
-          });
-        // only allow enter when the target is not singleLine
-      }
-    }
-    $(editableElements[0]).focus();
-  }
-
-  function stopEditMode(save){
-    for(var i = 0, l = editableElements.length; i < l; i++){
-      var el = editableElements[i];
-      if($(el).data('editmode') !== 'boolean') {
-
-        // remove designMode & contenteditable
-        $(el).prop('contenteditable', false);
-
-        // compare the current state with the pre-edit state and store the changed elements
-        if($(el).text() != localStorage[el]){
-          if(save){
-              localStorage[el] = $(el).text();
-          } else {
-            $(el).text( localStorage[el] );
-          }
-        }
-      }
-    }
-  }
-  
-  
-  /* ###
-  
-      search
-      
-  ### */
-  
-  $('input[type=search]').bind('input', search);
-  // channels = $('#channels .channel');
-  
-  function search(){
-    var text = this.value;
-    channels.each(function(i, el){
-      // check if the text is in there
-      // add class hidden if text is not the same
-      if($(el).text().indexOf(text) !== -1){
-        $(el).removeClass('hidden');
-      } else {
-        $(el).addClass('hidden');
-      };
-    });
-  }
-  
-  /* ###
-  
-    unfollow
-    
-    ### */
-  
-  $('.inChannel').on('click', '.unfollow', function(){
-    // rename button
-    $(this).text('Follow').removeClass('unfollow').addClass('follow');
-    
-    var channelToRemove = $('.channel.selected');
-    channelToRemove.bind(transitionendEvent, { propertyName : 'height' }, destroy);
-    
-    document.redraw();
-    
-    channelToRemove.addClass('remove');
-    
-    /* ###
-    
-      follow
-      
-    ### */
-    
-    function channelTemplate(avatarUrl, owner, status, animationClassName){
-      return $('<div class="channel">')
-        .addClass(animationClassName ? animationClassName : "")
-        .append(
-          $('<div class="avatar">').css('background-image', avatarUrl)
-        )
-        .append(
-          $('<div class="info">')
-            .append(
-              $('<div class="owner">').text(owner)
-            )
-            .append(
-              $('<div class="status">').text(status)
-            )
-        );
-    }
-    
-    $('.inChannel').on('click', '.follow', follow);
-    
-    function follow(){
-      $(this).text('Unfollow').removeClass('follow').addClass('unfollow');
-      
-      var avatarUrl = $(this).parent().siblings('.avatar').css('background-image');
-      var owner = $(this).parent().siblings().children('.owner').text();
-      // the status will not be visible in the discovery
-      // using the about for now
-      var status = $(this).parent().siblings().children('.about').text();
-      var animationClassName = 'channelHeader';
-      
-      // create new channel from template for the sidebar
-      var newChannel = new channelTemplate(avatarUrl, owner, status, animationClassName);
-      
-      // get the start offset
-      var offset = $(this).parent().parent().offset();
-      var callback = function(){ 
-        $('.channels').removeClass('rainbowAnimationRunning');
-        $(this).addClass('selected');
-      }.bind(newChannel);
-      
-      $('.channels').addClass('rainbowAnimationRunning');
-      
-      // start the animation
-      rainbowAnimation(newChannel, offset, animationClassName, callback);
-    }
-
-    function rainbowAnimation(channel, offset, animationClassName, callback){
-      channel.css({
-        left : offset.left - innerHolder.offset().left,
-        top : offset.top - innerHolder.offset().top
-      });
-      innerHolder.prepend(channel);
-
-      // wrap a growing holder around it
-      var landingArea = $('<div>').addClass('bubbleHolder rainbowBubble');
-      channel.wrap(landingArea);
-
-      document.redraw();
-
-      // bind the callback on transition end for all bubbling channels
-      channel.one(transitionendEvent, { callback : callback }, reset);
-
-      // bubble!
-      channel.removeClass(animationClassName).css({ 'top' : '', 'left' : '', 'z-index' : ++movingChannels+1 });
-      // open a gap for the channel to arrive
-      channel.parent().css('height', channelHeight);
-    }
-  });
-  
-  /* ###
-  
-    Show Settings
-  
-    ### */
-  $('.settings').click(function(){
-    $(this).toggleClass('showSettings');
-  });
-  $('.settings li').click(function(event){
-    event.stopPropagation();
   });
   
   /* ###

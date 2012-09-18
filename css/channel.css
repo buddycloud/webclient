@@ -23,7 +23,6 @@
   left: 234px;
   color: rgba(0,0,0,0.89);
   text-shadow: 0 1px rgba(255,255,255,0.34);
-  background: hsl(0,0%,95%);
   box-shadow: -1px 0 #000,-2px 0 rgba(0,0,0,0.21);
   position: absolute;
   overflow: auto;
@@ -32,8 +31,6 @@
 .channelView {
   margin-right: 13px;
   padding: 13px 0 13px 13px;
-  min-width: 500px;
-  max-width: 580px;
   float: left;
 }
 .channelHeader {
@@ -150,8 +147,11 @@
   cursor: default;
 }
 .stream {
+  width: 580px;
   border-radius: 5px 5px;
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.08),0 0 13px rgba(0,0,0,0.05);
+  box-shadow: 
+    0 0 0 1px rgba(0,0,0,0.08),
+    0 0 13px rgba(0,0,0,0.05);
   position: relative;
   z-index: 2;
 }
@@ -183,7 +183,7 @@
   box-shadow: none;
 }
 .stream .newTopic {
-  padding: 13px 21px;
+  padding: 13px 21px 13px 84px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #eee));
   background: -webkit-linear-gradient(top, #fff 0%, #eee 100%);
   background:    -moz-linear-gradient(top, #fff 0%, #eee 100%);
@@ -213,9 +213,14 @@
     left: 21px;
     width: 50px;
   }
+.stream .newTopic .holder,
+.stream .answer .holder {
+  position: relative;
+  overflow: hidden;
+}
 .stream .newTopic textarea,
 .stream .answer textarea {
-  width: 474px;
+  width: 100%;
   height: 34px;
   padding: 6px 5px;
   margin: 0;
@@ -247,24 +252,18 @@
          -o-transition: none;
             transition: none;
   }
-  .stream .newTopic textarea {
-    float: right;
-  }
   .stream .newTopic.write textarea,
   .stream .answer.write textarea {
     height: 50px;
-    margin-bottom: 34px;
     color: #000;
     resize: vertical;
+    margin-bottom: 34px;
   }
   .stream .controls {
-    bottom: 14px;
-    right: 21px;
+    bottom: 1px;
+    right: 0;
     width: 100%;
     position: absolute;
-  }
-  .stream .newTopic .controls {
-    width: 474px;
   }
     .stream .controls .hint { float: left; }
     .stream .controls .button { float: right; }
@@ -538,10 +537,6 @@
         1px 1px white, 
         inset 1px 1px rgba(0,0,0,0.05);
     }
-  .post .answer textarea,
-  .post .answer .controls {
-    width: 407px;
-  }
   .post .comments .answer .avatar {
     width: 34px;
     left: 84px;
@@ -555,10 +550,6 @@
     .post .comments .answer.write .avatar {
       left: 36px;
     }
-  .post .answer .controls {
-    bottom: 22px;
-    right: 89px;
-  }
 .post:not('.noComments') .comments {
   border-top: 1px solid hsl(0, 0%, 95%);
 }

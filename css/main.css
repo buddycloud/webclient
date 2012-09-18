@@ -51,27 +51,13 @@ html {
   overflow-y: hidden;
   overflow-x: auto;
   font: 13px/17px "Helvetica Neue",Helvetica,Arial,sans-serif;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #003152), color-stop(1, #3c87aa));
-  background: -webkit-linear-gradient(top, #003152 0%, #3c87aa 100%);
-  background:    -moz-linear-gradient(top, #003152 0%, #3c87aa 100%);
-  background:     -ms-linear-gradient(top, #003152 0%, #3c87aa 100%);
-  background:      -o-linear-gradient(top, #003152 0%, #3c87aa 100%);
-  background:         linear-gradient(to bottom, #003152 0%, #3c87aa 100%);
-  background-attachment: fixed;
 }
 body {
   width: 100%;
   height: 100%;
   overflow-y: hidden;
   overflow-x: auto;
-  background: rgba(255,255,255,0.34);
-  background: -webkit-gradient(radial,50% 50%,0,50% 50%,100%,from(rgba(255,255,255,0.34)),to(rgba(255,255,255,0)));
-  background: -webkit-radial-gradient(center center,cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
-  background:    -moz-radial-gradient(center center,circle cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
-  background:      -o-radial-gradient(center center,cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
-  background:     -ms-radial-gradient(center center,cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
-  background:         radial-gradient(center center,cover,rgba(255,255,255,0.34),rgba(255,255,255,0));
-  background-attachment: fixed;
+  background: hsl(0,0%,95%);
   -webkit-text-size-adjust: none;
 }
 body.anonymous .content {
@@ -147,7 +133,7 @@ h5 {
 ul {
   list-style-type: none;
 }
-a, a:visited {
+a {
   color: #83ac35;
   text-decoration: none;
 }
