@@ -16,9 +16,9 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var DiscoverView = require('views/DiscoverView');
+  var DiscoverView = require('views/content/DiscoverView');
   var Search = require('models/Search');
-  var SearchBar = require('views/SearchBar');
+  var SearchBar = require('views/content/SearchBar');
 
   var DiscoverPage = Backbone.View.extend({
     className: 'discoverPage clearfix',
