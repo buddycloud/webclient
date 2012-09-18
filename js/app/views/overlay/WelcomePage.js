@@ -9,7 +9,12 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template));
-      $('.content').html(this.el);
+      $('.content').addClass('homepage').html(this.el);
+    },
+
+    remove: function() {
+      $('.content').removeClass('homepage')
+      Backbone.Model.prototype.fetch.call(this);
     }
   });
 
