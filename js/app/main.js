@@ -30,24 +30,46 @@ define(function(require) {
   var _ = require('underscore');
   var Backbone = require('backbone');
   var config = require('config');
+
   var ChannelPage = require('views/content/ChannelPage');
+  var DiscoverPage = require('views/content/DiscoverPage');
+  var WelcomePage = require('views/overlay/WelcomePage');
 
   var Router = Backbone.Router.extend({
     routes: {
-      '': 'defaultChannel',
-      ':channel': 'channel'
+      '': 'default',
+      'explore': 'explore',
+      'prefs': 'preferences',
+      ':channel': 'channel',
+      ':channel/edit' : 'channelEdit'
+},
+
+    default: function() {
+      // if logged in
+      new WelcomePage()
+      // if followed channels < 5
+      // this.navigate("explore")
+      // else
+      // this.navigate("mychannel@example.com")
     },
 
-    defaultChannel: function() {
-      new ChannelPage({channel: config.defaultChannel});
+    explore: function() {
+      new DiscoverPage();
+    },
+
+    prefs: function() {
+
     },
 
     channel: function(channel) {
       new ChannelPage({channel: channel});
-    }
+    },
+    
+    channelEdit: function(channel) {
+      new ChannelPage({channel: channel, edit: true})
   });
 
   new Router();
-  Backbone.history.start({root: window.location.pathname, pushState: true});
+  Backbone.history.start({root: window.location.pathname/*, pushState: true*/});
 });
 
