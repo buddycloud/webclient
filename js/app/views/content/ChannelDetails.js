@@ -16,15 +16,37 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var ChannelList = require('views/content/ChannelList');
   var template = require('text!templates/content/channelDetails.html')
 
   var ChannelDetails = Backbone.View.extend({
     className: 'channelDetails',
 
+    initialize: function() {
+      this.moderatorsList = new ChannelList({title: 'moderators'});
+      this.followersList = new ChannelList({title: 'followers'});
+    },
+
     render: function() {
-      this.$el.html(_.template(template, {
-        metadata: this.model.metadata
-      }));
+      var metadata = this.model.metadata;
+      this.$el.html(_.template(template, {metadata: metadata}));
+      this._renderChannelLists();
+    },
+
+    _renderChannelLists: function() {
+      this._populateChannelLists();
+      this.moderatorsList.render();
+      this.followersList.render();
+      this.$('.holder').append(this.moderatorsList.el);
+      this.$('.holder').append(this.followersList.el);
+    },
+
+    _populateChannelLists: function() {
+      var types = this.model.followers.byType();
+      var moderators = (types['owner'] || []).concat(types['moderator'] || []);
+      var followers = (types['publisher'] || []).concat(types['member'] || []);
+      this.moderatorsList.model = moderators;
+      this.followersList.model = followers;
     }
   });
 
