@@ -15,12 +15,18 @@
  */
 
 define(function(require) {
+  var $ = require('jquery');
   var Backbone = require('backbone');
+  var Post = require('models/Post');
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
+    events: {
+      'click .newTopic': '_expandNewTopicArea',
+      'click .createComment': '_post',
+    },
 
     initialize: function() {
       this._posts = [];
@@ -62,6 +68,31 @@ define(function(require) {
       var self = this;
       _.each(this._posts, function(post) {
         self.$('.posts').append(post.el);
+      });
+    },
+
+    _expandNewTopicArea: function(event) {
+      event.stopPropagation();
+      var newTopicArea = this.$('.newTopic');
+      if(!newTopicArea.hasClass('write')){
+        newTopicArea.addClass('write');
+        $(document).one('click', {self: this}, this._collapseNewTopicArea);
+      }
+    },
+
+    _collapseNewTopicArea: function(event) {
+      var newTopicArea = event.data.self.$('.newTopic');
+      var textArea = newTopicArea.find('textarea');
+      if(textArea.val() === ""){
+        newTopicArea.removeClass('write');
+      }
+    },
+
+    _post: function() {
+      var content = this.$('textarea').val();
+      var post = new Post({content: content});
+      this.model.posts.create({content: content}, {
+        credentials: this.options.user.credentials
       });
     }
   });
