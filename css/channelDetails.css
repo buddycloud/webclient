@@ -1,12 +1,9 @@
 .channelDetails {
-  width: 304px;
-  margin-top: 118px;
-  margin-left: -13px;
+  margin-top: 21px;
   font-size: 12px;
   color: #808080;
   text-shadow: 0 1px 1px #fff;
   overflow: hidden;
-  float: left;
 }
 .channelDetails .infoToggle {
   width: 259px;

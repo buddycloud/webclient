@@ -3,20 +3,14 @@
 }
 
 .anonView .channelView {
-  width: 580px;
-  float: none;
-}
-
-.anonView .channelDetails {
   width: auto;
-  float: none;
-  margin-top: 174px;
 }
 
 .navigation {
-  padding: 13px 21px;
+  padding: 0 0 13px;
   position: relative;
   width: 580px;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
   .navigation .buddycloud123 {

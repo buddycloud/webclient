@@ -37,6 +37,7 @@
 .reddit { background-image: url(../img/reddit_16.png); }
 .tumblr { background-image: url(../img/tumblr_16.png); }
 
+/* flex box helpers */
 .centered, .justify, .horizontal {
   display: -webkit-box;
   display:    -moz-box;
@@ -44,8 +45,11 @@
   display:      -o-box;
   display:         box;
 }
-.stretch {
+.stretchWidth {
   width: 100%;
+}
+.stretchHeight {
+  height: 100%;
 }
 .centered {
   -webkit-box-align: center;
@@ -58,6 +62,13 @@
       -ms-box-pack: center;
        -o-box-pack: center;
           box-pack: center;
+}
+.start {
+  -webkit-box-align: start;
+     -moz-box-align: start;
+      -ms-box-align: start;
+       -o-box-align: start;
+          box-align: start;
 }
 .justify, .horizontal {
   width: 100%;

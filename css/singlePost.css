@@ -1,21 +1,7 @@
-html.singlePost {
-  overflow: auto;
-}
-
-.singlePost body {
-  background: hsl(0, 0%, 95%);
-  overflow: visible;
-  height: auto;
-  min-height: 100%;
-}
-
-.singlePost .content {
-  width: 606px;
+.content.singlePost {
   min-width: 0;
-  position: relative;
   left: 0;
   box-shadow: none;
-  overflow: visible;
 }
 
 .singlePost .stream p {
@@ -23,8 +9,6 @@ html.singlePost {
 }
 
 .singlePost .channelView {
-  width: 606px;
-  max-width: 9999px;
   margin-right: 0;
   padding: 0;
   float: none;
@@ -64,7 +48,8 @@ html.singlePost {
 
 .joinBuddycloud {
   height: 211px;
-  margin: -217px 12px 0;
+  width: 554px;
+  margin: -213px 12px 0;
   padding: 21px;
   background: hsl(0,0%,90%);
   border: 1px solid rgba(0,0,0,.13);

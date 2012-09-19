@@ -1,6 +1,10 @@
 .searchbar {
   padding: 19px 34px 20px;
   background: -webkit-linear-gradient(left, hsl(199, 0%, 85%), hsl(199, 0%, 93%), hsl(199, 0%, 85%));
+  background:    -moz-linear-gradient(left, hsl(199, 0%, 85%), hsl(199, 0%, 93%), hsl(199, 0%, 85%));
+  background:     -ms-linear-gradient(left, hsl(199, 0%, 85%), hsl(199, 0%, 93%), hsl(199, 0%, 85%));
+  background:      -o-linear-gradient(left, hsl(199, 0%, 85%), hsl(199, 0%, 93%), hsl(199, 0%, 85%));
+  background:         linear-gradient(left, hsl(199, 0%, 85%), hsl(199, 0%, 93%), hsl(199, 0%, 85%));
   border-bottom: 1px solid hsl(199, 0%, 75%);
   box-shadow: 0 -1px hsl(199, 0%, 85%) inset, 0 1px white;
 }

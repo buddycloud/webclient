@@ -38,7 +38,7 @@
     position: relative;
     width: 13px;
     height: 10px;
-    bottom: -1px;
+    margin-bottom: -1px;
     overflow: hidden;
   }
     .popup .arrow:before {
@@ -51,5 +51,8 @@
       border: 1px solid hsl(0,0%,83%);
       background: white;
       -webkit-transform: rotate(45deg);
-      
+         -moz-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+           -o-transform: rotate(45deg);
+              transform: rotate(45deg);
     }

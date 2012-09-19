@@ -562,7 +562,7 @@
   }
   
   function reset(event){
-    if(event.data.callback) event.data.callback();
+    if(event.data && event.data.callback) event.data.callback();
     // reset the bubbling channel and unwrap it
     $(this).removeClass('bubbling').css({ 'height' : '', 'z-index' : '' }).unwrap();
     movingChannels--;
@@ -615,6 +615,7 @@
     var offset = $(this).parent().offset();
     var callback = function(){ 
       $('.channels').removeClass('rainbowAnimationRunning');
+      $(this).css({ left: '', top: '' });
     }.bind(newChannel);
     
     $('.channels').addClass('rainbowAnimationRunning');
@@ -640,7 +641,7 @@
     channel.one(transitionendEvent, { callback : callback }, reset);
 
     // bubble!
-    channel.removeClass(animationClassName).css({ 'top' : '', 'left' : '', 'z-index' : ++movingChannels+1 });
+    channel.removeClass(animationClassName).css({ 'top' : 0, 'left' : 0, 'z-index' : ++movingChannels+1 });
     // open a gap for the channel to arrive
     channel.parent().css('height', channelHeight);
   }

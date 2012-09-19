@@ -17,7 +17,7 @@
 
   .homepage form {
     right: 1px;
-    top: 27px;
+    top: 28px;
     padding: 13px 3px 13px 13px;
     background: white;
     position: absolute;
@@ -28,7 +28,10 @@
       0 2px rgba(255,255,255,.13);
     display: none;
   }
-  .homepage form.login { padding: 13px; }
+  .homepage form.login { 
+    padding: 13px;
+    right: 52px;
+  }
   .homepage form.register { width: 480px; }
   .homepage .showLogin form.login { display: block; }
   .homepage .showRegister form.register { display: block; }

@@ -21,7 +21,7 @@
        -o-transition: left 400ms;
           transition: left 400ms;
 }
-  .sidebar:after {
+  .sidebar:before {
     content: "";
     position: absolute;
     top: 0;
@@ -46,15 +46,15 @@
   left: 0;
   position: absolute;
   overflow-y: auto;
-  z-index: 2;
+  overflow-x: hidden;
 }
   .channels.rainbowAnimationRunning {
     overflow-y: visible;
+    overflow-x: visible;
   }
 .sidebar nav {
+  z-index: 2;
   position: relative;
-  z-index: 1;
-  overflow: hidden;
   box-shadow: -1px 0 black inset,0 1px hsla(0, 0%, 0%, 0.55),0 2px hsla(0, 0%, 0%, 0.21),0 3px hsla(0, 0%, 0%, 0.13);
 }
 .sidebar button {
@@ -155,8 +155,8 @@
   background:         linear-gradient(to bottom, #60859d 0%, #4a6e88 100%);
   border-bottom: 1px solid #000;
   box-shadow: -1px 0 #000 inset;
+  z-index: 3;
   position: relative;
-  z-index: 1;
 }
 .personal.channel .avatar,
 .personal.channel.selected .avatar {
@@ -193,6 +193,7 @@
     display:         box;
   }
 .channel {
+  left: 0;
   width: 145px;
   height: 34px;
   padding: 16px 13px 16px 76px;
@@ -272,46 +273,17 @@
   background-size: cover;
   position: absolute;
   z-index: 1;
-  -webkit-transition: width 500ms, height 500ms;
-     -moz-transition: width 500ms, height 500ms;
-      -ms-transition: width 500ms, height 500ms;
-       -o-transition: width 500ms, height 500ms;
-          transition: width 500ms, height 500ms;
-}
-.sidebar .avatar {
   box-shadow: 
     0 0 0 1px rgba(0,0,0,0.55),
     0 1px 1px rgba(0,0,0,0.55),
-    0 0 0 1px rgba(255,255,255,0.55) inset;    
-  -webkit-transition: top 500ms linear;
-     -moz-transition: top 500ms linear;
-      -ms-transition: top 500ms linear;
-       -o-transition: top 500ms linear;
-          transition: top 500ms linear;
+    0 0 0 1px rgba(255,255,255,0.55) inset;
+  -webkit-transition: width 500ms, height 500ms, top 500ms linear;
+     -moz-transition: width 500ms, height 500ms, top 500ms linear;
+      -ms-transition: width 500ms, height 500ms, top 500ms linear;
+       -o-transition: width 500ms, height 500ms, top 500ms linear;
+          transition: width 500ms, height 500ms, top 500ms linear;
 }
-.tutorial {
-  height: 123px;
-  padding: 12px 12px 12px 7px;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgba(255,255,255,0.34)), color-stop(1, rgba(255,255,255,0.21)));
-  background: -webkit-linear-gradient(top, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.21) 100%);
-  background:    -moz-linear-gradient(top, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.21) 100%);
-  background:     -ms-linear-gradient(top, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.21) 100%);
-  background:      -o-linear-gradient(top, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.21) 100%);
-  background:         linear-gradient(to bottom, rgba(255,255,255,0.34) 0%, rgba(255,255,255,0.21) 100%);
-}
-.tutorial .arrow {
-  padding-left: 7px;
-  font-size: 42px;
-  color: #cd296b;
-  text-shadow: #000 0 0 2px;
-}
-.tutorial .info {
-  cursor: auto;
-  top: 0;
-  margin-top: 0;
-  text-shadow: #000 0 0 1px;
-}
-.sidebar .selected .avatar {
+.channel .selected .avatar {
   box-shadow: 0 0 0 1px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.55) inset,0 0 0 3px #83ac35,0 0 0 4px #90bd3a,0 0 2px 4px rgba(0,0,0,0.34);
 }
 .counter {

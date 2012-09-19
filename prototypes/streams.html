@@ -21,13 +21,15 @@
         <span class="status">Aww yeah, Mountain Lion rocks</span>
       </div>
       <div class="settings noSelect">
-        <div class="popup centered vertical">
-          <div class="arrow"></div>
-          <ul>
-            <li class="newChannel"><a href="editChannel.html">Create Topic Channel</a>
-            <li class="preferences"><a href="preferences.html">Preferences</a>
-            <li class="logout">Logout
-          </ul>
+        <div class="popup">
+          <div class="centered vertical">
+            <div class="arrow"></div>
+            <ul>
+              <li class="newChannel"><a href="editChannel.html">Create Topic Channel</a>
+              <li class="preferences"><a href="preferences.html">Preferences</a>
+              <li class="logout">Logout
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -193,26 +195,26 @@
   </div>
   <div class="content">
     <div class="channelView personal clearfix">
-        <!--<div class="banner" style="background-image: url(public/images/vera_bg.jpg);"></div>-->
-        <header class="channelHeader justify">
-          <div class="avatar" style="background-image: url(avatars/user2_big.jpg)"></div>
-          <div class="flex titleText">
-            <h2 class="owner" data-editmode="singleLine">Vera Maier</h2>
-            <div class="about" data-editmode="multiLine">I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend.</div>
-          </div>
-          <nav class="inChannel">
-            <!--<span class="messages button newMessage">
-              <span class="holder">Messages</span><span class="message counter">2</span>
-            </span>-->
-            <span class="channel button">
-              <span class="holder">Channel</span>
-            </span>
-            <span class="hidden save button">Save</span>
-            <!--<span class="edit button">Edit</span>-->
-            <span class="unfollow button">Unfollow</span>
-          </nav>
-          <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
-        </header>
+      <header class="channelHeader justify">
+        <div class="avatar" style="background-image: url(avatars/user2_big.jpg)"></div>
+        <div class="flex titleText">
+          <h2 class="owner" data-editmode="singleLine">Vera Maier</h2>
+          <div class="about" data-editmode="multiLine">I'm Vera, I love to cook, I love clothes and most of all, I love my boyfriend.</div>
+        </div>
+        <nav class="inChannel">
+          <!--<span class="messages button newMessage">
+            <span class="holder">Messages</span><span class="message counter">2</span>
+          </span>-->
+          <span class="channel button">
+            <span class="holder">Channel</span>
+          </span>
+          <span class="hidden save button">Save</span>
+          <!--<span class="edit button">Edit</span>-->
+          <span class="unfollow button">Unfollow</span>
+        </nav>
+        <a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>
+      </header>
+      <div class="centered start">
         <section class="stream clearfix">
           <section class="newTopic">
             <img class="avatar" src="avatars/user1.jpg" />
@@ -225,7 +227,7 @@
             </div>
           </section>
           <!-- this produces some weird bug - some content below
-	    it gets lost when this is visible -->
+      it gets lost when this is visible -->
       	  <div class="notifications">
       	    <article class="notification">
       	      <section>
@@ -414,136 +416,137 @@
             <span class="spinner"></span>
           </p>
         </section><!-- /stream -->
-      </div><!-- /channelView -->
-      <div class="channelDetails">
-        <div class="infoToggle">
-          <h4 class="title">Info</h4>
-          <span class="icon"></span>
-        </div>
-        <div class="holder">
-          <section class="meta">
-            <p class="address">
-              <span class="title">Address:</span>
-              <span class="data">vera@buddycloud.com</span>
-            </p>
-            <p class="open">
-              <span class="title">This Channel is:</span>
-	<span class="data accessModel" data-editmode="boolean">Public</span>
-            </p>
-            <p class="broadcast">
-              <span class="title">Broadcasting for:</span>
-	<time class="data"
-	      datetime="2011-06-06T05:06:00.000Z"
-	      title="5:06pm 06.06.2011"
-	      data-strftime="%f"
-	      data-strftitle="%A %d %B %Y %H:%M">188 days</time>
-            </p>
-          </section>
-          <section class="channelList">
-            <h3>moderators <span class="count">1</count></h3>
-            <div class="list">
-              <img src="avatars/user2.jpg" />
-            </div>
-          </section><!-- /followers -->
-          <section class="channelList">
-            <h3>followers <span class="count">20</count></h3>
-            <div class="list">
-              <img src="avatars/user3.jpg" class="selected" />
-              <img src="avatars/user4.jpg" />
-              <img src="avatars/user5.jpg" />
-              <img src="avatars/user6.jpg" />
-              <div class="adminAction first">
-                <div class="arrow"></div>
-                <div class="holder">
-                  <div class="box">
-                    <section class="channelInfo">
-                      <h4>tom@buddycloud.com</h4>
-                      <div class="currentRole">Follower</div>
-                    </section>
-                    <section class="action changeRole">
-                      <h5>Change Role</h5>
-                      <select>
-                        <option value="moderator">Moderator</option>
-                        <option value="followerPlus">Follower+Post</option>
-                        <option value="follower" selected>Follower</option>
-                      </select>
-                      <section class="info">
-                        <div class="moderator">
+        <div class="channelDetails">
+          <div class="infoToggle">
+            <h4 class="title">Info</h4>
+            <span class="icon"></span>
+          </div>
+          <div class="holder">
+            <section class="meta">
+              <p class="address">
+                <span class="title">Address:</span>
+                <span class="data">vera@buddycloud.com</span>
+              </p>
+              <p class="open">
+                <span class="title">This Channel is:</span>
+    <span class="data accessModel" data-editmode="boolean">Public</span>
+              </p>
+              <p class="broadcast">
+                <span class="title">Broadcasting for:</span>
+    <time class="data"
+          datetime="2011-06-06T05:06:00.000Z"
+          title="5:06pm 06.06.2011"
+          data-strftime="%f"
+          data-strftitle="%A %d %B %Y %H:%M">188 days</time>
+              </p>
+            </section>
+            <section class="channelList">
+              <h3>moderators <span class="count">1</count></h3>
+              <div class="list">
+                <img src="avatars/user2.jpg" />
+              </div>
+            </section><!-- /followers -->
+            <section class="channelList">
+              <h3>followers <span class="count">20</count></h3>
+              <div class="list">
+                <img src="avatars/user3.jpg" class="selected" />
+                <img src="avatars/user4.jpg" />
+                <img src="avatars/user5.jpg" />
+                <img src="avatars/user6.jpg" />
+                <div class="adminAction first">
+                  <div class="arrow"></div>
+                  <div class="holder">
+                    <div class="box">
+                      <section class="channelInfo">
+                        <h4>tom@buddycloud.com</h4>
+                        <div class="currentRole">Follower</div>
+                      </section>
+                      <section class="action changeRole">
+                        <h5>Change Role</h5>
+                        <select>
+                          <option value="moderator">Moderator</option>
+                          <option value="followerPlus">Follower+Post</option>
+                          <option value="follower" selected>Follower</option>
+                        </select>
+                        <section class="info">
+                          <div class="moderator">
+                            <ul>
+                              <li>read your channel</li>
+                              <li>write comments &amp; messages</li>
+                              <li>post new topics</li>
+                              <li>approve new followers</li>
+                              <li>set user's roles</li>
+                              <li>delete posts</li>
+                            </ul>
+                          </div>
+                          <div class="followerPlus">
+                            <ul>
+                              <li>read your channel</li>
+                              <li>write comments &amp; messages</li>
+                              <li>post new topics</li>
+                            </ul>
+                          </div>
+                          <div class="follower">
+                            <ul>
+                              <li>read your channel</li>
+                            </ul>
+                          </div>
+                        </section>
+                      </section>
+                      <section class="action banUser">
+                        <h5>Ban User</h5>
+                        <div class="info">
                           <ul>
-                            <li>read your channel</li>
-                            <li>write comments &amp; messages</li>
-                            <li>post new topics</li>
-                            <li>approve new followers</li>
-                            <li>set user's roles</li>
-                            <li>delete posts</li>
-                          </ul>
-                        </div>
-                        <div class="followerPlus">
-                          <ul>
-                            <li>read your channel</li>
-                            <li>write comments &amp; messages</li>
-                            <li>post new topics</li>
-                          </ul>
-                        </div>
-                        <div class="follower">
-                          <ul>
-                            <li>read your channel</li>
+                            <li class="negative">Remove access to channel.</li>
                           </ul>
                         </div>
                       </section>
-                    </section>
-                    <section class="action banUser">
-                      <h5>Ban User</h5>
-                      <div class="info">
-                        <ul>
-                          <li class="negative">Remove access to channel.</li>
-                        </ul>
-                      </div>
-                    </section>
-                    <section class="actionRow choose">
-                      <div class="changeRoleButton">Change Role</div>
-                      <div class="banUserButton">Ban User</div>
-                    </section>
-                    <section class="actionRow confirm">
-                      <div class="cancelButton">Cancel</div>
-                      <div class="okButton">Ok</div>
-                    </section>
-                  </div><!-- /box -->
+                      <section class="actionRow choose">
+                        <div class="changeRoleButton">Change Role</div>
+                        <div class="banUserButton">Ban User</div>
+                      </section>
+                      <section class="actionRow confirm">
+                        <div class="cancelButton">Cancel</div>
+                        <div class="okButton">Ok</div>
+                      </section>
+                    </div><!-- /box -->
+                  </div>
                 </div>
+                <img src="avatars/user7.jpg" />
+                <img src="avatars/user8.jpg" />
+                <img src="avatars/user9.jpg" />
+                <img src="avatars/user10.jpg" />
+                <img src="avatars/user11.jpg" />
+                <img src="avatars/user12.jpg" />
+                <img src="avatars/user13.jpg" />
+                <img src="avatars/channel8.jpg" />
               </div>
-              <img src="avatars/user7.jpg" />
-              <img src="avatars/user8.jpg" />
-              <img src="avatars/user9.jpg" />
-              <img src="avatars/user10.jpg" />
-              <img src="avatars/user11.jpg" />
-              <img src="avatars/user12.jpg" />
-              <img src="avatars/user13.jpg" />
-              <img src="avatars/channel8.jpg" />
-            </div>
-            <div class="showAll">show all</div>
-          </section><!-- /followers -->
-          <section class="channelList">
-            <h3>channels nearby <span class="count">10</count></h3>
-            <div class="list">
-              <img src="avatars/channel1.jpg" />
-              <img src="avatars/channel2.jpg" />
-              <img src="avatars/channel3.jpg" />
-              <img src="avatars/channel4.jpg" />
-            </div>
-            <div class="showAll">show all</div>
-          </section><!-- /followers -->
-          <section class="channelList">
-            <h3>similar channels <span class="count">8</count></h3>
-            <div class="list">
-              <img src="avatars/channel5.jpg" />
-              <img src="avatars/channel6.jpg" />
-              <img src="avatars/channel7.jpg" />
-              <img src="avatars/channel8.jpg" />
-            </div>
-            <div class="showAll">show all</div>
-          </section><!-- /followers -->
-        </div><!-- /holder -->
-      </div><!-- /detail -->
+              <div class="showAll">show all</div>
+            </section><!-- /followers -->
+            <section class="channelList">
+              <h3>channels nearby <span class="count">10</count></h3>
+              <div class="list">
+                <img src="avatars/channel1.jpg" />
+                <img src="avatars/channel2.jpg" />
+                <img src="avatars/channel3.jpg" />
+                <img src="avatars/channel4.jpg" />
+              </div>
+              <div class="showAll">show all</div>
+            </section><!-- /followers -->
+            <section class="channelList">
+              <h3>similar channels <span class="count">8</count></h3>
+              <div class="list">
+                <img src="avatars/channel5.jpg" />
+                <img src="avatars/channel6.jpg" />
+                <img src="avatars/channel7.jpg" />
+                <img src="avatars/channel8.jpg" />
+              </div>
+              <div class="showAll">show all</div>
+            </section><!-- /followers -->
+          </div><!-- /holder -->
+        </div><!-- /detail -->
+      </div>
+    </div><!-- /channelView -->
   </div><!-- /content -->
 <script type="text/javascript">
   /* ###
@@ -683,12 +686,11 @@
   }
 
   function reset(event){
-    if(event.data.callback) event.data.callback();
+    if(event.data && event.data.callback) event.data.callback();
     // reset the bubbling channel and unwrap it
     $(this).removeClass('bubbling').css({ 'height' : '', 'z-index' : '' }).unwrap();
     movingChannels--;
   }
-
   channels.click(bubble);
   //channels.toggle(function(){ $(this).css('background', 'red'); }, function(){ $(this).css('background', 'green'); });
 
@@ -892,80 +894,81 @@
     document.redraw();
     
     channelToRemove.addClass('remove');
-    
-    /* ###
-    
-      follow
-      
-    ### */
-    
-    function channelTemplate(avatarUrl, owner, status, animationClassName){
-      return $('<div class="channel">')
-        .addClass(animationClassName ? animationClassName : "")
-        .append(
-          $('<div class="avatar">').css('background-image', avatarUrl)
-        )
-        .append(
-          $('<div class="info">')
-            .append(
-              $('<div class="owner">').text(owner)
-            )
-            .append(
-              $('<div class="status">').text(status)
-            )
-        );
-    }
-    
-    $('.inChannel').on('click', '.follow', follow);
-    
-    function follow(){
-      $(this).text('Unfollow').removeClass('follow').addClass('unfollow');
-      
-      var avatarUrl = $(this).parent().siblings('.avatar').css('background-image');
-      var owner = $(this).parent().siblings().children('.owner').text();
-      // the status will not be visible in the discovery
-      // using the about for now
-      var status = $(this).parent().siblings().children('.about').text();
-      var animationClassName = 'channelHeader';
-      
-      // create new channel from template for the sidebar
-      var newChannel = new channelTemplate(avatarUrl, owner, status, animationClassName);
-      
-      // get the start offset
-      var offset = $(this).parent().parent().offset();
-      var callback = function(){ 
-        $('.channels').removeClass('rainbowAnimationRunning');
-        $(this).addClass('selected');
-      }.bind(newChannel);
-      
-      $('.channels').addClass('rainbowAnimationRunning');
-      
-      // start the animation
-      rainbowAnimation(newChannel, offset, animationClassName, callback);
-    }
-
-    function rainbowAnimation(channel, offset, animationClassName, callback){
-      channel.css({
-        left : offset.left - innerHolder.offset().left,
-        top : offset.top - innerHolder.offset().top
-      });
-      innerHolder.prepend(channel);
-
-      // wrap a growing holder around it
-      var landingArea = $('<div>').addClass('bubbleHolder rainbowBubble');
-      channel.wrap(landingArea);
-
-      document.redraw();
-
-      // bind the callback on transition end for all bubbling channels
-      channel.one(transitionendEvent, { callback : callback }, reset);
-
-      // bubble!
-      channel.removeClass(animationClassName).css({ 'top' : '', 'left' : '', 'z-index' : ++movingChannels+1 });
-      // open a gap for the channel to arrive
-      channel.parent().css('height', channelHeight);
-    }
   });
+    
+  /* ###
+  
+    follow
+    
+    ### */
+   
+  function channelTemplate(avatarUrl, owner, status, animationClassName){
+    return $('<div class="channel">')
+      .addClass(animationClassName ? animationClassName : "")
+      .append(
+        $('<div class="avatar">').css('background-image', avatarUrl)
+      )
+      .append(
+        $('<div class="info">')
+          .append(
+            $('<div class="owner">').text(owner)
+          )
+          .append(
+            $('<div class="status">').text(status)
+          )
+      );
+  }
+  
+  $('.inChannel').on('click', '.follow', follow);
+  
+  function follow(){
+    // TODO: scroll channel list up (animation) and the go on
+    $(this).text('Unfollow').removeClass('follow').addClass('unfollow');
+    
+    var avatarUrl = $(this).parent().siblings('.avatar').css('background-image');
+    var owner = $(this).parent().siblings().children('.owner').text();
+    // the status will not be visible in the discovery
+    // using the about for now
+    var status = $(this).parent().siblings().children('.about').text();
+    var animationClassName = 'channelHeader';
+    
+    // create new channel from template for the sidebar
+    var newChannel = new channelTemplate(avatarUrl, owner, status, animationClassName);
+    
+    // get the start offset
+    var offset = $(this).parents('.channelHeader').offset();
+    var callback = function(){ 
+      $('.channels').removeClass('rainbowAnimationRunning');
+      $(this).addClass('selected').css({ left: '', top: '' });
+    }.bind(newChannel);
+    
+    $('.channels').addClass('rainbowAnimationRunning');
+    
+    // start the animation
+    rainbowAnimation(newChannel, offset, animationClassName, callback);
+  }
+
+  function rainbowAnimation(channel, offset, animationClassName, callback){
+    channel.css({
+      left : offset.left - innerHolder.offset().left,
+      top : offset.top - innerHolder.offset().top
+    });
+    innerHolder.prepend(channel);
+
+    // wrap a growing holder around it
+    var landingArea = $('<div>').addClass('bubbleHolder rainbowBubble');
+    channel.wrap(landingArea);
+
+    document.redraw();
+
+    // bind the callback on transition end for all bubbling channels
+    channel.one(transitionendEvent, { callback : callback }, reset);
+
+    // bubble!
+    channel.removeClass(animationClassName).css({ 'top' : 0, 'left' : 0, 'z-index' : ++movingChannels+1 });
+    // open a gap for the channel to arrive
+    channel.parent().css('height', channelHeight);
+  }
   
   /* ###
   

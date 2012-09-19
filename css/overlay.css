@@ -14,14 +14,22 @@
   z-index: 10;
   display: none;
   opacity: 0;
-  -webkit-transition: opacity 500ms;
-     -moz-transition: opacity 500ms;
-      -ms-transition: opacity 500ms;
-       -o-transition: opacity 500ms;
-          transition: opacity 500ms;
+  -webkit-transition: opacity 500ms 250ms;
+     -moz-transition: opacity 500ms 250ms;
+      -ms-transition: opacity 500ms 250ms;
+       -o-transition: opacity 500ms 250ms;
+          transition: opacity 500ms 250ms;
 }
+  .overlay.show {
+    display: block;
+  }
   .overlay.visible {
     opacity: 1;
+    -webkit-transition: opacity 500ms;
+       -moz-transition: opacity 500ms;
+        -ms-transition: opacity 500ms;
+         -o-transition: opacity 500ms;
+            transition: opacity 500ms;
   }
 
 .overlay .left h2 {
@@ -116,4 +124,17 @@
 }
 .overlay form .submit {
   margin-top: 18px;
+  height: 24px;
 }
+  .overlay form.loading .storePassword {
+    display: none;
+  }
+  .overlay form span.loading {
+    margin-left: 3px;
+    margin-top: 2px;
+    color: hsl(0, 0%, 40%);
+    display: none;
+  }
+  .overlay form.loading span.loading {
+    display: inline-block;
+  }

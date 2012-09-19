@@ -30,9 +30,9 @@
     left: 234px;
   }
 .channelView {
+  width: 580px;
   margin-right: 13px;
   padding: 0 0 13px 13px;
-  float: left;
 }
 .channelHeader {
   width: 580px;
@@ -41,13 +41,14 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.channelHeader .avatar {
-  width: 75px;
-  height: 75px;
-}
-.channelHeader .titleText {
-  margin: 0 13px;
-}
+  .channelHeader .avatar,
+  .channelHeader .avatar {
+    width: 75px;
+    height: 75px;
+  }
+  .channelHeader .titleText {
+    margin: 0 13px;
+  }
 .channelHeader .owner,
 .channelHeader .status,
 .channelHeader .location {
