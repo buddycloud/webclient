@@ -33,7 +33,7 @@ define(function(require) {
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
       if (!this._userCanPost()) {
-        this.$('.answer').hide();
+        this.$('.answer').remove();
       }
     },
 
