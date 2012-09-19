@@ -86,6 +86,9 @@ form label {
   line-height: 20px;
   display: inline-block;
 }
+form .storePassword label {
+  padding-left: 0;
+}
 form input[type=text],
 form input[type=password],
 form input[type=email] {
@@ -139,6 +142,9 @@ form button[disabled] {
 }
 form .forgot {
   float: right;
+}
+form .submit {
+  margin-top: 13px;
 }
 
 form.stream {
