@@ -32,6 +32,9 @@ define(function(require) {
         linkify: linkify
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      if (!this.options.credentials.username) {
+        this.$('.answer').hide();
+      }
     }
   });
 

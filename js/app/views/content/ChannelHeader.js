@@ -26,6 +26,9 @@ define(function(require) {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
+      if (!this.options.credentials.username) {
+        this.$('.follow').hide();
+      }
     }
   });
 

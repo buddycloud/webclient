@@ -52,7 +52,7 @@ define(function(require) {
     },
 
     channel: function(channel) {
-      new ChannelPage({channel: channel});
+      new ChannelPage({channel: channel, credentials: this.credentials});
     },
 
     channelEdit: function(channel) {

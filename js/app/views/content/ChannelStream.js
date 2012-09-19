@@ -24,14 +24,15 @@ define(function(require) {
 
     initialize: function() {
       this._posts = [];
-      this.model.posts.bind('reset', this._renderPosts, this);
+      this.model.posts.bind('reset', this._preRenderPosts, this);
     },
 
-    _renderPosts: function() {
+    _preRenderPosts: function() {
       var posts = this.model.posts.byThread();
       var self = this;
       _.each(posts, function(post) {
-        var view = new PostView({model: post});
+        var credentials = self.options.credentials;
+        var view = new PostView({model: post, credentials: credentials});
         view.render();
         self._posts.push(view);
       });
@@ -39,6 +40,13 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template));
+      if (!this.options.credentials.username) {
+        this.$('.newTopic').hide();
+      }
+      this._appendPosts();
+    },
+
+    _appendPosts: function() {
       var self = this;
       _.each(this._posts, function(post) {
         self.$('.posts').append(post.el);
