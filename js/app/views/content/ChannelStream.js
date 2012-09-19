@@ -39,7 +39,7 @@ define(function(require) {
       _.each(posts, function(post) {
         var view = new PostView({
           model: post,
-          channel: self.model.name,
+          channel: self.model,
           user: self.options.user
         });
         view.render();
@@ -102,7 +102,7 @@ define(function(require) {
       // when real-time support arrives.
       var view = new PostView({
         model: [post],
-        channel: this.model.name,
+        channel: this.model,
         user: this.options.user
       });
       console.log(post);
