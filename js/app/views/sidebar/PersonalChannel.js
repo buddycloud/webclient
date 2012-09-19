@@ -18,7 +18,8 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
-  var template = require('text!templates/sidebar/personalChannel.html')
+  var template = require('text!templates/sidebar/personalChannel.html');
+  var Events = Backbone.Events;
 
   var PersonalChannel = Backbone.View.extend({
     className: 'personal channel',
@@ -27,11 +28,16 @@ define(function(require) {
       this.metadata = new ChannelMetadata(this.model.username);
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
+      this.on('click', this._navigate, this);
     },
 
     render: function() {
       this.$el.html(_.template(template,{metadata: this.metadata}));
       avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);
+    },
+
+    _navigate: function() {
+      Events.trigger('navigate', this.model.username);
     }
   });
 
