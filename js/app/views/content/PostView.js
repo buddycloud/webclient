@@ -91,8 +91,9 @@ define(function(require) {
     },
 
     _comment: function(event) {
+      console.log('post comment');
       event.stopPropagation();
-      var content = this.$('textarea').val();
+      var content = this.$('.answer textarea').val();
       var self = this;
       var comment = this.options.channel.posts.create({
         content: content,

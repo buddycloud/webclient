@@ -89,7 +89,7 @@ define(function(require) {
     },
 
     _post: function() {
-      var content = this.$('textarea').val();
+      var content = this.$('.newTopic textarea').val();
       var self = this;
       var post = this.model.posts.create({content: content}, {
         credentials: this.options.user.credentials,
