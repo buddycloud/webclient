@@ -92,14 +92,19 @@ define(function(require) {
 
     _comment: function(event) {
       event.stopPropagation();
-      var content = this.$('.answer textarea').val();
+      var textArea = this.$('.answer textarea');
+      var content = textArea.val();
       var self = this;
       var comment = this.options.channel.posts.create({
         content: content,
         replyTo: this.model[0].id
       }, {
         credentials: this.options.user.credentials,
-        success: function() { self._showComment(comment); }
+        success: function() {
+          textArea.val('');
+          self._collapseAnswerArea({data: {self: self}});
+          self._showComment(comment);
+        }
       });
     },
 
