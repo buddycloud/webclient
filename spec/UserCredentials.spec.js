@@ -59,52 +59,6 @@ define(function(require) {
       });
     });
 
-    describe('register()', function() {
-      it('should send register request to URL /account', function() {
-        spyOn($, 'ajax').andCallFake(function(options) {
-          expect(options.url).toBe('https://example.com/account');
-          expect(options.contentType).toBe('application/json');
-          expect(options.method).toBe('POST');
-          expect(options.data).toBe(
-            JSON.stringify(
-              {
-                'username': 'bob@example.com', 
-                'password': 'bob',
-                'email': 'bob@example.com'
-              }));
-        });
-
-        credentials.register('bob@example.com', 'bob', 'bob@example.com');
-        expect($.ajax).toHaveBeenCalled();
-      });
-
-      it('should not send request if username is unset', function() {
-        spyOn($, 'ajax');
-        credentials.register();
-        expect($.ajax).not.toHaveBeenCalled();
-      });
-
-      it('should trigger "registrationSuccess" on success response', function() {
-        spyOn($, 'ajax').andCallFake(function(options) {
-          options.success();
-        });
-        spyOn(credentials, 'trigger');
-
-        credentials.register('bob@example.com', 'bob', 'bob@example.com');
-        expect(credentials.trigger).toHaveBeenCalledWith('registrationSuccess');
-      });
-
-      it('should trigger "registrationError" on error response', function() {
-        spyOn($, 'ajax').andCallFake(function(options) {
-          options.error(new XMLHttpRequest);
-        });
-        spyOn(credentials, 'trigger');
-
-        credentials.register('bob@example.com', 'bob', 'bob@example.com');
-        expect(credentials.trigger).toHaveBeenCalledWith('registrationError', 'Registration error');
-      });
-    });
-
     describe('save()', function() {
       it('should store credentials into sessionStorage', function() {
         credentials.save({username: 'bob@example.com', password: 'bob'});

@@ -19,6 +19,7 @@ define(function(require) {
   var ChannelPage = require('views/content/ChannelPage');
   var config = require('config');
   var ExplorePage = require('views/content/ExplorePage');
+  var SidebarPage = require('views/sidebar/SidebarPage');
   var WelcomePage = require('views/overlay/WelcomePage');
 
   var Router = Backbone.Router.extend({
@@ -35,7 +36,16 @@ define(function(require) {
       this.user = user;
     },
 
+    // It would be nice if we could wrap its route function
+    // or just use something like https://github.com/boazsender/backbone.routefilter
+    _before: function(route) {
+      if (!this.user.isAnonymous() && !this.sidebar) {
+        this.sidebar = new SidebarPage({model: this.user});
+      }
+    },
+
     default: function() {
+      this._before();
       if (this.user.isAnonymous()) {
         new WelcomePage({model: this.user.credentials}).render();
       } else {
@@ -44,6 +54,7 @@ define(function(require) {
     },
 
     explore: function() {
+      this._before();
       new ExplorePage({user: this.user});
     },
 
@@ -52,10 +63,12 @@ define(function(require) {
     },
 
     channel: function(channel) {
+      this._before();
       new ChannelPage({channel: channel, user: this.user});
     },
 
     channelEdit: function(channel) {
+      this._before();
       new ChannelPage({channel: channel, edit: true});
     }
   });

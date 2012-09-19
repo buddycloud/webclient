@@ -42,7 +42,7 @@ define(function(require) {
       this.details.render();
       this.$el.append(this.view.el);
       this.$el.append(this.details.el);
-      $('.content').append(this.el);
+      $('.content').html(this.el);
     }
   });
 
