@@ -1,8 +1,9 @@
 define(function(require) {
   var $ = require('jquery');
-  var _ = require('underscore')
+  var _ = require('underscore');
   var Backbone = require('backbone');
-  var template = require('text!templates/overlay/welcome.html')
+  var template = require('text!templates/overlay/welcome.html');
+  var footer = require('text!templates/overlay/footer.html');
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
@@ -65,10 +66,11 @@ define(function(require) {
         }
       }
       
-
       function hideForm(){
         formHolder.removeClass('showLogin showRegister');
       }
+      
+      $('.content').append(_.template(footer));
 /*
       $('#login_submit').click(that._login)
   */},
