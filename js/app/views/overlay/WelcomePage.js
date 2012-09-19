@@ -3,7 +3,8 @@ define(function(require) {
   var _ = require('underscore');
   var Backbone = require('backbone');
   var template = require('text!templates/overlay/welcome.html');
-  var footer = require('text!templates/overlay/footer.html');
+
+  var User = require('model/User');
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
@@ -13,8 +14,8 @@ define(function(require) {
     },
 
     events: {
-      'submit form.login': 'login'//,
-      //'submit form.register': '_register'
+      'submit form.login': 'login',
+      'submit form.register': 'register'
     },
 
     login: function(event) {
@@ -24,16 +25,22 @@ define(function(require) {
       this.model.save({username: username, password: password});
       location.reload();
     },
-/*
-    _register: function(event) {
+
+    register: function(event) {
       event.preventDefault();
       var username = this.$('#register_name').attr('value');
       var password = this.$('#register_password').attr('value');
       var email = this.$('#register_email').attr('value');
-      this.model.save({username: username, password: password, email: email});
-      location.reload();
+      User.register(username, password, email)
+      User.on('registrationSuccess', function() {
+        this.model.save({username: username, password: password});
+        location.reload();
+      })
+      User.on('registrationError', function(message) {
+        alert(message)
+      })
     },
-*/
+
     render: function() {
       that = this;
       this.$el.html(_.template(template));
@@ -66,11 +73,10 @@ define(function(require) {
         }
       }
       
+
       function hideForm(){
         formHolder.removeClass('showLogin showRegister');
       }
-      
-      $('.content').append(_.template(footer));
 /*
       $('#login_submit').click(that._login)
   */},
