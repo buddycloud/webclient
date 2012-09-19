@@ -19,6 +19,7 @@ define(function(require) {
   var ChannelPage = require('views/content/ChannelPage');
   var config = require('config');
   var ExplorePage = require('views/content/ExplorePage');
+  var SidebarPage = require('views/sidebar/SidebarPage');
   var WelcomePage = require('views/overlay/WelcomePage');
 
   var Router = Backbone.Router.extend({
@@ -40,6 +41,7 @@ define(function(require) {
         new WelcomePage({model: this.user.credentials}).render();
       } else {
         this.navigate(config.defaultChannel, {trigger: true});
+        new SidebarPage({mode: this.user});
       }
     },
 

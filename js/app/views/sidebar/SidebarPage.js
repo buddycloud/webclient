@@ -32,10 +32,10 @@ define(function(require) {
       });
       this.actionBar = new ActionBar();
       this.channels = new Channels({
-        model: this.model.subscribedChannels;
+        model: this.model.subscribedChannels
       });
       this.metadata.bind('fetch', this.render, this);
-      this.metadata.fetch()
+      this.metadata.fetch();
     },
 
     render: function() {

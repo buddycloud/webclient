@@ -75,7 +75,7 @@ define(function(require) {
       };
 
       $.ajax(options);
-    }
+    },
 
     _tryFetchingSubscribedChannels: function() {
        this.subscribedChannels = new SubscribedChannels(this.username);

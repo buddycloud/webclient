@@ -24,7 +24,10 @@ define(function(require) {
 
     render: function() {
       var username = this.model.credentials.username;
-      this.$el.html(_.template(template, {username: username,
+      this.$el.html(_.template(template, 
+        {
+          username: username,
+          description: this.options.metadata.description
         }));
       avatarFallback(this.$('.avatar'), this.options.metadata.channelType(), 75);
     }
