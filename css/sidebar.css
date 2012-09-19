@@ -288,8 +288,13 @@
        -o-transition: width 500ms, height 500ms, top 500ms linear;
           transition: width 500ms, height 500ms, top 500ms linear;
 }
-.channel .selected .avatar {
-  box-shadow: 0 0 0 1px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.55) inset,0 0 0 3px #83ac35,0 0 0 4px #90bd3a,0 0 2px 4px rgba(0,0,0,0.34);
+.channel.selected .avatar {
+  box-shadow: 
+    0 0 0 1px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(255,255,255,0.55) inset,
+    0 0 0 3px hsl(81, 53%, 44%),
+    0 0 0 4px hsl(81, 53%, 48%),
+    0 0 2px 4px rgba(0,0,0,0.34);
 }
 .counter {
   top: -5px;
