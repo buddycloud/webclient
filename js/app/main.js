@@ -51,7 +51,7 @@ define(function(require) {
       if (this.loggedIn) {
         this.navigate(config.defaultChannel);
       } else {
-        new WelcomePage().render();
+        new WelcomePage({model: this.credModel}).render();
       }
     },
 
@@ -76,6 +76,7 @@ define(function(require) {
   defRouter.loggedIn = false;
 
   var credentials = new Credentials();
+  defRouter.credModel = credentials;
   credentials.fetch();
   credentials.verify();
   credentials.on('accepted', function() {
