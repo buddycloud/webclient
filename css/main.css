@@ -17,6 +17,7 @@
 @import "popup.css";
 @import "homepage.css";
 @import "login.css";
+@import "spinner.css";
 /*@import "lightSidebar.css";*/
 
 pre,textarea {
@@ -103,51 +104,4 @@ a.internal, a:visited.internal {
 .hint { color: #bbb; }
 table td:not(:last-child) {
   padding-right: 13px;
-}
-.loading {
-  display: -webkit-box;
-  display:    -moz-box;
-  display:         box;
-  -webkit-box-orient: horizontal;
-     -moz-box-orient: horizontal;
-      -ms-box-orient: horizontal;
-       -o-box-orient: horizontal;
-  -webkit-box-orient: horizontal;
-     -moz-box-orient: horizontal;
-      -ms-box-orient: horizontal;
-       -o-box-orient: horizontal;
-          box-orient: horizontal;
-  -webkit-box-pack: center;
-     -moz-box-pack: center;
-      -ms-box-pack: center;
-       -o-box-pack: center;
-  -webkit-box-pack: center;
-     -moz-box-pack: center;
-      -ms-box-pack: center;
-       -o-box-pack: center;
-          box-pack: center;
-  -webkit-box-align: center;
-     -moz-box-align: center;
-      -ms-box-align: center;
-       -o-box-align: center;
-  -webkit-box-align: center;
-     -moz-box-align: center;
-      -ms-box-align: center;
-       -o-box-align: center;
-          box-align: center;
-  -webkit-box-lines: multiple;
-     -moz-box-lines: multiple;
-      -ms-box-lines: multiple;
-       -o-box-lines: multiple;
-          box-lines: multiple;
-  display: box;
-  -webkit-box-flex: 1;
-     -moz-box-flex: 1;
-      -ms-box-flex: 1;
-       -o-box-flex: 1;
-          box-flex: 1;
-  font-size: 27px;
-  color: #fff;
-  text-align: center;
-  text-shadow: 0 0 1px rgba(0,0,0,0.89),0 1px 5px rgba(0,0,0,0.55);
 }
