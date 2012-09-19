@@ -17,7 +17,6 @@
 define(function(require) {
   var Backbone = require('backbone');
   var Channel = require('models/Channel');
-  var ChannelDetails = require('views/content/ChannelDetails');
   var ChannelView = require('views/content/ChannelView');
 
   var ChannelPage = Backbone.View.extend({
@@ -29,20 +28,13 @@ define(function(require) {
         model: this.model,
         user: this.options.user
       });
-      this.details = new ChannelDetails({
-        model: this.model,
-        user: this.options.user
-      });
       this.model.bind('fetch', this.render, this);
       this.model.fetch({credentials: this.options.user.credentials})
     },
 
     render: function() {
       this.view.render();
-      this.details.render();
-      this.$el.append(this.view.el);
-      this.$el.append(this.details.el);
-      $('.content').html(this.el);
+      $('.content').append(this.view.el);
     }
   });
 

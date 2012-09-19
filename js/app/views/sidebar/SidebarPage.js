@@ -31,11 +31,12 @@ define(function(require) {
     },
 
     render: function() {
+      var $sidebar = $('.sidebar');
       this.actionBar.render();
-      $('.sidebar').append(this.personalChannel.el)
-      .append(this.actionBar.el)
-      .append(this.channels.el)
-      .removeClass('hidden');
+      $sidebar.append(this.personalChannel.el);
+      $sidebar.append(this.actionBar.el);
+      $sidebar.append(this.channels.el);
+      $sidebar.removeClass('hidden');
     }
   });
 
