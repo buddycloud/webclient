@@ -38,7 +38,7 @@ define(function(require) {
       this.discover.render();
       this.$el.append(this.searchbar.el);
       this.$el.append(this.discover.el);
-      $('.content').append(this.el);
+      $('.content').html(this.el);
     },
 
     _renderSearch: function() {
