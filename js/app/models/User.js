@@ -16,6 +16,7 @@
 
 define(function(require) {
   var $ = require('jquery');
+  var api = require('util/api');
   var Backbone = require('backbone');
   var ModelBase = require('models/ModelBase')
   var SubscribedChannels = require('models/SubscribedChannels')
