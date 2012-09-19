@@ -25,21 +25,32 @@ define(function(require) {
     className: 'channels antiscroll-wrap',
 
     initialize: function() {
+      this.metadatas = [];
+      this._getChannelsMetadata();
+    },
+
+    render: function() {
+      this.$el.html(_.template(template, {metadatas: this.metadatas}));
+      this._avatarFallback();
+    },
+
+    // This was necessary because the channels' types are not always the same
+    _avatarFallback: function() {
+      var $avatars = this.$('.channel img');
+      _.each($avatars, function(avatar) {
+        avatarFallback(avatar, avatar.dataset.channeltype, 50);
+      });
+    },
+
+    _getChannelsMetadata: function() {
       var self = this;
       var callback = this._triggerRenderCallback();
-      this.metadatas = [];
+
       _.each(this.model.channels(), function(channel, index) {
         var metadata = new ChannelMetadata(channel);
         self.metadatas.push(metadata);
         metadata.fetch({success: callback});
       });
-    },
-
-    render: function() {
-      this.$el.html(_.template(template, 
-      {
-        metadatas: this.metadatas
-      }));
     },
 
     _triggerRenderCallback: function() {
@@ -51,7 +62,7 @@ define(function(require) {
           self.render();
         }
       }
-    }   
+    }
   });
 
   return Channels;
