@@ -23,12 +23,13 @@ define(function(require) {
 
   var PersonalChannel = Backbone.View.extend({
     className: 'personal channel',
+    events:  {'click .metadata': '_navigate'},
 
     initialize: function() {
       this.metadata = new ChannelMetadata(this.model.username);
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
-      this.on('click', this._navigate, this);
+      this.$el.on('click', this._navigate);
     },
 
     render: function() {
