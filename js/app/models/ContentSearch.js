@@ -16,11 +16,14 @@
 
 define(function(require) {
   var api = require('util/api');
-  var ModelBase = require('models/ModelBase');
+  var CollectionBase = require('models/CollectionBase');
+  var ContentSearchResult = require('models/ContentSearchResult');
 
-  var ContentSearch = ModelBase.extend({
+  var ContentSearch = CollectionBase.extend({
+    model: ContentSearchResult,
+
     constructor: function() {
-      ModelBase.call(this);
+      CollectionBase.call(this);
     },
 
     url: function() {
@@ -34,8 +37,14 @@ define(function(require) {
       }
     },
 
-    items: function() {
-      return this.get('items');
+    parse: function(resp, xhr) {
+      if (typeof(resp) === 'object' && resp.rsm && resp.items) {
+        this.index = resp.rsm.index;
+        this.count = resp.rsm.count;
+        return resp.items;
+      } else {
+        return resp;
+      }
     }
   });
 
