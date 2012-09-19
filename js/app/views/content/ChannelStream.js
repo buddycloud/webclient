@@ -50,7 +50,7 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template));
       if (!this._userCanPost()) {
-        this.$('.newTopic').hide();
+        this.$('.newTopic').remove();
       }
       this._appendPosts();
     },
