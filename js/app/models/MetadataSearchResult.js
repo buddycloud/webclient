@@ -31,6 +31,10 @@ define(function(require) {
       return this.get('title');
     },
 
+    channelType: function() {
+      return this.get('channelType');
+    },
+
     description: function() {
       return this.get('description');
     },

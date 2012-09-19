@@ -15,16 +15,13 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
+  var config = require('config');
 
-  function avatarFallback(avatarElements, type, size) {
-    var fallbackImage;
-    $(avatarElements).one('error', function(event) {
-      type = event.target.dataset['type'] || type;
-      fallbackImage = 'img/' + type + '-' + size + 'px.jpg';
-      event.target.src = fallbackImage;
-    });
+  function routeUrl(path) {
+    var url = (config.release) ? '/' + path : '#' + path;
+    return url;
   }
 
-  return avatarFallback;
+  return routeUrl;
+
 });

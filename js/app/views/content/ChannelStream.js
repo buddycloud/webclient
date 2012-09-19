@@ -48,7 +48,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(template, {user: this.options.user}));
       if (!this._userCanPost()) {
         this.$('.newTopic').remove();
       }
@@ -89,11 +89,16 @@ define(function(require) {
     },
 
     _post: function() {
-      var content = this.$('textarea').val();
+      var textArea = this.$('.newTopic textarea');
+      var content = textArea.val();
       var self = this;
       var post = this.model.posts.create({content: content}, {
         credentials: this.options.user.credentials,
-        success: function() { self._showPost(post); }
+        success: function() {
+          textArea.val('');
+          self._collapseNewTopicArea({data: {self: self}});
+          self._showPost(post);
+        }
       });
     },
 

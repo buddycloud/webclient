@@ -6,7 +6,7 @@
       <div class="list">
         <% _.each(channels, function(channel) { %>
         <div class="channel justify">
-          <img class="avatar" src="<%= channel.jidAvatarUrl(50) %>"></img>
+          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
@@ -24,7 +24,7 @@
         <% _.each(posts, function(post) { %>
         <article class="post">
           <section class="opener">
-            <img class="avatar" src="<%= post.authorAvatarUrl(50) %>"></img>
+            <img class="avatar" data-type="personal" src="<%= post.authorAvatarUrl(50) %>"></img>
               <div class="postmeta">
                 <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%= post.published() %>" title="<%= post.published() %>">3 days</time>
               </div>

@@ -55,8 +55,10 @@ define(function(require) {
       if (options) {
         options.headers = options.headers || {};
         options.headers['Authorization'] = this._authorizationHeader();
+        options.headers['X-Session-Id'] = this._sessionId;
         options.xhrFields = options.xhrFields || {};
         options.xhrFields.withCredentials = true;
+        this._addSessionIdRecording(options);
       }
     },
 
@@ -65,6 +67,23 @@ define(function(require) {
         return 'Basic ' + btoa(this.username + ':' + this.password);
       } else {
         return undefined;
+      }
+    },
+
+    _addSessionIdRecording: function(options) {
+      var complete = options.complete
+      var self = this;
+      options.complete = function(arg1, arg2) {
+        var xhr;
+        if (arg1.getResponseHeader) {
+          xhr = arg1;
+        } else {
+          xhr = arg2[0];
+        }
+        self._sessionId = xhr.getResponseHeader('X-Session-Id');
+        if (complete) {
+          options.complete.apply(this, arguments);
+        }
       }
     }
   });

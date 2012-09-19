@@ -33,6 +33,14 @@ define(function(require) {
       return !this.credentials.username;
     },
 
+    avatarUrl: function() {
+      if (this.isAnonymous()) {
+        return "";
+      } else {
+        return api.avatarUrl(this.credentials.username);
+      }
+    },
+
     login: function() {
       if (this.isAnonymous()) {
         this.trigger('loginSuccess');
@@ -51,7 +59,7 @@ define(function(require) {
         };
         var successCallback = function() {
           self.credentials.save({'username': username, 'password': password});
-          self.trigger('registrationSuccess');  
+          self.trigger('registrationSuccess');
         };
         var errorCallback = function(res) {
           var message = 'Registration error'
@@ -67,7 +75,7 @@ define(function(require) {
 
     _sendRegistrationRequest: function(data, successCallback, errorCallback) {
       var options = {
-        method: 'POST',
+        type: 'POST',
         url: api.url('account'),
         contentType: 'application/json',
         data: JSON.stringify(data),

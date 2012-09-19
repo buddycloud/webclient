@@ -79,7 +79,7 @@ ul {
   list-style-type: none;
 }
 a {
-  color: #83ac35;
+  color: hsl(81, 53%, 44%);
   text-decoration: none;
 }
 a:hover, a:visited:hover {

@@ -33,9 +33,31 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {
         post: this.model,
+        user: this.options.user,
+        roleTag: this._roleTag.bind(this),
         linkify: linkify
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      this._addNoCommentsClassIfNeeded();
+      this._adjustCommentAreaVisibility();
+    },
+
+    _roleTag: function(username) {
+      var role = this.options.channel.followers.get(username);
+      if (role == 'owner' || role == 'moderator') {
+        return role;
+      } else {
+        return '';
+      }
+    },
+
+    _addNoCommentsClassIfNeeded: function() {
+      if (this.model.length == 1) {
+        this.$el.addClass('noComments');
+      }
+    },
+
+    _adjustCommentAreaVisibility: function() {
       if (!this._userCanPost()) {
         this.$('.answer').remove();
       }
@@ -70,14 +92,19 @@ define(function(require) {
 
     _comment: function(event) {
       event.stopPropagation();
-      var content = this.$('textarea').val();
+      var textArea = this.$('.answer textarea');
+      var content = textArea.val();
       var self = this;
       var comment = this.options.channel.posts.create({
         content: content,
         replyTo: this.model[0].id
       }, {
         credentials: this.options.user.credentials,
-        success: function() { self._showComment(comment); }
+        success: function() {
+          textArea.val('');
+          self._collapseAnswerArea({data: {self: self}});
+          self._showComment(comment);
+        }
       });
     },
 

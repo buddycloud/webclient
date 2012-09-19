@@ -31,7 +31,7 @@ define(function(require) {
         channels: this.model.channels.models,
         posts: this.model.posts.models
       }));
-      avatarFallback(this.$('.avatar'), 'personal', 50);
+      avatarFallback(this.$('.avatar'), undefined, 50);
       if (this.options.user.isAnonymous()) {
         this.$('.follow').hide();
       }

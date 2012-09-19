@@ -440,7 +440,7 @@
   top: 8px;
   position: absolute;
   height: 68px;
-  padding: 15px 21px 0 70px;
+  padding: 15px 13px 0 70px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #eee));
   background: -webkit-linear-gradient(top, #fff 0%, #eee 100%);
   background:    -moz-linear-gradient(top, #fff 0%, #eee 100%);
@@ -459,8 +459,27 @@
   top: 4px;
   left: 27px;
   height: 52px;
-  padding: 7px 21px 0 55px;
+  padding: 7px 13px 0 54px;
 }
+  .moderator .usermeta .name:after,
+  .owner .usermeta .name:after {
+    content: "Moderator";
+    margin: 0 5px;
+    padding: 1px 3px;
+    color: white;
+    text-shadow: none;
+    font-weight: normal;
+    font-size: 0.85em;
+    vertical-align: text-top;
+    background: hsl(199, 53%, 48%);
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,.13);
+    border-bottom-color: rgba(0,0,0,.21);
+  }
+  .owner .usermeta .name:after {
+    content: "Producer";
+    background: hsl(81, 53%, 48%);
+  }
   .avatar:hover {
     z-index: 1;
   }
@@ -553,6 +572,16 @@
   top: 17px;
   position: absolute;
 }
+  .post .moderator .avatar:after {
+    content: "";
+    top: 3px;
+    right: 3px;
+    width: 5px;
+    height: 5px;
+    position: absolute;
+    background: hsl(199, 53%, 44%);
+    border-radius: 3px;
+  }
 .post p {
   color: #333;
   display: inline;
