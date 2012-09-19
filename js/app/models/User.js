@@ -40,7 +40,48 @@ define(function(require) {
       }
     },
 
-     _tryFetchingSubscribedChannels: function() {
+    register: function(username, password, email) {
+      if (username && password && email) {
+        var self = this;
+
+        var data = {
+          'username': username,
+          'password': password,
+          'email': email
+        };
+
+        var successCallback = function() {
+          self.credentials.save({'username': username, 'password': password});
+          self.trigger('registrationSuccess');  
+        };
+
+        var errorCallback = function(res) {
+          var message = 'Registration error'
+          if (res.status === 503) {
+            message = 'User "' + username + '" already exists';
+          }
+          self.trigger('registrationError', message);
+        };
+
+        this._sendRegistrationRequest(data, successCallback, errorCallback);
+      }
+    },
+
+    _sendRegistrationRequest: function(data, successCallback, errorCallback) {
+      var self = this;
+      var options = {
+        method: 'POST',
+        url: api.url('account'),
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: successCallback,
+        error: errorCallback
+      };
+
+      $.ajax(options);
+    }
+
+    _tryFetchingSubscribedChannels: function() {
        this.subscribedChannels = new SubscribedChannels(this.username);
        var self = this;
        this.subscribedChannels.fetch({
