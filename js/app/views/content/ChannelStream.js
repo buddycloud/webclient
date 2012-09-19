@@ -31,7 +31,11 @@ define(function(require) {
       var posts = this.model.posts.byThread();
       var self = this;
       _.each(posts, function(post) {
-        var view = new PostView({model: post, user: self.options.user});
+        var view = new PostView({
+          model: post,
+          channel: self.model.name,
+          user: self.options.user
+        });
         view.render();
         self._posts.push(view);
       });
@@ -48,9 +52,9 @@ define(function(require) {
     _userCanPost: function() {
       var user = this.options.user;
       if (user.isAnonymous()) {
-        return user;
+        return false;
       } else {
-        return  user.subscribedChannels.isPostingAllowed(this.model.name);
+        return user.subscribedChannels.isPostingAllowed(this.model.name);
       }
     },
 
