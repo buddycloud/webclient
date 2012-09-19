@@ -1,5 +1,9 @@
 <section class="opener">
   <img class="avatar" src="<%= post[0].authorAvatarUrl(50) %>" />
+  <div class="usermeta">
+    <div class="name"><%= post[0].author().split('@', 2)[0] %></div>
+    <div class="jid"><%= post[0].author() %></div>    
+  </div>
   <div class="postmeta">
     <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011"></time>
   </div>
@@ -9,6 +13,10 @@
   <% for (var i = 1; i < post.length; i++) { %>
      <section class="comment">
        <img class="avatar" src="<%= post[i].authorAvatarUrl(50) %>" />
+       <div class="usermeta">
+         <div class="name"><%= post[i].author().split('@', 2)[0] %></div>
+         <div class="jid"><%= post[i].author() %></div>    
+       </div>
        <div class="postmeta">
          <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011"></time>
        </div>
@@ -16,7 +24,7 @@
      </section>
   <% } %>
   <section class="answer">
-    <img class="avatar" src="">
+    <img class="avatar" src="<%= user.avatarUrl() %>">
     <div class="holder">
       <textarea placeholder="comment"></textarea>
       <div class="controls clearfix">

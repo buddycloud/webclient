@@ -48,7 +48,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(template, {user: this.options.user}));
       if (!this._userCanPost()) {
         this.$('.newTopic').remove();
       }

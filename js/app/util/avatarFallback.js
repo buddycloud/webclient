@@ -20,7 +20,7 @@ define(function(require) {
   function avatarFallback(avatarElements, type, size) {
     var fallbackImage;
     $(avatarElements).one('error', function(event) {
-      type = type || event.target.dataset['type'];
+      type = event.target.dataset['type'] || type;
       fallbackImage = 'img/' + type + '-' + size + 'px.jpg';
       event.target.src = fallbackImage;
     });

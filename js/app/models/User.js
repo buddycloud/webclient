@@ -16,6 +16,7 @@
 
 define(function(require) {
   var $ = require('jquery');
+  var api = require('util/api');
   var Backbone = require('backbone');
   var ModelBase = require('models/ModelBase')
   var SubscribedChannels = require('models/SubscribedChannels')
@@ -30,6 +31,14 @@ define(function(require) {
 
     isAnonymous: function() {
       return !this.credentials.username;
+    },
+
+    avatarUrl: function() {
+      if (this.isAnonymous()) {
+        return "";
+      } else {
+        return api.avatarUrl(this.credentials.username);
+      }
     },
 
     login: function() {
@@ -50,7 +59,7 @@ define(function(require) {
         };
         var successCallback = function() {
           self.credentials.save({'username': username, 'password': password});
-          self.trigger('registrationSuccess');  
+          self.trigger('registrationSuccess');
         };
         var errorCallback = function(res) {
           var message = 'Registration error'
@@ -66,7 +75,7 @@ define(function(require) {
 
     _sendRegistrationRequest: function(data, successCallback, errorCallback) {
       var options = {
-        method: 'POST',
+        type: 'POST',
         url: api.url('account'),
         contentType: 'application/json',
         data: JSON.stringify(data),

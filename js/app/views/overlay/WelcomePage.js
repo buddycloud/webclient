@@ -4,7 +4,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/overlay/welcome.html');
   var footer = require('text!templates/overlay/footer.html');
-  var User = require('models/User');
+  var user = require('models/User');
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
@@ -31,6 +31,7 @@ define(function(require) {
       var username = this.$('#register_name').attr('value');
       var password = this.$('#register_password').attr('value');
       var email = this.$('#register_email').attr('value');
+      var User = new user();
       User.register(username, password, email)
       User.on('registrationSuccess', function() {
         this.model.save({username: username, password: password});
