@@ -34,9 +34,23 @@ define(function(require) {
       this.$el.html(_.template(template, {
         post: this.model,
         user: this.options.user,
+        roleTag: this._roleTag.bind(this),
         linkify: linkify
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      this._adjustCommentAreaVisibility();
+    },
+
+    _roleTag: function(username) {
+      var role = this.options.channel.followers.get(username);
+      if (role == 'owner' || role == 'moderator') {
+        return role;
+      } else {
+        return '';
+      }
+    },
+
+    _adjustCommentAreaVisibility: function() {
       if (!this._userCanPost()) {
         this.$('.answer').remove();
       }

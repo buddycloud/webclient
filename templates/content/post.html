@@ -1,4 +1,4 @@
-<section class="opener">
+<section class="opener <%= roleTag(post[0].author()) %>">
   <img class="avatar" src="<%= post[0].authorAvatarUrl(50) %>" />
   <div class="usermeta">
     <div class="name"><%= post[0].author().split('@', 2)[0] %></div>
@@ -11,7 +11,7 @@
 </section>
 <section class="comments">
   <% for (var i = 1; i < post.length; i++) { %>
-     <section class="comment">
+     <section class="comment <%= roleTag(post[i].author()) %>">
        <img class="avatar" src="<%= post[i].authorAvatarUrl(50) %>" />
        <div class="usermeta">
          <div class="name"><%= post[i].author().split('@', 2)[0] %></div>
