@@ -20,57 +20,15 @@ requirejs.config({
     'config': '../../config',
     'templates': '../../templates',
     'models': '../app/models',
+    'Router': '../app/Router',
     'util': '../app/util',
     'views': '../app/views'
   }
 });
 
 define(function(require) {
-  var Backbone = require('backbone');
-  var ChannelPage = require('views/content/ChannelPage');
-  var config = require('config');
-  var ExplorePage = require('views/content/ExplorePage');
-  var WelcomePage = require('views/overlay/WelcomePage');
+  var Router = require('Router');
   var UserCredentials = require('models/UserCredentials');
-
-  var Router = Backbone.Router.extend({
-    routes: {
-      '': 'default',
-      'explore': 'explore',
-      'prefs': 'preferences',
-      ':channel': 'channel',
-      ':channel/edit' : 'channelEdit'
-    },
-
-    constructor: function(credentials) {
-      Backbone.Router.call(this);
-      this.credentials = credentials;
-    },
-
-    default: function() {
-      if (this.credentials.username) {
-        this.navigate(config.defaultChannel, {trigger: true});
-      } else {
-        new WelcomePage({model: this.credentials}).render();
-      }
-    },
-
-    explore: function() {
-      new ExplorePage();
-    },
-
-    preferences: function() {
-
-    },
-
-    channel: function(channel) {
-      new ChannelPage({channel: channel});
-    },
-
-    channelEdit: function(channel) {
-      new ChannelPage({channel: channel, edit: true});
-    }
-  });
 
   function initialize() {
     var credentials = new UserCredentials();
