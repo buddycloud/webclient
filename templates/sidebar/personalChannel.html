@@ -4,7 +4,19 @@
         <span class="message counter">2</span>
       </div>
       <div class="info">
-        <span class="owner">felix<span class="domain">@buddycloud.com</span></span>
-        <span class="status">Aww yeah, Lion rocks</span>
+        <span class="owner"><%- username.split('@', 2)[0] %><span class="domain"><%- username.split('@', 2)[1] %></span></span>
+        <span class="status"><%- description %></span>
+      </div>
+      <div class="settings noSelect">
+        <div class="popup">
+          <div class="centered vertical">
+            <div class="arrow"></div>
+            <ul>
+              <li class="newChannel"><a href="editChannel.html">Create Topic Channel</a>
+              <li class="preferences"><a href="preferences.html">Preferences</a>
+              <li class="logout">Logout
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
