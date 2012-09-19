@@ -90,10 +90,25 @@ define(function(require) {
 
     _post: function() {
       var content = this.$('textarea').val();
-      var post = new Post({content: content});
-      this.model.posts.create({content: content}, {
-        credentials: this.options.user.credentials
+      var self = this;
+      var post = this.model.posts.create({content: content}, {
+        credentials: this.options.user.credentials,
+        success: function() { self._showPost(post); }
       });
+    },
+
+    _showPost: function(post) {
+      // FIXME: This function is only temporary and will disappear
+      // when real-time support arrives.
+      var view = new PostView({
+        model: [post],
+        channel: this.model.name,
+        user: this.options.user
+      });
+      console.log(post);
+      this._posts.unshift(view);
+      view.render();
+      this.$('.posts').prepend(view.el);
     }
   });
 

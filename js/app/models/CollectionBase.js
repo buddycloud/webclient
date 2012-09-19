@@ -36,14 +36,7 @@ define(function(require) {
       if (options && options.credentials) {
         options.credentials.addAuthorizationToAjaxOptions(options);
       }
-      Backbone.Collection.prototype.create.call(this, attributes, options);
-    },
-
-    create: function(attributes, options) {
-      if (options && options.credentials) {
-        options.credentials.addAuthorizationToAjaxOptions(options);
-      }
-      Backbone.Collection.prototype.create.call(this, attributes, options);
+      return Backbone.Collection.prototype.create.call(this, attributes, options);
     },
 
     _adjustOptions: function(options) {
