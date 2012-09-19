@@ -26,19 +26,14 @@ requirejs.config({
 });
 
 define(function(require) {
-  var $ = require('jquery');
-  var _ = require('underscore');
   var Backbone = require('backbone');
-  var config = require('config');
-
-  var Credentials = require('models/UserCredentials');
-
   var ChannelPage = require('views/content/ChannelPage');
+  var config = require('config');
   var ExplorePage = require('views/content/ExplorePage');
   var WelcomePage = require('views/overlay/WelcomePage');
+  var UserCredentials = require('models/UserCredentials');
 
   var Router = Backbone.Router.extend({
-
     routes: {
       '': 'default',
       'explore': 'explore',
@@ -47,11 +42,16 @@ define(function(require) {
       ':channel/edit' : 'channelEdit'
     },
 
+    constructor: function(credentials) {
+      Backbone.Router.call(this);
+      this.credentials = credentials;
+    },
+
     default: function() {
-      if (this.loggedIn) {
-        this.navigate(config.defaultChannel);
+      if (this.credentials.username) {
+        this.navigate(config.defaultChannel, {trigger: true});
       } else {
-        new WelcomePage({model: this.credModel}).render();
+        new WelcomePage({model: this.credentials}).render();
       }
     },
 
@@ -68,34 +68,30 @@ define(function(require) {
     },
 
     channelEdit: function(channel) {
-      new ChannelPage({channel: channel, edit: true})
+      new ChannelPage({channel: channel, edit: true});
     }
   });
 
-  var defRouter = new Router();
-  defRouter.loggedIn = false;
-
-  var credentials = new Credentials();
-  defRouter.credModel = credentials;
-
-  if (!credentials.loggedIn) {
-    startRouting()
-  } else {
-  credentials.fetch();
-  credentials.verify();
-  credentials.on('accepted', function() {
-    defRouter.loggedIn = true;
-    startRouting()
-  });
-  credentials.on('rejected', function() {
-    alert('Wrong credentials.')
-    credentials.set({username: null, password: null})
-    startRouting()
-  })
-}
-
-  function startRouting() {
-    Backbone.history.start({root: window.location.pathname/*, pushState: true*/});
+  function initialize() {
+    var credentials = new UserCredentials();
+    credentials.fetch();
+    credentials.on('accepted', function() {
+      route(credentials);
+    });
+    credentials.on('alert', function() {
+      alert('Wrong username or password.');
+      credentials.set({username: null, password: null});
+      credentials.save();
+      route(credentials);
+    });
+    credentials.verify();
   }
+
+  function route(credentials) {
+    var router = new Router(credentials);
+    Backbone.history.start({root: window.location.pathname});
+  }
+
+  initialize();
 });
 
