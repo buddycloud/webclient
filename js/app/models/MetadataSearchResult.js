@@ -15,25 +15,30 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
-  var avatarFallback = require('util/avatarFallback');
-  var template = require('text!templates/content/searchResults.html');
+  var api = require('util/api');
+  var ModelBase = require('models/ModelBase');
 
-  var SearchView = Backbone.View.extend({
-    className: 'discoverChannels clearfix',
-
-    initialize: function() {
-      this.model.bind('fetch', this.render, this);
+  var MetadataSearchResult = ModelBase.extend({
+    jid: function() {
+      return this.get('jid');
     },
 
-    render: function() {
-      this.$el.html(_.template(template, {
-        channels: this.model.channels.models,
-        posts: this.model.posts.models
-      }));
-      avatarFallback(this.$('.avatar'), 'personal', 50);
+    jidAvatarUrl: function(size) {
+      return api.avatarUrl(this.jid(), size);
+    },
+
+    title: function() {
+      return this.get('title');
+    },
+
+    description: function() {
+      return this.get('description');
+    },
+
+    published: function() {
+      return this.get('published');
     }
   });
 
-  return SearchView;
+  return MetadataSearchResult;
 });
