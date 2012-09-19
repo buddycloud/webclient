@@ -34,7 +34,7 @@ define(function(require) {
 
     render: function() {
       this.view.render();
-      $('.content').append(this.view.el);
+      $('.content').html(this.view.el);
     }
   });
 
