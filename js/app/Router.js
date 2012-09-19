@@ -21,6 +21,7 @@ define(function(require) {
   var ExplorePage = require('views/content/ExplorePage');
   var SidebarPage = require('views/sidebar/SidebarPage');
   var WelcomePage = require('views/overlay/WelcomePage');
+  var Events = Backbone.Events;
 
   var Router = Backbone.Router.extend({
     routes: {
@@ -36,12 +37,20 @@ define(function(require) {
       this.user = user;
     },
 
+    initialize: function() {
+      Events.on('navigate', this._navigate, this);
+    },
+
     // It would be nice if we could wrap its route function
     // or just use something like https://github.com/boazsender/backbone.routefilter
     _before: function(route) {
       if (!this.user.isAnonymous() && !this.sidebar) {
         this.sidebar = new SidebarPage({model: this.user});
       }
+    },
+
+    _navigate: function(path) {
+      this.navigate(path, {trigger: true});
     },
 
     default: function() {

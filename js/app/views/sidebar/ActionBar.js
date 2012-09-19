@@ -17,12 +17,18 @@
 define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/sidebar/actionBar.html')
+  var Events = Backbone.Events;
 
   var ActionBar = Backbone.View.extend({
     className: 'actionBar clearfix',
+    events: {'click .discover': '_navigate'},
 
     render: function() {
       this.$el.html(_.template(template));
+    },
+
+    _navigate: function() {
+      Events.trigger('navigate', 'explore');
     }
   });
 

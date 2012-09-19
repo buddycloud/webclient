@@ -17,13 +17,14 @@
 define(function(require) {
   var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
-  var routeUrl = require('util/routeUrl');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/sidebar/channels.html')
+  var Events = Backbone.Events;
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
+    events: {'click .channel': '_navigate'},
 
     initialize: function() {
       this.metadatas = [];
@@ -33,9 +34,12 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {
         metadatas: this.metadatas,
-        routeUrl: routeUrl
       }));
       avatarFallback(this.$('.channel img'), undefined, 50);
+    },
+
+    _navigate: function(e) {
+      Events.trigger('navigate', e.currentTarget.dataset['href']);
     },
 
     _getChannelsMetadata: function() {
