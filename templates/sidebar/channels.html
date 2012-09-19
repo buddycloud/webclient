@@ -2,7 +2,7 @@
   <% _.each(metadatas, function(metadata, index) { %>
   <div class="channel">
     <div class="avatar">
-      <img data-channeltype="<%- metadata.channelType() %>" src="<%= metadata.avatarUrl(50) %>" />
+      <img data-type="<%- metadata.channelType() %>" src="<%= metadata.avatarUrl(50) %>" />
       <!-- <span class="channelpost counter">2</span> -->
     </div>
     <div class="info">

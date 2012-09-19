@@ -31,15 +31,7 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template, {metadatas: this.metadatas}));
-      this._avatarFallback();
-    },
-
-    // This was necessary because the channels' types are not always the same
-    _avatarFallback: function() {
-      var $avatars = this.$('.channel img');
-      _.each($avatars, function(avatar) {
-        avatarFallback(avatar, avatar.dataset.channeltype, 50);
-      });
+      avatarFallback(this.$('.channel img'), undefined, 50);
     },
 
     _getChannelsMetadata: function() {
