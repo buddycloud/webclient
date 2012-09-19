@@ -32,6 +32,9 @@ define(function(require) {
         posts: this.model.posts.models
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      if (this.options.user.isAnonymous()) {
+        this.$('.follow').hide();
+      }
     }
   });
 
