@@ -30,6 +30,8 @@ define(function(require) {
   var Router = require('Router');
   var User = require('models/User');
 
+  var config = require('config');
+
   function initialize() {
     var user = new User;
     user.credentials.fetch();
@@ -47,7 +49,7 @@ define(function(require) {
 
   function route(user) {
     var router = new Router(user);
-    Backbone.history.start({root: window.location.pathname});
+    Backbone.history.start({root: window.location.pathname, pushState: config.release);
   }
 
   initialize();

@@ -18,6 +18,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var ChannelHeader = require('views/content/ChannelHeader');
   var ChannelStream = require('views/content/ChannelStream');
+  var ChannelDetails = require('views/content/ChannelDetails');
 
   var ChannelView = Backbone.View.extend({
     className: 'channelView clearfix',
@@ -31,13 +32,22 @@ define(function(require) {
         model: this.model,
         user: this.options.user
       });
+      this.details = new ChannelDetails({
+        model: this.model,
+        user: this.options.user
+      });
     },
 
     render: function() {
+      // This was necessary to replicate the same structure of prototype
+      var $centered = $('<div class="centered start"></div>');
       this.header.render();
       this.stream.render();
+      this.details.render();
+      $centered.append(this.stream.el);
+      $centered.append(this.details.el);
       this.$el.append(this.header.el);
-      this.$el.append(this.stream.el);
+      this.$el.append($centered);
     }
   });
 
