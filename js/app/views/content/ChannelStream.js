@@ -31,8 +31,7 @@ define(function(require) {
       var posts = this.model.posts.byThread();
       var self = this;
       _.each(posts, function(post) {
-        var credentials = self.options.credentials;
-        var view = new PostView({model: post, credentials: credentials});
+        var view = new PostView({model: post, user: self.options.user});
         view.render();
         self._posts.push(view);
       });
@@ -40,10 +39,19 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template));
-      if (!this.options.credentials.username) {
+      if (!this._userCanPost()) {
         this.$('.newTopic').hide();
       }
       this._appendPosts();
+    },
+
+    _userCanPost: function() {
+      var user = this.options.user;
+      if (user.isAnonymous()) {
+        return user;
+      } else {
+        return  user.subscribedChannels.isPostingAllowed(this.model.name);
+      }
     },
 
     _appendPosts: function() {

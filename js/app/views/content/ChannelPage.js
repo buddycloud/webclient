@@ -27,11 +27,11 @@ define(function(require) {
       this.model = new Channel(this.options.channel);
       this.view = new ChannelView({
         model: this.model,
-        credentials: this.options.credentials
+        user: this.options.user
       });
       this.details = new ChannelDetails({
         model: this.model,
-        credentials: this.options.credentials
+        user: this.options.user
       });
       this.model.bind('fetch', this.render, this);
       this.model.fetch()

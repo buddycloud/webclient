@@ -37,6 +37,12 @@ define(function(require) {
       return _.uniq(channelsList);
     },
 
+    isPostingAllowed: function(channel) {
+      var postsNode = channel + '/posts';
+      var affiliation = this.attributes[postsNode];
+      return _.include(['owner', 'moderator', 'publisher'], affiliation);
+    },
+
     subscribe: function(channel, node, role, credentials) {
       var self = this;
       this.set(channel + '/' + node, role, {silent: true});

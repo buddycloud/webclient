@@ -28,25 +28,25 @@ requirejs.config({
 
 define(function(require) {
   var Router = require('Router');
-  var UserCredentials = require('models/UserCredentials');
+  var User = require('models/User');
 
   function initialize() {
-    var credentials = new UserCredentials();
-    credentials.fetch();
-    credentials.on('accepted', function() {
-      route(credentials);
+    var user = new User;
+    user.credentials.fetch();
+    user.on('loginSuccess', function() {
+      route(user);
     });
-    credentials.on('alert', function() {
+    user.on('loginError', function() {
       alert('Wrong username or password.');
-      credentials.set({username: null, password: null});
-      credentials.save();
-      route(credentials);
+      user.credentials.set({username: null, password: null});
+      user.credentials.save();
+      route(user);
     });
-    credentials.verify();
+    user.login();
   }
 
-  function route(credentials) {
-    var router = new Router(credentials);
+  function route(user) {
+    var router = new Router(user);
     Backbone.history.start({root: window.location.pathname});
   }
 

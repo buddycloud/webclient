@@ -79,26 +79,6 @@ define(function(require) {
       }
     },
 
-    verify: function() {
-      if (!this.username) {
-        this.trigger('accepted');
-      } else {
-        this._sendVerificationRequest();
-      }
-    },
-
-    _sendVerificationRequest: function() {
-      var self = this;
-      var options = {
-        method: 'GET',
-        url: api.rootUrl(),
-        success: function() { self.trigger('accepted'); },
-        error: function() { self.trigger('rejected'); }
-      };
-      this.addAuthorizationToAjaxOptions(options);
-      $.ajax(options);
-    },
-
     addAuthorizationToAjaxOptions: function(options) {
       if (options) {
         options.headers = options.headers || {};

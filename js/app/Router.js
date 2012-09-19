@@ -30,16 +30,16 @@ define(function(require) {
       ':channel/edit' : 'channelEdit'
     },
 
-    constructor: function(credentials) {
+    constructor: function(user) {
       Backbone.Router.call(this);
-      this.credentials = credentials;
+      this.user = user;
     },
 
     default: function() {
-      if (this.credentials.username) {
-        this.navigate(config.defaultChannel, {trigger: true});
+      if (this.user.isAnonymous()) {
+        new WelcomePage({model: this.user.credentials}).render();
       } else {
-        new WelcomePage({model: this.credentials}).render();
+        this.navigate(config.defaultChannel, {trigger: true});
       }
     },
 
@@ -52,7 +52,7 @@ define(function(require) {
     },
 
     channel: function(channel) {
-      new ChannelPage({channel: channel, credentials: this.credentials});
+      new ChannelPage({channel: channel, user: this.user});
     },
 
     channelEdit: function(channel) {

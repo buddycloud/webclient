@@ -32,7 +32,7 @@ define(function(require) {
         linkify: linkify
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
-      if (!this.options.credentials.username) {
+      if (this.options.user.isAnonymous()) {
         this.$('.answer').hide();
       }
     }
