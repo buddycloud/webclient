@@ -105,3 +105,19 @@ a.internal, a:visited.internal {
 table td:not(:last-child) {
   padding-right: 13px;
 }
+
+.loader {
+  /* bug in firefox where it doesnt start from the top */
+  vertical-align: top;
+}
+.throbber {
+  font-size: 2em;
+  color: rgba(0,0,0,.55);
+  position: relative;
+  opacity: 0;
+  -webkit-animation: throb 1s linear infinite alternate;
+}
+
+@-webkit-keyframes throb {
+  to { opacity: 1; }
+}
