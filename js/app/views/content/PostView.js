@@ -25,6 +25,10 @@ define(function(require) {
   var PostView = Backbone.View.extend({
     tagName: 'article',
     className: 'post',
+    events: {
+      'click .answer': '_expandAnswerArea',
+      'click .createComment': '_comment'
+    },
 
     render: function() {
       this.$el.html(_.template(template, {
@@ -42,8 +46,46 @@ define(function(require) {
       if (user.isAnonymous()) {
         return false;
       } else {
-        return user.subscribedChannels.isPostingAllowed(this.options.channel);
+        var channelName = this.options.channel.name;
+        return user.subscribedChannels.isPostingAllowed(channelName);
       }
+    },
+
+    _expandAnswerArea: function(event) {
+      event.stopPropagation();
+      var area = this.$('.answer');
+      if(!area.hasClass('write')){
+        area.addClass('write');
+        $(document).one('click', {self: this}, this._collapseAnswerArea);
+      }
+    },
+
+    _collapseAnswerArea: function(event) {
+      var area = event.data.self.$('.answer');
+      var textArea = area.find('textarea');
+      if(textArea.val() === ""){
+        area.removeClass('write');
+      }
+    },
+
+    _comment: function(event) {
+      event.stopPropagation();
+      var content = this.$('textarea').val();
+      var self = this;
+      var comment = this.options.channel.posts.create({
+        content: content,
+        replyTo: this.model[0].id
+      }, {
+        credentials: this.options.user.credentials,
+        success: function() { self._showComment(comment); }
+      });
+    },
+
+    _showComment: function(comment) {
+      // FIXME: This function is only temporary and will disappear
+      // when real-time support arrives.
+      this.model.push(comment);
+      this.render();
     }
   });
 
