@@ -204,7 +204,6 @@
   padding: 16px 13px 16px 76px;
   position: relative;
   cursor: pointer;
-  display: block;
   -webkit-transform-origin: top;
      -moz-transform-origin: top;
       -ms-transform-origin: top;
@@ -216,9 +215,6 @@
        -o-transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
           transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
 }
-  .channel:hover {
-    text-decoration: none;
-  }
   .channel.remove {
     left: -234px;
     opacity: 0;
@@ -290,7 +286,7 @@
   .channel .avatar img {
     border-radius: 3px;
   }
-  .channel .avatar:after {
+  .sidebar .channel .avatar:after {
     content: "";
     width: 100%;
     height: 100%;
