@@ -41,7 +41,7 @@ define(function(require) {
         new WelcomePage({model: this.user.credentials}).render();
       } else {
         this.navigate(config.defaultChannel, {trigger: true});
-        new SidebarPage({mode: this.user});
+        new SidebarPage({model: this.user});
       }
     },
 
