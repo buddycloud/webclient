@@ -38,6 +38,7 @@ define(function(require) {
         linkify: linkify
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      this._addNoCommentsClassIfNeeded();
       this._adjustCommentAreaVisibility();
     },
 
@@ -47,6 +48,12 @@ define(function(require) {
         return role;
       } else {
         return '';
+      }
+    },
+
+    _addNoCommentsClassIfNeeded: function() {
+      if (this.model.length == 1) {
+        this.$el.addClass('noComments');
       }
     },
 
