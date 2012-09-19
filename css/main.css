@@ -26,27 +26,15 @@ pre,textarea {
   outline: 0;
   border: 0;
 }
+
 @font-face {
-  font-family: 'NunitoRegular';
+  font-family: 'Nunito';
   src: url("fonts/Nunito-Regular-webfont.eot");
   src: url("fonts/Nunito-Regular-webfont.eot?#iefix") format('embedded-opentype'),url("fonts/Nunito-Regular-webfont.woff") format('woff'),url("fonts/Nunito-Regular-webfont.ttf") format('truetype'),url("fonts/Nunito-Regular-webfont.svg#NunitoRegular") format('svg');
   font-weight: normal;
   font-style: normal;
 }
-@font-face {
-  font-family: 'NunitoLight';
-  src: url("fonts/Nunito-Light-webfont.eot");
-  src: url("fonts/Nunito-Light-webfont.eot?#iefix") format('embedded-opentype'),url("fonts/Nunito-Light-webfont.woff") format('woff'),url("fonts/Nunito-Light-webfont.ttf") format('truetype'),url("fonts/Nunito-Light-webfont.svg#NunitoLight") format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'NunitoBold';
-  src: url("fonts/Nunito-Bold-webfont.eot");
-  src: url("fonts/Nunito-Bold-webfont.eot?#iefix") format('embedded-opentype'),url("fonts/Nunito-Bold-webfont.woff") format('woff'),url("fonts/Nunito-Bold-webfont.ttf") format('truetype'),url("fonts/Nunito-Bold-webfont.svg#NunitoBold") format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
+
 html {
   height: 100%;
   overflow-y: hidden;
@@ -104,4 +92,20 @@ a.internal, a:visited.internal {
 .hint { color: #bbb; }
 table td:not(:last-child) {
   padding-right: 13px;
+}
+
+.loader {
+  /* bug in firefox where it doesnt start from the top */
+  vertical-align: top;
+}
+.throbber {
+  font-size: 2em;
+  color: rgba(0,0,0,.55);
+  position: relative;
+  opacity: 0;
+  -webkit-animation: throb 1s linear infinite alternate;
+}
+
+@-webkit-keyframes throb {
+  to { opacity: 1; }
 }

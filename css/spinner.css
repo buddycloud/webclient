@@ -1,8 +1,7 @@
-span.spinner {
+.spinner {
   position: relative;
   width: 21px;
   height: 21px;
-  margin-right: 6px;
   background: url(../img/spinner.png);
   display: inline-block;
   vertical-align: middle;
@@ -12,9 +11,14 @@ span.spinner {
        -o-animation: spin 2.1s linear infinite;
           animation: spin 2.1s linear infinite;
 }
+  .spinner.yellow {
+    width: 75px;
+    height: 75px;
+    background: url(../img/spinner_yellow.png) no-repeat center;
+  }
   
 @-webkit-keyframes spin {
-  to { -webkit-transform: rotate(360deg); }
+  to { -webkit-transform: rotate(360deg) translateZ(0); }
 }
 @-moz-keyframes spin {
   to { -moz-transform: rotate(360deg); }

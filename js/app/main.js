@@ -77,12 +77,25 @@ define(function(require) {
 
   var credentials = new Credentials();
   defRouter.credModel = credentials;
+
+  if (!credentials.loggedIn) {
+    startRouting()
+  } else {
   credentials.fetch();
   credentials.verify();
   credentials.on('accepted', function() {
     defRouter.loggedIn = true;
+    startRouting()
   });
+  credentials.on('rejected', function() {
+    alert('Wrong credentials.')
+    credentials.set({username: null, password: null})
+    startRouting()
+  })
+}
 
-  Backbone.history.start({root: window.location.pathname/*, pushState: true*/});
+  function startRouting() {
+    Backbone.history.start({root: window.location.pathname/*, pushState: true*/});
+  }
 });
 

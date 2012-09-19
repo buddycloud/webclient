@@ -233,11 +233,11 @@ form.stream .gravatar.inactive p {
 form.stream .notify { height: 147px; }
 form.stream .notify > label { height: 146px; }
 form.stream .hint {
-  margin: 0 8px;
   color: gray;
   position: relative;
 }
 form.stream .hint > span {
+  margin: 0 8px;
   width: 247px;
   left: 0;
   opacity: 0;

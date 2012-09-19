@@ -26,8 +26,8 @@
   position: absolute;
   overflow: auto;
 }
-  .content.docked {
-    left: 234px;
+  .content.full {
+    left: 0;
   }
 .channelView {
   width: 580px;
