@@ -28,7 +28,7 @@ define(function(require) {
     it('should set fallback URL on image if avatar fails to load', function() {
       avatarFallback(image, 'personal', 50);
       $(image).trigger('error');
-      expect(image.src).toContain('img/personal-50px.png');
+      expect(image.src).toContain('img/personal-50px.jpg');
     });
 
     it('should not change the passed image before an "error" event', function() {
@@ -41,8 +41,8 @@ define(function(require) {
       avatarFallback($([image, image2]), 'topic', 75);
       $(image).trigger('error');
       $(image2).trigger('error');
-      expect(image.src).toContain('img/topic-75px.png');
-      expect(image2.src).toContain('img/topic-75px.png');
+      expect(image.src).toContain('img/topic-75px.jpg');
+      expect(image2.src).toContain('img/topic-75px.jpg');
     });
   });
 
