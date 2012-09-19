@@ -25,18 +25,14 @@ define(function(require) {
     className: 'sidebar',
 
     initialize: function() {
-      this.metadata = new ChannelMetadata(this.model.credentials.username);
-      this.personalChannel = new PersonalChannel({model: this.metadata});
+      this.personalChannel = new PersonalChannel({model: this.model.credentials});
       this.actionBar = new ActionBar();
       this.channels = new Channels({model: this.model.subscribedChannels});
-      this.metadata.bind('change', this.render, this);
-      this.metadata.fetch();
+      this.render();
     },
 
     render: function() {
-      this.personalChannel.render();
       this.actionBar.render();
-      //this.channels.render();
       $('.sidebar').append(this.personalChannel.el)
       .append(this.actionBar.el)
       .append(this.channels.el)

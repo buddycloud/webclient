@@ -22,9 +22,15 @@ define(function(require) {
   var PersonalChannel = Backbone.View.extend({
     className: 'personal channel',
 
+    initialize: function() {
+      this.metadata = new ChannelMetadata(this.model.username);
+      this.metadata.bind('change', this.render, this);
+      this.metadata.fetch();
+    },
+
     render: function() {
-      this.$el.html(_.template(template,{metadata: this.model}));
-      avatarFallback(this.$('.avatar img'), this.model.channelType(), 50);
+      this.$el.html(_.template(template,{metadata: this.metadata}));
+      avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);
     }
   });
 
