@@ -23,13 +23,8 @@ define(function(require) {
     className: 'personal channel',
 
     render: function() {
-      var username = this.model.credentials.username;
-      this.$el.html(_.template(template,
-        {
-          username: username,
-          metadata: this.options.metadata
-        }));
-      avatarFallback(this.$('.avatar img'), this.options.metadata.channelType(), 50);
+      this.$el.html(_.template(template,{metadata: this.model}));
+      avatarFallback(this.$('.avatar img'), this.model.channelType(), 50);
     }
   });
 

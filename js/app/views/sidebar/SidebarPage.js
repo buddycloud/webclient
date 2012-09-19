@@ -26,14 +26,9 @@ define(function(require) {
 
     initialize: function() {
       this.metadata = new ChannelMetadata(this.model.credentials.username);
-      this.personalChannel = new PersonalChannel({
-        model: this.model,
-        metadata: this.metadata
-      });
+      this.personalChannel = new PersonalChannel({model: this.metadata});
       this.actionBar = new ActionBar();
-      this.channels = new Channels({
-        model: this.model.subscribedChannels
-      });
+      this.channels = new Channels({model: this.model.subscribedChannels});
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
     },
