@@ -32,8 +32,17 @@ define(function(require) {
         linkify: linkify
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
-      if (this.options.user.isAnonymous()) {
+      if (!this._userCanPost()) {
         this.$('.answer').hide();
+      }
+    },
+
+    _userCanPost: function() {
+      var user = this.options.user;
+      if (user.isAnonymous()) {
+        return false;
+      } else {
+        return user.subscribedChannels.isPostingAllowed(this.options.channel);
       }
     }
   });

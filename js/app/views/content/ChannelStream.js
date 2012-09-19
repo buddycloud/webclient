@@ -15,12 +15,18 @@
  */
 
 define(function(require) {
+  var $ = require('jquery');
   var Backbone = require('backbone');
+  var Post = require('models/Post');
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
+    events: {
+      'click .newTopic': '_expandNewTopicArea',
+      'click .createComment': '_post',
+    },
 
     initialize: function() {
       this._posts = [];
@@ -31,7 +37,11 @@ define(function(require) {
       var posts = this.model.posts.byThread();
       var self = this;
       _.each(posts, function(post) {
-        var view = new PostView({model: post, user: self.options.user});
+        var view = new PostView({
+          model: post,
+          channel: self.model.name,
+          user: self.options.user
+        });
         view.render();
         self._posts.push(view);
       });
@@ -48,9 +58,9 @@ define(function(require) {
     _userCanPost: function() {
       var user = this.options.user;
       if (user.isAnonymous()) {
-        return user;
+        return false;
       } else {
-        return  user.subscribedChannels.isPostingAllowed(this.model.name);
+        return user.subscribedChannels.isPostingAllowed(this.model.name);
       }
     },
 
@@ -58,6 +68,31 @@ define(function(require) {
       var self = this;
       _.each(this._posts, function(post) {
         self.$('.posts').append(post.el);
+      });
+    },
+
+    _expandNewTopicArea: function(event) {
+      event.stopPropagation();
+      var newTopicArea = this.$('.newTopic');
+      if(!newTopicArea.hasClass('write')){
+        newTopicArea.addClass('write');
+        $(document).one('click', {self: this}, this._collapseNewTopicArea);
+      }
+    },
+
+    _collapseNewTopicArea: function(event) {
+      var newTopicArea = event.data.self.$('.newTopic');
+      var textArea = newTopicArea.find('textarea');
+      if(textArea.val() === ""){
+        newTopicArea.removeClass('write');
+      }
+    },
+
+    _post: function() {
+      var content = this.$('textarea').val();
+      var post = new Post({content: content});
+      this.model.posts.create({content: content}, {
+        credentials: this.options.user.credentials
       });
     }
   });
