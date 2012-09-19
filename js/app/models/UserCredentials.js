@@ -31,34 +31,6 @@ define(function(require) {
       }
     },
 
-    register: function(username, password, email) {
-      if (username && password && email) {
-        var self = this;
-        var options = {
-          method: 'POST',
-          url: api.url('account'),
-          contentType: 'application/json',
-          data: JSON.stringify({
-            'username': username,
-            'password': password,
-            'email': email
-          }),
-          success: function() {
-            self.save({'username': username, 'password': password});
-            self.trigger('registrationSuccess');
-          },
-          error: function(xhr) {
-            var message = 'Registration error'
-            if (xhr.status === 503) {
-              message = 'User "' + username + '" already exists';
-            }
-            self.trigger('registrationError', message);
-          }
-        };
-        $.ajax(options);
-      }
-    },
-
     set: function() {
       Backbone.Model.prototype.set.apply(this, arguments);
       this.username = this.get('username');
@@ -77,26 +49,6 @@ define(function(require) {
       } else {
         delete sessionStorage[key];
       }
-    },
-
-    verify: function() {
-      if (!this.username) {
-        this.trigger('accepted');
-      } else {
-        this._sendVerificationRequest();
-      }
-    },
-
-    _sendVerificationRequest: function() {
-      var self = this;
-      var options = {
-        method: 'GET',
-        url: api.rootUrl(),
-        success: function() { self.trigger('accepted'); },
-        error: function() { self.trigger('rejected'); }
-      };
-      this.addAuthorizationToAjaxOptions(options);
-      $.ajax(options);
     },
 
     addAuthorizationToAjaxOptions: function(options) {

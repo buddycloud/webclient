@@ -15,23 +15,33 @@
  */
 
 define(function(require) {
+  var $ = require('jquery');
   var Backbone = require('backbone');
+  var Post = require('models/Post');
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
+    events: {
+      'click .newTopic': '_expandNewTopicArea',
+      'click .createComment': '_post',
+    },
 
     initialize: function() {
       this._posts = [];
-      this.model.posts.bind('reset', this._renderPosts, this);
+      this.model.posts.bind('reset', this._preRenderPosts, this);
     },
 
-    _renderPosts: function() {
+    _preRenderPosts: function() {
       var posts = this.model.posts.byThread();
       var self = this;
       _.each(posts, function(post) {
-        var view = new PostView({model: post});
+        var view = new PostView({
+          model: post,
+          channel: self.model.name,
+          user: self.options.user
+        });
         view.render();
         self._posts.push(view);
       });
@@ -39,10 +49,66 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template));
+      if (!this._userCanPost()) {
+        this.$('.newTopic').hide();
+      }
+      this._appendPosts();
+    },
+
+    _userCanPost: function() {
+      var user = this.options.user;
+      if (user.isAnonymous()) {
+        return false;
+      } else {
+        return user.subscribedChannels.isPostingAllowed(this.model.name);
+      }
+    },
+
+    _appendPosts: function() {
       var self = this;
       _.each(this._posts, function(post) {
         self.$('.posts').append(post.el);
       });
+    },
+
+    _expandNewTopicArea: function(event) {
+      event.stopPropagation();
+      var newTopicArea = this.$('.newTopic');
+      if(!newTopicArea.hasClass('write')){
+        newTopicArea.addClass('write');
+        $(document).one('click', {self: this}, this._collapseNewTopicArea);
+      }
+    },
+
+    _collapseNewTopicArea: function(event) {
+      var newTopicArea = event.data.self.$('.newTopic');
+      var textArea = newTopicArea.find('textarea');
+      if(textArea.val() === ""){
+        newTopicArea.removeClass('write');
+      }
+    },
+
+    _post: function() {
+      var content = this.$('textarea').val();
+      var self = this;
+      var post = this.model.posts.create({content: content}, {
+        credentials: this.options.user.credentials,
+        success: function() { self._showPost(post); }
+      });
+    },
+
+    _showPost: function(post) {
+      // FIXME: This function is only temporary and will disappear
+      // when real-time support arrives.
+      var view = new PostView({
+        model: [post],
+        channel: this.model.name,
+        user: this.options.user
+      });
+      console.log(post);
+      this._posts.unshift(view);
+      view.render();
+      this.$('.posts').prepend(view.el);
     }
   });
 

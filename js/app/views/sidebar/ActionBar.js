@@ -16,18 +16,15 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var template = require('text!templates/content/discover.html')
+  var template = require('text!templates/sidebar/actionBar.html')
 
-  var DiscoverView = Backbone.View.extend({
-    className: 'discoverChannels clearfix',
+  var ActionBar = Backbone.View.extend({
+    className: 'actionBar clearfix',
 
     render: function() {
       this.$el.html(_.template(template));
-      if (this.options.user.isAnonymous()) {
-        this.$('.follow').hide();
-      }
     }
   });
 
-  return DiscoverView;
+  return ActionBar;
 });

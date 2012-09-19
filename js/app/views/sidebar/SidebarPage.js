@@ -15,19 +15,29 @@
  */
 
 define(function(require) {
+  var ActionBar = require('views/sidebar/ActionBar');
   var Backbone = require('backbone');
-  var template = require('text!templates/content/discover.html')
+  var Channels = require('views/sidebar/Channels');
+  var PersonalChannel = require('views/sidebar/PersonalChannel');
 
-  var DiscoverView = Backbone.View.extend({
-    className: 'discoverChannels clearfix',
+  var SidebarPage = Backbone.View.extend({
+    className: 'sidebar',
+
+    initialize: function() {
+      this.personalChannel = new PersonalChannel({model: this.model.credentials});
+      this.actionBar = new ActionBar();
+      this.channels = new Channels({model: this.model.subscribedChannels});
+      this.render();
+    },
 
     render: function() {
-      this.$el.html(_.template(template));
-      if (this.options.user.isAnonymous()) {
-        this.$('.follow').hide();
-      }
+      this.actionBar.render();
+      $('.sidebar').append(this.personalChannel.el)
+      .append(this.actionBar.el)
+      .append(this.channels.el)
+      .removeClass('hidden');
     }
   });
 
-  return DiscoverView;
+  return SidebarPage;
 });

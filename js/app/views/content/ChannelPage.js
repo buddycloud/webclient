@@ -25,10 +25,16 @@ define(function(require) {
 
     initialize: function() {
       this.model = new Channel(this.options.channel);
-      this.view = new ChannelView({model: this.model});
-      this.details = new ChannelDetails({model: this.model});
+      this.view = new ChannelView({
+        model: this.model,
+        user: this.options.user
+      });
+      this.details = new ChannelDetails({
+        model: this.model,
+        user: this.options.user
+      });
       this.model.bind('fetch', this.render, this);
-      this.model.fetch()
+      this.model.fetch({credentials: this.options.user.credentials})
     },
 
     render: function() {
@@ -36,7 +42,7 @@ define(function(require) {
       this.details.render();
       this.$el.append(this.view.el);
       this.$el.append(this.details.el);
-      $('.content').append(this.el);
+      $('.content').html(this.el);
     }
   });
 

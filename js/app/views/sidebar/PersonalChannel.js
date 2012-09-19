@@ -15,37 +15,25 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
-  var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
-  var linkify = require('util/linkify');
-  var template = require('text!templates/content/post.html')
+  var ChannelMetadata = require('models/ChannelMetadata');
+  var template = require('text!templates/sidebar/personalChannel.html')
 
-  var PostView = Backbone.View.extend({
-    tagName: 'article',
-    className: 'post',
+  var PersonalChannel = Backbone.View.extend({
+    className: 'personal channel',
 
-    render: function() {
-      this.$el.html(_.template(template, {
-        post: this.model,
-        linkify: linkify
-      }));
-      avatarFallback(this.$('.avatar'), 'personal', 50);
-      if (!this._userCanPost()) {
-        this.$('.answer').hide();
-      }
+    initialize: function() {
+      this.metadata = new ChannelMetadata(this.model.username);
+      this.metadata.bind('change', this.render, this);
+      this.metadata.fetch();
     },
 
-    _userCanPost: function() {
-      var user = this.options.user;
-      if (user.isAnonymous()) {
-        return false;
-      } else {
-        return user.subscribedChannels.isPostingAllowed(this.options.channel);
-      }
+    render: function() {
+      this.$el.html(_.template(template,{metadata: this.metadata}));
+      avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);
     }
   });
 
-  return PostView;
+  return PersonalChannel;
 });

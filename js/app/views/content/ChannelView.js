@@ -23,8 +23,14 @@ define(function(require) {
     className: 'channelView clearfix',
 
     initialize: function() {
-      this.header = new ChannelHeader({model: this.model});
-      this.stream = new ChannelStream({model: this.model});
+      this.header = new ChannelHeader({
+        model: this.model,
+        user: this.options.user
+      });
+      this.stream = new ChannelStream({
+        model: this.model,
+        user: this.options.user
+      });
     },
 
     render: function() {
