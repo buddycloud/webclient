@@ -1,21 +1,21 @@
-    <div class="personal channel">
-      <img class="avatar" src="<%= metadata.avatarUrl(75) %>">
-      <span class="channelpost counter">2</span>
-      <span class="message counter">2</span>
-      <div class="info">
-        <span class="owner"><%- username.split('@', 2)[0] %><span class="domain"><%- username.split('@', 2)[1] %></span></span>
-        <span class="status"><%- metadata.description %></span>
-      </div>
-      <div class="settings noSelect">
-        <div class="popup">
-          <div class="centered vertical">
-            <div class="arrow"></div>
-            <ul>
-              <li class="newChannel"><a href="editChannel.html">Create Topic Channel</a>
-              <li class="preferences"><a href="preferences.html">Preferences</a>
-              <li class="logout">Logout
-            </ul>
-          </div>
-        </div>
-      </div>
+<div class="avatar">
+  <img src="<%= metadata.avatarUrl(50) %>" />
+  <span class="channelpost counter">2</span>
+  <span class="message counter">2</span>
+</div>
+<div class="info">
+  <span class="owner"><%- username.split('@', 2)[0] %><span class="domain"><%- username.split('@', 2)[1] %></span></span>
+  <span class="status"><%- metadata.description() %></span>
+</div>
+<div class="settings noSelect">
+  <div class="popup">
+    <div class="centered vertical">
+      <div class="arrow"></div>
+      <ul>
+        <li class="newChannel"><a href="editChannel.html">Create Topic Channel</a>
+        <li class="preferences"><a href="preferences.html">Preferences</a>
+        <li class="logout">Logout
+      </ul>
     </div>
+  </div>
+</div>

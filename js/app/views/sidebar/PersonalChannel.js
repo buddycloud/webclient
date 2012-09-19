@@ -24,12 +24,12 @@ define(function(require) {
 
     render: function() {
       var username = this.model.credentials.username;
-      this.$el.html(_.template(template, 
+      this.$el.html(_.template(template,
         {
           username: username,
           metadata: this.options.metadata
         }));
-      avatarFallback(this.$('.avatar'), this.options.metadata.channelType(), 75);
+      avatarFallback(this.$('.avatar img'), this.options.metadata.channelType(), 50);
     }
   });
 

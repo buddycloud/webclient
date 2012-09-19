@@ -1,20 +1,18 @@
-<div class="channels" class="antiscroll-wrap">
-  <div class="antiscroll-inner scrollHolder">
-    <% _.each(channels, function(channel, index) { %>
-    <div class="channel">
-      <div class="avatar" style="background-image: url(prototypes/avatars/user2.jpg)">
-        <span class="channelpost counter">2</span>
-      </div>
-      <div class="info">
-        <!--
-        FIXME add description
-        <span class="owner">vera<span class="domain">@buddycloud.com</span></span>
-        <span class="status">What a wonderful day</span>
-        -->
-        <span class="owner"><%- channel.split('@', 2)[0] %></span>
-        <span class="status"><%- channel %></span>
-      </div>
+<div class="antiscroll-inner scrollHolder">
+  <% _.each(channels, function(channel, index) { %>
+  <div class="channel">
+    <div class="avatar" style="background-image: url(prototypes/avatars/user2.jpg)">
+      <span class="channelpost counter">2</span>
     </div>
-    <% }); %>
-  </div><!-- /antiscroll-inner -->
-</div><!-- /channels -->
+    <div class="info">
+      <!--
+      FIXME add description
+      <span class="owner">vera<span class="domain">@buddycloud.com</span></span>
+      <span class="status">What a wonderful day</span>
+      -->
+      <span class="owner"><%- channel.split('@', 2)[0] %></span>
+      <span class="status"><%- channel %></span>
+    </div>
+  </div>
+  <% }); %>
+</div><!-- /antiscroll-inner -->

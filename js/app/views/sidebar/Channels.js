@@ -20,7 +20,7 @@ define(function(require) {
   var template = require('text!templates/sidebar/channels.html')
 
   var Channels = Backbone.View.extend({
-    className: 'channels',
+    className: 'channels antiscroll-wrap',
 
     render: function() {
       this.$el.html(_.template(template, {channels: this.model.channels}));

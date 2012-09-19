@@ -42,10 +42,10 @@ define(function(require) {
       this.personalChannel.render();
       this.actionBar.render();
       this.channels.render();
-      this.$el.append(this.personalChannel.el);
-      this.$el.append(this.actionBar.el);
-      this.$el.append(this.channels.el);
-      $('.sidebar').append(this.el);
+      $('.sidebar').append(this.personalChannel.el)
+      .append(this.actionBar.el)
+      .append(this.channels.el)
+      .removeClass('hidden');
     }
   });
 
