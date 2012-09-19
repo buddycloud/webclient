@@ -27,7 +27,7 @@ define(function(require) {
       this.$el.html(_.template(template, 
         {
           username: username,
-          description: this.options.metadata.description
+          metadata: this.options.metadata
         }));
       avatarFallback(this.$('.avatar'), this.options.metadata.channelType(), 75);
     }

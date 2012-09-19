@@ -24,7 +24,6 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(template, {channels: this.model.channels}));
-      avatarFallback(this.$('.avatar'), this.options.metadata.channelType(), 75);
     }
   });
 
