@@ -4,7 +4,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/overlay/welcome.html');
   var footer = require('text!templates/overlay/footer.html');
-  var User = require('model/User');
+  var User = require('models/User');
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
