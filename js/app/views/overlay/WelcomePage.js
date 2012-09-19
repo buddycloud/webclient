@@ -3,7 +3,7 @@ define(function(require) {
   var _ = require('underscore');
   var Backbone = require('backbone');
   var template = require('text!templates/overlay/welcome.html');
-
+  var footer = require('text!templates/overlay/footer.html');
   var User = require('model/User');
 
   var WelcomePage = Backbone.View.extend({
@@ -71,6 +71,9 @@ define(function(require) {
           // hide if the user clickes into empty space
           $(document).one('click', hideForm);
         }
+        
+        // add footer
+        $('.content').append(_.template(footer));
       }
       
 
