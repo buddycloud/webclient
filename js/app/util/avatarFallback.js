@@ -18,8 +18,10 @@ define(function(require) {
   var $ = require('jquery');
 
   function avatarFallback(avatarElements, type, size) {
-    var fallbackImage = 'img/' + type + '-' + size + 'px.jpg';
+    var fallbackImage;
     $(avatarElements).one('error', function(event) {
+      type = type || event.target.dataset['type'];
+      fallbackImage = 'img/' + type + '-' + size + 'px.jpg';
       event.target.src = fallbackImage;
     });
   }

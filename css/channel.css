@@ -435,6 +435,45 @@
        -o-transition: 500ms;
           transition: 500ms;
 }
+.usermeta {
+  left: 12px;
+  top: 8px;
+  position: absolute;
+  height: 68px;
+  padding: 15px 21px 0 70px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #fff), color-stop(1, #eee));
+  background: -webkit-linear-gradient(top, #fff 0%, #eee 100%);
+  background:    -moz-linear-gradient(top, #fff 0%, #eee 100%);
+  background:     -ms-linear-gradient(top, #fff 0%, #eee 100%);
+  background:      -o-linear-gradient(top, #fff 0%, #eee 100%);
+  background:         linear-gradient(to bottom, #fff 0%, #eee 100%);
+  border: 1px solid hsl(199, 0%, 88%);
+  border-bottom-color: hsl(199, 0%, 85%);
+  box-shadow: 0 1px 5px rgba(0,0,0,.08);
+  border-radius: 3px;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  display: none;
+}
+.comment .usermeta {
+  top: 4px;
+  left: 27px;
+  height: 52px;
+  padding: 7px 21px 0 55px;
+}
+  .avatar:hover {
+    z-index: 1;
+  }
+  .avatar:hover + .usermeta { 
+    display: block;
+  }
+  .post .usermeta .name { 
+    color: black;
+    display: block;
+  }
+  .post .usermeta .jid {
+    color: gray;
+  }
 .post .opener {
   min-height: 47px;
   padding: 21px 21px 13px 84px;
