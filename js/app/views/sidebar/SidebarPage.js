@@ -17,7 +17,6 @@
 define(function(require) {
   var ActionBar = require('views/sidebar/ActionBar');
   var Backbone = require('backbone');
-  var ChannelMetadata = require('models/ChannelMetadata');
   var Channels = require('views/sidebar/Channels');
   var PersonalChannel = require('views/sidebar/PersonalChannel');
 

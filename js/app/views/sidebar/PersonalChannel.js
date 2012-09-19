@@ -17,6 +17,7 @@
 define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/sidebar/personalChannel.html')
 
   var PersonalChannel = Backbone.View.extend({
