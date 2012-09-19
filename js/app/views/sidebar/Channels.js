@@ -15,16 +15,43 @@
  */
 
 define(function(require) {
+  var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/sidebar/channels.html')
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
 
+    initialize: function() {
+      var self = this;
+      var callback = this._triggerRenderCallback();
+      this.metadatas = [];
+      _.each(this.model.channels(), function(channel, index) {
+        var metadata = new ChannelMetadata(channel);
+        self.metadatas.push(metadata);
+        metadata.fetch({success: callback});
+      });
+    },
+
     render: function() {
-      this.$el.html(_.template(template, {channels: this.model.channels}));
-    }
+      this.$el.html(_.template(template, 
+      {
+        metadatas: this.metadatas
+      }));
+    },
+
+    _triggerRenderCallback: function() {
+      var self = this;
+      var fetched = [];
+      return function(model) {
+        fetched.push(model);
+        if (fetched.length === self.metadatas.length) {
+          self.render();
+        }
+      }
+    }   
   });
 
   return Channels;

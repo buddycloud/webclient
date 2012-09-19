@@ -36,7 +36,7 @@ define(function(require) {
     render: function() {
       this.personalChannel.render();
       this.actionBar.render();
-      this.channels.render();
+      //this.channels.render();
       $('.sidebar').append(this.personalChannel.el)
       .append(this.actionBar.el)
       .append(this.channels.el)

@@ -1,17 +1,13 @@
 <div class="antiscroll-inner scrollHolder">
-  <% _.each(channels, function(channel, index) { %>
+  <% _.each(metadatas, function(metadata, index) { %>
   <div class="channel">
-    <div class="avatar" style="background-image: url(prototypes/avatars/user2.jpg)">
+    <div class="avatar">
+      <img src="<%= metadata.avatarUrl(50) %>" />
       <span class="channelpost counter">2</span>
     </div>
     <div class="info">
-      <!--
-      FIXME add description
-      <span class="owner">vera<span class="domain">@buddycloud.com</span></span>
-      <span class="status">What a wonderful day</span>
-      -->
-      <span class="owner"><%- channel.split('@', 2)[0] %></span>
-      <span class="status"><%- channel %></span>
+      <span class="owner"><%= metadata.title() %></span>
+      <span class="status"><%= metadata.description() %></span>
     </div>
   </div>
   <% }); %>
