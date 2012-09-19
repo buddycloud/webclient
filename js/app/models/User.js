@@ -43,18 +43,15 @@ define(function(require) {
     register: function(username, password, email) {
       if (username && password && email) {
         var self = this;
-
         var data = {
           'username': username,
           'password': password,
           'email': email
         };
-
         var successCallback = function() {
           self.credentials.save({'username': username, 'password': password});
           self.trigger('registrationSuccess');  
         };
-
         var errorCallback = function(res) {
           var message = 'Registration error'
           if (res.status === 503) {
@@ -68,7 +65,6 @@ define(function(require) {
     },
 
     _sendRegistrationRequest: function(data, successCallback, errorCallback) {
-      var self = this;
       var options = {
         method: 'POST',
         url: api.url('account'),
