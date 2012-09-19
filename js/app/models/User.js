@@ -33,6 +33,14 @@ define(function(require) {
       return !this.credentials.username;
     },
 
+    avatarUrl: function() {
+      if (this.isAnonymous()) {
+        return "";
+      } else {
+        return api.avatarUrl(this.credentials.username);
+      }
+    },
+
     login: function() {
       if (this.isAnonymous()) {
         this.trigger('loginSuccess');

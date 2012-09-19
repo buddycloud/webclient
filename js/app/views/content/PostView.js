@@ -33,6 +33,7 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {
         post: this.model,
+        user: this.options.user,
         linkify: linkify
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
