@@ -51,7 +51,7 @@ define(function(require) {
         };
         var successCallback = function() {
           self.credentials.save({'username': username, 'password': password});
-          self.trigger('registrationSuccess');  
+          self.trigger('registrationSuccess');
         };
         var errorCallback = function(res) {
           var message = 'Registration error'
@@ -67,7 +67,7 @@ define(function(require) {
 
     _sendRegistrationRequest: function(data, successCallback, errorCallback) {
       var options = {
-        method: 'POST',
+        type: 'POST',
         url: api.url('account'),
         contentType: 'application/json',
         data: JSON.stringify(data),
