@@ -26,9 +26,9 @@ define(function(require) {
 
     initialize: function() {
       this.model = new Search();
-      this.discover = new DiscoverView();
+      this.discover = new DiscoverView({user: this.options.user});
       this.searchbar = new SearchBar({model: this.model});
-      this.search = new SearchView({model: this.model});
+      this.search = new SearchView({model: this.model, user: this.options.user});
       this.model.bind('fetch', this._renderSearch, this);
       this.render();
     },

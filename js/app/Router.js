@@ -44,7 +44,7 @@ define(function(require) {
     },
 
     explore: function() {
-      new ExplorePage();
+      new ExplorePage({user: this.user});
     },
 
     preferences: function() {
