@@ -40,14 +40,6 @@ define(function(require) {
         expect(search.posts.doSearch).toHaveBeenCalled();
       });
 
-      it('each submodel should NOT call fetch() on doSearch()', function() {
-        spyOn(search.channels, 'fetch');
-        spyOn(search.posts, 'fetch');
-        search.doSearch({});
-        expect(search.channels.fetch).not.toHaveBeenCalled();
-        expect(search.posts.fetch).not.toHaveBeenCalled();
-      });
-
       it('should trigger "fetch" if all submodels are fetched', function() {
         spyOn(search.channels, 'fetch').andCallFake(function(options) {
           options.success(search.channels);
