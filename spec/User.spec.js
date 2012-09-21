@@ -71,14 +71,13 @@ define(function(require) {
         expect(user.trigger).toHaveBeenCalledWith('loginError');
       });
     });
-  });
 
-  describe('register()', function() {
+    describe('register()', function() {
       it('should send register request to URL /account', function() {
         spyOn($, 'ajax').andCallFake(function(options) {
           expect(options.url).toBe('https://example.com/account');
           expect(options.contentType).toBe('application/json');
-          expect(options.method).toBe('POST');
+          expect(options.type).toBe('POST');
           expect(options.data).toBe(
             JSON.stringify(
               {
@@ -118,5 +117,5 @@ define(function(require) {
         expect(user.trigger).toHaveBeenCalledWith('registrationError', 'Registration error');
       });
     });
-
+  });
 });
