@@ -26,7 +26,7 @@ define(function(require) {
     initialize: function() {
       this.personalChannel = new PersonalChannel({model: this.model.credentials});
       this.actionBar = new ActionBar();
-      this.channels = new Channels({model: this.model.subscribedChannels});
+      this.channels = new Channels({model: this.model});
       this.render();
     },
 
