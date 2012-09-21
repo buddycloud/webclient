@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var template = require('text!templates/content/header.html')
@@ -26,9 +27,29 @@ define(function(require) {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
+      this._renderFollowButton();
+    },
+
+    _renderFollowButton: function() {
       if (this.options.user.isAnonymous()) {
         this.$('.follow').hide();
+      } else {
+        if (!this._follows()) {
+          this.$('.follow').text('Unfollow');
+        }
       }
+    },
+
+    _follows: function() {
+      var followedChannels = this.options.user.subscribedChannels.channels();
+      var channel = this.model.metadata.channel;
+      _.each(followedChannels, function(followedChannel, index) {
+        if (followedChannel.indexOf(channel) != -1) {
+          return true;
+        }
+      });
+
+      return false;
     }
   });
 
