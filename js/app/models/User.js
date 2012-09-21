@@ -94,6 +94,10 @@ define(function(require) {
          success: function() { self.trigger('loginSuccess'); },
          error: function() { self.trigger('loginError'); }
       });
+    },
+
+    username: function() {
+      return this.credentials.username;
     }
   });
 

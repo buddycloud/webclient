@@ -56,7 +56,7 @@ define(function(require) {
     default: function() {
       this._before();
       if (this.user.isAnonymous()) {
-        new WelcomePage({model: this.user.credentials}).render();
+        new WelcomePage({model: this.user}).render();
       } else {
         this.navigate(config.defaultChannel, {trigger: true});
       }

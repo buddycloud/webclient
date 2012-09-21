@@ -46,11 +46,17 @@ define(function(require) {
       var self = this;
       var callback = this._triggerRenderCallback();
 
-      _.each(this.model.channels(), function(channel, index) {
-        var metadata = new ChannelMetadata(channel);
-        self.metadatas.push(metadata);
-        metadata.fetch({success: callback});
+      _.each(this.model.subscribedChannels.channels(), function(channel, index) {
+        if (!self._itsMe(channel)) {
+          var metadata = new ChannelMetadata(channel);
+          self.metadatas.push(metadata);
+          metadata.fetch({success: callback});         
+        }
       });
+    },
+
+    _itsMe: function(channel) {
+      return this.model.username().indexOf(channel) != -1;
     },
 
     _triggerRenderCallback: function() {
