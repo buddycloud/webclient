@@ -20,6 +20,7 @@ define(function(require) {
   var Post = require('models/Post');
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
+  var avatarFallback = require('util/avatarFallback');
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -53,6 +54,7 @@ define(function(require) {
         this.$('.newTopic').remove();
       }
       this._appendPosts();
+      avatarFallback(this.$('.avatar'), 'personal', 50);
     },
 
     _userCanPost: function() {

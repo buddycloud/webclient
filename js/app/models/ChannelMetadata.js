@@ -38,7 +38,7 @@ define(function(require) {
     },
 
     description: function() {
-      return this.get('description');
+      return this.get('description') || '';
     },
 
     creationDate: function() {
