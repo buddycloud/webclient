@@ -20,11 +20,12 @@ define(function(require) {
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/sidebar/channels.html')
+  var animationsHelper = require('util/animationsHelper');
   var Events = Backbone.Events;
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
-    events: {'click .channel': '_navigate'},
+    events: {'click .channel': '_selectChannel'},
 
     initialize: function() {
       this.metadatas = [];
@@ -36,10 +37,16 @@ define(function(require) {
         metadatas: this.metadatas,
       }));
       avatarFallback(this.$('.channel img'), undefined, 50);
+      this._setupAnimation();
     },
 
-    _navigate: function(e) {
-      Events.trigger('navigate', e.currentTarget.dataset['href']);
+    _selectChannel: function(event) {
+      this._bubble(event.currentTarget);
+      this._dispatchNavigationEvent(event.currentTarget.dataset['href']);
+    },
+
+    _dispatchNavigationEvent: function(path) {
+      Events.trigger('navigate', path);
     },
 
     _getChannelsMetadata: function() {
@@ -50,7 +57,7 @@ define(function(require) {
         if (!self._itsMe(channel)) {
           var metadata = new ChannelMetadata(channel);
           self.metadatas.push(metadata);
-          metadata.fetch({success: callback});         
+          metadata.fetch({success: callback});
         }
       });
     },
@@ -68,6 +75,68 @@ define(function(require) {
           self.render();
         }
       }
+    },
+
+    _setupAnimation: function() {
+      // caching elements and values
+      this._$innerHolder = this.$el.find('.scrollHolder');
+      this._$channels = this.$el.find('.channel:not(".personal")');
+      this._channelHeight = this._$channels.first().outerHeight();
+      this._movingChannels = 0;
+    },
+
+    _bubble: function(target) {
+      var transitionendEvent = animationsHelper.getTransitionsEndEvent();
+      var bubblingChannel = $(target);
+      var offset = bubblingChannel.position().top + this._$innerHolder.scrollTop();
+
+      // if the selected channel is not the first or the bubble one
+      if (offset === 0 || bubblingChannel.parent().hasClass('bubbleHolder')) {
+        return false;
+      }
+
+      // the current spot of selected channel starts decreasing its height to 0
+      var startingArea = $('<div></div>').height( this._channelHeight ).addClass('startingArea');
+      bubblingChannel.before(startingArea);
+      document.redraw();
+      startingArea.bind(transitionendEvent, {propertyName: 'height'}, this._removeOldSpot);
+      startingArea.css('height', 0);
+
+      bubblingChannel.detach()
+                     .css('top', offset);
+      this._$innerHolder.prepend(bubblingChannel);
+
+      // the new spot of selected channel (top/first one) starts increasing its height to channelHeight
+      var landingArea = $('<div></div>').addClass('bubbleHolder');
+      bubblingChannel.wrap(landingArea);
+      document.redraw();
+      bubblingChannel.bind(transitionendEvent, {self: this}, this._adjustNewSpot);
+
+      bubblingChannel.addClass('bubbling').css({'top': 0, 'z-index': ++this._movingChannels + 1});
+      bubblingChannel.parent().css('height', this._channelHeight);
+    },
+
+    _removeOldSpot: function(event) {
+      var propertyToWaitFor = event.data ? event.data.propertyName : undefined;
+      if (propertyToWaitFor !== undefined && event.originalEvent.propertyName === propertyToWaitFor) {
+        var $this = $(this);
+        $this.remove();
+        $this.unbind(event.originalEvent.type);
+      }
+    },
+
+    _adjustNewSpot: function(event) {
+      var $this = $(this);
+      var data = event.data;
+
+      if (data && data.callback) {
+        data.callback();
+      }
+      $this.removeClass('bubbling');
+      $this.css({'height': '', 'z-index': ''});
+      $this.unwrap();
+      $this.unbind(event.originalEvent.type);
+      data.self._movingChannels--;
     }
   });
 
