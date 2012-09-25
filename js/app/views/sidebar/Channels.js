@@ -17,11 +17,11 @@
 define(function(require) {
   var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
+  var animations = require('util/animations');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/sidebar/channels.html')
   var Events = Backbone.Events;
-  var animationHelper = require('util/animationHelper');
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
@@ -86,7 +86,7 @@ define(function(require) {
     },
 
     _bubble: function(target) {
-      var transitionendEvent = animationHelper.getTransitionsEndEvent();
+      var transitionendEvent = animations.getTransitionsEndEvent();
       var bubblingChannel = $(target);
       var offset = bubblingChannel.position().top + this._$innerHolder.scrollTop();
 
