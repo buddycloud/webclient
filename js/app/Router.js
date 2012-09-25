@@ -58,7 +58,11 @@ define(function(require) {
       if (this.user.isAnonymous()) {
         new WelcomePage({model: this.user}).render();
       } else {
-        this.navigate(config.defaultChannel, {trigger: true});
+        if (this.user.channels().length < 5) {
+          this.navigate('explore', {trigger: true});
+        } else {
+          this.navigate(this.user.username(), {trigger: true});
+        }
       }
     },
 
