@@ -41,6 +41,14 @@ define(function(require) {
       }
     },
 
+    username: function() {
+      return this.credentials.username;
+    },
+
+    channels: function() {
+      return this.subscribedChannels.channels();
+    },
+
     login: function() {
       if (this.isAnonymous()) {
         this.trigger('loginSuccess');
@@ -94,10 +102,6 @@ define(function(require) {
          success: function() { self.trigger('loginSuccess'); },
          error: function() { self.trigger('loginError'); }
       });
-    },
-
-    username: function() {
-      return this.credentials.username;
     }
   });
 
