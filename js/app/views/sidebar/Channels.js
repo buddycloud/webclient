@@ -102,8 +102,7 @@ define(function(require) {
       startingArea.bind(transitionendEvent, {propertyName: 'height'}, this._removeOldSpot);
       startingArea.css('height', 0);
 
-      bubblingChannel.detach()
-                     .css('top', offset);
+      bubblingChannel.detach().css('top', offset);
       this._$innerHolder.prepend(bubblingChannel);
 
       // the new spot of selected channel (top/first one) starts increasing its height to channelHeight
