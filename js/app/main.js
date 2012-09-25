@@ -49,7 +49,7 @@ define(function(require) {
 
   function route(user) {
     var router = new Router(user);
-    Backbone.history.start({root: window.location.pathname, pushState: config.release});
+    Backbone.history.start({pushState: config.release});
   }
 
   initialize();
