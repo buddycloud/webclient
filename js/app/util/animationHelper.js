@@ -1,7 +1,6 @@
 define(function(require) {
-  //var Modernizr = require('modernizr');
-  var transition = 'WebkitTransition'; //Modernizr.prefixed('transition');
-  var transform = 'WebkitTransform';  //Modernizr.prefixed('transform');
+  var transition = Modernizr.prefixed('transition');
+  var transform = Modernizr.prefixed('transform');
   var transEndEventNames = {
     'WebkitTransition' : 'webkitTransitionEnd',
     'MozTransition'    : 'transitionend',
