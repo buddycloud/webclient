@@ -1,0 +1,40 @@
+<form class="stream clearfix">
+  <h2 class="pageName">Preferences</h2>
+  <div class="email">
+    <label for="email_address">Email Address</label>
+    <input type="text" id="email_address" value="<%= user.email() %>" />
+  </div>
+  <div class="notify">
+    <label>Notifications</label>
+    <div>
+      <div>
+        <input type="checkbox" id="newFollowers"/>
+        <label for="newFollowers" class="noSelect">new followers</label>
+      </div>
+      <div>
+        <input type="checkbox" id="mentions"/>
+        <label for="mentions" class="noSelect">@mentions</label>
+      </div>
+      <div>
+        <input type="checkbox" id="moderatedChannels"/>
+        <label for="moderatedChannels" class="noSelect">posts on channels I own or moderate</label>
+      </div>
+      <div>
+        <input type="checkbox" id="followedChannels"/>
+        <label for="followedChannels" class="noSelect">posts on any channel I follow</label>
+      </div>
+      <div>
+        <input type="checkbox" id="threads"/>
+        <label for="threads" class="noSelect">posts on threads I posted in</label>
+      </div>
+    </div>
+  </div>
+</form>
+<nav class="bottom clearfix">
+  <div class="floatLeft twoStepConfirmation clearfix">
+    <div class="button white delete stepOne">Delete Account</div>
+    <div class="button danger stepTwo">Confirm</div>
+  </div>
+  <div class="button callToAction save">Save</div>
+  <div class="button discard">Discard</div>
+</nav>
