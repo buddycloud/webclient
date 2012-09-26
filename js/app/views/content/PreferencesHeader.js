@@ -18,15 +18,21 @@ define(function(require) {
   var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/content/preferencesHeader.html')
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
 
+    initialize: function() {
+      this.metadata = new ChannelMetadata(this.model.username());
+      this.metadata.bind('change', this.render, this);
+      this.metadata.fetch();
+    },
+
     render: function() {
-      var metadata = this.model.metadata;
-      this.$el.html(_.template(template, {metadata: metadata}));
-      avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
+      this.$el.html(_.template(template, {metadata: this.metadata}));
+      avatarFallback(this.$('.avatar'), this.metadata.channelType(), 75);
     }
   });
 

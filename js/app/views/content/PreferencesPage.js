@@ -16,27 +16,28 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var Channel = require('models/Channel');
-  var PreferencesView = require('views/content/PreferencesView');
+  var PreferencesHeader = require('views/content/PreferencesHeader');
+  var PreferencesStream = require('views/content/PreferencesStream');
 
-  var PreferencesPage = Backbone.View.extend({
-    className: 'stream clearfix',
+  var PreferencesView = Backbone.View.extend({
+    className: 'channelView',
 
     initialize: function() {
-      this.model = new Channel(this.options.user.username());
-      this.view = new PreferencesView({
-        model: this.model,
+      this.header = new PreferencesHeader({
+        model: this.options.user
+      });
+      this.stream = new PreferencesStream({
         user: this.options.user
       });
-      this.model.bind('fetch', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials})
+      this.render();
     },
 
     render: function() {
-      this.view.render();
-      $('.content').html(this.view.el);
+      var content = $('.content');
+      content.append(this.header.el);
+      content.append(this.stream.el);
     }
   });
 
-  return PreferencesPage;
+  return PreferencesView;
 });

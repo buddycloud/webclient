@@ -24,8 +24,8 @@ define(function(require) {
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
 
-   initialize: function() {
-        _.bindAll(this, 'login');
+    initialize: function() {
+      _.bindAll(this, 'login');
     },
 
     events: {

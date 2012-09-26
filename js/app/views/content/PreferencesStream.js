@@ -17,15 +17,57 @@
 define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
+  var Preferences = require('models/Preferences');
   var template = require('text!templates/content/preferences.html');
 
   var PreferencesView = Backbone.View.extend({
     className: 'stream clearfix',
 
+    events: {
+      'click .save': 'save',
+    },
+
+    initialize: function() {
+      this.model = new Preferences();
+      this.model.bind('change', this.render, this);
+      this.model.fetch({credentials: this.options.user.credentials});
+    },
+
     render: function() {
       this.$el.html(_.template(template, {
-        user: this.model
+        preferences: this.model
       }));
+
+      // Update checkboxes
+      $('#newFollowers').attr('checked', this.model.newFollowers());
+      $('#mentions').attr('checked', this.model.mentions());
+      $('#ownChannel').attr('checked', this.model.ownChannel());
+      console.log(this.model.followedChannels());
+      $('#followedChannels').attr('checked', this.model.followedChannels());
+      $('#threads').attr('checked', this.model.threads());
+    },
+
+    save: function(event) {
+      event.preventDefault();
+      var email = $('#email_address').val();
+
+      if (email) {
+        var newFollowers = $('#newFollowers').attr('checked') ? true : false;
+        var mentions = $('#mentions').attr('checked') ? true : false;
+        var ownChannel = $('#ownChannel').attr('checked') ? true : false;
+        var followedChannels = $('#followedChannels').attr('checked') ? true : false;
+        var threads = $('#threads').attr('checked') ? true : false;
+
+        this.model.save({
+          'email': email,
+          'followMyChannel': newFollowers,
+          'postMentionedMe': mentions,
+          'postOnMyChannel': ownChannel,
+          'postOnSubscribedChannel': followedChannels,
+          'postAfterMe': threads,
+          'followRequest': newFollowers
+        }, {credentials: this.options.user.credentials});        
+      }
     }
   });
 
