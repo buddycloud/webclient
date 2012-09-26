@@ -47,7 +47,6 @@ define(function(require) {
     },
 
     save: function(event) {
-      event.preventDefault();
       var email = $('#email_address').val();
 
       if (email) {
@@ -56,6 +55,7 @@ define(function(require) {
     },
 
     _savePreferences: function(email) {
+      event.preventDefault();
       var newFollowers = this._isChecked($('#newFollowers'));
       var mentions = this._isChecked($('#mentions'));
       var ownChannel = this._isChecked($('#ownChannel'));
