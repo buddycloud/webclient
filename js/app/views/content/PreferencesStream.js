@@ -60,7 +60,7 @@ define(function(require) {
       var mentions = this._isChecked($('#mentions'));
       var ownChannel = this._isChecked($('#ownChannel'));
       var followedChannels = this._isChecked($('#followedChannels'));
-      var threads = this._isChecked($('#threads').attr('checked'));
+      var threads = this._isChecked($('#threads'));
 
       this.model.save({
         'email': email,
