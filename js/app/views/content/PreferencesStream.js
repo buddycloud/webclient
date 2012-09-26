@@ -39,12 +39,11 @@ define(function(require) {
       }));
 
       // Update checkboxes
-      $('#newFollowers').attr('checked', this.model.newFollowers());
-      $('#mentions').attr('checked', this.model.mentions());
-      $('#ownChannel').attr('checked', this.model.ownChannel());
-      console.log(this.model.followedChannels());
-      $('#followedChannels').attr('checked', this.model.followedChannels());
-      $('#threads').attr('checked', this.model.threads());
+      this._check($('#newFollowers'), this.model.newFollowers());
+      this._check($('#mentions'), this.model.mentions());
+      this._check($('#ownChannel'), this.model.ownChannel());
+      this._check($('#followedChannels'), this.model.followedChannels());
+      this._check($('#threads'), this.model.threads());
     },
 
     save: function(event) {
@@ -52,22 +51,43 @@ define(function(require) {
       var email = $('#email_address').val();
 
       if (email) {
-        var newFollowers = $('#newFollowers').attr('checked') ? true : false;
-        var mentions = $('#mentions').attr('checked') ? true : false;
-        var ownChannel = $('#ownChannel').attr('checked') ? true : false;
-        var followedChannels = $('#followedChannels').attr('checked') ? true : false;
-        var threads = $('#threads').attr('checked') ? true : false;
-
-        this.model.save({
-          'email': email,
-          'followMyChannel': newFollowers,
-          'postMentionedMe': mentions,
-          'postOnMyChannel': ownChannel,
-          'postOnSubscribedChannel': followedChannels,
-          'postAfterMe': threads,
-          'followRequest': newFollowers
-        }, {credentials: this.options.user.credentials});        
+        this._savePreferences(email);
       }
+    },
+
+    _savePreferences: function(email) {
+      var newFollowers = this._isChecked($('#newFollowers'));
+      var mentions = this._isChecked($('#mentions'));
+      var ownChannel = this._isChecked($('#ownChannel'));
+      var followedChannels = this._isChecked($('#followedChannels'));
+      var threads = this._isChecked($('#threads').attr('checked'));
+
+      this.model.save({
+        'email': email,
+        'followMyChannel': newFollowers,
+        'postMentionedMe': mentions,
+        'postOnMyChannel': ownChannel,
+        'postOnSubscribedChannel': followedChannels,
+        'postAfterMe': threads,
+        'followRequest': newFollowers
+      }, {credentials: this.options.user.credentials}); 
+    },
+
+    _check: function(element, value) {
+      if (element) {
+        element.attr('checked', value);
+      }
+    },
+
+    _isChecked: function(element) {
+      if (element) {
+        var checked = element.attr('checked');
+        if (checked) {
+          return checked === 'checked';
+        }
+      }
+
+      return false;
     }
   });
 
