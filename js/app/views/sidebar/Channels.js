@@ -86,31 +86,45 @@ define(function(require) {
     },
 
     _bubble: function(target) {
-      var transitionendEvent = animations.getTransitionsEndEvent();
       var bubblingChannel = $(target);
-      var offset = bubblingChannel.position().top + this._$innerHolder.scrollTop();
+      var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
 
-      // if the selected channel is not the first or the bubble one
-      if (offset === 0 || bubblingChannel.parent().hasClass('bubbleHolder')) {
-        return false;
+      if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
+        this._shrinkStartArea(bubblingChannel, bubbleDestination);
+        this._growDestinationArea(bubblingChannel);
       }
+    },
 
-      // the current spot of selected channel starts decreasing its height to 0
+    _needsBubbling: function(bubblingChannel, bubbleDestination) {
+      // if the selected channel is not the first or the bubble one
+      return bubbleDestination !== 0 && !bubblingChannel.parent().hasClass('bubbleHolder');
+    },
+
+    _shrinkStartArea: function(bubblingChannel, bubbleDestination) {
       var startingArea = $('<div></div>').height( this._channelHeight ).addClass('startingArea');
       bubblingChannel.before(startingArea);
       document.redraw();
-      startingArea.bind(transitionendEvent, {propertyName: 'height'}, this._removeOldSpot);
+      startingArea.bind(animations.transitionsEndEvent(), {propertyName: 'height'}, this._removeOldSpot);
       startingArea.css('height', 0);
+      // start animation
+      this._triggerShrinkingAnimation(bubblingChannel, bubbleDestination);
+    },
 
-      bubblingChannel.detach().css('top', offset);
+    _triggerShrinkingAnimation: function(bubblingChannel, bubbleDestination) {
+      bubblingChannel.detach().css('top', bubbleDestination);
       this._$innerHolder.prepend(bubblingChannel);
+    },
 
-      // the new spot of selected channel (top/first one) starts increasing its height to channelHeight
+    _growDestinationArea: function(bubblingChannel) {
       var landingArea = $('<div></div>').addClass('bubbleHolder');
       bubblingChannel.wrap(landingArea);
       document.redraw();
-      bubblingChannel.bind(transitionendEvent, {self: this}, this._adjustNewSpot);
+      bubblingChannel.bind(animations.transitionsEndEvent(), {self: this}, this._adjustNewSpot);
+      // start animation
+      this._triggerGrowingAnimation(bubblingChannel);
+    },
 
+    _triggerGrowingAnimation: function(bubblingChannel) {
       bubblingChannel.addClass('bubbling').css({'top': 0, 'z-index': ++this._movingChannels + 1});
       bubblingChannel.parent().css('height', this._channelHeight);
     },
