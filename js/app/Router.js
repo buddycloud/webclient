@@ -19,6 +19,7 @@ define(function(require) {
   var ChannelPage = require('views/content/ChannelPage');
   var config = require('config');
   var ExplorePage = require('views/content/ExplorePage');
+  var PreferencesPage = require('views/content/PreferencesPage');
   var SidebarPage = require('views/sidebar/SidebarPage');
   var WelcomePage = require('views/overlay/WelcomePage');
   var Events = Backbone.Events;
@@ -72,7 +73,8 @@ define(function(require) {
     },
 
     preferences: function() {
-
+      this._before();
+      new PreferencesPage({user: this.user});
     },
 
     channel: function(channel) {
