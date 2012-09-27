@@ -42,6 +42,7 @@ define(function(require) {
       }));
       this._addNoCommentsClassIfNeeded();
       this._adjustCommentAreaVisibility();
+      this._commentOnCtrlEnter();
     },
 
     _roleTag: function(username) {
@@ -73,6 +74,15 @@ define(function(require) {
         var channelName = this.options.channel.name;
         return user.subscribedChannels.isPostingAllowed(channelName);
       }
+    },
+
+    _commentOnCtrlEnter: function() {
+      var self = this;
+      this.$('.answer textarea').keyup(function(event) {
+        if (event.ctrlKey && event.keyCode == 13 /* Enter */) {
+          self._comment(event);
+        }
+      });
     },
 
     _expandAnswerArea: function(event) {

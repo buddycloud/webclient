@@ -66,6 +66,7 @@ define(function(require) {
       }
       this._showPosts();
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      this._postOnCtrlEnter();
     },
 
     _userCanPost: function() {
@@ -81,6 +82,15 @@ define(function(require) {
       var self = this;
       _.each(this._postViews, function(view) {
         self.$('.posts').append(view.el);
+      });
+    },
+
+    _postOnCtrlEnter: function() {
+      var self = this;
+      this.$('.newTopic textarea').keyup(function(event) {
+        if (event.ctrlKey && event.keyCode == 13 /* Enter */) {
+          self._post();
+        }
       });
     },
 
