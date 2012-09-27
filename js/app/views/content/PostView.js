@@ -29,6 +29,10 @@ define(function(require) {
       'click .createComment': '_comment'
     },
 
+    initialize: function() {
+      this.model.bind('addComment', this.render, this);
+    },
+
     render: function() {
       this.$el.html(_.template(template, {
         post: this.model,
@@ -93,24 +97,17 @@ define(function(require) {
       var textArea = this.$('.answer textarea');
       var content = textArea.val();
       var self = this;
-      var comment = this.options.channel.posts.create({
+      var comment = this.options.channel.items.create({
         content: content,
-        replyTo: this.model[0].id
+        replyTo: this.model.id
       }, {
         credentials: this.options.user.credentials,
+        wait: true,
         success: function() {
           textArea.val('');
           self._collapseAnswerArea({data: {self: self}});
-          self._showComment(comment);
         }
       });
-    },
-
-    _showComment: function(comment) {
-      // FIXME: This function is only temporary and will disappear
-      // when real-time support arrives.
-      this.model.push(comment);
-      this.render();
     }
   });
 
