@@ -1,0 +1,63 @@
+/*
+ * Copyright 2012 Denis Washington <denisw@online.de>
+ *
+ * Licensed under the Apache License, Version 2.0 (the 'License');
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an 'AS IS' BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+define(function(require) {
+  var api = require('util/api');
+  var ModelBase = require('models/ModelBase');
+
+  var Item = ModelBase.extend({
+    initialize: function() {
+      this._initializeComments();
+      this._defineGetter('author');
+      this._defineGetter('replyTo');
+      this._defineGetter('published');
+      this._defineGetter('content', function() {
+        return this.get('content') || '';
+      });
+      this._defineGetter('updated', function() {
+        return this.get('updated') || this.published;
+      });
+    },
+
+    _initializeComments: function() {
+      var comments = [];
+      _.each(this.attributes.comments || [], function(comment) {
+        comments.push(new Item(comment));
+      });
+      this.comments = comments;
+      delete this.attributes.comments;
+    },
+
+    _defineGetter: function(name, getter) {
+      getter = getter ? getter.bind(this) : this.get.bind(this, name);
+      Object.defineProperty(this, name, {get: getter});
+    },
+
+    isPost: function() {
+      return !this.replyTo;
+    },
+
+    isComment: function() {
+      return !this.isPost();
+    },
+
+    authorAvatarUrl: function(size) {
+      return api.avatarUrl(this.author, size);
+    }
+  });
+
+  return Item;
+});

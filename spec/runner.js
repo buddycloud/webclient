@@ -27,10 +27,10 @@ requirejs.config({
 define(function(require) {
   require('spec/Channel.spec');
   require('spec/ChannelFollowers.spec');
+  require('spec/ChannelItems.spec');
   require('spec/ChannelMetadata.spec');
-  require('spec/ChannelPosts.spec');
+  require('spec/Item.spec');
   require('spec/SubscribedChannels.spec');
-  require('spec/Post.spec');
   require('spec/User.spec');
   require('spec/UserCredentials.spec');
   require('spec/util_api.spec');

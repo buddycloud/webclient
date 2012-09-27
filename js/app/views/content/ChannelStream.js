@@ -17,7 +17,6 @@
 define(function(require) {
   var $ = require('jquery');
   var Backbone = require('backbone');
-  var Post = require('models/Post');
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
 
@@ -29,22 +28,34 @@ define(function(require) {
     },
 
     initialize: function() {
-      this._posts = [];
-      this.model.posts.bind('reset', this._preRenderPosts, this);
+      this._postViews = [];
+      this.model.items.bind('reset', this._renderPosts, this);
+      this.model.items.bind('addPost', this._showPost, this);
     },
 
-    _preRenderPosts: function() {
-      var posts = this.model.posts.byThread();
+    _renderPosts: function() {
+      var posts = this.model.items.posts();
       var self = this;
       _.each(posts, function(post) {
-        var view = new PostView({
-          model: post,
-          channel: self.model,
-          user: self.options.user
-        });
-        view.render();
-        self._posts.push(view);
+        var view = self._viewForPost(post);
+        self._postViews.push(view);
       });
+    },
+
+    _viewForPost: function(post) {
+      var view = new PostView({
+        model: post,
+        channel: this.model,
+        user: this.options.user
+      });
+      view.render();
+      return view;
+    },
+
+    _showPost: function(post) {
+      var view = this._viewForPost(post);
+      this._postViews.unshift(view);
+      this.$('.posts').prepend(view.el);
     },
 
     render: function() {
@@ -52,7 +63,7 @@ define(function(require) {
       if (!this._userCanPost()) {
         this.$('.newTopic').remove();
       }
-      this._appendPosts();
+      this._showPosts();
     },
 
     _userCanPost: function() {
@@ -64,10 +75,10 @@ define(function(require) {
       }
     },
 
-    _appendPosts: function() {
+    _showPosts: function() {
       var self = this;
-      _.each(this._posts, function(post) {
-        self.$('.posts').append(post.el);
+      _.each(this._postViews, function(view) {
+        self.$('.posts').append(view.el);
       });
     },
 
@@ -92,28 +103,14 @@ define(function(require) {
       var textArea = this.$('.newTopic textarea');
       var content = textArea.val();
       var self = this;
-      var post = this.model.posts.create({content: content}, {
+      var post = this.model.items.create({content: content}, {
         credentials: this.options.user.credentials,
+        wait: true,
         success: function() {
           textArea.val('');
           self._collapseNewTopicArea({data: {self: self}});
-          self._showPost(post);
         }
       });
-    },
-
-    _showPost: function(post) {
-      // FIXME: This function is only temporary and will disappear
-      // when real-time support arrives.
-      var view = new PostView({
-        model: [post],
-        channel: this.model,
-        user: this.options.user
-      });
-      console.log(post);
-      this._posts.unshift(view);
-      view.render();
-      this.$('.posts').prepend(view.el);
     }
   });
 

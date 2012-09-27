@@ -1,28 +1,28 @@
-<section class="opener <%= roleTag(post[0].author()) %>">
-  <img class="avatar" src="<%= post[0].authorAvatarUrl(50) %>" />
+<section class="opener <%= roleTag(post.author) %>">
+  <img class="avatar" src="<%= post.authorAvatarUrl(50) %>" />
   <div class="usermeta">
-    <div class="name"><%= post[0].author().split('@', 2)[0] %></div>
-    <div class="jid"><%= post[0].author() %></div>    
+    <div class="name"><%= post.author.split('@', 2)[0] %></div>
+    <div class="jid"><%= post.author %></div>    
   </div>
   <div class="postmeta">
     <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011"></time>
   </div>
-  <p><%= linkify(post[0].content()) %></p>
+  <p><%= linkify(post.content) %></p>
 </section>
 <section class="comments">
-  <% for (var i = 1; i < post.length; i++) { %>
-     <section class="comment <%= roleTag(post[i].author()) %>">
-       <img class="avatar" src="<%= post[i].authorAvatarUrl(50) %>" />
+  <% _.each(post.comments, function(comment) { %>
+     <section class="comment <%= roleTag(comment.author) %>">
+       <img class="avatar" src="<%= comment.authorAvatarUrl(50) %>" />
        <div class="usermeta">
-         <div class="name"><%= post[i].author().split('@', 2)[0] %></div>
-         <div class="jid"><%= post[i].author() %></div>    
+         <div class="name"><%= comment.author.split('@', 2) %></div>
+         <div class="jid"><%= comment.author %></div>    
        </div>
        <div class="postmeta">
          <time data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="2011-06-06T05:06:00.000Z" title="5:06pm 06.06.2011"></time>
        </div>
-       <p><%= linkify(post[i].content()) %></p>
+       <p><%= linkify(comment.content) %></p>
      </section>
-  <% } %>
+  <% }) %>
   <section class="answer">
     <img class="avatar" src="<%= user.avatarUrl() %>">
     <div class="holder">

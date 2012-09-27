@@ -17,8 +17,8 @@
 define(function(require) {
   var Backbone = require('backbone');
   var ChannelFollowers = require('models/ChannelFollowers');
+  var ChannelItems = require('models/ChannelItems');
   var ChannelMetadata = require('models/ChannelMetadata');
-  var ChannelPosts = require('models/ChannelPosts');
   var ModelBase = require('models/ModelBase');
 
   var Channel = ModelBase.extend({
@@ -27,7 +27,7 @@ define(function(require) {
       this.name = name;
       this.followers = new ChannelFollowers(name);
       this.metadata = new ChannelMetadata(name);
-      this.posts = new ChannelPosts(name);
+      this.items = new ChannelItems(name);
     },
 
     fetch: function(options) {
@@ -36,15 +36,9 @@ define(function(require) {
       });
       this.followers.fetch(options);
       this.metadata.fetch(options);
-      this.posts.fetch(options);
+      this.items.fetch(options);
     },
 
-/*    fetchPosts: function(num) {
-      var oldnum = this.posts.length
-      this.posts.push(new ChannelPosts(this.name))
-      return this.posts.slice(oldnum - 1)
-    },
-*/
     _triggerFetchCallback: function() {
       var self = this;
       var fetched = [];
@@ -52,7 +46,7 @@ define(function(require) {
         fetched.push(model);
         if (_.include(fetched, self.followers) &&
             _.include(fetched, self.metadata) &&
-            _.include(fetched, self.posts)) {
+            _.include(fetched, self.items)) {
           self.trigger('fetch');
         }
       }
