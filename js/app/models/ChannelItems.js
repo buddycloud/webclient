@@ -18,14 +18,27 @@ define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
   var CollectionBase = require('models/CollectionBase')
-  var Post = require('models/Post');
+  var Item = require('models/Item');
 
-  var ChannelPosts = CollectionBase.extend({
-    model: Post,
+  var ChannelItems = CollectionBase.extend({
+    model: Item,
 
     constructor: function(channel) {
       CollectionBase.call(this);
       this.channel = channel;
+      this.bind('add', this._itemAdded, this);
+    },
+
+    _itemAdded: function(item) {
+      if (item.isPost()) {
+        this.trigger('addPost', item);
+      } else {
+        var post = this.get(item.replyTo);
+        if (post) {
+          post.comments.push(item);
+          post.trigger('addComment', item, post);
+        }
+      }
     },
 
     url: function() {
@@ -39,6 +52,26 @@ define(function(require) {
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
       CollectionBase.prototype.fetch.call(this, options);
+    },
+
+    posts: function() {
+      return this.filter(function(item) {
+        return item.isPost();
+      });
+    },
+
+    parse: function(response) {
+      var comments = {};
+      _.each(response, function(item) {
+        if (item.replyTo) {
+          var postId = item.replyTo;
+          comments[postId] = comments[postId] || [];
+          comments[postId].unshift(item);
+        } else {
+          item.comments = comments[item.id];
+        }
+      });
+      return response;
     },
 
     byThread: function() {
@@ -64,5 +97,5 @@ define(function(require) {
     }
   });
 
-  return ChannelPosts;
+  return ChannelItems;
 });
