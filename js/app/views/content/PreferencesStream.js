@@ -82,12 +82,12 @@ define(function(require) {
     _isChecked: function(element) {
       if (element) {
         var checked = element.attr('checked');
-        if (checked) {
-          return checked === 'checked';
+        if (checked && checked === 'checked') {
+          return 'true';
         }
       }
 
-      return false;
+      return 'false';
     }
   });
 
