@@ -82,7 +82,7 @@ define(function(require) {
         }
         self._sessionId = xhr.getResponseHeader('X-Session-Id');
         if (complete) {
-          options.complete.apply(this, arguments);
+          complete.apply(this, arguments);
         }
       }
     }
