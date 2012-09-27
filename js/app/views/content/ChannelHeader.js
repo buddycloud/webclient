@@ -27,8 +27,7 @@ define(function(require) {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
-
-        this._renderFollowButton();
+      this._renderFollowButton();
     },
 
     _renderFollowButton: function() {
