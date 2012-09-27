@@ -31,13 +31,17 @@ define(function(require) {
     },
 
     _renderFollowButton: function() {
-      if (this.options.user.isAnonymous()) {
+      if (this.options.user.isAnonymous() || this._itsMe()) {
         this.$('.follow').hide();
       } else {
         if (!this._follows()) {
-          this.$('.follow').text('Unfollow');
+          this.$('.follow').text('Unfollow');       
         }
       }
+    },
+
+    _itsMe: function() {
+      return this.options.user.username().indexOf(this.model.name) != -1;
     },
 
     _follows: function() {
