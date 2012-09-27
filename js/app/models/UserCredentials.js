@@ -17,6 +17,7 @@
 define(function(require) {
   var $ = require('jquery');
   var api = require('util/api');
+  var config = require('config');
   var Backbone = require('backbone');
   var ModelBase = require('models/ModelBase')
 
@@ -35,6 +36,9 @@ define(function(require) {
       Backbone.Model.prototype.set.apply(this, arguments);
       this.username = this.get('username');
       this.password = this.get('password');
+      if (this.username && this.username.indexOf('@') == -1) {
+        this.username += '@' + config.homeDomain;
+      }
     },
 
     save: function(attributes) {
@@ -82,7 +86,7 @@ define(function(require) {
         }
         self._sessionId = xhr.getResponseHeader('X-Session-Id');
         if (complete) {
-          options.complete.apply(this, arguments);
+          complete.apply(this, arguments);
         }
       }
     }

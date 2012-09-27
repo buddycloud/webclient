@@ -21,6 +21,7 @@ define(function(require) {
   var ExplorePage = require('views/content/ExplorePage');
   var SidebarPage = require('views/sidebar/SidebarPage');
   var WelcomePage = require('views/overlay/WelcomePage');
+  var Events = Backbone.Events;
 
   var Router = Backbone.Router.extend({
     routes: {
@@ -36,6 +37,10 @@ define(function(require) {
       this.user = user;
     },
 
+    initialize: function() {
+      Events.on('navigate', this._navigate, this);
+    },
+
     // It would be nice if we could wrap its route function
     // or just use something like https://github.com/boazsender/backbone.routefilter
     _before: function(route) {
@@ -44,12 +49,20 @@ define(function(require) {
       }
     },
 
+    _navigate: function(path) {
+      this.navigate(path, {trigger: true});
+    },
+
     default: function() {
       this._before();
       if (this.user.isAnonymous()) {
-        new WelcomePage({model: this.user.credentials}).render();
+        new WelcomePage({model: this.user}).render();
       } else {
-        this.navigate(config.defaultChannel, {trigger: true});
+        if (this.user.channels().length < 5) {
+          this.navigate('explore', {trigger: true});
+        } else {
+          this.navigate(this.user.username(), {trigger: true});
+        }
       }
     },
 

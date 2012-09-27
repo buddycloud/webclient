@@ -41,6 +41,14 @@ define(function(require) {
       }
     },
 
+    username: function() {
+      return this.credentials.username;
+    },
+
+    channels: function() {
+      return this.subscribedChannels.channels();
+    },
+
     login: function() {
       if (this.isAnonymous()) {
         this.trigger('loginSuccess');

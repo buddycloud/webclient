@@ -30,6 +30,7 @@ define(function(require) {
   require('spec/ChannelItems.spec');
   require('spec/ChannelMetadata.spec');
   require('spec/Item.spec');
+  require('spec/Search.spec');
   require('spec/SubscribedChannels.spec');
   require('spec/User.spec');
   require('spec/UserCredentials.spec');

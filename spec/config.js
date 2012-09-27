@@ -1,3 +1,4 @@
 define({
-  baseUrl: 'https://example.com'
+  baseUrl: 'https://example.com',
+  homeDomain: 'example.com'
 });

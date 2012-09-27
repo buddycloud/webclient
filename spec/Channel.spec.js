@@ -38,7 +38,7 @@ define(function(require) {
     });
 
     describe('fetch()', function() {
-      it('should call fetch() om each submodel', function() {
+      it('should call fetch() on each submodel', function() {
         spyOn(channel.followers, 'fetch');
         spyOn(channel.metadata, 'fetch');
         spyOn(channel.items, 'fetch');

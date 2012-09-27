@@ -39,6 +39,11 @@ define(function(require) {
         expect(credentials.username).toBe('bob@example.com');
         expect(credentials.password).toBe('bob');
       });
+
+      it('should append the home domain to username if none is specified', function() {
+        credentials.set({username: 'bob'});
+        expect(credentials.username).toBe('bob@example.com');
+      });
     });
 
     describe('fetch()', function() {

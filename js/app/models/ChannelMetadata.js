@@ -38,7 +38,7 @@ define(function(require) {
     },
 
     description: function() {
-      return this.get('description');
+      return this.get('description') || '';
     },
 
     creationDate: function() {
@@ -51,10 +51,6 @@ define(function(require) {
 
     accessModel: function() {
       return this.get('access_model');
-    },
-
-    jid: function() {
-      return this.get('jid');
     }
   });
 

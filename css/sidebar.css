@@ -204,7 +204,6 @@
   padding: 16px 13px 16px 76px;
   position: relative;
   cursor: pointer;
-  display: block;
   -webkit-transform-origin: top;
      -moz-transform-origin: top;
       -ms-transform-origin: top;
@@ -216,9 +215,6 @@
        -o-transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
           transition: opacity 500ms, left 500ms, height 500ms 500ms, padding 500ms 500ms;
 }
-  .channel:hover {
-    text-decoration: none;
-  }
   .channel.remove {
     left: -234px;
     opacity: 0;
@@ -278,28 +274,39 @@
   width: 50px;
   top: 8px;
   left: 13px;
-  border-radius: 3px;
   background-size: cover;
   position: absolute;
   z-index: 1;
-  box-shadow: 
-    0 0 0 1px rgba(0,0,0,0.55),
-    0 1px 1px rgba(0,0,0,0.55),
-    0 0 0 1px rgba(255,255,255,0.55) inset;
   -webkit-transition: width 500ms, height 500ms, top 500ms linear;
      -moz-transition: width 500ms, height 500ms, top 500ms linear;
       -ms-transition: width 500ms, height 500ms, top 500ms linear;
        -o-transition: width 500ms, height 500ms, top 500ms linear;
           transition: width 500ms, height 500ms, top 500ms linear;
 }
-.channel.selected .avatar {
-  box-shadow: 
-    0 0 0 1px rgba(0,0,0,0.55),
-    0 0 0 1px rgba(255,255,255,0.55) inset,
-    0 0 0 3px hsl(81, 53%, 44%),
-    0 0 0 4px hsl(81, 53%, 48%),
-    0 0 2px 4px rgba(0,0,0,0.34);
-}
+  .channel .avatar img {
+    border-radius: 3px;
+  }
+  .sidebar .channel .avatar:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 3px;
+    box-shadow: 
+      0 0 0 1px rgba(0,0,0,0.55),
+      0 1px 1px rgba(0,0,0,0.55),
+      0 0 0 1px rgba(255,255,255,0.55) inset;
+  }
+  .channel.selected .avatar {
+    box-shadow: 
+      0 0 0 1px rgba(0,0,0,0.55),
+      0 0 0 1px rgba(255,255,255,0.55) inset,
+      0 0 0 3px hsl(81, 53%, 44%),
+      0 0 0 4px hsl(81, 53%, 48%),
+      0 0 2px 4px rgba(0,0,0,0.34);
+  }
 .counter {
   top: -5px;
   right: -5px;
@@ -318,6 +325,7 @@
   border-radius: 10px;
   box-shadow: 0 1px rgba(255,255,255,0.55) inset,0 1px 2px #000;
   position: absolute;
+  z-index: 1;
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
       -ms-box-sizing: border-box;

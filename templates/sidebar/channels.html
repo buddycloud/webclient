@@ -1,6 +1,6 @@
 <div class="antiscroll-inner scrollHolder">
   <% _.each(metadatas, function(metadata, index) { %>
-  <a class="channel" href="<%= routeUrl(metadata.channel) %>">
+  <div class="channel" data-href="<%- metadata.channel %>">
     <div class="avatar">
       <img data-type="<%- metadata.channelType() %>" src="<%= metadata.avatarUrl(50) %>" />
       <!-- <span class="channelpost counter">2</span> -->
@@ -9,6 +9,6 @@
       <span class="owner"><%- metadata.title() %></span>
       <span class="status"><%- metadata.description() %></span>
     </div>
-  </a>
+  </div>
   <% }); %>
 </div><!-- /antiscroll-inner -->

@@ -4,7 +4,6 @@ define(function(require) {
   var Backbone = require('backbone');
   var template = require('text!templates/overlay/welcome.html');
   var footer = require('text!templates/overlay/footer.html');
-  var user = require('models/User');
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
@@ -22,7 +21,7 @@ define(function(require) {
       event.preventDefault();
       var username = $('#login_name').attr('value');
       var password = $('#login_password').attr('value');
-      this.model.save({username: username, password: password});
+      this.model.credentials.save({username: username, password: password});
       location.reload();
     },
 
@@ -31,15 +30,14 @@ define(function(require) {
       var username = this.$('#register_name').attr('value');
       var password = this.$('#register_password').attr('value');
       var email = this.$('#register_email').attr('value');
-      var User = new user();
-      User.register(username, password, email)
-      User.on('registrationSuccess', function() {
-        this.model.save({username: username, password: password});
+      this.model.on('registrationSuccess', function() {
         location.reload();
-      })
-      User.on('registrationError', function(message) {
+      });
+      this.model.on('registrationError', function(message) {
         alert(message)
-      })
+      });
+
+      this.model.register(username, password, email);
     },
 
     render: function() {

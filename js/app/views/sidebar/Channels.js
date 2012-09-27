@@ -17,13 +17,14 @@
 define(function(require) {
   var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
-  var routeUrl = require('util/routeUrl');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/sidebar/channels.html')
+  var Events = Backbone.Events;
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
+    events: {'click .channel': '_navigate'},
 
     initialize: function() {
       this.metadatas = [];
@@ -33,20 +34,29 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {
         metadatas: this.metadatas,
-        routeUrl: routeUrl
       }));
       avatarFallback(this.$('.channel img'), undefined, 50);
+    },
+
+    _navigate: function(e) {
+      Events.trigger('navigate', e.currentTarget.dataset['href']);
     },
 
     _getChannelsMetadata: function() {
       var self = this;
       var callback = this._triggerRenderCallback();
 
-      _.each(this.model.channels(), function(channel, index) {
-        var metadata = new ChannelMetadata(channel);
-        self.metadatas.push(metadata);
-        metadata.fetch({success: callback});
+      _.each(this.model.subscribedChannels.channels(), function(channel, index) {
+        if (!self._itsMe(channel)) {
+          var metadata = new ChannelMetadata(channel);
+          self.metadatas.push(metadata);
+          metadata.fetch({success: callback});         
+        }
       });
+    },
+
+    _itsMe: function(channel) {
+      return this.model.username().indexOf(channel) != -1;
     },
 
     _triggerRenderCallback: function() {
