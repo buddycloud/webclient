@@ -27,17 +27,22 @@ define(function(require) {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
-      this._renderFollowButton();
+
+        this._renderFollowButton();
     },
 
     _renderFollowButton: function() {
-      if (this.options.user.isAnonymous()) {
+      if (this.options.user.isAnonymous() || this._itsMe()) {
         this.$('.follow').hide();
       } else {
         if (!this._follows()) {
-          this.$('.follow').text('Unfollow');
+          this.$('.follow').text('Unfollow');       
         }
       }
+    },
+
+    _itsMe: function() {
+      return this.options.user.username().indexOf(this.model.name) != -1;
     },
 
     _follows: function() {
