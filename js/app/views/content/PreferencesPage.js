@@ -16,14 +16,14 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var PreferencesHeader = require('views/content/PreferencesHeader');
+  var EditHeader = require('views/content/EditHeader');
   var PreferencesStream = require('views/content/PreferencesStream');
 
-  var PreferencesView = Backbone.View.extend({
+  var PreferencesPage = Backbone.View.extend({
     className: 'channelView',
 
     initialize: function() {
-      this.header = new PreferencesHeader({
+      this.header = new EditHeader({
         model: this.options.user
       });
       this.stream = new PreferencesStream({
@@ -39,5 +39,5 @@ define(function(require) {
     }
   });
 
-  return PreferencesView;
+  return PreferencesPage;
 });

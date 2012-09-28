@@ -20,7 +20,7 @@ define(function(require) {
   var Preferences = require('models/Preferences');
   var template = require('text!templates/content/preferences.html');
 
-  var PreferencesView = Backbone.View.extend({
+  var PreferencesStream = Backbone.View.extend({
     className: 'stream clearfix',
 
     events: {
@@ -58,7 +58,7 @@ define(function(require) {
 
     _deleteAccount: function() {
       //TODO delete account
-    }
+    },
 
     save: function(event) {
       var email = $('#email_address').val();
@@ -105,5 +105,5 @@ define(function(require) {
     }
   });
 
-  return PreferencesView;
+  return PreferencesStream;
 });
