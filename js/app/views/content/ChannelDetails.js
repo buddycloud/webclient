@@ -24,8 +24,8 @@ define(function(require) {
     events: {'click .infoToggle': '_toggleInfo'},
 
     initialize: function() {
-      this.moderatorsList = new ChannelList({title: 'moderators'});
-      this.followersList = new ChannelList({title: 'followers'});
+      this.moderatorsList = new ChannelList({title: 'moderators', role: 'Moderator'});
+      this.followersList = new ChannelList({title: 'followers', role: 'Follower'});
     },
 
     render: function() {
