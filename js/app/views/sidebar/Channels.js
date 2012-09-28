@@ -155,7 +155,7 @@ define(function(require) {
 
     selectChannel: function(channelId) {
       this.selected = channelId;
-      this.$('.channel').removeClass('selected');
+      this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channelId + '"]').addClass('selected');
     }
   });
