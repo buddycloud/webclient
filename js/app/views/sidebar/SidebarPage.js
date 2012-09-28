@@ -37,6 +37,11 @@ define(function(require) {
       $sidebar.append(this.actionBar.el);
       $sidebar.append(this.channels.el);
       $sidebar.removeClass('hidden');
+    },
+
+    selectChannel: function(channelId) {
+      this.personalChannel.selectChannel(channelId);
+      this.channels.selectChannel(channelId);
     }
   });
 

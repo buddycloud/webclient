@@ -33,12 +33,24 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template,{metadata: this.metadata}));
+      this.$el.html(_.template(template, {
+        metadata: this.metadata,
+        selected: this.selected
+      }));
       avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);
     },
 
     _navigate: function() {
       Events.trigger('navigate', this.model.username);
+    },
+
+    selectChannel: function(channelId) {
+      this.selected = (this.metadata.channel == channelId);
+      if (this.selected) {
+        this.$el.addClass('selected');
+      } else {
+        this.$el.removeClass('selected');
+      }
     }
   });
 
