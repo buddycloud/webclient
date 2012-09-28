@@ -25,6 +25,9 @@ define(function(require) {
 
     events: {
       'click .save': 'save',
+      'click .discard': '_renderCheckboxes',
+      'click .twoStepConfirmation .stepOne': '_renderConfirmButton',
+      'click .twoStepConfirmation .stepTwo': '_deleteAccount'
     },
 
     initialize: function() {
@@ -38,13 +41,24 @@ define(function(require) {
         preferences: this.model
       }));
 
-      // Update checkboxes
+      this._renderCheckboxes();
+    },
+
+    _renderCheckboxes: function() {
       this._check($('#newFollowers'), this.model.newFollowers());
       this._check($('#mentions'), this.model.mentions());
       this._check($('#ownChannel'), this.model.ownChannel());
       this._check($('#followedChannels'), this.model.followedChannels());
       this._check($('#threads'), this.model.threads());
     },
+
+    _renderConfirmButton: function() {
+      $('.twoStepConfirmation').toggleClass('confirmed');
+    },
+
+    _deleteAccount: function() {
+      //TODO delete account
+    }
 
     save: function(event) {
       var email = $('#email_address').val();
