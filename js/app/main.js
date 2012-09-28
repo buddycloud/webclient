@@ -23,13 +23,18 @@ requirejs.config({
     'Router': '../app/Router',
     'util': '../app/util',
     'views': '../app/views'
+  },
+
+  shim: {
+    'modernizr': {
+      exports: 'Modernizr'
+    }
   }
 });
 
 define(function(require) {
   var Router = require('Router');
   var User = require('models/User');
-
   var config = require('config');
 
   function initialize() {
