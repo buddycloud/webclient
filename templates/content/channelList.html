@@ -1,4 +1,4 @@
-<h3><%- title %></h3>
+<h3><%- title %> <span class="count"><%= channels.length %></count></h3>
 <div class="list">
   <% _.each(channels, function(channel) { %>
   <img title="<%= channel %>" src="<%= avatarUrl(channel, 50) %>">
