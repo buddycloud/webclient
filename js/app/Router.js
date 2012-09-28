@@ -79,6 +79,7 @@ define(function(require) {
 
     channel: function(channel) {
       this._before();
+      this.sidebar.selectChannel(channel);
       new ChannelPage({channel: channel, user: this.user});
     },
 
