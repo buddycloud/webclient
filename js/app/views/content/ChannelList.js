@@ -18,11 +18,16 @@ define(function(require) {
   var api = require('util/api');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
-  var template = require('text!templates/content/channelList.html')
+  var ChannelListDetails = require('views/content/ChannelListDetails');
+  var template = require('text!templates/content/channelList.html');
 
   var ChannelList = Backbone.View.extend({
     tagName: 'section',
     className: 'channelList',
+    events: {
+      'click img': '_showDetails',
+      'click .showAll': '_showAll'
+    },
 
     render: function() {
       if (this.model.length > 0) {
@@ -32,6 +37,50 @@ define(function(require) {
           avatarUrl: api.avatarUrl
         }));
         avatarFallback(this.$('img'), 'personal', 50);
+      }
+    },
+
+    _showAll: function() {
+      this.$('img').show();
+      this.$('.showAll').remove();
+    },
+
+    _showDetails: function(event) {
+      var channelPosition = this.model.indexOf(event.target.title);
+      var inlinePosition = channelPosition % 4; // 4 = n. channels per line
+      var appendPosition = channelPosition + (3 - inlinePosition); // 3 because it starts with 0
+
+      this._removeOpenedView(event.target);
+      if (this._selectedTarget === event.target) {
+        // this makes possible to close the view if user click on the same target
+        this._selectedTarget = null;
+        return false;
+      }
+
+      this._selectedTarget = event.target;
+      this._openedDetailsView = new ChannelListDetails({
+        channel: event.target.title,
+        role: this.options.role,
+        position: inlinePosition
+      });
+      $(this._selectedTarget).addClass('selected');
+      this._appendDetails(appendPosition);
+    },
+
+    _appendDetails: function(position) {
+      if (this.model.length <= position) {
+        this.$el.append(this._openedDetailsView.el);
+      } else {
+        this.$('img:eq(' + position + ')').after(this._openedDetailsView.el);
+      }
+    },
+
+    _removeOpenedView: function() {
+      // Remember: Backbone 0.9.2 stable version has a memory issue on remove()
+      if (this._openedDetailsView) {
+        this._openedDetailsView.remove();
+        this.$('.selected').removeClass('selected');
+        this._openedDetailsView = null; // GC
       }
     }
   });

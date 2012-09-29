@@ -21,10 +21,11 @@ define(function(require) {
 
   var ChannelDetails = Backbone.View.extend({
     className: 'channelDetails',
+    events: {'click .infoToggle': '_toggleInfo'},
 
     initialize: function() {
-      this.moderatorsList = new ChannelList({title: 'moderators'});
-      this.followersList = new ChannelList({title: 'followers'});
+      this.moderatorsList = new ChannelList({title: 'moderators', role: 'Moderator'});
+      this.followersList = new ChannelList({title: 'followers', role: 'Follower'});
     },
 
     render: function() {
@@ -47,6 +48,10 @@ define(function(require) {
       var followers = (types['publisher'] || []).concat(types['member'] || []);
       this.moderatorsList.model = moderators;
       this.followersList.model = followers;
+    },
+
+    _toggleInfo: function() {
+      this.$el.toggleClass('hidden');
     }
   });
 
