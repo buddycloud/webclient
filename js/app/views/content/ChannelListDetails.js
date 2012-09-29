@@ -20,7 +20,7 @@ define(function(require) {
   var template = require('text!templates/content/channelListDetails.html')
   var Events = Backbone.Events;
 
-  var ChannelList = Backbone.View.extend({
+  var ChannelListDetails = Backbone.View.extend({
     className: 'adminAction',
     events: {'click h4': '_navigateToChannel'},
     positions: ['first', 'second', 'third', 'fourth'],
@@ -42,5 +42,5 @@ define(function(require) {
     }
   });
 
-  return ChannelList;
+  return ChannelListDetails;
 });
