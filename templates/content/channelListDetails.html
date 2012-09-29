@@ -1,0 +1,57 @@
+<div class="arrow"></div>
+<div class="holder">
+  <div class="box">
+    <section class="channelInfo">
+      <h4><%- channel %></h4>
+      <div class="currentRole"><%- role %></div>
+    </section>
+    <section class="action changeRole">
+      <h5>Change Role</h5>
+      <select>
+        <option value="moderator">Moderator</option>
+        <option value="followerPlus">Follower+Post</option>
+        <option value="follower" selected>Follower</option>
+      </select>
+      <section class="info">
+        <div class="moderator">
+          <ul>
+            <li>read your channel</li>
+            <li>write comments &amp; messages</li>
+            <li>post new topics</li>
+            <li>approve new followers</li>
+            <li>set user's roles</li>
+            <li>delete posts</li>
+          </ul>
+        </div>
+        <div class="followerPlus">
+          <ul>
+            <li>read your channel</li>
+            <li>write comments &amp; messages</li>
+            <li>post new topics</li>
+          </ul>
+        </div>
+        <div class="follower">
+          <ul>
+            <li>read your channel</li>
+          </ul>
+        </div>
+      </section>
+    </section>
+    <section class="action banUser">
+      <h5>Ban User</h5>
+      <div class="info">
+        <ul>
+          <li class="negative">Remove access to channel.</li>
+        </ul>
+      </div>
+    </section>
+    <section class="actionRow choose">
+      <div class="changeRoleButton">Change Role</div>
+      <div class="banUserButton">Ban User</div>
+    </section>
+    <section class="actionRow confirm">
+      <div class="cancelButton">Cancel</div>
+      <div class="okButton">Ok</div>
+    </section>
+  </div><!-- /box -->
+</div><!-- /holder -->

@@ -1,6 +1,13 @@
-<h3><%- title %></h3>
+<h3><%- title %> <span class="count"><%= channels.length %></count></h3>
 <div class="list">
-  <% _.each(channels, function(channel) { %>
-  <img title="<%= channel %>" src="<%= avatarUrl(channel, 50) %>">
-  <% }) %>
+  <% _.each(channels, function(channel, index) { %>
+    <% if (index < 8) { %>
+    <img title="<%= channel %>" src="<%= avatarUrl(channel, 50) %>">
+    <% } else { %>
+    <img title="<%= channel %>" src="<%= avatarUrl(channel, 50) %>" style="display: none">
+    <% } %>
+  <% }); %>
+  <% if (channels.length > 8) { %>
+  <div class="showAll">show all</div>
+  <% } %>
 </div>

@@ -35,6 +35,7 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {
         metadatas: this.metadatas,
+        selected: this.selected
       }));
       avatarFallback(this.$('.channel img'), undefined, 50);
       this._setupAnimation();
@@ -150,6 +151,12 @@ define(function(require) {
       $this.unwrap();
       $this.unbind(event.originalEvent.type);
       data.self._movingChannels--;
+    },
+
+    selectChannel: function(channelId) {
+      this.selected = channelId;
+      this.$('.selected').removeClass('selected');
+      this.$('.channel[data-href="' + channelId + '"]').addClass('selected');
     }
   });
 
