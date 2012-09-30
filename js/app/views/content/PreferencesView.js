@@ -15,31 +15,92 @@
  */
 
 define(function(require) {
+  var _ = require('underscore');
   var Backbone = require('backbone');
-  var PreferencesHeader = require('views/content/PreferencesHeader');
-  var PreferencesStream = require('views/content/PreferencesStream');
+  var avatarFallback = require('util/avatarFallback');
+  var Preferences = require('models/Preferences');
+  var template = require('text!templates/content/preferences.html');
 
   var PreferencesView = Backbone.View.extend({
-    className: 'channelView',
+    className: 'stream clearfix',
+
+    events: {
+      'click .save': 'save',
+      'click .discard': '_renderCheckboxes',
+      'click .twoStepConfirmation .stepOne': '_renderConfirmButton',
+      'click .twoStepConfirmation .stepTwo': '_deleteAccount'
+    },
 
     initialize: function() {
-      this.header = new PreferencesHeader({
-        model: this.model,
-        user: this.options.user
-      });
-      this.stream = new PreferencesStream({
-        model: this.options.user
-      });
+      this.checkboxes = 
+        {
+          'newFollowers': 'followMyChannel',
+          'mentions': 'postMentionedMe',
+          'ownChannel': 'postOnMyChannel',
+          'followedChannels': 'postOnSubscribedChannel',
+          'threads': 'postAfterMe' 
+        };
+      this.model = new Preferences();
+      this.model.bind('change', this.render, this);
+      this.model.fetch({credentials: this.options.user.credentials});
     },
 
     render: function() {
-      // This was necessary to replicate the same structure of prototype
-      var $centered = $('<div class="centered start"></div>');
-      this.header.render();
-      this.stream.render();
-      $centered.append(this.stream.el);
-      this.$el.append(this.header.el);
-      this.$el.append($centered);
+      this.$el.html(_.template(template, {
+        preferences: this.model
+      }));
+
+      this._renderCheckboxes();
+    },
+
+    _renderCheckboxes: function() {
+      self = this;
+      _.each(_.keys(this.checkboxes), function(checkbox) {
+        self._check($('#' + checkbox), self.model[checkbox]());
+      });
+    },
+
+    _renderConfirmButton: function() {
+      $('.twoStepConfirmation').toggleClass('confirmed');
+    },
+
+    _deleteAccount: function() {
+      //TODO delete account
+    },
+
+    save: function(event) {
+      var email = $('#email_address').val();
+
+      if (email) {
+        this._savePreferences(email);
+      }
+    },
+
+    _savePreferences: function(email) {
+      self = this;
+      _.each(_.keys(this.checkboxes), function(checkbox) {
+        self.model.set(self.checkboxes[checkbox], 
+          self._isChecked($('#' + checkbox)));
+      });
+
+      this.model.save({}, {credentials: this.options.user.credentials});
+    },
+
+    _check: function(element, value) {
+      if (element) {
+        element.attr('checked', value);
+      }
+    },
+
+    _isChecked: function(element) {
+      if (element) {
+        var checked = element.attr('checked');
+        if (checked && checked === 'checked') {
+          return 'true';
+        }
+      }
+
+      return 'false';
     }
   });
 
