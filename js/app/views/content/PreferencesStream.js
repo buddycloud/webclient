@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  var $ = require('jquery');
   var _ = require('underscore');
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
@@ -56,7 +57,7 @@ define(function(require) {
     _renderCheckboxes: function() {
       self = this;
       _.each(_.keys(this.checkboxes), function(checkbox) {
-        self._check($('#' + checkbox), self.model[checkbox]());
+        self._check(this.$('#' + checkbox), self.model[checkbox]());
       });
     },
 
@@ -69,7 +70,7 @@ define(function(require) {
     },
 
     save: function(event) {
-      var email = $('#email_address').val();
+      var email = this.$('#email_address').val();
 
       if (email) {
         this._savePreferences(email);
@@ -80,7 +81,7 @@ define(function(require) {
       self = this;
       _.each(_.keys(this.checkboxes), function(checkbox) {
         self.model.set(self.checkboxes[checkbox], 
-          self._isChecked($('#' + checkbox)));
+          self._isChecked(this.$('#' + checkbox)));
       });
 
       this.model.save({}, {credentials: this.options.user.credentials});
