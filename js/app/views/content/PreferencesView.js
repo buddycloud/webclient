@@ -15,92 +15,26 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var Backbone = require('backbone');
-  var avatarFallback = require('util/avatarFallback');
-  var Preferences = require('models/Preferences');
-  var template = require('text!templates/content/preferences.html');
+  var EditHeader = require('views/content/EditHeader');
+  var PreferencesStream = require('views/content/PreferencesStream');
 
   var PreferencesView = Backbone.View.extend({
-    className: 'stream clearfix',
-
-    events: {
-      'click .save': 'save',
-      'click .discard': '_renderCheckboxes',
-      'click .twoStepConfirmation .stepOne': '_renderConfirmButton',
-      'click .twoStepConfirmation .stepTwo': '_deleteAccount'
-    },
+    className: 'channelView',
 
     initialize: function() {
-      this.checkboxes = 
-        {
-          'newFollowers': 'followMyChannel',
-          'mentions': 'postMentionedMe',
-          'ownChannel': 'postOnMyChannel',
-          'followedChannels': 'postOnSubscribedChannel',
-          'threads': 'postAfterMe' 
-        };
-      this.model = new Preferences();
-      this.model.bind('change', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials});
+      this.header = new EditHeader({
+        model: this.options.user
+      });
+      this.stream = new PreferencesStream({
+        user: this.options.user
+      });
+      this.render();
     },
 
     render: function() {
-      this.$el.html(_.template(template, {
-        preferences: this.model
-      }));
-
-      this._renderCheckboxes();
-    },
-
-    _renderCheckboxes: function() {
-      self = this;
-      _.each(_.keys(this.checkboxes), function(checkbox) {
-        self._check($('#' + checkbox), self.model[checkbox]());
-      });
-    },
-
-    _renderConfirmButton: function() {
-      $('.twoStepConfirmation').toggleClass('confirmed');
-    },
-
-    _deleteAccount: function() {
-      //TODO delete account
-    },
-
-    save: function(event) {
-      var email = $('#email_address').val();
-
-      if (email) {
-        this._savePreferences(email);
-      }
-    },
-
-    _savePreferences: function(email) {
-      self = this;
-      _.each(_.keys(this.checkboxes), function(checkbox) {
-        self.model.set(self.checkboxes[checkbox], 
-          self._isChecked($('#' + checkbox)));
-      });
-
-      this.model.save({}, {credentials: this.options.user.credentials});
-    },
-
-    _check: function(element, value) {
-      if (element) {
-        element.attr('checked', value);
-      }
-    },
-
-    _isChecked: function(element) {
-      if (element) {
-        var checked = element.attr('checked');
-        if (checked && checked === 'checked') {
-          return 'true';
-        }
-      }
-
-      return 'false';
+      this.$el.append(this.header.el);
+      this.$el.append(this.stream.el);
     }
   });
 
