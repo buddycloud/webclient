@@ -19,7 +19,7 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
-  var template = require('text!templates/content/preferencesHeader.html')
+  var template = require('text!templates/content/editHeader.html')
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
