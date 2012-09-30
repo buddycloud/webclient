@@ -23,7 +23,12 @@ define(function(require) {
 
   var PersonalChannel = Backbone.View.extend({
     className: 'personal channel',
-    events:  {'click .metadata': '_navigate'},
+    events:  
+      {
+        'click .metadata': '_navigate',
+        'click .settings': '_showSettings',
+        'click .settings li': '_hideSettings'
+      },
 
     initialize: function() {
       this.metadata = new ChannelMetadata(this.model.username);
@@ -51,6 +56,14 @@ define(function(require) {
       } else {
         this.$el.removeClass('selected');
       }
+    },
+
+    _showSettings: function() {
+      $('.settings').toggleClass('showSettings');
+    },
+
+    _hideSettings: function(event) {
+      event.stopPropagation();
     }
   });
 
