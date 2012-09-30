@@ -54,7 +54,7 @@ define(function(require) {
     },
 
     _renderCheckboxes: function() {
-      self = this;
+      var self = this;
       _.each(_.keys(this.checkboxes), function(checkbox) {
         self._check(self.$('#' + checkbox), self.model[checkbox]());
       });
@@ -77,7 +77,7 @@ define(function(require) {
     },
 
     _savePreferences: function(email) {
-      self = this;
+      var self = this;
       _.each(_.keys(this.checkboxes), function(checkbox) {
         self.model.set(self.checkboxes[checkbox], 
           self._isChecked(self.$('#' + checkbox)));
