@@ -23,19 +23,14 @@ define(function(require) {
     className: 'channelView',
 
     initialize: function() {
-      this.header = new EditHeader({
-        model: this.options.user
-      });
-      this.stream = new PreferencesView({
+      this.view = new PreferencesView({
         user: this.options.user
       });
       this.render();
     },
 
     render: function() {
-      var content = $('.content');
-      content.append(this.header.el);
-      content.append(this.stream.el);
+      $('.content').html(this.view.el);
     }
   });
 

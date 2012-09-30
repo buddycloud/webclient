@@ -27,7 +27,8 @@ define(function(require) {
       {
         'click .metadata': '_navigate',
         'click .settings': '_showSettings',
-        'click .settings li': '_hideSettings'
+        'click .settings li': '_hideSettings',
+        'click .preferences': '_showPrefs'
       },
 
     initialize: function() {
@@ -58,12 +59,17 @@ define(function(require) {
       }
     },
 
+    _showPrefs: function() {
+      Events.trigger('navigate', 'prefs');
+      this._hideSettings();
+    },
+
     _showSettings: function() {
       $('.settings').toggleClass('showSettings');
     },
 
-    _hideSettings: function(event) {
-      event.stopPropagation();
+    _hideSettings: function() {
+      $('.settings').toggleClass('noSelect');
     }
   });
 
