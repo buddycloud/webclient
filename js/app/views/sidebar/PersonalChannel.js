@@ -15,7 +15,6 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
