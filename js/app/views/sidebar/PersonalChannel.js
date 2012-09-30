@@ -61,7 +61,6 @@ define(function(require) {
 
     _showPrefs: function() {
       Events.trigger('navigate', 'prefs');
-      this._hideSettings();
     },
 
     _showSettings: function() {
