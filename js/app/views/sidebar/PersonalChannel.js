@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  var $ = require('jquery');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
@@ -64,11 +65,11 @@ define(function(require) {
     },
 
     _showSettings: function() {
-      $('.settings').toggleClass('showSettings');
+      this.$('.settings').toggleClass('showSettings');
     },
 
     _hideSettings: function() {
-      $('.settings').toggleClass('noSelect');
+      this.$('.settings').toggleClass('noSelect');
     }
   });
 
