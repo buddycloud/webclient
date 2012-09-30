@@ -62,7 +62,7 @@ define(function(require) {
     },
 
     _renderConfirmButton: function() {
-      $('.twoStepConfirmation').toggleClass('confirmed');
+      this.$('.twoStepConfirmation').toggleClass('confirmed');
     },
 
     _deleteAccount: function() {
