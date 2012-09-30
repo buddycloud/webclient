@@ -17,7 +17,7 @@
 define(function(require) {
   var Backbone = require('backbone');
   var EditHeader = require('views/content/EditHeader');
-  var PreferencesStream = require('views/content/PreferencesStream');
+  var PreferencesView = require('views/content/PreferencesView');
 
   var PreferencesPage = Backbone.View.extend({
     className: 'channelView',
@@ -26,7 +26,7 @@ define(function(require) {
       this.header = new EditHeader({
         model: this.options.user
       });
-      this.stream = new PreferencesStream({
+      this.stream = new PreferencesView({
         user: this.options.user
       });
       this.render();
