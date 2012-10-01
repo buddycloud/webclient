@@ -22,10 +22,10 @@ Project documentation, design guides and general help is avalible on the [webcli
 
 API Access
 ==========
+
 Change `config.js` to point it to another buddycloud API server.
-* read-write: run your own API server ([HTTP API](https://github.com/buddycloud/buddycloud-http-api) 
-on your own domain)
-* read-only: use `api.buddycloud.org`
+* read-write: run a [HTTP API Server](https://github.com/buddycloud/buddycloud-http-api) on your domain
+* read-only/testing: use `api.buddycloud.org`
 
 License and Copyright
 =====================
