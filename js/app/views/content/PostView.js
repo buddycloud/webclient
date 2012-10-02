@@ -17,6 +17,7 @@
 define(function(require) {
   var $ = require('jquery');
   var _ = require('underscore')
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html')
@@ -40,6 +41,7 @@ define(function(require) {
         roleTag: this._roleTag.bind(this),
         linkify: linkify
       }));
+      avatarFallback(this.$('.avatar'), 'personal', 50);
       this._addNoCommentsClassIfNeeded();
       this._adjustCommentAreaVisibility();
       this._commentOnCtrlEnter();

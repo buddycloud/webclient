@@ -64,8 +64,8 @@ define(function(require) {
       if (!this._userCanPost()) {
         this.$('.newTopic').remove();
       }
-      this._showPosts();
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      this._showPosts();
       this._postOnCtrlEnter();
     },
 
