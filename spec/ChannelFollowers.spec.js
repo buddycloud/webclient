@@ -76,6 +76,15 @@ define(function(require) {
       });
     });
 
+    describe('isOwner()', function() {
+      it('should verify if an username is the channel owner', function() {
+        expect(followers.isOwner('alice@example.com')).toBeTruthy();
+        expect(followers.isOwner('joe@example.com')).toBeFalsy();
+        expect(followers.isOwner('ron@example.com')).toBeFalsy();
+        expect(followers.isOwner('eve@example.com')).toBeFalsy();
+      });
+    });
+
     describe('parse()', function() {
       var fixedFollowers, resp;
 
