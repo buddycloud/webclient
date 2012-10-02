@@ -27,17 +27,33 @@ define(function(require) {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
-      this._renderFollowButton();
+      this._renderButtons();
     },
 
-    _renderFollowButton: function() {
-      if (this.options.user.isAnonymous() || this._itsMe()) {
+    _renderButtons: function() {
+      if (this.options.user.isAnonymous()) {
+        // Hide both buttons
+        this.$('.edit').hide();
         this.$('.follow').hide();
       } else {
-        if (!this._follows()) {
-          this.$('.follow').text('Unfollow');       
+        if (this._itsMe() || this._isOwner()) {
+          // Show only edit button
+          this.$('.follow').hide();
+        } else {
+          // Show (un)follow button
+          this.$('.edit').hide();
+
+          if (this._follows()) {
+            var button = this.$('.follow');
+            button.toggleClass('follow unfollow').text('Unfollow')
+          }
         }
       }
+    },
+
+    _isOwner: function() {
+      var username = this.options.user.username();
+      return this.model.followers.isOwner(username);
     },
 
     _itsMe: function() {
@@ -47,13 +63,7 @@ define(function(require) {
     _follows: function() {
       var followedChannels = this.options.user.subscribedChannels.channels();
       var channel = this.model.metadata.channel;
-      _.each(followedChannels, function(followedChannel, index) {
-        if (followedChannel.indexOf(channel) != -1) {
-          return true;
-        }
-      });
-
-      return false;
+      return _.include(followedChannels, channel);
     }
   });
 
