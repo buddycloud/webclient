@@ -46,6 +46,11 @@ define(function(require) {
       return role === 'publisher' || role === 'owner' || role === 'moderator';
     },
 
+    isOwner: function(username) {
+      var role = this.get(username);
+      return role === 'owner';
+    },
+
     // These are workarounds resultant by server issues
     parse: function(resp, xhr) {
       this._normalizeTypes(resp);
