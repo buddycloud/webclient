@@ -100,8 +100,9 @@ define(function(require) {
       var self = this;
       return function(model) {
         self.render();
-        // FIXME bubble and other animations
+        // FIXME add right animations
         self.selectChannel(model.channel);
+        self._bubble('.channel[data-href="' + model.channel + '"]');
       }
     },
 
