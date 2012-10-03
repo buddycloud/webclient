@@ -51,6 +51,10 @@ define(function(require) {
 
     accessModel: function() {
       return this.get('access_model');
+    },
+
+    defaultAffiliation: function() {
+      return this.get('default_affiliation');
     }
   });
 

@@ -30,6 +30,43 @@ define(function(require) {
     initialize: function() {
       this.metadatas = [];
       this._getChannelsMetadata();
+      this.model.subscribedChannels.bind('sync', this._updateChannels, this);
+    },
+
+    _updateChannels: function(action, channel) {
+      if (action === 'subscribedChannel') {
+        this._addChannel(channel);
+      } else {
+        this._removeChannel(channel);
+      }
+    },
+
+    _addChannel: function(channel) {
+      var callback = this._triggerUpdateCallback();
+      this._fetchMetadata(channel, callback);
+    },
+
+    _removeChannel: function(channel) {
+      this._removeMetadata(channel);
+
+      // Update template
+      var channelToRemove = $('.channel.selected');
+      channelToRemove.addClass('remove');
+    },
+
+    _removeMetadata: function(channel) {
+      var self = this;
+      _.each(this.metadatas, function(metadata, index) {
+        if (metadata.channel === channel) {
+          self.metadatas.splice(index, 1);
+        }
+      });      
+    },
+
+    _fetchMetadata: function(channel, callback) {
+      var metadata = new ChannelMetadata(channel);
+      this.metadatas.push(metadata);
+      metadata.fetch({success: callback});      
     },
 
     render: function() {
@@ -56,15 +93,23 @@ define(function(require) {
 
       _.each(this.model.subscribedChannels.channels(), function(channel, index) {
         if (!self._itsMe(channel)) {
-          var metadata = new ChannelMetadata(channel);
-          self.metadatas.push(metadata);
-          metadata.fetch({success: callback});
+          self._fetchMetadata(channel, callback);
         }
       });
     },
 
     _itsMe: function(channel) {
       return this.model.username().indexOf(channel) != -1;
+    },
+
+    _triggerUpdateCallback: function() {
+      var self = this;
+      return function(model) {
+        self.render();
+        // FIXME add right animations
+        self.selectChannel(model.channel);
+        self._bubble('.channel[data-href="' + model.channel + '"]');
+      }
     },
 
     _triggerRenderCallback: function() {
@@ -153,10 +198,10 @@ define(function(require) {
       data.self._movingChannels--;
     },
 
-    selectChannel: function(channelId) {
-      this.selected = channelId;
+    selectChannel: function(channel) {
+      this.selected = channel;
       this.$('.selected').removeClass('selected');
-      this.$('.channel[data-href="' + channelId + '"]').addClass('selected');
+      this.$('.channel[data-href="' + channel + '"]').addClass('selected');
     }
   });
 
