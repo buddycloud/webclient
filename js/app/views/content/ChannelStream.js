@@ -30,17 +30,37 @@ define(function(require) {
 
     initialize: function() {
       this._postViews = [];
-      this.model.items.bind('reset', this._renderPosts, this);
+      this.model.items.bind('reset', this._getAndRenderPosts, this);
       this.model.items.bind('addPost', this._showPost, this);
+      this.options.user.subscribedChannels.bind('sync', this._checkPosting, this);
     },
 
-    _renderPosts: function() {
+    _checkPosting: function(action) {
+      if (action === 'subscribedChannel') {
+        this.$('.newTopic').show();
+      } else {
+        this.$('.newTopic').hide();
+      }
+
+      this._renderPosts();    
+    },
+
+    _getAndRenderPosts: function() {
       var posts = this.model.items.posts();
       var self = this;
       _.each(posts, function(post) {
         var view = self._viewForPost(post);
         self._postViews.push(view);
       });
+
+      this._renderPosts();
+    },
+
+    _renderPosts: function() {
+      _.each(this._postViews, function(view) {
+        view.render();
+      });      
+      avatarFallback(this.$('.avatar'), 'personal', 50);
     },
 
     _viewForPost: function(post) {
@@ -49,7 +69,6 @@ define(function(require) {
         channel: this.model,
         user: this.options.user
       });
-      view.render();
       return view;
     },
 
@@ -62,7 +81,7 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {user: this.options.user}));
       if (!this._userCanPost()) {
-        this.$('.newTopic').remove();
+        this.$('.newTopic').hide();
       }
       this._showPosts();
       avatarFallback(this.$('.avatar'), 'personal', 50);

@@ -40,6 +40,26 @@ define(function(require) {
       }
     },
 
+    addItem: function(toAdd) {
+      if (this.model) {
+        this.model.push(toAdd);
+      }
+    },
+
+    removeItem: function(toRemove) {
+      if (this.model) {
+        var self = this;
+        _.each(this.model, function(item, index) {
+          if (item === toRemove) {
+            self.model.splice(index, 1);
+
+            // Should not have repeated channels
+            return;
+          }
+        });
+      }
+    },
+
     _showAll: function() {
       this.$('img').show();
       this.$('.showAll').remove();

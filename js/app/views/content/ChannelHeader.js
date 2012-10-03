@@ -23,6 +23,13 @@ define(function(require) {
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
 
+    events: {'click .follow': '_follow',
+             'click .unfollow': '_unfollow'},
+
+    initialize: function() {
+      this.options.user.subscribedChannels.bind('sync', this.render, this);
+    },
+
     render: function() {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
@@ -64,7 +71,24 @@ define(function(require) {
       var followedChannels = this.options.user.subscribedChannels.channels();
       var channel = this.model.metadata.channel;
       return _.include(followedChannels, channel);
-    }
+    },
+
+    _follow: function() {
+      var channel = this.model.metadata.channel;
+      var role = this.model.metadata.defaultAffiliation();
+      var credentials = this.options.user.credentials;
+
+      // Subscribe
+      this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials);
+    },
+
+    _unfollow: function() {
+      var channel = this.model.metadata.channel;
+      var credentials = this.options.user.credentials;
+
+      // Subscribe
+      this.options.user.subscribedChannels.unsubscribe(channel, 'posts', credentials);
+    }    
   });
 
   return ChannelHeader;
