@@ -1,6 +1,6 @@
 define({
-  baseUrl: 'https://api.buddycloud.org',
+  baseUrl: 'http://localhost:3000',
   homeDomain: 'buddycloud.org',
   defaultChannel: 'lounge@topics.buddycloud.org',
-  release: true
+  release: false 
 });
