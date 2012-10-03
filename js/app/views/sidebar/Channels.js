@@ -47,8 +47,19 @@ define(function(require) {
     },
 
     _removeChannel: function(channel) {
+      this._removeMetadata(channel);
+
       var channelToRemove = $('.channel.selected');
       channelToRemove.addClass('remove');
+    },
+
+    _removeMetadata: function(channel) {
+      var self = this;
+      _.each(this.metadatas, function(metadata, index) {
+        if (metadata.channel === channel) {
+          self.metadatas.splice(index, 1);
+        }
+      });      
     },
 
     _fetchMetadata: function(channel, callback) {
