@@ -26,6 +26,27 @@ define(function(require) {
     initialize: function() {
       this.moderatorsList = new ChannelList({title: 'moderators', role: 'Moderator'});
       this.followersList = new ChannelList({title: 'followers', role: 'Follower'});
+      this.options.user.subscribedChannels.bind('sync', this._updateFollowersList, this);
+    },
+
+    _updateFollowersList: function(action) {
+      var username = this.options.user.username();
+
+      if (action === 'subscribedChannel') {
+        this._addFollower(username);
+      } else {
+        this._removeFollower(username);
+      }
+
+      this.followersList.render();
+    },
+
+    _addFollower: function(username) {
+      this.followersList.addItem(username);
+    },
+
+    _removeFollower: function(username) {
+      this.followersList.removeItem(username);
     },
 
     render: function() {

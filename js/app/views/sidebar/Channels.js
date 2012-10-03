@@ -49,6 +49,7 @@ define(function(require) {
     _removeChannel: function(channel) {
       this._removeMetadata(channel);
 
+      // Update template
       var channelToRemove = $('.channel.selected');
       channelToRemove.addClass('remove');
     },
