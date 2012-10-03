@@ -30,6 +30,7 @@ define(function(require) {
     initialize: function() {
       this.metadatas = [];
       this._getChannelsMetadata();
+      this.model.subscribedChannels.bind('sync', this.render, this);
     },
 
     render: function() {

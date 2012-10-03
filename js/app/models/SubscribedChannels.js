@@ -91,7 +91,7 @@ define(function(require) {
 
     sync: function(method, model, options) {
       if (method === 'update' || method === 'create') {
-        // always POST only changed attributes
+        // Always POST only changed attributes
         var changed = model.changedAttributes();
         if (changed) {
           options.data = JSON.stringify(changed || {});
