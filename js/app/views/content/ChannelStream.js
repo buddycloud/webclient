@@ -37,7 +37,10 @@ define(function(require) {
 
     _checkPosting: function(action) {
       if (action === 'subscribedChannel') {
-        this.$('.newTopic').show();
+        var defaultRole = this.model.metadata.defaultAffiliation();
+        if (defaultRole === 'publisher') {
+          this.$('.newTopic').show();  
+        }
       } else {
         this.$('.newTopic').hide();
       }
