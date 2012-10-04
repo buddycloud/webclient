@@ -19,6 +19,7 @@ define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
   var ModelBase = require('models/ModelBase')
+  var PostNotifications = require('models/PostNotifications')
   var SubscribedChannels = require('models/SubscribedChannels')
   var UserCredentials = require('models/UserCredentials')
 
@@ -26,6 +27,7 @@ define(function(require) {
     constructor: function() {
       ModelBase.call(this);
       this.credentials = new UserCredentials;
+      this.notifications = new PostNotifications;
       this.subscribedChannels = null;
     },
 
