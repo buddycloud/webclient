@@ -26,10 +26,6 @@ define(function(require) {
     events: {'click .follow': '_follow',
              'click .unfollow': '_unfollow'},
 
-    initialize: function() {
-      this.options.user.subscribedChannels.bind('sync', this.render, this);
-    },
-
     render: function() {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
@@ -52,7 +48,7 @@ define(function(require) {
 
           if (this._follows()) {
             var button = this.$('.follow');
-            button.toggleClass('follow unfollow').text('Unfollow')
+            button.toggleClass('follow unfollow').text('Unfollow');
           }
         }
       }
@@ -80,6 +76,9 @@ define(function(require) {
 
       // Subscribe
       this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials);
+
+      // Update button
+      this.$('.follow').toggleClass('follow unfollow').text('Unfollow');
     },
 
     _unfollow: function() {
@@ -88,6 +87,9 @@ define(function(require) {
 
       // Subscribe
       this.options.user.subscribedChannels.unsubscribe(channel, 'posts', credentials);
+
+      // Update button
+      this.$('.unfollow').toggleClass('unfollow follow').text('Follow');
     }    
   });
 
