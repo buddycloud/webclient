@@ -28,8 +28,25 @@ define(function(require) {
         model: this.model,
         user: this.options.user
       });
-      this.model.bind('fetch', this.render, this);
+      this.model.bind('fetch', this._begin, this);
       this.model.fetch({credentials: this.options.user.credentials})
+    },
+
+    _begin: function() {
+      this.render();
+      this._listenForNewPosts();
+    },
+
+    _listenForNewPosts: function() {
+      var user = this.options.user;
+      var items = this.model.items;
+      user.notifications.on('new', function(item) {
+        console.log(item.source);
+        if (item.source == items.channel) {
+          items.add(item);
+        }
+      });
+      user.notifications.listen({credentials: user.credentials});
     },
 
     render: function() {
