@@ -35,28 +35,26 @@ define(function(require) {
       this.metadata = new ChannelMetadata(this.model.username);
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
-      this.$el.on('click', this._navigate);
     },
 
     render: function() {
       this.$el.html(_.template(template, {
-        metadata: this.metadata,
-        selected: this.selected
+        metadata: this.metadata
       }));
       avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);
     },
 
-    _navigate: function() {
-      Events.trigger('navigate', this.model.username);
-    },
-
-    selectChannel: function(channelId) {
-      this.selected = (this.metadata.channel == channelId);
+    selectChannel: function(channel) {
+      this.selected = (this.metadata.channel == channel);
       if (this.selected) {
         this.$el.addClass('selected');
       } else {
         this.$el.removeClass('selected');
       }
+    },
+
+    _navigate: function() {
+      Events.trigger('navigate', this.model.username);
     },
 
     _showPrefs: function() {
