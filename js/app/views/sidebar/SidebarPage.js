@@ -39,9 +39,9 @@ define(function(require) {
       $sidebar.removeClass('hidden');
     },
 
-    selectChannel: function(channelId) {
-      this.personalChannel.selectChannel(channelId);
-      this.channels.selectChannel(channelId);
+    selectChannel: function(channel) {
+      this.personalChannel.selectChannel(channel);
+      this.channels.selectChannel(channel);
     }
   });
 
