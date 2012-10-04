@@ -24,6 +24,10 @@ define(function(require) {
       this._defineGetter('author');
       this._defineGetter('replyTo');
       this._defineGetter('published');
+      this._defineGetter('source', function() {
+        var source = this.get('source');
+        return source ? source.split('/', 2)[0] : undefined;
+      });
       this._defineGetter('content', function() {
         return this.get('content') || '';
       });
