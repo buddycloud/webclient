@@ -128,8 +128,8 @@ define(function(require) {
         wait: true,
         success: function() {
           textArea.val('');
-          self._enableButton();
           self._collapseAnswerArea({data: {self: self}});
+          self._enableButton();
         }
       });
     }

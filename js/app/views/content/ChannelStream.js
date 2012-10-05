@@ -153,8 +153,8 @@ define(function(require) {
         wait: true,
         success: function() {
           textArea.val('');
-          self._enableButton();
           self._collapseNewTopicArea({data: {self: self}});
+          self._enableButton();
         }
       });
     }
