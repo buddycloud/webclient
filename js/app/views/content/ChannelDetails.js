@@ -28,15 +28,17 @@ define(function(require) {
     },
 
     _updateFollowersList: function(action) {
-      var username = this.options.user.username();
+      if (this._isInitialized()) {
+        var username = this.options.user.username();
 
-      if (action === 'subscribedChannel') {
-        this._addFollower(username);
-      } else {
-        this._removeFollower(username);
+        if (action === 'subscribedChannel') {
+          this._addFollower(username);
+        } else {
+          this._removeFollower(username);
+        }
+
+        this.followersList.render();
       }
-
-      this.followersList.render();
     },
 
     _addFollower: function(username) {
