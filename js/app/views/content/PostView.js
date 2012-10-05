@@ -104,11 +104,22 @@ define(function(require) {
       }
     },
 
+    _enableButton: function() {
+      this.$('.createComment').removeClass('disabled').text('Post');
+    },
+
+    _disableButton: function() {
+      this.$('.createComment').addClass('disabled').text('Posting...');
+    },
+
     _comment: function(event) {
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
       var content = textArea.val();
       var self = this;
+
+      this._disableButton();
+
       var comment = this.options.channel.items.create({
         content: content,
         replyTo: this.model.id
@@ -117,6 +128,7 @@ define(function(require) {
         wait: true,
         success: function() {
           textArea.val('');
+          self._enableButton();
           self._collapseAnswerArea({data: {self: self}});
         }
       });
