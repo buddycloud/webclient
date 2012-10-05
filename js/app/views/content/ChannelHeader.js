@@ -38,15 +38,15 @@ define(function(require) {
     },
 
     _switchButton: function(action) {
+      var button;
       if (action === 'subscribedChannel') {
-        var button = this.$('.follow');
+        button = this.$('.follow');
         button.toggleClass('follow unfollow').text('Unfollow');
-        button.removeClass('disabled');
       } else {
-        var button = this.$('.unfollow');
+        button = this.$('.unfollow');
         button.toggleClass('unfollow follow').text('Follow');
-        button.removeClass('disabled');
       }
+      button.removeClass('disabled');
     },
 
     _renderButtons: function() {
