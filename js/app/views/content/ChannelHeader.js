@@ -91,26 +91,26 @@ define(function(require) {
     },
 
     _follow: function() {
-      // Disable button
-      this.$('.follow').toggleClass('disabled');
-
       var channel = this.model.metadata.channel;
       var role = this.model.metadata.defaultAffiliation();
       var credentials = this.options.user.credentials;
 
       // Subscribe
       this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials);
+
+      // Disable button
+      this.$('.follow').toggleClass('disabled');
     },
 
     _unfollow: function() {
-      // Disable button
-      this.$('.unfollow').toggleClass('disabled');
-
       var channel = this.model.metadata.channel;
       var credentials = this.options.user.credentials;
 
       // Subscribe
       this.options.user.subscribedChannels.unsubscribe(channel, 'posts', credentials);
+
+      // Disable button
+      this.$('.unfollow').toggleClass('disabled');
     }    
   });
 
