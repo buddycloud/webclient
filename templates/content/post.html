@@ -14,7 +14,7 @@
      <section class="comment <%= roleTag(comment.author) %>">
        <img class="avatar" src="<%= comment.authorAvatarUrl(50) %>" />
        <div class="usermeta">
-         <div class="name"><%= comment.author.split('@', 2) %></div>
+         <div class="name"><%= comment.author.split('@', 2)[0] %></div>
          <div class="jid"><%= comment.author %></div>    
        </div>
        <div class="postmeta">
