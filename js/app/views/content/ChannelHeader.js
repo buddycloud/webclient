@@ -26,6 +26,10 @@ define(function(require) {
     events: {'click .follow': '_follow',
              'click .unfollow': '_unfollow'},
 
+    initialize: function() {
+      this.options.user.subscribedChannels.bind('sync', this._switchButton, this);
+    },
+
     render: function() {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
@@ -33,24 +37,41 @@ define(function(require) {
       this._renderButtons();
     },
 
+    _switchButton: function(action) {
+      var button;
+      if (action === 'subscribedChannel') {
+        button = this.$('.follow');
+        button.toggleClass('follow unfollow').text('Unfollow');
+      } else {
+        button = this.$('.unfollow');
+        button.toggleClass('unfollow follow').text('Follow');
+      }
+      button.removeClass('disabled');
+    },
+
     _renderButtons: function() {
       if (this.options.user.isAnonymous()) {
         // Hide both buttons
-        this.$('.edit').hide();
-        this.$('.follow').hide();
+        this._hideButtons('edit', 'follow');
       } else {
         if (this._itsMe() || this._isOwner()) {
           // Show only edit button
-          this.$('.follow').hide();
+          this._hideButtons('follow');
         } else {
-          // Show (un)follow button
-          this.$('.edit').hide();
+          // Show only (un)follow button
+          this._hideButtons('edit');
 
           if (this._follows()) {
             var button = this.$('.follow');
             button.toggleClass('follow unfollow').text('Unfollow');
           }
         }
+      }
+    },
+
+    _hideButtons: function() {
+      for (var i = 0; i < arguments.length; i++) {
+        this.$('.' + arguments[i]).hide();
       }
     },
 
@@ -77,19 +98,19 @@ define(function(require) {
       // Subscribe
       this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials);
 
-      // Update button
-      this.$('.follow').toggleClass('follow unfollow').text('Unfollow');
+      // Disable button
+      this.$('.follow').toggleClass('disabled');
     },
 
     _unfollow: function() {
       var channel = this.model.metadata.channel;
       var credentials = this.options.user.credentials;
 
-      // Subscribe
+      // Unsubscribe
       this.options.user.subscribedChannels.unsubscribe(channel, 'posts', credentials);
 
-      // Update button
-      this.$('.unfollow').toggleClass('unfollow follow').text('Follow');
+      // Disable button
+      this.$('.unfollow').toggleClass('disabled');
     }    
   });
 
