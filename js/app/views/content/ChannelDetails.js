@@ -20,7 +20,7 @@ define(function(require) {
   var template = require('text!templates/content/channelDetails.html')
 
   var ChannelDetails = Backbone.View.extend({
-    className: 'channelDetails',
+    className: 'channelDetails hidden',
     events: {'click .infoToggle': '_toggleInfo'},
 
     initialize: function() {
@@ -50,7 +50,6 @@ define(function(require) {
     render: function() {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
-      this._hideInfo();
     },
 
     _renderChannelLists: function() {
@@ -71,10 +70,6 @@ define(function(require) {
 
     _isInitialized: function() {
       return this.moderatorsList && this.followersList;
-    },
-
-    _hideInfo: function() {
-      this.$el.addClass('hidden');
     },
 
     _toggleInfo: function() {
