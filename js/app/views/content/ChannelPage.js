@@ -41,7 +41,6 @@ define(function(require) {
       var user = this.options.user;
       var items = this.model.items;
       user.notifications.on('new', function(item) {
-        console.log(item.source);
         if (item.source == items.channel) {
           items.add(item);
         }
