@@ -20,12 +20,10 @@ define(function(require) {
   var template = require('text!templates/content/channelDetails.html')
 
   var ChannelDetails = Backbone.View.extend({
-    className: 'channelDetails',
+    className: 'channelDetails hidden',
     events: {'click .infoToggle': '_toggleInfo'},
 
     initialize: function() {
-      this.moderatorsList = new ChannelList({title: 'moderators', role: 'Moderator'});
-      this.followersList = new ChannelList({title: 'followers', role: 'Follower'});
       this.options.user.subscribedChannels.bind('sync', this._updateFollowersList, this);
     },
 
@@ -52,7 +50,6 @@ define(function(require) {
     render: function() {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
-      this._renderChannelLists();
     },
 
     _renderChannelLists: function() {
@@ -71,8 +68,18 @@ define(function(require) {
       this.followersList.model = followers;
     },
 
+    _isInitialized: function() {
+      return this.moderatorsList && this.followersList;
+    },
+
     _toggleInfo: function() {
       this.$el.toggleClass('hidden');
+      if (!this._isInitialized()) {
+        this.moderatorsList = new ChannelList({title: 'moderators', role: 'Moderator'});
+        this.followersList = new ChannelList({title: 'followers', role: 'Follower'});
+
+        this._renderChannelLists();
+      }
     }
   });
 
