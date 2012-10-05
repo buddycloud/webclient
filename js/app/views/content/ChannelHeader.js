@@ -106,7 +106,7 @@ define(function(require) {
       var channel = this.model.metadata.channel;
       var credentials = this.options.user.credentials;
 
-      // Subscribe
+      // Unsubscribe
       this.options.user.subscribedChannels.unsubscribe(channel, 'posts', credentials);
 
       // Disable button
