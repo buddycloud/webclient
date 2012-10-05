@@ -133,16 +133,28 @@ define(function(require) {
       }
     },
 
+    _enableButton: function() {
+      this.$('.createComment').removeClass('disabled').text('Post');
+    },
+
+    _disableButton: function() {
+      this.$('.createComment').addClass('disabled').text('Posting...');
+    },
+
     _post: function() {
       var textArea = this.$('.newTopic textarea');
       var content = textArea.val();
       var self = this;
+
+      this._disableButton();
+
       var post = this.model.items.create({content: content}, {
         credentials: this.options.user.credentials,
         wait: true,
         success: function() {
           textArea.val('');
           self._collapseNewTopicArea({data: {self: self}});
+          self._enableButton();
         }
       });
     }
