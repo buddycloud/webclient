@@ -35,7 +35,7 @@ define(function(require) {
       this.fields = 
         {
           'channel_name': 'title', 
-          'channel_description': 'description', 
+          'channel_status': 'description', 
           'channel_public_access': 'access_model',
           'channel_default_role': 'default_affiliation' 
         };
@@ -157,7 +157,7 @@ define(function(require) {
     _setTextFields: function() {
       // FIXME not all fields are handled by HTTP API
       // var textFields = ['channel_name', 'channel_description', 'channel_status', 'channel_location'];
-      var textFields = ['channel_name', 'channel_description'];
+      var textFields = ['channel_name', 'channel_status'];
       for (var i = 0; i < textFields.length; i++) {
         var content = this.$('#' + textFields[i]).val();
         this.model.set(this.fields[textFields[i]], content);
