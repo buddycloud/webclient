@@ -18,6 +18,7 @@ define(function(require) {
   var _ = require('underscore');
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
+  var Events = Backbone.Events;
   var template = require('text!templates/content/editChannel.html');
 
   var EditChannelStream = Backbone.View.extend({
@@ -102,16 +103,55 @@ define(function(require) {
         // Create new ChannelMetadata
       }
 
-      this._saveAvatar();
+      // Set fields
       this._setTextFields();
       this._setAccessModel();
       this._setDefaultRole();
 
-      this.model.save({}, {credentials: this.options.user.credentials});      
+      // Save
+      this.model.save({}, {credentials: this.options.user.credentials});  
+      this._saveAvatar();
     },
 
     _saveAvatar: function() {
+      var file = $(':file')[0].files[0];
+      if (file) {
+        var formData = this._buildFormData(file);
+        this._sendUploadFileResquest(formData);
+      }
+    },
 
+    _buildFormData: function(file) {
+      var formData = new FormData();
+      formData.append('data', file);
+      formData.append('content-type', file.type);
+      if (file.name) {
+        formData.append('filename', file.name);
+      }
+
+      return formData;
+    },
+
+    _sendUploadFileResquest: function(formData) {
+      var self = this;
+      $.ajax({
+        type: 'PUT',
+        url: this.model.avatarUrl(),
+        crossDomain: true,
+        data: formData,
+        xhrFields: {withCredentials: true},
+        contentType: false,
+        processData: false,
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization', 
+            self.options.user.credentials.authorizationHeader());
+        },
+        statusCode: {
+          201: function() {
+            Events.trigger('avatarChanged');
+          }
+        }
+      });
     },
 
     _setTextFields: function() {
