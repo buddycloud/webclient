@@ -148,7 +148,7 @@ define(function(require) {
         },
         statusCode: {
           201: function() {
-            Events.trigger('avatarChanged');
+            Events.trigger('avatarChanged', self.model.channel);
           }
         }
       });
