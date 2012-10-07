@@ -69,17 +69,6 @@ define(function(require) {
       }
     },
 
-    _isChecked: function(element) {
-      if (element) {
-        var checked = element.attr('checked');
-        if (checked && checked === 'checked') {
-          return 'true';
-        }
-      }
-
-      return 'false';
-    },
-
     _hasPublicAccess: function() {
       return this.model.accessModel() === 'open';
     },
@@ -162,6 +151,15 @@ define(function(require) {
         var content = this.$('#' + textFields[i]).val();
         this.model.set(this.fields[textFields[i]], content);
       }
+    },
+
+    _isChecked: function(element) {
+      if (element) {
+        var checked = element.attr('checked');
+        return checked && checked === 'checked';
+      }
+
+      return false;
     },
 
     _setAccessModel: function() {
