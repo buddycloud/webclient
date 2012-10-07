@@ -114,7 +114,7 @@ define(function(require) {
     },
 
     _saveAvatar: function() {
-      var file = this.$('input:file')[0].files[0];
+      var file = this.$(':file')[0].files[0];
       if (file) {
         var formData = this._buildFormData(file);
         this._sendUploadFileResquest(formData);
