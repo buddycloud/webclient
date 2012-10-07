@@ -18,13 +18,15 @@ define(function(require) {
   var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var template = require('text!templates/content/header.html')
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
 
     events: {'click .follow': '_follow',
-             'click .unfollow': '_unfollow'},
+             'click .unfollow': '_unfollow',
+             'click .edit': '_edit'},
 
     initialize: function() {
       this.options.user.subscribedChannels.bind('sync', this._switchButton, this);
@@ -67,6 +69,10 @@ define(function(require) {
           }
         }
       }
+    },
+
+    _edit: function() {
+      Events.trigger('navigate', this.model.name + '/edit');
     },
 
     _hideButtons: function() {

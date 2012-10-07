@@ -16,19 +16,18 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var ChannelMetadata = require('models/ChannelMetadata');
   var EditHeader = require('views/content/EditHeader');
-  var PreferencesStream = require('views/content/PreferencesStream');
+  var EditChannelStream = require('views/content/EditChannelStream');
 
-  var PreferencesView = Backbone.View.extend({
+  var EditChannelView = Backbone.View.extend({
     className: 'channelView',
 
     initialize: function() {
-      this.metadata = new ChannelMetadata(this.options.user.username());
       this.header = new EditHeader({
-        model: this.metadata
+        model: this.model.metadata
       });
-      this.stream = new PreferencesStream({
+      this.stream = new EditChannelStream({
+        model: this.model.metadata,
         user: this.options.user
       });
       this.render();
@@ -40,5 +39,5 @@ define(function(require) {
     }
   });
 
-  return PreferencesView;
+  return EditChannelView;
 });
