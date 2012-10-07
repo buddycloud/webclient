@@ -20,7 +20,7 @@ define(function(require) {
   var EditHeader = require('views/content/EditHeader');
   var EditChannelView = require('views/content/EditChannelView');
 
-  var PreferencesPage = Backbone.View.extend({
+  var EditChannelPage = Backbone.View.extend({
     className: 'channelView',
 
     initialize: function() {
@@ -38,5 +38,5 @@ define(function(require) {
     }
   });
 
-  return PreferencesPage;
+  return EditChannelPage;
 });
