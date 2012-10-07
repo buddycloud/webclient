@@ -55,6 +55,20 @@ define(function(require) {
 
     defaultAffiliation: function() {
       return this.get('default_affiliation');
+    },
+
+    sync: function(method, model, options) {
+      if (method === 'update' || method === 'create') {
+        // Always POST only changed attributes
+        var changed = model.changedAttributes();
+        if (changed) {
+          options.data = JSON.stringify(changed || {});
+          options.contentType = 'application/json';
+          options.dataType = 'text';
+          method = 'create';
+        }
+      }
+      Backbone.sync.call(this, method, model, options);
     }
   });
 

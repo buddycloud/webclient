@@ -58,7 +58,7 @@ define(function(require) {
     addAuthorizationToAjaxOptions: function(options) {
       if (options) {
         options.headers = options.headers || {};
-        options.headers['Authorization'] = this._authorizationHeader();
+        options.headers['Authorization'] = this.authorizationHeader();
         options.headers['X-Session-Id'] = this._sessionId;
         options.xhrFields = options.xhrFields || {};
         options.xhrFields.withCredentials = true;
@@ -66,7 +66,7 @@ define(function(require) {
       }
     },
 
-    _authorizationHeader: function() {
+    authorizationHeader: function() {
       if (this.username) {
         return 'Basic ' + btoa(this.username + ':' + this.password);
       } else {
