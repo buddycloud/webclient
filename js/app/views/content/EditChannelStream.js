@@ -109,8 +109,8 @@ define(function(require) {
       this._setDefaultRole();
 
       // Save
-      this.model.save({}, {credentials: this.options.user.credentials});  
       this._saveAvatar();
+      this.model.save({}, {credentials: this.options.user.credentials});  
     },
 
     _saveAvatar: function() {

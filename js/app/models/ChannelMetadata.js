@@ -59,11 +59,14 @@ define(function(require) {
 
     sync: function(method, model, options) {
       if (method === 'update' || method === 'create') {
-        // Always POST
-        options.data = JSON.stringify(this.attributes || {});
-        options.contentType = 'application/json';
-        options.dataType = 'text';
-        method = 'create';
+        // Always POST only changed attributes
+        var changed = model.changedAttributes();
+        if (changed) {
+          options.data = JSON.stringify(changed || {});
+          options.contentType = 'application/json';
+          options.dataType = 'text';
+          method = 'create';
+        }
       }
       Backbone.sync.call(this, method, model, options);
     }
