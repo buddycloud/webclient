@@ -12,7 +12,7 @@
 <section class="comments">
   <% _.each(post.comments, function(comment) { %>
      <section class="comment <%= roleTag(comment.author) %>">
-       <img class="avatar" src="<%= comment.authorAvatarUrl(50) %>" />
+       <img class="avatar" src="<%= comment.authorAvatarUrl(34) %>" />
        <div class="usermeta">
          <div class="name"><%= comment.author.split('@', 2)[0] %></div>
          <div class="jid"><%= comment.author %></div>    
