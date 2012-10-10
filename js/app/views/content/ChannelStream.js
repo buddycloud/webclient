@@ -39,13 +39,13 @@ define(function(require) {
       if (action === 'subscribedChannel') {
         var defaultRole = this.model.metadata.defaultAffiliation();
         if (defaultRole === 'publisher') {
-          this.$('.newTopic').show();  
+          this.$('.newTopic').show();
         }
       } else {
         this.$('.newTopic').hide();
       }
 
-      this._renderPosts();    
+      this._renderPosts();
     },
 
     _getAndRenderPosts: function() {
@@ -62,7 +62,7 @@ define(function(require) {
     _renderPosts: function() {
       _.each(this._postViews, function(view) {
         view.render();
-      });      
+      });
       avatarFallback(this.$('.avatar'), 'personal', 50);
     },
 
