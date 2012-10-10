@@ -25,10 +25,11 @@ define(function(require) {
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
-    events: {'click .channel': '_selectChannel'},
+    events: {'click .channel': '_navigateToChannel'},
 
     initialize: function() {
       this.metadatas = [];
+      this._unreadCounts = {};
       this._getChannelsMetadata();
       this.model.subscribedChannels.bind('sync', this._updateChannels, this);
     },
@@ -78,7 +79,7 @@ define(function(require) {
       this._setupAnimation();
     },
 
-    _selectChannel: function(event) {
+    _navigateToChannel: function(event) {
       this._bubble(event.currentTarget);
       this._dispatchNavigationEvent(event.currentTarget.dataset['href']);
     },
@@ -119,6 +120,7 @@ define(function(require) {
         fetched.push(model);
         if (fetched.length === self.metadatas.length) {
           self.render();
+          self._listenForNewItems();
         }
       }
     },
@@ -198,10 +200,47 @@ define(function(require) {
       data.self._movingChannels--;
     },
 
+    _listenForNewItems: function() {
+      var user = this.model;
+      var self = this;
+      user.notifications.on('new', function(item) {
+        var channel = item.source;
+        if (channel != self.selected) {
+          self._increaseUnreadCount(channel);
+        }
+      });
+      user.notifications.listen({credentials: user.credentials});
+    },
+
+    _increaseUnreadCount: function(channel) {
+      var numUnread = this._unreadCounts[channel];
+      numUnread = numUnread ? numUnread + 1 : 1;
+      this._unreadCounts[channel] = numUnread;
+      this._renderUnreadCount(channel);
+    },
+
+    _renderUnreadCount: function(channel) {
+      var channelEl = this.$('.channel[data-href="' + channel + '"]');
+      var countEl = channelEl.find('.counter');
+      var count = this._unreadCounts[channel];
+      if (count > 0) {
+        countEl.text(count);
+        countEl.show();
+      } else {
+        countEl.hide();
+      }
+    },
+
     selectChannel: function(channel) {
       this.selected = channel;
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
+      this._resetUnreadCount(channel);
+    },
+
+    _resetUnreadCount: function(channel) {
+      this._unreadCounts[channel] = 0;
+      this._renderUnreadCount(channel);
     }
   });
 
