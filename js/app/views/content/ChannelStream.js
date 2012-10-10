@@ -55,7 +55,6 @@ define(function(require) {
         var view = self._viewForPost(post);
         self._postViews.push(view);
       });
-
       this._renderPosts();
     },
 
@@ -78,6 +77,8 @@ define(function(require) {
     _showPost: function(post) {
       var view = this._viewForPost(post);
       this._postViews.unshift(view);
+      view.render();
+      avatarFallback(view.$('.avatar'), 'personal', 50);
       this.$('.posts').prepend(view.el);
     },
 
@@ -142,13 +143,11 @@ define(function(require) {
     },
 
     _post: function() {
+      this._disableButton();
       var textArea = this.$('.newTopic textarea');
       var content = textArea.val();
       var self = this;
-
-      this._disableButton();
-
-      var post = this.model.items.create({content: content}, {
+      this.model.items.create({content: content}, {
         credentials: this.options.user.credentials,
         wait: true,
         success: function() {
