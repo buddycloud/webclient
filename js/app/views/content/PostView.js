@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
+  var $ = require(['jquery', 'timeago']);
   var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
@@ -42,9 +42,14 @@ define(function(require) {
         linkify: linkify
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      this._showPostTime();
       this._addNoCommentsClassIfNeeded();
       this._adjustCommentAreaVisibility();
       this._commentOnCtrlEnter();
+    },
+
+    _showPostTime: function() {
+      this.$('.postmeta').timeago();
     },
 
     _roleTag: function(username) {
