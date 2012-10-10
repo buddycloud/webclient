@@ -35,11 +35,11 @@ define(function(require) {
       return !this.credentials.username;
     },
 
-    avatarUrl: function() {
+    avatarUrl: function(size) {
       if (this.isAnonymous()) {
         return "";
       } else {
-        return api.avatarUrl(this.credentials.username);
+        return api.avatarUrl(this.credentials.username, size);
       }
     },
 
