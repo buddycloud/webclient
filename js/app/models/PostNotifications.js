@@ -43,10 +43,17 @@ define(function(require) {
     },
 
     listen: function(options) {
+      if (!this._listening) {
+        this._listening = true;
+        this._doListen(options);
+      }
+    },
+
+    _doListen: function(options) {
       options = options || {};
       var self = this;
       options.complete = function() {
-        self.listen(options);
+        self._doListen(options);
       };
       this.fetch(options);
     }
