@@ -15,9 +15,10 @@
  */
 
 define(function(require) {
-  var $ = require(['jquery', 'timeago']);
+  var $ = require(['jquery', 'timeago', 'jquery.embedly']);
   var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
+  var config = require('config');
   var Backbone = require('backbone');
   var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html')
@@ -43,6 +44,7 @@ define(function(require) {
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
       this._showPostTime();
+      this._embedly();
       this._addNoCommentsClassIfNeeded();
       this._adjustCommentAreaVisibility();
       this._commentOnCtrlEnter();
@@ -50,6 +52,10 @@ define(function(require) {
 
     _showPostTime: function() {
       this.$('.postmeta').timeago();
+    },
+
+    _embedly: function() {
+      this.$('p').embedly({key: config.embedlyKey});
     },
 
     _roleTag: function(username) {
