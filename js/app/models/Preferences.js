@@ -49,7 +49,7 @@ define(function(require) {
     },
 
     url: function() {
-      return api.url('notifications');
+      return api.url('user_settings');
     },
 
     parse: function(resp, xhr) {
