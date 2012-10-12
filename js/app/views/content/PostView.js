@@ -21,7 +21,7 @@ define(function(require) {
   var config = require('config');
   var Backbone = require('backbone');
   var linkify = require('util/linkify');
-  var template = require('text!templates/content/post.html')
+  var template = require('text!templates/content/post.html');
 
   var PostView = Backbone.View.extend({
     tagName: 'article',
