@@ -37,6 +37,7 @@ define(function(require) {
       event.preventDefault();
       var username = $('#login_name').attr('value');
       var password = $('#login_password').attr('value');
+      localStorage.loginPermanent = $('#store_local').is(':checked')
       this.model.credentials.save({username: username, password: password});
       location.reload();
     },
