@@ -21,9 +21,16 @@ define(function(require) {
   var Item = ModelBase.extend({
     initialize: function() {
       this._initializeComments();
-      this._defineGetter('author');
-      this._defineGetter('replyTo');
-      this._defineGetter('published');
+      this._defineGetter('author', function() {
+        var author = this.get('author');
+        if (author) {
+          if (author.indexOf('acct:') != -1) {
+            return author.slice('acct:'.length);
+          } else {
+            return author;
+          }
+        }
+      });
       this._defineGetter('source', function() {
         var source = this.get('source');
         return source ? source.split('/', 2)[0] : undefined;
@@ -34,6 +41,8 @@ define(function(require) {
       this._defineGetter('updated', function() {
         return this.get('updated') || this.published;
       });
+      this._defineGetter('replyTo');
+      this._defineGetter('published');
     },
 
     _initializeComments: function() {
