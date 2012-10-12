@@ -89,6 +89,16 @@ define(function(require) {
         user.login();
         expect(localStorage.loginCount).toBe('4');
       });
+
+      it('should not increase loginCount if {permanent: true} is passed', function() {
+        spyOn($, 'ajax').andCallFake(function(options) {
+          options.success();
+        });
+        user.credentials.set({username: 'bob@example.com', password: 'bob'});
+        localStorage.loginCount = '3';
+        user.login({permanent: true});
+        expect(localStorage.loginCount).toBe('3');
+      });
     });
 
     describe('logout()', function() {

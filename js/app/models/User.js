@@ -51,24 +51,32 @@ define(function(require) {
       return this.subscribedChannels.channels();
     },
 
-    login: function() {
+    login: function(options) {
       if (this.isAnonymous()) {
         this.trigger('loginSuccess');
       } else {
-        this._tryFetchingSubscribedChannels();
+       var self = this;
+        this._tryFetchingSubscribedChannels({
+          error: function() {
+            self.trigger('loginError');
+          },
+          success: function() {
+            self._loginPermanent = options ? options.permanent : false;
+            if (!self._loginPermanent) {
+              self._increaseLoginCount();
+            }
+            self.trigger('loginSuccess');
+          }
+        });
       }
     },
 
-    _tryFetchingSubscribedChannels: function() {
+    _tryFetchingSubscribedChannels: function(options) {
        this.subscribedChannels = new SubscribedChannels(this.username);
-       var self = this;
        this.subscribedChannels.fetch({
          credentials: this.credentials,
-         error: function() { self.trigger('loginError'); },
-         success: function() {
-           self._increaseLoginCount();
-           self.trigger('loginSuccess');
-         }
+         success: options.success,
+         error: options.error
       });
     },
 
@@ -80,9 +88,13 @@ define(function(require) {
 
     logout: function() {
       if (!this.isAnonymous()) {
-        var newCount = this._decreaseLoginCount();
-        if (newCount == 0) {
-          this.credentials.save({username: null, password: null});
+        if (this._loginPermanent) {
+          this.credentials.save();
+        } else {
+          var newCount = this._decreaseLoginCount();
+          if (newCount == 0) {
+            this.credentials.save({username: null, password: null});
+          }
         }
       }
     },
