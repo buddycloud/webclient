@@ -24,11 +24,28 @@ define(function(require) {
   var UserCredentials = ModelBase.extend({
     fetch: function(options) {
       this.set({
-        username: sessionStorage.username,
-        password: sessionStorage.password
+        username: sessionStorage.username || localStorage.username,
+        password: sessionStorage.password || localStorage.password
       });
+      this._saveToStorage(sessionStorage);
+      if (!localStorage.username) {
+        this._saveToStorage(localStorage);
+      }
       if (options && options.success) {
         options.success();
+      }
+    },
+
+    _saveToStorage: function(storage) {
+      this._setStorageKey(storage, 'username', this.username);
+      this._setStorageKey(storage, 'password', this.password);
+    },
+
+    _setStorageKey: function(storage, key, value) {
+      if (value) {
+        storage[key] = value;
+      } else {
+        delete storage[key];
       }
     },
 
@@ -43,16 +60,7 @@ define(function(require) {
 
     save: function(attributes) {
       this.set(attributes);
-      this._setSessionStorage('username', this.get('username'));
-      this._setSessionStorage('password', this.get('password'));
-    },
-
-    _setSessionStorage: function(key, value) {
-      if (value) {
-        sessionStorage[key] = value;
-      } else {
-        delete sessionStorage[key];
-      }
+      this._saveToStorage(localStorage);
     },
 
     addAuthorizationToAjaxOptions: function(options) {

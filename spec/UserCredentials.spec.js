@@ -18,11 +18,16 @@ define(function(require) {
   var UserCredentials = require('models/UserCredentials');
 
   describe('UserCredentials', function() {
-    var realSessionStorage = sessionStorage;
     var credentials;
+    var realLocalStorage = localStorage;
+    var realSessionStorage = sessionStorage;
 
     beforeEach(function() {
       credentials = new UserCredentials();
+      Object.defineProperty(window, 'localStorage', {
+        value: {},
+        writable: true
+      });
       Object.defineProperty(window, 'sessionStorage', {
         value: {},
         writable: true
@@ -30,6 +35,7 @@ define(function(require) {
     });
 
     afterEach(function() {
+      window.localStorage = realLocalStorage;
       window.sessionStorage = realSessionStorage;
     });
 
@@ -55,6 +61,50 @@ define(function(require) {
         expect(credentials.password).toBe('bob');
       });
 
+      it('should fall back to localStorage if required', function() {
+        localStorage.username = 'bob@example.com';
+        localStorage.password = 'bob';
+        credentials.fetch();
+        expect(credentials.username).toBe('bob@example.com');
+        expect(credentials.password).toBe('bob');
+      });
+
+      it('should prefer sessionStorage over localStorage', function() {
+        sessionStorage.username = 'alice@example.com';
+        sessionStorage.password = 'alice';
+        localStorage.username = 'bob@example.com';
+        localStorage.password = 'bob';
+        credentials.fetch();
+        expect(credentials.username).toBe('alice@example.com');
+        expect(credentials.password).toBe('alice');
+      });
+
+      it('should store credentials in sessionStorage', function() {
+        localStorage.username = 'bob@example.com';
+        localStorage.password = 'bob';
+        credentials.fetch();
+        expect(sessionStorage.username).toBe('bob@example.com');
+        expect(sessionStorage.password).toBe('bob');
+      });
+
+      it('should store credentials in localStorage if it is empty', function() {
+        sessionStorage.username = 'bob@example.com';
+        sessionStorage.password = 'bob';
+        credentials.fetch();
+        expect(localStorage.username).toBe('bob@example.com');
+        expect(localStorage.password).toBe('bob');
+      });
+
+      it('should not change localStorage if it has credentials', function() {
+        localStorage.username = 'alice@example.com';
+        localStorage.password = 'alice';
+        sessionStorage.username = 'bob@example.com';
+        sessionStorage.password = 'bob';
+        credentials.fetch();
+        expect(localStorage.username).toBe('alice@example.com');
+        expect(localStorage.password).toBe('alice');
+      });
+
       it('should call success callback if supplied', function() {
         var success = jasmine.createSpy('success');
         sessionStorage.username = 'alice@example.com';
@@ -65,17 +115,17 @@ define(function(require) {
     });
 
     describe('save()', function() {
-      it('should store credentials into sessionStorage', function() {
+      it('should store credentials into localStorage', function() {
         credentials.save({username: 'bob@example.com', password: 'bob'});
-        expect(sessionStorage.username).toBe('bob@example.com');
-        expect(sessionStorage.password).toBe('bob');
+        expect(localStorage.username).toBe('bob@example.com');
+        expect(localStorage.password).toBe('bob');
       });
 
       it('should delete storage if credentials are cleared', function() {
         credentials.save({username: 'bob@example.com', password: 'bob'});
         credentials.save({username: null, password: null});
-        expect(sessionStorage.username).toBeUndefined();
-        expect(sessionStorage.password).toBeUndefined();
+        expect(localStorage.username).toBeUndefined();
+        expect(localStorage.password).toBeUndefined();
       });
     });
 
