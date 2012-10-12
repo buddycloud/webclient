@@ -51,11 +51,13 @@ define(function(require) {
 
     _doListen: function(options) {
       options = options || {};
-      var self = this;
-      options.complete = function() {
-        self._doListen(options);
-      };
-      this.fetch(options);
+      if (options.credentials && options.credentials.username) {
+        var self = this;
+        options.complete = function() {
+          setTimeout(self._doListen.bind(self, options), 0);
+        };
+        this.fetch(options);
+      }
     }
   });
 

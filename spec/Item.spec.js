@@ -38,9 +38,15 @@ define(function(require) {
       expect(item.replyTo).toBe('foo');
       expect(item.content).toBe('A post from Alice');
     });
+
     it('should use "published" as value for "updated" if unspecified', function() {
       item.set({updated: null});
       expect(item.updated).toBe(item.published);
+    });
+
+    it('should remove possible "acct:" prefix from author', function() {
+      item.set({author: 'acct:bob@example.com'});
+      expect(item.author).toBe('bob@example.com');
     });
 
     it('should have initially empty "comments" array', function() {

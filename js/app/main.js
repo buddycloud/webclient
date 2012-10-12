@@ -49,7 +49,7 @@ define(function(require) {
       user.credentials.save();
       route(user);
     });
-    user.login();
+    user.login({permanent: localStorage.loginPermanent === 'true'});
   }
 
   function route(user) {

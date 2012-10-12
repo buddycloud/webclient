@@ -55,7 +55,7 @@ define(function(require) {
     },
 
     _embedly: function() {
-      this.$('p').embedly({key: config.embedlyKey});
+      this.$('p').embedly({maxWidth: 400, key: config.embedlyKey});
     },
 
     _roleTag: function(username) {

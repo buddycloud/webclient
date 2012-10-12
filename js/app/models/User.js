@@ -51,12 +51,59 @@ define(function(require) {
       return this.subscribedChannels.channels();
     },
 
-    login: function() {
+    login: function(options) {
       if (this.isAnonymous()) {
         this.trigger('loginSuccess');
       } else {
-        this._tryFetchingSubscribedChannels();
+       var self = this;
+        this._tryFetchingSubscribedChannels({
+          error: function() {
+            self.trigger('loginError');
+          },
+          success: function() {
+            self._loginPermanent = options ? options.permanent : false;
+            if (!self._loginPermanent) {
+              self._increaseLoginCount();
+            }
+            self.trigger('loginSuccess');
+          }
+        });
       }
+    },
+
+    _tryFetchingSubscribedChannels: function(options) {
+       this.subscribedChannels = new SubscribedChannels(this.username);
+       this.subscribedChannels.fetch({
+         credentials: this.credentials,
+         success: options.success,
+         error: options.error
+      });
+    },
+
+    _increaseLoginCount: function() {
+      var count = localStorage.loginCount || 0;
+      count++;
+      localStorage.loginCount = count + '';
+    },
+
+    logout: function() {
+      if (!this.isAnonymous()) {
+        if (this._loginPermanent) {
+          this.credentials.save();
+        } else {
+          var newCount = this._decreaseLoginCount();
+          if (newCount == 0) {
+            this.credentials.save({username: null, password: null});
+          }
+        }
+      }
+    },
+
+    _decreaseLoginCount: function() {
+      var count = localStorage.loginCount || 0;
+      count = Math.max(count - 1, 0);
+      localStorage.loginCount = count + '';
+      return count;
     },
 
     register: function(username, password, email) {
@@ -95,16 +142,6 @@ define(function(require) {
 
       $.ajax(options);
     },
-
-    _tryFetchingSubscribedChannels: function() {
-       this.subscribedChannels = new SubscribedChannels(this.username);
-       var self = this;
-       this.subscribedChannels.fetch({
-         credentials: this.credentials,
-         success: function() { self.trigger('loginSuccess'); },
-         error: function() { self.trigger('loginError'); }
-      });
-    }
   });
 
   return User;

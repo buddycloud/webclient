@@ -37,10 +37,20 @@ define(function(require) {
     constructor: function(user) {
       Backbone.Router.call(this);
       this.user = user;
+      if (!this.user.isAnonymous()) {
+        this._logoutOnUnload();
+      }
     },
 
     initialize: function() {
       Events.on('navigate', this._navigate, this);
+    },
+
+    _logoutOnUnload: function() {
+      var user = this.user;
+      window.onbeforeunload = function() {
+        user.logout();
+      };
     },
 
     // It would be nice if we could wrap its route function
