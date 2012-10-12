@@ -59,6 +59,41 @@ define(function(require) {
       }
     },
 
+    _tryFetchingSubscribedChannels: function() {
+       this.subscribedChannels = new SubscribedChannels(this.username);
+       var self = this;
+       this.subscribedChannels.fetch({
+         credentials: this.credentials,
+         error: function() { self.trigger('loginError'); },
+         success: function() {
+           self._increaseLoginCount();
+           self.trigger('loginSuccess');
+         }
+      });
+    },
+
+    _increaseLoginCount: function() {
+      var count = localStorage.loginCount || 0;
+      count++;
+      localStorage.loginCount = count + '';
+    },
+
+    logout: function() {
+      if (!this.isAnonymous()) {
+        var newCount = this._decreaseLoginCount();
+        if (newCount == 0) {
+          this.credentials.save({username: null, password: null});
+        }
+      }
+    },
+
+    _decreaseLoginCount: function() {
+      var count = localStorage.loginCount || 0;
+      count = Math.max(count - 1, 0);
+      localStorage.loginCount = count + '';
+      return count;
+    },
+
     register: function(username, password, email) {
       if (username && password && email) {
         var self = this;
@@ -95,16 +130,6 @@ define(function(require) {
 
       $.ajax(options);
     },
-
-    _tryFetchingSubscribedChannels: function() {
-       this.subscribedChannels = new SubscribedChannels(this.username);
-       var self = this;
-       this.subscribedChannels.fetch({
-         credentials: this.credentials,
-         success: function() { self.trigger('loginSuccess'); },
-         error: function() { self.trigger('loginError'); }
-      });
-    }
   });
 
   return User;

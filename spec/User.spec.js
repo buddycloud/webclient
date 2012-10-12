@@ -19,9 +19,18 @@ define(function(require) {
 
   describe('User', function() {
     var user;
+    var realLocalStorage = localStorage;
 
     beforeEach(function() {
       user = new User;
+      Object.defineProperty(window, 'localStorage', {
+        value: {},
+        writable: true
+      });
+    });
+
+    afterEach(function() {
+      window.localStorage = realLocalStorage;
     });
 
     describe('login()', function() {
@@ -69,6 +78,48 @@ define(function(require) {
         user.credentials.set({username: 'bob@example.com', password: 'bob'});
         user.login();
         expect(user.trigger).toHaveBeenCalledWith('loginError');
+      });
+
+      it('should increase localStorage.loginCount on success', function() {
+        spyOn($, 'ajax').andCallFake(function(options) {
+          options.success();
+        });
+        user.credentials.set({username: 'bob@example.com', password: 'bob'});
+        localStorage.loginCount = '3';
+        user.login();
+        expect(localStorage.loginCount).toBe('4');
+      });
+    });
+
+    describe('logout()', function() {
+      beforeEach(function() {
+        user.credentials.set({username: 'bob@example.com', password: 'bob'});
+      });
+
+      it('should decrease localStorage.loginCount', function() {
+        localStorage.loginCount = '2';
+        user.logout();
+        expect(localStorage.loginCount).toBe('1');
+      });
+
+      it('should not decrease loginCount if user is anonymous', function() {
+        user.credentials.set({username: null, password: null});
+        localStorage.loginCount = '2';
+        user.logout();
+        expect(localStorage.loginCount).toBe('2');
+      });
+
+      it('should not decrease loginCount if it is already 0', function() {
+        localStorage.loginCount = '0';
+        user.logout();
+        expect(localStorage.loginCount).toBe('0');
+      });
+
+      it('should reset credentials if loginCount reaches 0', function() {
+        localStorage.loginCount = '1';
+        user.logout();
+        expect(localStorage.username).toBeUndefined();
+        expect(user.password).toBeUndefined();
       });
     });
 
