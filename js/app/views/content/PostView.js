@@ -20,6 +20,7 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var config = require('config');
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html');
 
@@ -28,7 +29,8 @@ define(function(require) {
     className: 'post',
     events: {
       'click .answer': '_expandAnswerArea',
-      'click .createComment': '_comment'
+      'click .createComment': '_comment',
+      'click .avatar': '_redirect'
     },
 
     initialize: function() {
@@ -113,6 +115,11 @@ define(function(require) {
       if(textArea.val() === ""){
         area.removeClass('write');
       }
+    },
+
+    _redirect: function(event) {
+      var jid = this.$(event.currentTarget).parent().find('.jid').text();
+      Events.trigger('navigate', jid);
     },
 
     _enableButton: function() {
