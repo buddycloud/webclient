@@ -32,7 +32,7 @@ define(function(require) {
   function linkUrls(content) {
     return content.replace(
       URL_REGEX,
-      '<a href="$&" target="_blank">$&</a>'
+      '<a href="$&" target="_blank" rel="nofollow">$&</a>'
     );
   }
 
