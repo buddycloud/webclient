@@ -40,13 +40,13 @@ define(function(require) {
           'channel_default_role': 'default_affiliation' 
         };
       this.model.bind('change', this.render, this);
+      this.model.bind('sync', this.render, this);
     },
 
     render: function() {
       this.$el.html(_.template(template, {
         metadata: this.model
       }));
-
       if (this.model) {
         this._fillCheckbox();
         this._selectDefaultRole();
@@ -75,7 +75,7 @@ define(function(require) {
 
     _selectDefaultRole: function() {
       if (this.model.defaultAffiliation() === 'publisher') {
-        $('#channel_default_role').val('followerPlus');
+        this.$('#channel_default_role').val('followerPlus');
       }
     },
 
@@ -149,7 +149,7 @@ define(function(require) {
       var textFields = ['channel_name', 'channel_status'];
       for (var i = 0; i < textFields.length; i++) {
         var content = this.$('#' + textFields[i]).val();
-        this.model.set(this.fields[textFields[i]], content);
+        this.model.set(this.fields[textFields[i]], content, {silent: true});
       }
     },
 
@@ -165,18 +165,18 @@ define(function(require) {
     _setAccessModel: function() {
       var accessField = this.fields['channel_public_access'];
       if (this._isChecked(this.$('#channel_public_access'))) {
-        this.model.set(accessField, 'open');  
+        this.model.set(accessField, 'open', {silent: true});  
       } else {
-        this.model.set(accessField, 'whitelist');
+        this.model.set(accessField, 'whitelist', {silent: true});
       }
     },
 
     _setDefaultRole: function() {
       var defaultRoleField = this.fields['channel_default_role'];
       if (this.$('#channel_default_role').val() == 'followerPlus') {
-        this.model.set(defaultRoleField, 'publisher');  
-      } else {
-        this.model.set(defaultRoleField, 'member');
+        this.model.set(defaultRoleField, 'publisher', {silent: true});  
+      } else if (this.$('#channel_default_role').val() == 'follower') {
+        this.model.set(defaultRoleField, 'member', {silent: true});
       }      
     }
   });
