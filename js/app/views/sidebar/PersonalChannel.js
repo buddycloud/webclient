@@ -26,8 +26,8 @@ define(function(require) {
     events:  
       {
         'click .metadata': '_navigate',
-        'click .settings': '_showSettings',
-        'click .settings li': '_hideSettings',
+        'click .settings': 'showSettings',
+        'click .showSettings' : 'hideSettings',
         'click .preferences': '_showPrefs'
       },
 
@@ -35,6 +35,8 @@ define(function(require) {
       this.metadata = new ChannelMetadata(this.model.username);
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
+
+      _.bindAll(this, 'showSettings', 'hideSettings');
     },
 
     render: function() {
@@ -61,12 +63,19 @@ define(function(require) {
       Events.trigger('navigate', 'prefs');
     },
 
-    _showSettings: function() {
-      this.$('.settings').toggleClass('showSettings');
+    showSettings: function() {
+      event.stopPropagation();
+      this.$('.settings').removeClass('noSelect').addClass('showSettings');
+
+      // Hide settings clicking elsewhere
+      $('body, html').on('click', this.hideSettings);
     },
 
-    _hideSettings: function() {
-      this.$('.settings').toggleClass('noSelect');
+    hideSettings: function() {
+      this.$('.settings').removeClass('showSettings').addClass('noSelect');
+
+      // Remove click event
+      $('body, html').off('click', this.hideSettings);
     }
   });
 
