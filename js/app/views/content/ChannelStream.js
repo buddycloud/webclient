@@ -32,7 +32,10 @@ define(function(require) {
       this._postViews = [];
       this.model.items.bind('reset', this._getAndRenderPosts, this);
       this.model.items.bind('addPost', this._showPost, this);
-      this.options.user.subscribedChannels.bind('sync', this._checkPosting, this);
+
+      if (this.options.user.subscribedChannels) { 
+        this.options.user.subscribedChannels.bind('sync', this._checkPosting, this); 
+      }
     },
 
     _checkPosting: function(action) {

@@ -24,7 +24,7 @@ define(function(require) {
     className: 'sidebar',
 
     initialize: function() {
-      this.personalChannel = new PersonalChannel({model: this.model.credentials});
+      this.personalChannel = new PersonalChannel({model: this.model});
       this.actionBar = new ActionBar();
       this.channels = new Channels({model: this.model});
       this.render();

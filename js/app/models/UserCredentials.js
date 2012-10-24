@@ -27,16 +27,16 @@ define(function(require) {
         username: sessionStorage.username || localStorage.username,
         password: sessionStorage.password || localStorage.password
       });
-      this._saveToStorage(sessionStorage);
+      this.saveToStorage(sessionStorage);
       if (!localStorage.username) {
-        this._saveToStorage(localStorage);
+        this.saveToStorage(localStorage);
       }
       if (options && options.success) {
         options.success();
       }
     },
 
-    _saveToStorage: function(storage) {
+    saveToStorage: function(storage) {
       this._setStorageKey(storage, 'username', this.username);
       this._setStorageKey(storage, 'password', this.password);
     },
@@ -60,7 +60,7 @@ define(function(require) {
 
     save: function(attributes) {
       this.set(attributes);
-      this._saveToStorage(localStorage);
+      this.saveToStorage(localStorage);
     },
 
     addAuthorizationToAjaxOptions: function(options) {
