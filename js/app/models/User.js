@@ -72,8 +72,7 @@ define(function(require) {
     },
 
     logout: function() {
-      this.credentials.save({username: null, password: null});
-      this.credentials.saveToStorage(sessionStorage);
+      this.credentials.save({username: null, password: null}, {permanent: true});
     },
 
     _tryFetchingSubscribedChannels: function(options) {
