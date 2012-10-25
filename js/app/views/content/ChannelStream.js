@@ -51,9 +51,10 @@ define(function(require) {
     // http://backbonetutorials.com/infinite-scrolling/
 
     checkScroll: function() {
-      var triggerPoint = 600; // 600px from the bottom
+      var content = $('.content');
+      var triggerPoint = 100; // 100px from the bottom
 
-      if(!this.isLoading && ($('.content').scrollTop() + triggerPoint > this.$el.height())) {
+      if(!this.isLoading && (content.scrollTop() + content.prop('clientHeight') + triggerPoint > content.prop('scrollHeight'))) {
         var self = this;
         this.isLoading = true;
         this.model.items.fetch({
