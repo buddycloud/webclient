@@ -17,6 +17,7 @@
 define(function(require) {
   var $ = require('jquery');
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
   var avatarFallback = require('util/avatarFallback');
@@ -25,16 +26,42 @@ define(function(require) {
     className: 'stream clearfix',
     events: {
       'click .newTopic': '_expandNewTopicArea',
-      'click .createComment': '_post',
+      'click .createComment': '_post'
     },
 
     initialize: function() {
+      this.isLoading = false;
       this._postViews = [];
       this.model.items.bind('reset', this._getAndRenderPosts, this);
-      this.model.items.bind('addPost', this._showPost, this);
+      this.model.items.bind('addPost', this._prependPost, this);
 
       if (this.options.user.subscribedChannels) { 
         this.options.user.subscribedChannels.bind('sync', this._checkPosting, this); 
+      }
+
+      // Scroll event
+      _.bindAll(this, 'checkScroll');
+      $('.content').scroll(this.checkScroll);
+
+      // Loaded new items event
+      Events.on('newItems', this._appendPosts, this);
+    },
+
+    // Thanks to Thomas Davis
+    // http://backbonetutorials.com/infinite-scrolling/
+
+    checkScroll: function() {
+      var triggerPoint = 600; // 600px from the bottom
+
+      if(!this.isLoading && ($('.content').scrollTop() + triggerPoint > this.$el.height())) {
+        var self = this;
+        this.isLoading = true;
+        this.model.items.fetch({
+          success: function(items) {
+            Events.trigger('newItems', items.models);
+            self.isLoading = false;
+          }
+        });
       }
     },
 
@@ -77,12 +104,22 @@ define(function(require) {
       return view;
     },
 
-    _showPost: function(post) {
+    _prependPost: function(post) {
       var view = this._viewForPost(post);
       this._postViews.unshift(view);
       view.render();
       avatarFallback(view.$('.avatar'), 'personal', 50);
       this.$('.posts').prepend(view.el);
+    },
+
+    _appendPosts: function(posts) {
+      for (var i = 0; i < posts.length; i++) {
+        var view = this._viewForPost(posts[i]);
+        this._postViews.push(view);
+        view.render();
+        this.$('.posts').append(view.el);
+      }
+      avatarFallback(view.$('.avatar'), 'personal', 50);
     },
 
     render: function() {
