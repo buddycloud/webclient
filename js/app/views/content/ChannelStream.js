@@ -58,15 +58,25 @@ define(function(require) {
         var lastItem = this.model.items.lastItem();
 
         if (lastItem) {
+          this._showSpinner();
           this.model.items.fetch({
             data: {after: lastItem},
             success: function() {
               self._appendPosts();
+              self._hideSpinner();
               self.isLoading = false;
             }
           });
         }
       }
+    },
+
+    _hideSpinner: function() {
+      this.$('.loader').hide();
+    },
+
+    _showSpinner: function() {
+      this.$('.loader').show();
     },
 
     _subscribeAction: function(action) {
@@ -134,6 +144,7 @@ define(function(require) {
       }
       this._showPosts();
       this._postOnCtrlEnter();
+      this._hideSpinner();
     },
 
     _userCanPost: function() {
