@@ -18,6 +18,7 @@ define(function(require) {
   var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var template = require('text!templates/content/editHeader.html')
 
   var ChannelHeader = Backbone.View.extend({
