@@ -32,6 +32,11 @@ define(function(require) {
       this.options.user.subscribedChannels.bind('sync', this._switchButton, this);
     },
 
+    destroy: function() {
+      this.options.user.subscribedChannels.unbind('sync', this._switchButton, this);
+      this.remove();
+    },
+
     render: function() {
       var metadata = this.model.metadata;
       this.$el.html(_.template(template, {metadata: metadata}));
@@ -117,7 +122,7 @@ define(function(require) {
 
       // Disable button
       this.$('.unfollow').toggleClass('disabled');
-    }    
+    }
   });
 
   return ChannelHeader;

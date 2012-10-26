@@ -27,6 +27,11 @@ define(function(require) {
       this.options.user.subscribedChannels.bind('sync', this._updateFollowersList, this);
     },
 
+    destroy: function() {
+      this.options.user.subscribedChannels.unbind('sync', this._updateFollowersList, this);
+      this.remove();
+    },
+
     _updateFollowersList: function(action) {
       if (this._isInitialized()) {
         var username = this.options.user.username();

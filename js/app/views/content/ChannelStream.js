@@ -35,6 +35,11 @@ define(function(require) {
       this.options.user.subscribedChannels.bind('sync', this._checkPosting, this);
     },
 
+    destroy: function() {
+      this.options.user.subscribedChannels.unbind('sync', this._checkPosting, this);
+      this.remove();
+    },
+
     _checkPosting: function(action) {
       if (action === 'subscribedChannel') {
         var defaultRole = this.model.metadata.defaultAffiliation();
