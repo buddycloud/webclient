@@ -24,7 +24,9 @@ define(function(require) {
     events: {'click .infoToggle': '_toggleInfo'},
 
     initialize: function() {
-      this.options.user.subscribedChannels.bind('sync', this._updateFollowersList, this);
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.bind('sync', this._updateFollowersList, this);
+      }
     },
 
     destroy: function() {

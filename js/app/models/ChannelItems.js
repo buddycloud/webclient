@@ -45,6 +45,11 @@ define(function(require) {
       return api.url(this.channel, 'content', 'posts');
     },
 
+    lastItem: function() {
+      var lastItem = _.last(_.values(this.models));
+      return lastItem ? lastItem.id : null;
+    },
+
     fetch: function(options) {
       // Explicitly set "Accept: application/json" so that we get the
       // JSON representation instead of an Atom feed.

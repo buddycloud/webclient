@@ -58,9 +58,13 @@ define(function(require) {
       }
     },
 
-    save: function(attributes) {
+    save: function(attributes, options) {
       this.set(attributes);
       this._saveToStorage(localStorage);
+
+      if (options && options.permanent) {
+        this._saveToStorage(sessionStorage);
+      }
     },
 
     addAuthorizationToAjaxOptions: function(options) {

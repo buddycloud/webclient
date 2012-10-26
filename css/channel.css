@@ -635,6 +635,7 @@
 .post .comments .avatar {
   top: 13px;
   left: 36px;
+  height: 34px;
   width: 34px;
   border-radius: 2px;
 }

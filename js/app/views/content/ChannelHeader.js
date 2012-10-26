@@ -29,7 +29,9 @@ define(function(require) {
              'click .edit': '_edit'},
 
     initialize: function() {
-      this.options.user.subscribedChannels.bind('sync', this._switchButton, this);
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.bind('sync', this._switchButton, this);
+      }
     },
 
     destroy: function() {

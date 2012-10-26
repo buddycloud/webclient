@@ -17,40 +17,93 @@
 define(function(require) {
   var $ = require('jquery');
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
-  var avatarFallback = require('util/avatarFallback');
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
     events: {
       'click .newTopic': '_expandNewTopicArea',
-      'click .createComment': '_post',
+      'click .createComment': '_post'
     },
 
     initialize: function() {
+      this.isLoading = false;
       this._postViews = [];
       this.model.items.bind('reset', this._getAndRenderPosts, this);
-      this.model.items.bind('addPost', this._showPost, this);
-      this.options.user.subscribedChannels.bind('sync', this._checkPosting, this);
+      this.model.items.bind('addPost', this._prependNewPost, this);
+
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.bind('sync', this._subscribeAction, this);
+      }
+
+      // Scroll event
+      _.bindAll(this, 'checkScroll');
+      $('.content').scroll(this.checkScroll);
+    },
+
+    // Thanks to Thomas Davis
+    // http://backbonetutorials.com/infinite-scrolling/
+
+    checkScroll: function() {
+      var content = $('.content');
+      var triggerPoint = 200; // 200px from the bottom
+
+      if(!this.isLoading && (content.scrollTop() + content.prop('clientHeight') + triggerPoint > content.prop('scrollHeight'))) {
+        var self = this;
+        this.isLoading = true;
+
+        // Last loaded post id
+        var lastItem = this.model.items.lastItem();
+
+        if (lastItem) {
+          this._showSpinner();
+          this.model.items.fetch({
+            data: {after: lastItem},
+            silent: true,
+            success: function() {
+              self._appendPosts();
+              self._hideSpinner();
+              self.isLoading = false;
+            }
+          });
+        }
+      }
+    },
+
+    _hideSpinner: function() {
+      this.$('.loader').hide();
     },
 
     destroy: function() {
-      this.options.user.subscribedChannels.unbind('sync', this._checkPosting, this);
+      this.options.user.subscribedChannels.unbind('sync', this._subscribeAction, this);
       this.remove();
     },
 
-    _checkPosting: function(action) {
+    _showSpinner: function() {
+      this.$('.loader').show();
+    },
+
+    _subscribeAction: function(action) {
       if (action === 'subscribedChannel') {
+        // Followed the channel
         var defaultRole = this.model.metadata.defaultAffiliation();
         if (defaultRole === 'publisher') {
           this.$('.newTopic').show();
         }
       } else {
+        // Unfollowed the channel
         this.$('.newTopic').hide();
       }
 
       this._renderPosts();
+    },
+
+    _renderPosts: function() {
+      _.each(this._postViews, function(view) {
+        view.render();
+      });
     },
 
     _getAndRenderPosts: function() {
@@ -63,11 +116,15 @@ define(function(require) {
       this._renderPosts();
     },
 
-    _renderPosts: function() {
-      _.each(this._postViews, function(view) {
+    _appendPosts: function() {
+      var posts = this.model.items.posts();
+      var self = this;
+      _.each(posts, function(post) {
+        var view = self._viewForPost(post);
+        self._postViews.push(view);
         view.render();
+        this.$('.posts').append(view.el);
       });
-      avatarFallback(this.$('.avatar'), 'personal', 50);
     },
 
     _viewForPost: function(post) {
@@ -79,11 +136,10 @@ define(function(require) {
       return view;
     },
 
-    _showPost: function(post) {
+    _prependNewPost: function(post) {
       var view = this._viewForPost(post);
       this._postViews.unshift(view);
       view.render();
-      avatarFallback(view.$('.avatar'), 'personal', 50);
       this.$('.posts').prepend(view.el);
     },
 
@@ -92,9 +148,9 @@ define(function(require) {
       if (!this._userCanPost()) {
         this.$('.newTopic').hide();
       }
-      avatarFallback(this.$('.avatar'), 'personal', 50);
       this._showPosts();
       this._postOnCtrlEnter();
+      this._hideSpinner();
     },
 
     _userCanPost: function() {

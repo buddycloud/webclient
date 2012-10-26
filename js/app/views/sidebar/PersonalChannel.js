@@ -25,14 +25,15 @@ define(function(require) {
     className: 'personal channel',
     events:
       {
+        'click .logout': '_logout',
         'click .metadata': '_navigate',
-        'click .settings': 'showSettings',
+        'click .noSelect': 'showSettings',
         'click .showSettings' : 'hideSettings',
         'click .preferences': '_showPrefs'
       },
 
     initialize: function() {
-      this.metadata = new ChannelMetadata(this.model.username);
+      this.metadata = new ChannelMetadata(this.model.username());
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
 
@@ -46,6 +47,11 @@ define(function(require) {
       avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);
     },
 
+    _logout: function() {
+      this.model.logout();
+      location.reload();
+    },
+
     selectChannel: function(channel) {
       this.selected = (this.metadata.channel === channel);
       if (this.selected) {
@@ -56,7 +62,7 @@ define(function(require) {
     },
 
     _navigate: function() {
-      Events.trigger('navigate', this.model.username);
+      Events.trigger('navigate', this.model.username());
     },
 
     _showPrefs: function() {
