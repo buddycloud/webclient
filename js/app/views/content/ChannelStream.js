@@ -20,7 +20,6 @@ define(function(require) {
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
-  var avatarFallback = require('util/avatarFallback');
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -89,7 +88,6 @@ define(function(require) {
       _.each(this._postViews, function(view) {
         view.render();
       });
-      avatarFallback(this.$('.avatar'), 'personal', 50);
     },
 
     _getAndRenderPosts: function() {
@@ -109,8 +107,7 @@ define(function(require) {
         var view = self._viewForPost(post);
         self._postViews.push(view);
         view.render();
-        this.$('.posts').append(view.el);
-        avatarFallback(view.$('.avatar'), 'personal', 50);        
+        this.$('.posts').append(view.el);     
       });
     },
 
@@ -127,7 +124,6 @@ define(function(require) {
       var view = this._viewForPost(post);
       this._postViews.unshift(view);
       view.render();
-      avatarFallback(view.$('.avatar'), 'personal', 50);
       this.$('.posts').prepend(view.el);
     },
 
@@ -136,7 +132,6 @@ define(function(require) {
       if (!this._userCanPost()) {
         this.$('.newTopic').hide();
       }
-      avatarFallback(this.$('.avatar'), 'personal', 50);
       this._showPosts();
       this._postOnCtrlEnter();
     },
