@@ -33,18 +33,15 @@ define(function(require) {
       this.isLoading = false;
       this._postViews = [];
       this.model.items.bind('reset', this._getAndRenderPosts, this);
-      this.model.items.bind('addPost', this._prependPost, this);
+      this.model.items.bind('addPost', this._prependNewPost, this);
 
       if (this.options.user.subscribedChannels) { 
-        this.options.user.subscribedChannels.bind('sync', this._checkPosting, this); 
+        this.options.user.subscribedChannels.bind('sync', this._subscribeAction, this); 
       }
 
       // Scroll event
       _.bindAll(this, 'checkScroll');
       $('.content').scroll(this.checkScroll);
-
-      // Loaded new items event
-      Events.on('newItems', this._appendPosts, this);
     },
 
     // Thanks to Thomas Davis
@@ -57,26 +54,42 @@ define(function(require) {
       if(!this.isLoading && (content.scrollTop() + content.prop('clientHeight') + triggerPoint > content.prop('scrollHeight'))) {
         var self = this;
         this.isLoading = true;
-        this.model.items.fetch({
-          success: function(items) {
-            Events.trigger('newItems', items.models);
-            self.isLoading = false;
-          }
-        });
+        
+        // Last loaded post id
+        var lastItem = this.model.items.lastItem();
+
+        if (lastItem) {
+          this.model.items.fetch({
+            data: {after: lastItem},
+            success: function() {
+              self._appendPosts();
+              self.isLoading = false;
+            }
+          });
+        }
       }
     },
 
-    _checkPosting: function(action) {
+    _subscribeAction: function(action) {
       if (action === 'subscribedChannel') {
+        // Followed the channel
         var defaultRole = this.model.metadata.defaultAffiliation();
         if (defaultRole === 'publisher') {
           this.$('.newTopic').show();
         }
       } else {
+        // Unfollowed the channel
         this.$('.newTopic').hide();
       }
 
       this._renderPosts();
+    },
+
+    _renderPosts: function() {
+      _.each(this._postViews, function(view) {
+        view.render();
+      });
+      avatarFallback(this.$('.avatar'), 'personal', 50);
     },
 
     _getAndRenderPosts: function() {
@@ -89,11 +102,16 @@ define(function(require) {
       this._renderPosts();
     },
 
-    _renderPosts: function() {
-      _.each(this._postViews, function(view) {
+    _appendPosts: function() {
+      var posts = this.model.items.posts();
+      var self = this;
+      _.each(posts, function(post) {
+        var view = self._viewForPost(post);
+        self._postViews.push(view);
         view.render();
+        this.$('.posts').append(view.el);
+        avatarFallback(view.$('.avatar'), 'personal', 50);        
       });
-      avatarFallback(this.$('.avatar'), 'personal', 50);
     },
 
     _viewForPost: function(post) {
@@ -105,22 +123,12 @@ define(function(require) {
       return view;
     },
 
-    _prependPost: function(post) {
+    _prependNewPost: function(post) {
       var view = this._viewForPost(post);
       this._postViews.unshift(view);
       view.render();
       avatarFallback(view.$('.avatar'), 'personal', 50);
       this.$('.posts').prepend(view.el);
-    },
-
-    _appendPosts: function(posts) {
-      for (var i = 0; i < posts.length; i++) {
-        var view = this._viewForPost(posts[i]);
-        this._postViews.push(view);
-        view.render();
-        this.$('.posts').append(view.el);
-      }
-      avatarFallback(view.$('.avatar'), 'personal', 50);
     },
 
     render: function() {

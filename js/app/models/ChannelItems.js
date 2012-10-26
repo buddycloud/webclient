@@ -26,10 +26,6 @@ define(function(require) {
     constructor: function(channel) {
       CollectionBase.call(this);
       this.channel = channel;
-
-      // Max items per query
-      this.max = 50;
-
       this.bind('add', this._itemAdded, this);
     },
 
@@ -46,15 +42,10 @@ define(function(require) {
     },
 
     url: function() {
-      return api.url(this.channel, 'content', 'posts') + this._urlParameters();
+      return api.url(this.channel, 'content', 'posts');
     },
 
-    _urlParameters: function() {
-      var last = this._lastItem();
-      return '?max=' + this.max + (last ? '&after=' + last : '');
-    },
-
-    _lastItem: function() {
+    lastItem: function() {
       var lastItem = _.last(_.values(this.models));
       return lastItem ? lastItem.id : null;
     },
