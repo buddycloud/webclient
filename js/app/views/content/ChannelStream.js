@@ -61,6 +61,7 @@ define(function(require) {
           this._showSpinner();
           this.model.items.fetch({
             data: {after: lastItem},
+            silent: true,
             success: function() {
               self._appendPosts();
               self._hideSpinner();

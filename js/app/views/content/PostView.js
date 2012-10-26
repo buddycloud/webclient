@@ -44,7 +44,7 @@ define(function(require) {
         roleTag: this._roleTag.bind(this),
         linkify: linkify
       }));
-      avatarFallback(this.$el.find('.avatar'), 'personal', 50);
+      avatarFallback(this.$('.avatar'), 'personal', 50);
       this._showPostTime();
       this._embedly();
       this._addNoCommentsClassIfNeeded();
