@@ -38,6 +38,15 @@ define(function(require) {
       this.metadata.fetch();
 
       _.bindAll(this, 'showSettings', 'hideSettings');
+
+      // Avatar changed event
+      Events.on('avatarChanged', this._avatarChanged, this);
+    },
+
+    _avatarChanged: function(channel) {
+      if (channel === this.model.username()) {
+        this.render();
+      }
     },
 
     render: function() {

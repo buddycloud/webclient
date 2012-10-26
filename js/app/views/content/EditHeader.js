@@ -26,6 +26,9 @@ define(function(require) {
     initialize: function() {
       this.model.bind('change', this.render, this);
       this.model.fetch();
+
+      // Avatar changed event
+      Events.on('avatarChanged', this.render, this);
     },
 
     render: function() {
