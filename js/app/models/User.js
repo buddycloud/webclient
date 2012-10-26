@@ -71,6 +71,10 @@ define(function(require) {
       }
     },
 
+    logout: function() {
+      this.credentials.save({username: null, password: null}, {permanent: true});
+    },
+
     _tryFetchingSubscribedChannels: function(options) {
        this.subscribedChannels = new SubscribedChannels(this.username);
        this.subscribedChannels.fetch({
@@ -86,7 +90,7 @@ define(function(require) {
       localStorage.loginCount = count + '';
     },
 
-    logout: function() {
+    endSession: function() {
       if (!this.isAnonymous()) {
         if (this._loginPermanent) {
           this.credentials.save();

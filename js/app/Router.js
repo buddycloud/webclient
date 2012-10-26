@@ -38,7 +38,7 @@ define(function(require) {
       Backbone.Router.call(this);
       this.user = user;
       if (!this.user.isAnonymous()) {
-        this._logoutOnUnload();
+        this._endSessionOnUnload();
       }
     },
 
@@ -46,10 +46,10 @@ define(function(require) {
       Events.on('navigate', this._navigate, this);
     },
 
-    _logoutOnUnload: function() {
+    _endSessionOnUnload: function() {
       var user = this.user;
       window.onbeforeunload = function() {
-        user.logout();
+        user.endSession();
       };
     },
 
