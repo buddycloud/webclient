@@ -25,12 +25,12 @@ define(function(require) {
 
     initialize: function() {
       if (this.options.user.subscribedChannels) {
-        this.options.user.subscribedChannels.bind('sync', this._updateFollowersList, this);
+        this.options.user.subscribedChannels.bind('subscriptionSync', this._updateFollowersList, this);
       }
     },
 
     destroy: function() {
-      this.options.user.subscribedChannels.unbind('sync', this._updateFollowersList, this);
+      this.options.user.subscribedChannels.unbind('subscriptionSync', this._updateFollowersList, this);
       this.remove();
     },
 

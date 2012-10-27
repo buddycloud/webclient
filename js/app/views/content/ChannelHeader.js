@@ -30,12 +30,12 @@ define(function(require) {
 
     initialize: function() {
       if (this.options.user.subscribedChannels) {
-        this.options.user.subscribedChannels.bind('sync', this._switchButton, this);
+        this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
       }
     },
 
     destroy: function() {
-      this.options.user.subscribedChannels.unbind('sync', this._switchButton, this);
+      this.options.user.subscribedChannels.unbind('subscriptionSync', this._switchButton, this);
       this.remove();
     },
 

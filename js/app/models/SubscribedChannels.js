@@ -47,7 +47,7 @@ define(function(require) {
       var self = this;
       this.set(channel + '/' + node, role, {silent: true});
       this._saveChangedAttributes(credentials, function() {
-        self.trigger('sync', 'subscribedChannel', channel, role);
+        self.trigger('subscriptionSync', 'subscribedChannel', channel, role);
         self.change();
       });
     },
@@ -58,7 +58,7 @@ define(function(require) {
       this.set(channelAndNode, 'none', {silent: true});
       this._saveChangedAttributes(credentials, function() {
         delete self.attributes[channelAndNode];
-        self.trigger('sync', 'unsubscribedChannel', channel);
+        self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
         self.change();
       });
     },
