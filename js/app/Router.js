@@ -62,6 +62,11 @@ define(function(require) {
       if (this.currentPage) {
         this.currentPage.destroy();
       }
+      this._showSpinner();
+    },
+
+    _showSpinner: function() {
+      $('.content').html('<span class="loading"><span class="spinner"></span></span>');
     },
 
     _navigate: function(path) {
