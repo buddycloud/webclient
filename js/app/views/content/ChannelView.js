@@ -48,6 +48,12 @@ define(function(require) {
       $centered.append(this.details.el);
       this.$el.append(this.header.el);
       this.$el.append($centered);
+    },
+
+    destroy: function() {
+      this.header.destroy();
+      this.stream.destroy();
+      this.details.destroy();
     }
   });
 

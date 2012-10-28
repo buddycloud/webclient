@@ -34,13 +34,18 @@ define(function(require) {
       this.model.items.bind('reset', this._getAndRenderPosts, this);
       this.model.items.bind('addPost', this._prependNewPost, this);
 
-      if (this.options.user.subscribedChannels) { 
-        this.options.user.subscribedChannels.bind('sync', this._subscribeAction, this); 
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
       }
 
       // Scroll event
       _.bindAll(this, 'checkScroll');
       $('.content').scroll(this.checkScroll);
+    },
+
+    destroy: function() {
+      this.options.user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
+      this.remove();
     },
 
     // Thanks to Thomas Davis
@@ -53,7 +58,7 @@ define(function(require) {
       if(!this.isLoading && (content.scrollTop() + content.prop('clientHeight') + triggerPoint > content.prop('scrollHeight'))) {
         var self = this;
         this.isLoading = true;
-        
+
         // Last loaded post id
         var lastItem = this.model.items.lastItem();
 
@@ -118,7 +123,7 @@ define(function(require) {
         var view = self._viewForPost(post);
         self._postViews.push(view);
         view.render();
-        this.$('.posts').append(view.el);     
+        this.$('.posts').append(view.el);
       });
     },
 

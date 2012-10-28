@@ -59,6 +59,14 @@ define(function(require) {
       if (!this.user.isAnonymous() && !this.sidebar) {
         this.sidebar = new SidebarPage({model: this.user});
       }
+      if (this.currentPage) {
+        this.currentPage.destroy();
+      }
+      this._showSpinner();
+    },
+
+    _showSpinner: function() {
+      $('.content').html('<span class="loading"><span class="spinner"></span></span>');
     },
 
     _navigate: function(path) {
@@ -80,12 +88,12 @@ define(function(require) {
 
     explore: function() {
       this._before();
-      new ExplorePage({user: this.user});
+      this.currentPage = new ExplorePage({user: this.user});
     },
 
     preferences: function() {
       this._before();
-      new PreferencesPage({user: this.user});
+      this.currentPage = new PreferencesPage({user: this.user});
     },
 
     channel: function(channel) {
@@ -93,12 +101,12 @@ define(function(require) {
       if (this.sidebar) {
         this.sidebar.selectChannel(channel);
       }
-      new ChannelPage({channel: channel, user: this.user});
+      this.currentPage = new ChannelPage({channel: channel, user: this.user});
     },
 
     channelEdit: function(channel) {
       this._before();
-      new EditChannelPage({channel: channel, user: this.user});
+      this.currentPage = new EditChannelPage({channel: channel, user: this.user});
     }
   });
 

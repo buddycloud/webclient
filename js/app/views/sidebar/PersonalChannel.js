@@ -1,4 +1,4 @@
-/*
+  /*
  * Copyright 2012 Denis Washington <denisw@online.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ define(function(require) {
 
   var PersonalChannel = Backbone.View.extend({
     className: 'personal channel',
-    events:  
+    events:
       {
         'click .logout': '_logout',
         'click .metadata': '_navigate',
@@ -62,7 +62,7 @@ define(function(require) {
     },
 
     selectChannel: function(channel) {
-      this.selected = (this.metadata.channel == channel);
+      this.selected = (this.metadata.channel === channel);
       if (this.selected) {
         this.$el.addClass('selected');
       } else {
@@ -78,7 +78,7 @@ define(function(require) {
       Events.trigger('navigate', 'prefs');
     },
 
-    showSettings: function() {
+    showSettings: function(event) {
       event.stopPropagation();
       this.$('.settings').removeClass('noSelect').addClass('showSettings');
 

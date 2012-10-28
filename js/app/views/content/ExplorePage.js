@@ -41,8 +41,13 @@ define(function(require) {
       $('.content').html(this.el);
     },
 
+    destroy: function() {
+      this.searchbar.remove();
+      this.discover.remove();
+      this.remove();
+    },
+
     _renderSearch: function() {
-      // Remember: Backbone 0.9.2 stable version has a memory issue on remove()
       this.discover.remove();
       if (!this.$el.find(this.search).length) {
         this.$el.append(this.search.el);
