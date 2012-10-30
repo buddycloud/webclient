@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,19 @@ define(function(require) {
   var DiscoverView = Backbone.View.extend({
     className: 'discoverChannels clearfix',
 
+    initialize: function() {
+      this.model.bind('fetch', this.render, this);
+      this.model.doDiscover(this.options.user.username());
+    },
+
     render: function() {
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(template, {
+        mostActive: this.model.mostActive.models,
+        popular: this.model.recommendations.models
+      }));
+      avatarFallback(this.$('.avatar'), undefined, 50);
       if (this.options.user.isAnonymous()) {
-        this.$('.follow').hide();
+        this.$('.follow').removeClass('callToAction').addClass('disabled');
       }
     }
   });

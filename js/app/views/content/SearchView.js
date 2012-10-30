@@ -33,7 +33,7 @@ define(function(require) {
       }));
       avatarFallback(this.$('.avatar'), undefined, 50);
       if (this.options.user.isAnonymous()) {
-        this.$('.follow').hide();
+        this.$('.follow').removeClass('callToAction').addClass('disabled');
       }
     }
   });

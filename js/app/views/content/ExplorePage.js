@@ -16,6 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var Discover = require('models/Discover');
   var DiscoverView = require('views/content/DiscoverView');
   var Search = require('models/Search');
   var SearchBar = require('views/content/SearchBar');
@@ -25,27 +26,35 @@ define(function(require) {
     className: 'discoverPage clearfix',
 
     initialize: function() {
-      this.model = new Search();
-      this.discover = new DiscoverView({user: this.options.user});
-      this.searchbar = new SearchBar({model: this.model});
-      this.search = new SearchView({model: this.model, user: this.options.user});
-      this.model.bind('fetch', this._renderSearch, this);
+      this._initDiscover();
+      this._initSearch();
       this.render();
+    },
+
+    _initDiscover: function() {
+      this.discoverModel = new Discover();
+      this.discoverView = new DiscoverView({model: this.discoverModel, user: this.options.user});
+    },
+
+    _initSearch: function() {
+      this.searchModel = new Search();
+      this.searchbar = new SearchBar({model: this.searchModel});
+      this.searchView = new SearchView({model: this.searchModel, user: this.options.user});
+      this.searchModel.bind('fetch', this._renderSearch, this);
     },
 
     render: function() {
       this.searchbar.render();
-      this.discover.render();
       this.$el.append(this.searchbar.el);
-      this.$el.append(this.discover.el);
+      this.$el.append(this.discoverView.el);
       $('.content').html(this.el);
     },
 
     _renderSearch: function() {
       // Remember: Backbone 0.9.2 stable version has a memory issue on remove()
-      this.discover.remove();
-      if (!this.$el.find(this.search).length) {
-        this.$el.append(this.search.el);
+      this.discoverView.remove();
+      if (!this.$el.find(this.searchView).length) {
+        this.$el.append(this.searchView.el);
       }
     }
   });

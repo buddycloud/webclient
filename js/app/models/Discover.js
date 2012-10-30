@@ -17,34 +17,34 @@
 define(function(require) {
   var api = require('util/api');
   var ModelBase = require('models/ModelBase');
-  var MetadataSearch = require('models/MetadataSearch');
-  var ContentSearch = require('models/ContentSearch');
+  var MostActiveDiscover = require('models/MostActiveDiscover');
+  var RecommendationsDiscover = require('models/RecommendationsDiscover');
 
-  var Search = ModelBase.extend({
+  var Discover = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
-      this.channels = new MetadataSearch();
-      this.posts = new ContentSearch();
+      this.mostActive = new MostActiveDiscover();
+      this.recommendations = new RecommendationsDiscover();
     },
 
-    doSearch: function(params) {
-      var callback = this._triggerSearchCallback();
-      this.channels.doSearch(params, callback);
-      this.posts.doSearch(params, callback);
+    doDiscover: function(user) {
+      var callback = this._triggerDiscoverCallback();
+      this.mostActive.doDiscover(/*TODO user.split('@')[1],*/callback);
+      this.recommendations.doDiscover(user, callback);
     },
 
-    _triggerSearchCallback: function() {
+    _triggerDiscoverCallback: function() {
       var self = this;
       var fetched = [];
       return function(model) {
         fetched.push(model);
-        if (_.include(fetched, self.channels) &&
-            _.include(fetched, self.posts)) {
+        if (_.include(fetched, self.mostActive) &&
+            _.include(fetched, self.recommendations)) {
           self.trigger('fetch');
         }
       }
     }
   });
 
-  return Search;
+  return Discover;
 });
