@@ -31,6 +31,11 @@ define(function(require) {
 
     render: function() {
       $('.content').html(this.view.el);
+    },
+
+    destroy: function() {
+      this.view.remove();
+      this.remove();
     }
   });
 

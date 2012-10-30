@@ -51,7 +51,11 @@ define(function(require) {
     render: function() {
       this.view.render();
       $('.content').html(this.view.el);
-      $('.content').scrollTop(0);
+    },
+
+    destroy: function() {
+      this.view.destroy();
+      this.remove();
     }
   });
 

@@ -31,7 +31,7 @@ define(function(require) {
       this.metadatas = [];
       this._unreadCounts = {};
       this._getChannelsMetadata();
-      this.model.subscribedChannels.bind('sync', this._updateChannels, this);
+      this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
     },
 
     _updateChannels: function(action, channel) {
@@ -61,13 +61,13 @@ define(function(require) {
         if (metadata.channel === channel) {
           self.metadatas.splice(index, 1);
         }
-      });      
+      });
     },
 
     _fetchMetadata: function(channel, callback) {
       var metadata = new ChannelMetadata(channel);
       this.metadatas.push(metadata);
-      metadata.fetch({success: callback});      
+      metadata.fetch({success: callback});
     },
 
     render: function() {

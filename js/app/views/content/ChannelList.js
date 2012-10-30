@@ -96,7 +96,6 @@ define(function(require) {
     },
 
     _removeOpenedView: function() {
-      // Remember: Backbone 0.9.2 stable version has a memory issue on remove()
       if (this._openedDetailsView) {
         this._openedDetailsView.remove();
         this.$('.selected').removeClass('selected');
