@@ -29,6 +29,12 @@
   .content.full {
     left: 0;
   }
+  .content .loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -10px 0 0 -10px;
+  }
 .channelView {
   width: 580px;
   margin-right: 13px;
@@ -152,7 +158,7 @@
 .stream {
   width: 580px;
   border-radius: 5px 5px;
-  box-shadow: 
+  box-shadow:
     0 0 0 1px rgba(0,0,0,0.08),
     0 0 13px rgba(0,0,0,0.05);
   position: relative;
@@ -483,10 +489,10 @@
   .avatar:hover {
     z-index: 1;
   }
-  .avatar:hover + .usermeta { 
+  .avatar:hover + .usermeta {
     display: block;
   }
-  .post .usermeta .name { 
+  .post .usermeta .name {
     color: black;
     display: block;
   }
@@ -537,7 +543,7 @@
   top: 19px;
   display: none;
 }
-  .post .postmeta .popup.visible { 
+  .post .postmeta .popup.visible {
     display: -webkit-box;
   }
 .post .postmeta button {
@@ -604,8 +610,8 @@
   }
     .post .answer.write textarea {
       border-color: rgba(0,0,0,0.13);
-      box-shadow: 
-        1px 1px white, 
+      box-shadow:
+        1px 1px white,
         inset 1px 1px rgba(0,0,0,0.05);
     }
   .post .comments .answer .avatar {
