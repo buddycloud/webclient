@@ -52,7 +52,12 @@ define(function(require) {
 
     destroy: function() {
       this.searchbar.remove();
-      this.discover.remove();
+      if (this.discoverView) {
+        this.discoverView.remove();
+      }
+      if (this.searchView) {
+        this.searchView.remove();
+      }
       this.remove();
     },
 

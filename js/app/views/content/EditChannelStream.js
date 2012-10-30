@@ -99,7 +99,16 @@ define(function(require) {
 
       // Save
       this._saveAvatar();
-      this.model.save({}, {credentials: this.options.user.credentials});  
+
+      var self = this;
+      this.model.save({}, {
+        credentials: this.options.user.credentials,
+        complete: function() {
+          self._enableSaveButton();
+        }
+      });  
+
+      this._disableSaveButton();
     },
 
     _saveAvatar: function() {
@@ -141,6 +150,14 @@ define(function(require) {
           }
         }
       });
+    },
+
+    _enableSaveButton: function() {
+      this.$('.save').removeClass('disabled').text('Save');
+    },
+
+    _disableSaveButton: function() {
+      this.$('.save').addClass('disabled').text('Saving...');
     },
 
     _setTextFields: function() {
