@@ -17,16 +17,18 @@
 define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
+  var spinner = require('util/spinner');
   var template = require('text!templates/content/discover.html')
 
   var DiscoverView = Backbone.View.extend({
     className: 'discoverChannels clearfix',
 
-    events: {'click .follow': '_follow'},
+    events: {'click .callToAction': '_follow'},
 
     initialize: function() {
       this.model.bind('fetch', this.render, this);
       this.model.doDiscover(this.options.user.username());
+      spinner.replace(this.$el);
     },
 
     render: function() {
@@ -41,16 +43,24 @@ define(function(require) {
     _renderButtons: function() {
       var self = this;
       this.$('.channel').each(function() {
-        var jid = $(this).find('.owner').text();
-        if (self._follows(jid)) {
-          $(this).find('.follow').toggleClass('disabled');
+        var title = $(this).find('.owner').text();
+        if (self._follows(title)) {
+          $(this).find('.follow').removeClass('callToAction').addClass('disabled');
         }
       });
     },
 
-    _follows: function(channel) {
+    _follows: function(title) {
+      var channels = this.model.mostActive.models;
       var followedChannels = this.options.user.subscribedChannels.channels();
-      return _.include(followedChannels, channel);
+      for (var i = 0; i < channels.length; i++) {
+        if (channels[i].title() === title &&
+            _.include(followedChannels, channels[i].jid())) {
+            return true;
+        }
+      }   
+
+      return false;
     },
 
     _follow: function(event) {
@@ -62,7 +72,7 @@ define(function(require) {
       //TODO this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials);
 
       // Disable button
-      this.$(event.currentTarget).parent().find('.follow').toggleClass('disabled');
+      this.$(event.currentTarget).parent().find('.follow').removeClass('callToAction').addClass('disabled');
     }
   });
 

@@ -18,9 +18,11 @@ define(function(require) {
   var Backbone = require('backbone');
   var Discover = require('models/Discover');
   var DiscoverView = require('views/content/DiscoverView');
+  var Events = Backbone.Events;
   var Search = require('models/Search');
   var SearchBar = require('views/content/SearchBar');
   var SearchView = require('views/content/SearchView');
+  var spinner = require('util/spinner');
 
   var ExplorePage = Backbone.View.extend({
     className: 'discoverPage clearfix',
@@ -40,7 +42,15 @@ define(function(require) {
       this.searchModel = new Search();
       this.searchbar = new SearchBar({model: this.searchModel});
       this.searchView = new SearchView({model: this.searchModel, user: this.options.user});
-      this.searchModel.bind('fetch', this._renderSearch, this);
+      Events.on('startSearch', this._removeDiscover, this);
+    },
+
+    _removeDiscover: function() {
+      if (this.discoverView) {
+        this.discoverView.remove();
+      }
+
+      this.$el.append(this.searchView.el);
     },
 
     render: function() {
@@ -59,13 +69,6 @@ define(function(require) {
         this.searchView.remove();
       }
       this.remove();
-    },
-
-    _renderSearch: function() {
-      this.discoverView.remove();
-      if (!this.$el.find(this.searchView).length) {
-        this.$el.append(this.searchView.el);
-      }
     }
   });
 

@@ -15,26 +15,25 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
-  var Events = Backbone.Events;
-  var template = require('text!templates/content/searchBar.html')
+  var $ = require('jquery');
+  var SPINNER = '<span class="loading"><span class="spinner"></span></span>';
 
-  var SearchBar = Backbone.View.extend({
-    className: 'searchbar',
+  function append(element) {
+    var spinner = $(SPINNER);
+    element.append(spinner.el);
+  }
 
-    events: {'submit form': 'search'},
+  function remove(element) {
+    element.remove('.loading');
+  }
 
-    search: function(e) {
-      var q = this.$el.find('input[type=search]').val();
-      e.preventDefault();
-      this.model.doSearch({q: q});
-      Events.trigger('startSearch');
-    },
+  function replace(element) {
+    element.html(SPINNER);
+  }
 
-    render: function() {
-      this.$el.html(_.template(template));
-    }
-  });
-
-  return SearchBar;
+  return {
+    append: append,
+    remove: remove,
+    replace: replace
+  };
 });
