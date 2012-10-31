@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ define(function(require) {
     var search;
 
     beforeEach(function() {
-      search = new Search('eve@example.com');
+      search = new Search();
     });
 
     it('should initialize submodels correctly', function() {

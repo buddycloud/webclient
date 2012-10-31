@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var template = require('text!templates/content/searchBar.html')
 
   var SearchBar = Backbone.View.extend({
@@ -27,6 +28,7 @@ define(function(require) {
       var q = this.$el.find('input[type=search]').val();
       e.preventDefault();
       this.model.doSearch({q: q});
+      Events.trigger('startSearch');
     },
 
     render: function() {

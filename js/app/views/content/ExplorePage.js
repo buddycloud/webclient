@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,42 +16,59 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var Discover = require('models/Discover');
   var DiscoverView = require('views/content/DiscoverView');
+  var Events = Backbone.Events;
   var Search = require('models/Search');
   var SearchBar = require('views/content/SearchBar');
   var SearchView = require('views/content/SearchView');
+  var spinner = require('util/spinner');
 
   var ExplorePage = Backbone.View.extend({
     className: 'discoverPage clearfix',
 
     initialize: function() {
-      this.model = new Search();
-      this.discover = new DiscoverView({user: this.options.user});
-      this.searchbar = new SearchBar({model: this.model});
-      this.search = new SearchView({model: this.model, user: this.options.user});
-      this.model.bind('fetch', this._renderSearch, this);
+      this._initDiscover();
+      this._initSearch();
       this.render();
+    },
+
+    _initDiscover: function() {
+      this.discoverModel = new Discover();
+      this.discoverView = new DiscoverView({model: this.discoverModel, user: this.options.user});
+    },
+
+    _initSearch: function() {
+      this.searchModel = new Search();
+      this.searchbar = new SearchBar({model: this.searchModel});
+      this.searchView = new SearchView({model: this.searchModel, user: this.options.user});
+      Events.on('startSearch', this._removeDiscover, this);
+    },
+
+    _removeDiscover: function() {
+      if (this.discoverView) {
+        this.discoverView.remove();
+      }
+
+      this.$el.append(this.searchView.el);
     },
 
     render: function() {
       this.searchbar.render();
-      this.discover.render();
       this.$el.append(this.searchbar.el);
-      this.$el.append(this.discover.el);
+      this.$el.append(this.discoverView.el);
       $('.content').html(this.el);
     },
 
     destroy: function() {
       this.searchbar.remove();
-      this.discover.remove();
-      this.remove();
-    },
-
-    _renderSearch: function() {
-      this.discover.remove();
-      if (!this.$el.find(this.search).length) {
-        this.$el.append(this.search.el);
+      if (this.discoverView) {
+        this.discoverView.remove();
       }
+      if (this.searchView) {
+        this.searchView.remove();
+      }
+      this.remove();
     }
   });
 

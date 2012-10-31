@@ -15,43 +15,36 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
-  var ChannelFollowers = require('models/ChannelFollowers');
-  var ChannelItems = require('models/ChannelItems');
-  var ChannelMetadata = require('models/ChannelMetadata');
+  var api = require('util/api');
   var ModelBase = require('models/ModelBase');
+  var MostActiveDiscover = require('models/MostActiveDiscover');
+  var RecommendationsDiscover = require('models/RecommendationsDiscover');
 
-  var Channel = ModelBase.extend({
-    constructor: function(name) {
+  var Discover = ModelBase.extend({
+    constructor: function() {
       ModelBase.call(this);
-      this.name = name;
-      this.followers = new ChannelFollowers(name);
-      this.metadata = new ChannelMetadata(name);
-      this.items = new ChannelItems(name);
+      this.mostActive = new MostActiveDiscover();
+      this.recommendations = new RecommendationsDiscover();
     },
 
-    fetch: function(options) {
-      options = _.extend(options || {}, {
-        success: this._triggerFetchCallback()
-      });
-      this.followers.fetch(options);
-      this.metadata.fetch(options);
-      this.items.fetch(options);
+    doDiscover: function(params) {
+      var callback = this._triggerDiscoverCallback();
+      this.mostActive.doDiscover(params, callback);
+      this.recommendations.doDiscover(params, callback);
     },
 
-    _triggerFetchCallback: function() {
+    _triggerDiscoverCallback: function() {
       var self = this;
       var fetched = [];
       return function(model) {
         fetched.push(model);
-        if (_.include(fetched, self.followers) &&
-            _.include(fetched, self.metadata) &&
-            _.include(fetched, self.items)) {
+        if (_.include(fetched, self.mostActive) &&
+            _.include(fetched, self.recommendations)) {
           self.trigger('fetch');
         }
       }
     }
   });
 
-  return Channel;
+  return Discover;
 });

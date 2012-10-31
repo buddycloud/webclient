@@ -19,7 +19,7 @@ define(function(require) {
   var CollectionBase = require('models/CollectionBase');
   var MetadataSearchResult = require('models/MetadataSearchResult');
 
-  var MetadataSearch = CollectionBase.extend({
+  var RecommendationsDiscover = CollectionBase.extend({
     model: MetadataSearchResult,
 
     constructor: function() {
@@ -27,12 +27,13 @@ define(function(require) {
     },
 
     url: function() {
-      return api.url('search');
+      return api.url('recommendations');
     },
 
-    doSearch: function(query, callback) {
-      if (query.q) {
-        query = _.extend({type: 'metadata', max: 5}, query);
+    doDiscover: function(query, callback) {
+      if (query.user) {
+        query = _.extend({max: 5}, query);
+        // TODO Local discover
         this.fetch({data: query, success: callback});
       }
     },
@@ -48,5 +49,5 @@ define(function(require) {
     }
   });
 
-  return MetadataSearch;
+  return RecommendationsDiscover;
 });
