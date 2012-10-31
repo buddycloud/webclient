@@ -15,41 +15,41 @@
  */
 
 define(function(require) {
-  var MetadataSearch = require('models/MetadataSearch');
-  var ContentSearch = require('models/ContentSearch');
-  var Search = require('models/Search');
+  var MostActiveDiscover = require('models/MostActiveDiscover');
+  var RecommendationsDiscover = require('models/RecommendationsDiscover');
+  var Discover = require('models/Discover');
 
-  describe('Search', function() {
-    var search;
+  describe('Discover', function() {
+    var discover;
 
     beforeEach(function() {
-      search = new Search('eve@example.com');
+      discover = new Discover();
     });
 
     it('should initialize submodels correctly', function() {
-      expect(search.channels instanceof MetadataSearch).toBeTruthy();
-      expect(search.posts instanceof ContentSearch).toBeTruthy();
+      expect(discover.mostActive instanceof MostActiveDiscover).toBeTruthy();
+      expect(discover.recommendations instanceof RecommendationsDiscover).toBeTruthy();
     });
 
-    describe('doSearch()', function() {
-      it('should call doSearch() on each submodel', function() {
-        spyOn(search.channels, 'doSearch');
-        spyOn(search.posts, 'doSearch');
-        search.doSearch({q: 'test'});
-        expect(search.channels.doSearch).toHaveBeenCalled();
-        expect(search.posts.doSearch).toHaveBeenCalled();
+    describe('doDiscover()', function() {
+      it('should call doDiscover() on each submodel', function() {
+        spyOn(discover.mostActive, 'doDiscover');
+        spyOn(discover.recommendations, 'doDiscover');
+        discover.doDiscover('alice@example.com');
+        expect(discover.mostActive.doDiscover).toHaveBeenCalled();
+        expect(discover.recommendations.doDiscover).toHaveBeenCalled();
       });
 
       it('should trigger "fetch" if all submodels are fetched', function() {
-        spyOn(search.channels, 'fetch').andCallFake(function(options) {
-          options.success(search.channels);
+        spyOn(discover.mostActive, 'fetch').andCallFake(function(options) {
+          options.success(discover.mostActive);
         });
-        spyOn(search.posts, 'fetch').andCallFake(function(options) {
-          options.success(search.posts);
+        spyOn(discover.recommendations, 'fetch').andCallFake(function(options) {
+          options.success(discover.recommendations);
         });
-        spyOn(search, 'trigger');
-        search.doSearch({q: 'test'});
-        expect(search.trigger).toHaveBeenCalledWith('fetch');
+        spyOn(discover, 'trigger');
+        discover.doDiscover('alice@example.com');
+        expect(discover.trigger).toHaveBeenCalledWith('fetch');
       });
     });
   });

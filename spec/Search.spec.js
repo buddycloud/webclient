@@ -23,7 +23,7 @@ define(function(require) {
     var search;
 
     beforeEach(function() {
-      search = new Search('eve@example.com');
+      search = new Search();
     });
 
     it('should initialize submodels correctly', function() {
