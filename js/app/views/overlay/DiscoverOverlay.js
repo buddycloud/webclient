@@ -29,6 +29,7 @@ define(function(require) {
     },
 
     render: function() {
+      // FIXME popular must show the channels with biggest number of followers
       var mostActive = this.model.models.slice(0, 5);
       var popular = this.model.models.slice(5, 10);
       this.$el.html(_.template(template, {
