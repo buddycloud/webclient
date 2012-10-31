@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,7 +99,16 @@ define(function(require) {
 
       // Save
       this._saveAvatar();
-      this.model.save({}, {credentials: this.options.user.credentials});  
+
+      var self = this;
+      this.model.save({}, {
+        credentials: this.options.user.credentials,
+        complete: function() {
+          self._enableSaveButton();
+        }
+      });  
+
+      this._disableSaveButton();
     },
 
     _saveAvatar: function() {
@@ -141,6 +150,14 @@ define(function(require) {
           }
         }
       });
+    },
+
+    _enableSaveButton: function() {
+      this.$('.save').removeClass('disabled').text('Save');
+    },
+
+    _disableSaveButton: function() {
+      this.$('.save').addClass('disabled').text('Saving...');
     },
 
     _setTextFields: function() {

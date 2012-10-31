@@ -1,6 +1,5 @@
-<div class="discoverChannels clearfix">
-  <div class="local span-2">
-    <h1>Local</h1>
+<div class="local span-2">
+  <h1>Local</h1>
     <div class="mostActive span-1">
       <h2>Most Active</h2>
       <% if (mostActive) { %>
@@ -12,32 +11,30 @@
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
         </div>
         <% }); %>
       </div>
       <% } %>
     </div>
     <div class="popular span-1">
-      <h2>Recommended</h2>
-      <% if (recommended) { %>
+      <h2>Popular</h2>
+      <% if (popular) { %>
       <div class="list">
-        <% _.each(recommended, function(channel) { %>
+        <% _.each(popular, function(channel) { %>
         <div class="channel justify" id="<%= channel.jid() %>">
           <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
         </div>
         <% }); %>
       </div>
       <% } %>
     </div>
-  </div>
-  <div class="global span-2">
-    <h1>Global</h1>
+</div>
+<div class="global span-2">
+  <h1>Global</h1>
     <div class="mostActive span-1">
       <h2>Most Active</h2>
       <% if (mostActive) { %>
@@ -49,46 +46,26 @@
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
         </div>
         <% }); %>
       </div>
       <% } %>
     </div>
     <div class="popular span-1">
-      <h2>Recommended</h2>
-      <% if (recommended) { %>
+      <h2>Popular</h2>
+      <% if (popular) { %>
       <div class="list">
-        <% _.each(recommended, function(channel) { %>
+        <% _.each(popular, function(channel) { %>
         <div class="channel justify">
           <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
         </div>
         <% }); %>
       </div>
       <% } %>
     </div>
-  </div>
-<!-- TODO not supported yet
-<div class="location span-1">
-
-<h1>Location</h1>
-<div class="nearby span-1">
-<h2>Nearby</h2>
-<div class="list">
-<div class="channel justify">
-<div class="avatar" style="background-image: url(prototypes/avatars/user12.jpg)"></div>
-<div class="info flex">
-<span class="owner">Franz</span>
-<span class="about">Hanging out at starbucks</span>
 </div>
-<div class="follow button">Follow</div>
-</div>
-</div>
-</div>
-</div> -->
 </div>

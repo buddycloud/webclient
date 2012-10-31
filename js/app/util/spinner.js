@@ -15,29 +15,25 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
-  var EditHeader = require('views/content/EditHeader');
-  var PreferencesView = require('views/content/PreferencesView');
+  var $ = require('jquery');
+  var SPINNER = '<span class="loading"><span class="spinner"></span></span>';
 
-  var PreferencesPage = Backbone.View.extend({
-    className: 'channelView',
+  function append(element) {
+    var spinner = $(SPINNER);
+    element.append(spinner.el);
+  }
 
-    initialize: function() {
-      this.view = new PreferencesView({
-        user: this.options.user
-      });
-      this.render();
-    },
+  function remove(element) {
+    element.remove('.loading');
+  }
 
-    render: function() {
-      $('.content').html(this.view.el);
-    },
+  function replace(element) {
+    element.html(SPINNER);
+  }
 
-    destroy: function() {
-      this.view.remove();
-      this.remove();
-    }
-  });
-
-  return PreferencesPage;
+  return {
+    append: append,
+    remove: remove,
+    replace: replace
+  };
 });

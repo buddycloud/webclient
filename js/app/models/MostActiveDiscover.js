@@ -19,7 +19,7 @@ define(function(require) {
   var CollectionBase = require('models/CollectionBase');
   var MetadataSearchResult = require('models/MetadataSearchResult');
 
-  var MetadataSearch = CollectionBase.extend({
+  var MostActiveDiscover = CollectionBase.extend({
     model: MetadataSearchResult,
 
     constructor: function() {
@@ -27,14 +27,13 @@ define(function(require) {
     },
 
     url: function() {
-      return api.url('search');
+      return api.url('most_active');
     },
 
-    doSearch: function(query, callback) {
-      if (query.q) {
-        query = _.extend({type: 'metadata', max: 5}, query);
-        this.fetch({data: query, success: callback});
-      }
+    doDiscover: function(query, callback) {
+      query = _.extend({max: 5}, query);
+      // TODO Local discover
+      this.fetch({data: query, success: callback});
     },
 
     parse: function(resp, xhr) {
@@ -48,5 +47,5 @@ define(function(require) {
     }
   });
 
-  return MetadataSearch;
+  return MostActiveDiscover;
 });

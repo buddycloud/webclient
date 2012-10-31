@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ define(function(require) {
   var ExplorePage = require('views/content/ExplorePage');
   var PreferencesPage = require('views/content/PreferencesPage');
   var SidebarPage = require('views/sidebar/SidebarPage');
+  var spinner = require('util/spinner');
   var WelcomePage = require('views/overlay/WelcomePage');
   var Events = Backbone.Events;
 
@@ -62,11 +63,7 @@ define(function(require) {
       if (this.currentPage) {
         this.currentPage.destroy();
       }
-      this._showSpinner();
-    },
-
-    _showSpinner: function() {
-      $('.content').html('<span class="loading"><span class="spinner"></span></span>');
+      spinner.replace($('.content'));
     },
 
     _navigate: function(path) {

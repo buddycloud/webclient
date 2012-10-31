@@ -1,233 +1,50 @@
-     <div class="clearfix">
-        <nav>
-          <a href="http://buddycloud.com/" class="about onDark">about</a>
-          <a href="https://buddycloud.org/wiki/" class="developers onDark">developers</a>
-        </nav>
-        <div class="floatRight formHolder">
-          <nav>
-            <a href="#" class="login onDark">login</a>
-            <a href="#" class="register onDark callToAction">join</a>
-          </nav>
-          <form class="clearfix register">
-            <div class="horizontal fit">
-              <div>
-                <label for="register_name">Username</label>
-                <input type="text" id="register_name" class="small" required="required">
-              </div>
-              <div>
-                <label for="register_password">Password</label>
-                <input type="password" id="register_password" class="small" required="required">
-              </div>
-              <div class="email">
-                <label for="register_email">Email</label>
-                <input id="register_email" class="small" type="email">
-              </div>
-            </div>
-            <button type="submit" id="register_submit" class="left callToAction">Join buddycloud</button>
-          </form>
-          <form class="clearfix login">
-            <div>
-              <label for="login_name">Username</label>
-              <input type="text" class="small xl" id="login_name" required="required">
-            </div>
-            <div>
-              <label for="login_password">Password</label><a class="forgot">Forgot Password?</a>
-              <input type="password" class="small xl" id="login_password" required="required">
-            </div>
-            <div class="submit">
-              <span class="storePassword">
-                <input type="checkbox" id="store_local" />
-                <label for="store_local">stay logged in</label>
-              </span>
-              <button type="submit" id="login_submit" class="callToAction">Login</button>
-            </div>
-          </form>
+<div class="clearfix">
+  <nav>
+    <a href="http://buddycloud.com/" class="about onDark">about</a>
+    <a href="https://buddycloud.org/wiki/" class="developers onDark">developers</a>
+  </nav>
+  <div class="floatRight formHolder">
+    <nav>
+      <a href="#" class="login onDark">login</a>
+      <a href="#" class="register onDark callToAction">join</a>
+    </nav>
+    <form class="clearfix register">
+      <div class="horizontal fit">
+        <div>
+          <label for="register_name">Username</label>
+          <input type="text" id="register_name" class="small" required="required">
+        </div>
+        <div>
+          <label for="register_password">Password</label>
+          <input type="password" id="register_password" class="small" required="required">
+        </div>
+        <div class="email">
+          <label for="register_email">Email</label>
+          <input id="register_email" class="small" type="email">
         </div>
       </div>
-      <div class="hero centered stretchWidth vertical">
-        <h1>buddycloud</h1>
-        <p>Share, discover and communicate in a magically simple way.</p>
+      <button type="submit" id="register_submit" class="left callToAction">Join buddycloud</button>
+    </form>
+    <form class="clearfix login">
+      <div>
+        <label for="login_name">Username</label>
+        <input type="text" class="small xl" id="login_name" required="required">
       </div>
-        <div class="local span-2">
-          <h1>Local</h1>
-          <div class="mostActive span-1">
-            <h2>Most Active</h2>
-            <div class="list">
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user12.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Franz</span>
-                  <span class="about">Hanging out at starbucks</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user11.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Lisa</span>
-                  <span class="about">Where is the love?</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user13.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Ralf</span>
-                  <span class="about">Ich bin ein Berliner!</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user6.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Steffi</span>
-                  <span class="about">Listening to Fuadadeimuada</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user7.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Anna</span>
-                  <span class="about">First Season of Game of Thrones was a blast!</span>
-                </div>
-                
-              </div>
-            </div>
-          </div>
-          <div class="popular span-1">
-            <h2>Popular</h2>
-            <div class="list">
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user1.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">mrflix</span>
-                  <span class="about">I don't like cinema</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user4.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Martin</span>
-                  <span class="about">Handed in my thesis. Like a boss.</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user2.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Vera</span>
-                  <span class="about">Munich here I come.</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user3.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Tom</span>
-                  <span class="about">Island is great. Let's make music</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user5.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Josef</span>
-                  <span class="about">Desmond Myers really knows how to rap</span>
-                </div>
-                
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="global span-2">
-          <h1>Global</h1>
-          <div class="mostActive span-1">
-            <h2>Most Active</h2>
-            <div class="list">
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user12.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Franz</span>
-                  <span class="about">Hanging out at starbucks</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user11.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Lisa</span>
-                  <span class="about">Where is the love?</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user13.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Ralf</span>
-                  <span class="about">Ich bin ein Berliner!</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user6.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Steffi</span>
-                  <span class="about">Listening to Fuadadeimuada</span>
-                </div>
-                
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user7.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Anna</span>
-                  <span class="about">First Season of Game of Thrones was a blast!</span>
-                </div>
-                
-              </div>
-            </div>
-          </div>
-          <div class="popular span-1">
-            <h2>Popular</h2>
-            <div class="list">
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user1.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">mrflix</span>
-                  <span class="about">I don't like cinema</span>
-                </div>
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user4.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Martin</span>
-                  <span class="about">Handed in my thesis. Like a boss.</span>
-                </div>
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user2.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Vera</span>
-                  <span class="about">Munich here I come.</span>
-                </div>
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user3.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Tom</span>
-                  <span class="about">Island is great. Let's make music</span>
-                </div>
-              </div>
-              <div class="channel justify">
-                <div class="avatar" style="background-image: url(prototypes/avatars/user5.jpg)"></div>
-                <div class="info flex">
-                  <span class="owner">Josef</span>
-                  <span class="about">Desmond Myers really knows how to rap</span>
-                </div>
-                
-              </div>
-            </div>
-          </div>
-        </div>
+      <div>
+        <label for="login_password">Password</label><a class="forgot">Forgot Password?</a>
+        <input type="password" class="small xl" id="login_password" required="required">
       </div>
+      <div class="submit">
+        <span class="storePassword">
+          <input type="checkbox" id="store_local" />
+          <label for="store_local">stay logged in</label>
+        </span>
+        <button type="submit" id="login_submit" class="callToAction">Login</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="hero centered stretchWidth vertical">
+  <h1>buddycloud</h1>
+  <p>Share, discover and communicate in a magically simple way.</p>
+</div>
