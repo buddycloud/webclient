@@ -27,14 +27,14 @@ define(function(require) {
 
     initialize: function() {
       this.model.bind('fetch', this.render, this);
-      this.model.doDiscover(this.options.user.username());
+      this.model.doDiscover({user: this.options.user.username()});
       spinner.replace(this.$el);
     },
 
     render: function() {
       this.$el.html(_.template(template, {
         mostActive: this.model.mostActive.models,
-        popular: this.model.recommendations.models
+        recommended: this.model.recommendations.models
       }));
       avatarFallback(this.$('.avatar'), undefined, 50);
       this._renderButtons();

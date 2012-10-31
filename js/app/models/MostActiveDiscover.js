@@ -30,13 +30,9 @@ define(function(require) {
       return api.url('most_active');
     },
 
-    doDiscover: function(callback) {
-      var query = {};
-      query['max'] = 5;
+    doDiscover: function(query, callback) {
+      query = _.extend({max: 5}, query);
       // TODO Local discover
-      //if (domain) {
-      //  query['domain'] = domain;
-      //}
       this.fetch({data: query, success: callback});
     },
 

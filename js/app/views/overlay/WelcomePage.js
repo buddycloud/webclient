@@ -18,19 +18,21 @@ define(function(require) {
   var $ = require('jquery');
   var _ = require('underscore');
   var Backbone = require('backbone');
+  var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
   var footer = require('text!templates/overlay/footer.html');
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
 
-    initialize: function() {
-      _.bindAll(this, 'login');
-    },
-
     events: {
       'submit form.login': 'login',
       'submit form.register': 'register'
+    },
+
+    initialize: function() {
+      _.bindAll(this, 'login');
+      this.discover = new DiscoverOverlay();
     },
 
     login: function(event) {
@@ -58,8 +60,8 @@ define(function(require) {
     },
 
     render: function() {
-      that = this;
       this.$el.html(_.template(template));
+      this.$el.append(this.discover.el);
       $('.content').addClass('homepage').html(this.el);
 
       var formHolder = $('.formHolder');
@@ -91,15 +93,11 @@ define(function(require) {
         // add footer
         $('.content').append(_.template(footer));
       }
-      
 
       function hideForm(){
         formHolder.removeClass('showLogin showRegister');
       }
-/*
-      $('#login_submit').click(that._login)
-  */},
-
+    },
 
     remove: function() {
       $('.content').removeClass('homepage')

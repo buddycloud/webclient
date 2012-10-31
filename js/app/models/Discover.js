@@ -27,10 +27,10 @@ define(function(require) {
       this.recommendations = new RecommendationsDiscover();
     },
 
-    doDiscover: function(user) {
+    doDiscover: function(params) {
       var callback = this._triggerDiscoverCallback();
-      this.mostActive.doDiscover(/*TODO user.split('@')[1],*/callback);
-      this.recommendations.doDiscover(user, callback);
+      this.mostActive.doDiscover(params, callback);
+      this.recommendations.doDiscover(params, callback);
     },
 
     _triggerDiscoverCallback: function() {

@@ -30,13 +30,12 @@ define(function(require) {
       return api.url('recommendations');
     },
 
-    doDiscover: function(user, callback) {
-      var query = {};
-      query['max'] = 5;
-      if (user) {
-        query['user'] = user;
+    doDiscover: function(query, callback) {
+      if (query.user) {
+        query = _.extend({max: 5}, query);
+        // TODO Local discover
+        this.fetch({data: query, success: callback});
       }
-      this.fetch({data: query, success: callback});
     },
 
     parse: function(resp, xhr) {
