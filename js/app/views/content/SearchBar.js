@@ -16,6 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var template = require('text!templates/content/searchBar.html')
 
   var SearchBar = Backbone.View.extend({
