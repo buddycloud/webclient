@@ -5,7 +5,7 @@
       <% if (channels) { %>
       <div class="list">
         <% _.each(channels, function(channel) { %>
-        <div class="channel justify">
+        <div class="channel justify" id="<%= channel.jid() %>">
           <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
