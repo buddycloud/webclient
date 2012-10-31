@@ -17,10 +17,15 @@
 define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
+  var Events = Backbone.Events;
   var MostActiveDiscover = require('models/MostActiveDiscover');
   var template = require('text!templates/overlay/discover.html');
 
   var DiscoverOverlay = Backbone.View.extend({
+
+    events: {
+      'click .channel': '_redirect'
+    },
 
     initialize: function() {
       this.model = new MostActiveDiscover();
@@ -37,6 +42,14 @@ define(function(require) {
         popular: popular
       }));
       avatarFallback(this.$('.avatar'), undefined, 50);
+    },
+
+    _redirect: function(event) {
+      //TODO need anon view (prototypes/anon.html)
+      //var jid = this.$(event.currentTarget).attr('id');
+      //if (jid) {
+      //  Events.trigger('navigate', jid);
+      //}
     }
   });
 

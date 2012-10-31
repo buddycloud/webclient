@@ -17,13 +17,17 @@
 define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
+  var Events = Backbone.Events;
   var spinner = require('util/spinner');
   var template = require('text!templates/content/discover.html')
 
   var DiscoverView = Backbone.View.extend({
     className: 'discoverChannels clearfix',
 
-    events: {'click .callToAction': '_follow'},
+    events: {
+      'click .callToAction': '_follow',
+      'click .channel': '_redirect'
+    },
 
     initialize: function() {
       this.model.bind('fetch', this.render, this);
@@ -43,24 +47,16 @@ define(function(require) {
     _renderButtons: function() {
       var self = this;
       this.$('.channel').each(function() {
-        var title = $(this).find('.owner').text();
-        if (self._follows(title)) {
+        var jid = $(this).attr('id');
+        if (self._follows(jid)) {
           $(this).find('.follow').removeClass('callToAction').addClass('disabled');
         }
       });
     },
 
-    _follows: function(title) {
-      var channels = this.model.mostActive.models;
+    _follows: function(jid) {
       var followedChannels = this.options.user.subscribedChannels.channels();
-      for (var i = 0; i < channels.length; i++) {
-        if (channels[i].title() === title &&
-            _.include(followedChannels, channels[i].jid())) {
-            return true;
-        }
-      }   
-
-      return false;
+      return _.include(followedChannels, jid);
     },
 
     _follow: function(event) {
@@ -73,6 +69,13 @@ define(function(require) {
 
       // Disable button
       this.$(event.currentTarget).parent().find('.follow').removeClass('callToAction').addClass('disabled');
+    },
+
+    _redirect: function(event) {
+      var jid = this.$(event.currentTarget).attr('id');
+      if (jid) {
+        Events.trigger('navigate', jid);
+      }
     }
   });
 
