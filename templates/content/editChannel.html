@@ -11,16 +11,16 @@
     <label for="channel_name">Channel Name</label>
     <input type="text" id="channel_name" value="<%= metadata.title() || '' %>"/>
   </div>
-  <!--
-    Description field is handled as status
-    <div class="description area">
+  <div class="description area">
     <label for="channel_description">Description</label>
     <textarea id="channel_description"></textarea>
-  </div> -->
+  </div>  
+  <!--
+    Not handled yet
   <div class="status">
     <label for="channel_mood">Status</label>
     <input type="text" id="channel_status" placeholder="How are you doing?" value="<%= metadata.description() || '' %>"/>
-  </div>
+  </div> -->
   <!--
     Location isn't currently handled 
     <div class="location">
