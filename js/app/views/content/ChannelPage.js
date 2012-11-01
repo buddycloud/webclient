@@ -18,6 +18,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var Channel = require('models/Channel');
   var ChannelView = require('views/content/ChannelView');
+  var Events = Backbone.Events;
 
   var ChannelPage = Backbone.View.extend({
     className: 'channelView clearfix',
@@ -29,12 +30,18 @@ define(function(require) {
         user: this.options.user
       });
       this.model.bind('fetch', this._begin, this);
+      this.model.bind('error', this._error, this);
       this.model.fetch({credentials: this.options.user.credentials});
     },
 
     _begin: function() {
       this.render();
       this._listenForNewPosts();
+    },
+
+    _error: function(xhr) {
+      this.view.destroy();
+      Events.trigger('error', xhr.status, xhr.statusText);
     },
 
     _listenForNewPosts: function() {

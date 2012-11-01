@@ -21,6 +21,7 @@ define(function(require) {
   var EditChannelPage = require('views/content/EditChannelPage');
   var ExplorePage = require('views/content/ExplorePage');
   var PreferencesPage = require('views/content/PreferencesPage');
+  var ErrorPage = require('views/content/ErrorPage');
   var SidebarPage = require('views/sidebar/SidebarPage');
   var spinner = require('util/spinner');
   var WelcomePage = require('views/overlay/WelcomePage');
@@ -45,6 +46,7 @@ define(function(require) {
 
     initialize: function() {
       Events.on('navigate', this._navigate, this);
+      Events.on('error', this._error, this);
     },
 
     _endSessionOnUnload: function() {
@@ -104,6 +106,11 @@ define(function(require) {
     channelEdit: function(channel) {
       this._before();
       this.currentPage = new EditChannelPage({channel: channel, user: this.user});
+    },
+
+    _error: function(status, statusText) {
+      this._before();
+      this.currentPage = new ErrorPage({status: status, statusText: statusText});
     }
   });
 
