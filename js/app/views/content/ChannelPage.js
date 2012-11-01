@@ -39,9 +39,9 @@ define(function(require) {
       this._listenForNewPosts();
     },
 
-    _error: function(xhr) {
+    _error: function(e) {
       this.view.destroy();
-      Events.trigger('error', xhr.status, xhr.statusText);
+      Events.trigger('pageError', e);
     },
 
     _listenForNewPosts: function() {

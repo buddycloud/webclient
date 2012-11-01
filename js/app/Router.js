@@ -46,7 +46,7 @@ define(function(require) {
 
     initialize: function() {
       Events.on('navigate', this._navigate, this);
-      Events.on('error', this._error, this);
+      Events.on('pageError', this._error, this);
     },
 
     _endSessionOnUnload: function() {
@@ -108,9 +108,9 @@ define(function(require) {
       this.currentPage = new EditChannelPage({channel: channel, user: this.user});
     },
 
-    _error: function(status, statusText) {
+    _error: function(e) {
       this._before();
-      this.currentPage = new ErrorPage({status: status, statusText: statusText});
+      this.currentPage = new ErrorPage({error: e});
     }
   });
 

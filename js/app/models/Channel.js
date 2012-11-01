@@ -61,7 +61,7 @@ define(function(require) {
         if (_.include(error, self.followers) &&
             _.include(error, self.metadata) &&
             _.include(error, self.items)) {
-          self.trigger('error', xhr);
+          self.trigger('error', {status: xhr.status, statusText: xhr.statusText});
         }
       }
     }
