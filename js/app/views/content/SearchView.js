@@ -42,24 +42,16 @@ define(function(require) {
     _renderButtons: function() {
       var self = this;
       this.$('.channel').each(function() {
-        var title = $(this).find('.owner').text();
-        if (self._follows(title)) {
+        var jid = $(this).attr('id');
+        if (self._follows(jid)) {
           $(this).find('.follow').removeClass('callToAction').addClass('disabled');
         }
       });
     },
 
-    _follows: function(title) {
-      var channels = this.model.channels.models;
+    _follows: function(jid) {
       var followedChannels = this.options.user.subscribedChannels.channels();
-      for (var i = 0; i < channels.length; i++) {
-        if (channels[i].title() === title &&
-            _.include(followedChannels, channels[i].jid())) {
-            return true;
-        }
-      }   
-
-      return false;
+      return _.include(followedChannels, jid);
     },
 
     _follow: function(event) {
