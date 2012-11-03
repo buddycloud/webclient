@@ -56,13 +56,18 @@ define(function(require) {
       this.$('.postmeta').timeago();
     },
 
-    _embedlyCallback: function(oembed, dict) {
-      var elem = $(dict.node);
-      return oembed.type !== 'link' ? elem.replaceWith(oembed.code) : elem;
-    },
-
     _embedly: function() {
-      this.$('p').embedly({maxWidth: 400, key: config.embedlyKey, secure: true, success: this._embedlyCallback});
+      this.$('p').embedly({
+        maxWidth: 400, 
+        key: config.embedlyKey, 
+        secure: true, 
+        success: function(oembed, dict) {
+          var elem = dict.node;
+          // If is not a link or if the link has an image
+          return oembed && (oembed.type !== 'link' || oembed.code.indexOf('img') != -1) ?
+            elem.replaceWith(oembed.code) : null;
+        }
+      });
     },
 
     _roleTag: function(username) {
