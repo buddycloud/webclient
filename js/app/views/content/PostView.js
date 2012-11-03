@@ -56,8 +56,13 @@ define(function(require) {
       this.$('.postmeta').timeago();
     },
 
+    _embedlyCallback: function(oembed, dict) {
+      var elem = $(dict.node);
+      return oembed.type !== 'link' ? elem.replaceWith(oembed.code) : elem;
+    },
+
     _embedly: function() {
-      this.$('p').embedly({maxWidth: 400, method: 'after', key: config.embedlyKey, secure: true});
+      this.$('p').embedly({maxWidth: 400, key: config.embedlyKey, secure: true, success: this._embedlyCallback});
     },
 
     _roleTag: function(username) {
