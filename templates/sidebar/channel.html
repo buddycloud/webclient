@@ -1,0 +1,12 @@
+<div class="channel <%= selected ? 'selected' : '' %>"
+     data-href="<%- metadata.channel %>">
+  <div class="avatar">
+    <img data-type="<%- metadata.channelType() %>"
+         src="<%= metadata.avatarUrl(75) %>" />
+    <span class="channelpost counter" style="display: none;">0</span>
+  </div>
+  <div class="info">
+    <span class="owner"><%- metadata.title() %></span>
+    <span class="status"><%- metadata.description() %></span>
+  </div>
+</div>
