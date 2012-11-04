@@ -58,7 +58,7 @@ define(function(require) {
     },
 
     _getChannelDefaultAffiliation: function(jid) {
-      var channels = _.union(this.model.mostActive.models, this.model.recommendations.models);
+      var channels = this.model.channels.models;
       for (var i = 0; i < channels.length; i++) {
         if (channels[i].jid() === jid) {
           return channels[i].defaultAffiliation();
