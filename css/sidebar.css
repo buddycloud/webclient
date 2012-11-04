@@ -12,7 +12,7 @@
   background:      -o-linear-gradient(top,       #003152, #3c87aa);
   background:         linear-gradient(to bottom, #003152, #3c87aa);
   position: absolute;
-  box-shadow: 
+  box-shadow:
     -1px 0 black inset,
     -2px 0 rgba(0,0,0,0.21) inset;
   -webkit-transition: left 400ms;
@@ -123,7 +123,7 @@
   position: absolute;
   background: #000;
   z-index: 9;
-  box-shadow: 
+  box-shadow:
     1px 0 rgba(255,255,255,0.21) inset,
     0 1px rgba(255,255,255,0.21) inset,
     0 -1px rgba(0,0,0,0.55),
@@ -233,7 +233,7 @@
   background:     -ms-linear-gradient(top, rgba(0,0,0,0.13), rgba(128,128,128,0) 33%, rgba(255,255,255,0.13));
   background:      -o-linear-gradient(top, rgba(0,0,0,0.13), rgba(128,128,128,0) 33%, rgba(255,255,255,0.13));
   background:         linear-gradient(to bottom, rgba(0,0,0,0.13), rgba(128,128,128,0) 33%, rgba(255,255,255,0.13));
-  box-shadow: 
+  box-shadow:
     0 1px rgba(0,0,0,0.55),
     0 2px rgba(255,255,255,0.21),
     0 1px rgba(0,0,0,0.55) inset,
@@ -277,13 +277,20 @@
   background-size: cover;
   position: absolute;
   z-index: 1;
-  -webkit-transition: width 500ms, height 500ms, top 500ms linear;
-     -moz-transition: width 500ms, height 500ms, top 500ms linear;
-      -ms-transition: width 500ms, height 500ms, top 500ms linear;
-       -o-transition: width 500ms, height 500ms, top 500ms linear;
-          transition: width 500ms, height 500ms, top 500ms linear;
+  -webkit-transition: top 500ms linear;
+     -moz-transition: top 500ms linear;
+      -ms-transition: top 500ms linear;
+       -o-transition: top 500ms linear;
+          transition: top 500ms linear;
 }
   .channel .avatar img {
+    height: 50px;
+    width: 50px;
+    -webkit-transition: width 500ms, height 500ms;
+     -moz-transition: width 500ms, height 500ms;
+      -ms-transition: width 500ms, height 500ms;
+       -o-transition: width 500ms, height 500ms;
+          transition: width 500ms, height 500ms;
     border-radius: 3px;
   }
   .sidebar .channel .avatar:after {
@@ -294,13 +301,13 @@
     left: 0;
     top: 0;
     border-radius: 3px;
-    box-shadow: 
+    box-shadow:
       0 0 0 1px rgba(0,0,0,0.55),
       0 1px 1px rgba(0,0,0,0.55),
       0 0 0 1px rgba(255,255,255,0.55) inset;
   }
   .channel.selected .avatar {
-    box-shadow: 
+    box-shadow:
       0 0 0 1px rgba(0,0,0,0.55),
       0 0 0 1px rgba(255,255,255,0.55) inset,
       0 0 0 3px hsl(81, 53%, 44%),

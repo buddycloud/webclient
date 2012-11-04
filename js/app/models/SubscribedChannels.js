@@ -43,11 +43,11 @@ define(function(require) {
       return _.include(['owner', 'moderator', 'publisher'], affiliation);
     },
 
-    subscribe: function(channel, node, role, credentials) {
+    subscribe: function(channel, node, role, credentials, extra) {
       var self = this;
       this.set(channel + '/' + node, role, {silent: true});
       this._saveChangedAttributes(credentials, function() {
-        self.trigger('subscriptionSync', 'subscribedChannel', channel, role);
+        self.trigger('subscriptionSync', 'subscribedChannel', channel, role, extra);
         self.change();
       });
     },
