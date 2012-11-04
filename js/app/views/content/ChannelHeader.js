@@ -114,7 +114,7 @@ define(function(require) {
 
       // subscribe
       // the final parameter is an extra thing necessary to the rainbow animation
-      this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials, {offset: offset, animationClass: animationClassName});
+      this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials, {offset: offset, animationClass: animationClassName, selected: true});
 
       // Disable button
       this.$('.follow').toggleClass('disabled');

@@ -112,7 +112,7 @@ define(function(require) {
           metadata: model,
           selected: false
         });
-        self._rainbowAnimation($(channel), extra.offset, extra.animationClass);
+        self._rainbowAnimation($(channel), model.channelType(), extra.offset, extra.animationClass, extra.selected);
       }
     },
 
@@ -246,26 +246,33 @@ define(function(require) {
       this._renderUnreadCount(channel);
     },
 
-    _rainbowAnimation: function($channel, offset, animationClassName) {
+    _rainbowAnimation: function($channel, channelType, offset, animationClassName, selected) {
       var self = this;
 
-      this._setupFlyingChannel($channel, offset);
-      // wrap a growing holder around it
-      // also trigger the fly-in animation
-      var callback = function() {
-        self.$el.removeClass('rainbowAnimationRunning');
-        $(this).addClass('selected').css({ left: '', top: '' });
-      }.bind($channel);
-      this._growDestinationArea($channel, 'bubbleHolder rainbowBubble', animationClassName, callback);
+      this._setupFlyingChannel($channel, channelType, offset);
+      // trigger the fly-in animation
+      this._growDestinationArea($channel, 'bubbleHolder rainbowBubble', animationClassName, this._rainbowAnimationCallback($channel, selected));
     },
 
-    _setupFlyingChannel: function($channel, offset) {
+    _rainbowAnimationCallback: function($channel, selected) {
+      var self = this;
+      return function() {
+        self.$el.removeClass('rainbowAnimationRunning');
+        if (selected) {
+          self.$('.selected').removeClass('selected');
+          $channel.addClass('selected').css({left: '', top: ''});
+        }
+      }
+    },
+
+    _setupFlyingChannel: function($channel, channelType, offset) {
       this.$el.addClass('rainbowAnimationRunning');
       $channel.css({
-        left : offset.left - this._$innerHolder.offset().left,
-        top : offset.top - this._$innerHolder.offset().top
+        left: offset.left - this._$innerHolder.offset().left,
+        top: offset.top - this._$innerHolder.offset().top
       });
       this._$innerHolder.prepend($channel);
+      avatarFallback($channel.find('img'), channelType, 50);
     }
 
   });
