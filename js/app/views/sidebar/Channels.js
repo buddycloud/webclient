@@ -20,7 +20,8 @@ define(function(require) {
   var animations = require('util/animations');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
-  var template = require('text!templates/sidebar/channels.html')
+  var template = require('text!templates/sidebar/channels.html');
+  var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
 
   var Channels = Backbone.View.extend({
@@ -34,17 +35,18 @@ define(function(require) {
       this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
     },
 
-    _updateChannels: function(action, channel) {
+    _updateChannels: function(action, channel, role, extra) {
+      // extra for rainbow animation
       if (action === 'subscribedChannel') {
-        this._addChannel(channel);
+        this._addChannel(channel, extra);
       } else {
         this._removeChannel(channel);
       }
     },
 
-    _addChannel: function(channel) {
-      var callback = this._triggerUpdateCallback();
-      this._fetchMetadata(channel, callback);
+    _addChannel: function(channel, extra) {
+      var callback = this._triggerUpdateCallback(extra);
+      this._fetchMetadata(channel, callback, extra);
     },
 
     _removeChannel: function(channel) {
@@ -103,13 +105,14 @@ define(function(require) {
       return this.model.username().indexOf(channel) != -1;
     },
 
-    _triggerUpdateCallback: function() {
+    _triggerUpdateCallback: function(extra) {
       var self = this;
       return function(model) {
-        self.render();
-        // FIXME add right animations
-        self.selectChannel(model.channel);
-        self._bubble('.channel[data-href="' + model.channel + '"]');
+        var channel = _.template(channelTemplate,{
+          metadata: model,
+          selected: false
+        });
+        self._rainbowAnimation($(channel), extra.offset, extra.animationClass);
       }
     },
 
@@ -139,7 +142,7 @@ define(function(require) {
 
       if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
         this._shrinkStartArea(bubblingChannel, bubbleDestination);
-        this._growDestinationArea(bubblingChannel);
+        this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
       }
     },
 
@@ -163,17 +166,17 @@ define(function(require) {
       this._$innerHolder.prepend(bubblingChannel);
     },
 
-    _growDestinationArea: function(bubblingChannel) {
-      var landingArea = $('<div></div>').addClass('bubbleHolder');
+    _growDestinationArea: function(bubblingChannel, bubbleClasses, animationClass, callback) {
+      var landingArea = $('<div></div>').addClass(bubbleClasses);
       bubblingChannel.wrap(landingArea);
       document.redraw();
-      bubblingChannel.bind(animations.transitionsEndEvent(), {self: this}, this._adjustNewSpot);
+      bubblingChannel.bind(animations.transitionsEndEvent(), {self: this, callback: callback}, this._adjustNewSpot);
       // start animation
       this._triggerGrowingAnimation(bubblingChannel);
     },
 
-    _triggerGrowingAnimation: function(bubblingChannel) {
-      bubblingChannel.addClass('bubbling').css({'top': 0, 'z-index': ++this._movingChannels + 1});
+    _triggerGrowingAnimation: function(bubblingChannel, animationClass) {
+      bubblingChannel.addClass(animationClass).css({'top': 0, 'left': 0, 'z-index': ++this._movingChannels + 1});
       bubblingChannel.parent().css('height', this._channelHeight);
     },
 
@@ -241,7 +244,30 @@ define(function(require) {
     _resetUnreadCount: function(channel) {
       this._unreadCounts[channel] = 0;
       this._renderUnreadCount(channel);
+    },
+
+    _rainbowAnimation: function($channel, offset, animationClassName) {
+      var self = this;
+
+      this._setupFlyingChannel($channel, offset);
+      // wrap a growing holder around it
+      // also trigger the fly-in animation
+      var callback = function() {
+        self.$el.removeClass('rainbowAnimationRunning');
+        $(this).addClass('selected').css({ left: '', top: '' });
+      }.bind($channel);
+      this._growDestinationArea($channel, 'bubbleHolder rainbowBubble', animationClassName, callback);
+    },
+
+    _setupFlyingChannel: function($channel, offset) {
+      this.$el.addClass('rainbowAnimationRunning');
+      $channel.css({
+        left : offset.left - this._$innerHolder.offset().left,
+        top : offset.top - this._$innerHolder.offset().top
+      });
+      this._$innerHolder.prepend($channel);
     }
+
   });
 
   return Channels;

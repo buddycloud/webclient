@@ -69,16 +69,20 @@ define(function(require) {
     },
 
     _follow: function(event) {
-      var jid = this.$(event.currentTarget).parent().attr('id');
+      var $channel = $(event.currentTarget).parent();
+      var jid = $channel.attr('id');
       var role = this._getChannelDefaultAffiliation(jid);
       var credentials = this.options.user.credentials;
 
       if (jid && role && credentials) {
+        var animationClassName = 'rainbow';
+        var offset = $channel.offset();
+
         // Subscribe
-        this.options.user.subscribedChannels.subscribe(jid, 'posts', role, credentials);
+        this.options.user.subscribedChannels.subscribe(jid, 'posts', role, credentials, {offset: offset, animationClass: animationClassName});
 
         // Disable button
-        this.$(event.currentTarget).parent().find('.follow').removeClass('callToAction').addClass('disabled');
+        $channel.find('.follow').removeClass('callToAction').addClass('disabled');
       }
     },
 
