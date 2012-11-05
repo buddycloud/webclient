@@ -54,7 +54,10 @@ define(function(require) {
 
       // Update template
       var channelToRemove = this.$('.channel[data-href="' + channel + '"]');
+      channelToRemove.bind(animations.transitionsEndEvent(), {propertyName : 'height'}, this._removeOldSpot);
+      document.redraw();
       channelToRemove.addClass('remove');
+      channelToRemove.css('height', 0);
     },
 
     _removeMetadata: function(channel) {
@@ -183,9 +186,7 @@ define(function(require) {
     _removeOldSpot: function(event) {
       var propertyToWaitFor = event.data ? event.data.propertyName : undefined;
       if (propertyToWaitFor !== undefined && event.originalEvent.propertyName === propertyToWaitFor) {
-        var $this = $(this);
-        $this.remove();
-        $this.unbind(event.originalEvent.type);
+        $(this).remove();
       }
     },
 
