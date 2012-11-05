@@ -17,6 +17,7 @@
 define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
+  var Events = Backbone.Events;
   var spinner = require('util/spinner');
   var template = require('text!templates/content/searchResults.html');
 

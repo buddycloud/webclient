@@ -29,7 +29,7 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.isLoading = false;
+      this.isLoading = true;
       this._postViews = [];
       this.model.items.bind('reset', this._getAndRenderPosts, this);
       this.model.items.bind('addPost', this._prependNewPost, this);
@@ -114,6 +114,9 @@ define(function(require) {
         self._postViews.push(view);
       });
       this._renderPosts();
+
+      // Loaded all initial posts
+      this.isLoading = false;
     },
 
     _appendPosts: function() {
