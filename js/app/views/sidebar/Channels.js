@@ -53,7 +53,7 @@ define(function(require) {
       this._removeMetadata(channel);
 
       // Update template
-      var channelToRemove = $('.channel.selected');
+      var channelToRemove = this.$('.channel[data-href="' + channel + '"]');
       channelToRemove.addClass('remove');
     },
 
