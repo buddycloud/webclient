@@ -45,8 +45,7 @@ define(function(require) {
     });
     user.on('loginError', function() {
       alert('Wrong username or password.');
-      user.credentials.set({username: null, password: null});
-      user.credentials.save();
+      user.logout();
       route(user);
     });
     user.login({permanent: localStorage.loginPermanent === 'true'});

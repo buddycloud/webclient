@@ -41,6 +41,10 @@ define(function(require) {
 
     published: function() {
       return this.get('published');
+    },
+
+    defaultAffiliation: function() {
+      return this.get('defaultAffiliation');
     }
   });
 

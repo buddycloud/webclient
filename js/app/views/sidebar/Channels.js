@@ -20,7 +20,8 @@ define(function(require) {
   var animations = require('util/animations');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
-  var template = require('text!templates/sidebar/channels.html')
+  var template = require('text!templates/sidebar/channels.html');
+  var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
 
   var Channels = Backbone.View.extend({
@@ -34,25 +35,29 @@ define(function(require) {
       this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
     },
 
-    _updateChannels: function(action, channel) {
+    _updateChannels: function(action, channel, role, extra) {
+      // extra for rainbow animation
       if (action === 'subscribedChannel') {
-        this._addChannel(channel);
+        this._addChannel(channel, extra);
       } else {
         this._removeChannel(channel);
       }
     },
 
-    _addChannel: function(channel) {
-      var callback = this._triggerUpdateCallback();
-      this._fetchMetadata(channel, callback);
+    _addChannel: function(channel, extra) {
+      var callback = this._triggerUpdateCallback(extra);
+      this._fetchMetadata(channel, callback, extra);
     },
 
     _removeChannel: function(channel) {
       this._removeMetadata(channel);
 
       // Update template
-      var channelToRemove = $('.channel.selected');
+      var channelToRemove = this.$('.channel[data-href="' + channel + '"]');
+      channelToRemove.bind(animations.transitionsEndEvent(), {propertyName : 'height'}, this._removeOldSpot);
+      document.redraw();
       channelToRemove.addClass('remove');
+      channelToRemove.css('height', 0);
     },
 
     _removeMetadata: function(channel) {
@@ -103,13 +108,14 @@ define(function(require) {
       return this.model.username().indexOf(channel) != -1;
     },
 
-    _triggerUpdateCallback: function() {
+    _triggerUpdateCallback: function(extra) {
       var self = this;
       return function(model) {
-        self.render();
-        // FIXME add right animations
-        self.selectChannel(model.channel);
-        self._bubble('.channel[data-href="' + model.channel + '"]');
+        var channel = _.template(channelTemplate,{
+          metadata: model,
+          selected: false
+        });
+        self._rainbowAnimation($(channel), model.channelType(), extra.offset, extra.animationClass, extra.selected);
       }
     },
 
@@ -139,7 +145,7 @@ define(function(require) {
 
       if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
         this._shrinkStartArea(bubblingChannel, bubbleDestination);
-        this._growDestinationArea(bubblingChannel);
+        this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
       }
     },
 
@@ -163,26 +169,24 @@ define(function(require) {
       this._$innerHolder.prepend(bubblingChannel);
     },
 
-    _growDestinationArea: function(bubblingChannel) {
-      var landingArea = $('<div></div>').addClass('bubbleHolder');
+    _growDestinationArea: function(bubblingChannel, bubbleClasses, animationClass, callback) {
+      var landingArea = $('<div></div>').addClass(bubbleClasses);
       bubblingChannel.wrap(landingArea);
       document.redraw();
-      bubblingChannel.bind(animations.transitionsEndEvent(), {self: this}, this._adjustNewSpot);
+      bubblingChannel.bind(animations.transitionsEndEvent(), {self: this, callback: callback}, this._adjustNewSpot);
       // start animation
       this._triggerGrowingAnimation(bubblingChannel);
     },
 
-    _triggerGrowingAnimation: function(bubblingChannel) {
-      bubblingChannel.addClass('bubbling').css({'top': 0, 'z-index': ++this._movingChannels + 1});
+    _triggerGrowingAnimation: function(bubblingChannel, animationClass) {
+      bubblingChannel.addClass(animationClass).css({'top': 0, 'left': 0, 'z-index': ++this._movingChannels + 1});
       bubblingChannel.parent().css('height', this._channelHeight);
     },
 
     _removeOldSpot: function(event) {
       var propertyToWaitFor = event.data ? event.data.propertyName : undefined;
       if (propertyToWaitFor !== undefined && event.originalEvent.propertyName === propertyToWaitFor) {
-        var $this = $(this);
-        $this.remove();
-        $this.unbind(event.originalEvent.type);
+        $(this).remove();
       }
     },
 
@@ -241,7 +245,37 @@ define(function(require) {
     _resetUnreadCount: function(channel) {
       this._unreadCounts[channel] = 0;
       this._renderUnreadCount(channel);
+    },
+
+    _rainbowAnimation: function($channel, channelType, offset, animationClassName, selected) {
+      var self = this;
+
+      this._setupFlyingChannel($channel, channelType, offset);
+      // trigger the fly-in animation
+      this._growDestinationArea($channel, 'bubbleHolder rainbowBubble', animationClassName, this._rainbowAnimationCallback($channel, selected));
+    },
+
+    _rainbowAnimationCallback: function($channel, selected) {
+      var self = this;
+      return function() {
+        self.$el.removeClass('rainbowAnimationRunning');
+        if (selected) {
+          self.$('.selected').removeClass('selected');
+          $channel.addClass('selected').css({left: '', top: ''});
+        }
+      }
+    },
+
+    _setupFlyingChannel: function($channel, channelType, offset) {
+      this.$el.addClass('rainbowAnimationRunning');
+      $channel.css({
+        left: offset.left - this._$innerHolder.offset().left,
+        top: offset.top - this._$innerHolder.offset().top
+      });
+      this._$innerHolder.prepend($channel);
+      avatarFallback($channel.find('img'), channelType, 50);
     }
+
   });
 
   return Channels;

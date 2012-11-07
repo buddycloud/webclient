@@ -103,13 +103,18 @@ define(function(require) {
       return _.include(followedChannels, channel);
     },
 
-    _follow: function() {
+    _follow: function(e) {
       var channel = this.model.metadata.channel;
       var role = this.model.metadata.defaultAffiliation();
       var credentials = this.options.user.credentials;
 
-      // Subscribe
-      this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials);
+      // rainbow animation stuff
+      var animationClassName = 'channelHeader';
+      var offset = this.$el.offset();
+
+      // subscribe
+      // the final parameter is an extra thing necessary to the rainbow animation
+      this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials, {offset: offset, animationClass: animationClassName, selected: true});
 
       // Disable button
       this.$('.follow').toggleClass('disabled');

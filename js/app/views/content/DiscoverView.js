@@ -26,7 +26,7 @@ define(function(require) {
 
     events: {
       'click .callToAction': '_follow',
-      'click .channel': '_redirect'
+      'click .info,.avatar': '_redirect'
     },
 
     initialize: function() {
@@ -59,23 +59,38 @@ define(function(require) {
       return _.include(followedChannels, jid);
     },
 
+    _getChannelDefaultAffiliation: function(jid) {
+      var channels = _.union(this.model.mostActive.models, this.model.recommendations.models);
+      for (var i = 0; i < channels.length; i++) {
+        if (channels[i].jid() === jid) {
+          return channels[i].defaultAffiliation();
+        }
+      }
+
+      return null;
+    },
+
     _follow: function(event) {
-      var jid = this.$(event.currentTarget).parent().find('.owner').text();
-      //TODO var role = this._getChannelDefaultAffiliation();
+      var $channel = $(event.currentTarget).parent();
+      var jid = $channel.attr('id');
+      var role = this._getChannelDefaultAffiliation(jid);
       var credentials = this.options.user.credentials;
 
-      // Subscribe
-      //TODO this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials);
+      if (jid && role && credentials) {
+        var animationClassName = 'rainbow';
+        var offset = $channel.offset();
 
-      // Disable button
-      this.$(event.currentTarget).parent().find('.follow').removeClass('callToAction').addClass('disabled');
+        // Subscribe
+        this.options.user.subscribedChannels.subscribe(jid, 'posts', role, credentials, {offset: offset, animationClass: animationClassName});
+
+        // Disable button
+        $channel.find('.follow').removeClass('callToAction').addClass('disabled');
+      }
     },
 
     _redirect: function(event) {
-      var jid = this.$(event.currentTarget).attr('id');
-      if (jid) {
-        Events.trigger('navigate', jid);
-      }
+      var jid = this.$(event.currentTarget).parent().attr('id');
+      Events.trigger('navigate', jid);
     }
   });
 
