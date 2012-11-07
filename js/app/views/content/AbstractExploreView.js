@@ -21,7 +21,6 @@ define(function(require) {
 
 
   var AbstractExploreView = Backbone.View.extend({
-    className: 'discoverChannels clearfix',
 
     _render: function() {
       avatarFallback(this.$('.avatar'), undefined, 50);

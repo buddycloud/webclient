@@ -29,7 +29,7 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.isLoading = false;
+      this.isLoading = true;
       this._postViews = [];
       this.model.items.bind('reset', this._getAndRenderPosts, this);
       this.model.items.bind('addPost', this._prependNewPost, this);
@@ -44,6 +44,7 @@ define(function(require) {
     },
 
     destroy: function() {
+      $('.content').off('scroll', this.checkScroll);
       this.options.user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
       this.remove();
     },
@@ -57,7 +58,6 @@ define(function(require) {
 
       if(!this.isLoading && (content.scrollTop() + content.prop('clientHeight') + triggerPoint > content.prop('scrollHeight'))) {
         var self = this;
-        this.isLoading = true;
 
         // Last loaded post id
         var lastItem = this.model.items.lastItem();
@@ -70,7 +70,6 @@ define(function(require) {
             success: function() {
               self._appendPosts();
               self._hideSpinner();
-              self.isLoading = false;
             }
           });
         }
@@ -78,10 +77,12 @@ define(function(require) {
     },
 
     _hideSpinner: function() {
+      this.isLoading = false;
       this.$('.loader').hide();
     },
 
     _showSpinner: function() {
+      this.isLoading = true;
       this.$('.loader').show();
     },
 
