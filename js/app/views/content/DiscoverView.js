@@ -15,13 +15,11 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
-  var avatarFallback = require('util/avatarFallback');
-  var Events = Backbone.Events;
+  var AbstractExploreView = require('views/content/AbstractExploreView');
   var spinner = require('util/spinner');
   var template = require('text!templates/content/discover.html')
 
-  var DiscoverView = Backbone.View.extend({
+  var DiscoverView = AbstractExploreView.extend({
     className: 'discoverChannels clearfix',
 
     events: {
@@ -30,6 +28,10 @@ define(function(require) {
     },
 
     initialize: function() {
+      this._defineGetter('channels', function() {
+        return _.union(this.model.mostActive.models, this.model.recommendations.models);
+      });
+
       this.model.bind('fetch', this.render, this);
       this.model.doDiscover({user: this.options.user.username()});
       spinner.replace(this.$el);
@@ -40,57 +42,7 @@ define(function(require) {
         mostActive: this.model.mostActive.models,
         recommended: this.model.recommendations.models
       }));
-      avatarFallback(this.$('.avatar'), undefined, 50);
-      this._renderButtons();
-    },
-
-    _renderButtons: function() {
-      var self = this;
-      this.$('.channel').each(function() {
-        var jid = $(this).attr('id');
-        if (self._follows(jid)) {
-          $(this).find('.follow').removeClass('callToAction').addClass('disabled');
-        }
-      });
-    },
-
-    _follows: function(jid) {
-      var followedChannels = this.options.user.subscribedChannels.channels();
-      return _.include(followedChannels, jid);
-    },
-
-    _getChannelDefaultAffiliation: function(jid) {
-      var channels = _.union(this.model.mostActive.models, this.model.recommendations.models);
-      for (var i = 0; i < channels.length; i++) {
-        if (channels[i].jid() === jid) {
-          return channels[i].defaultAffiliation();
-        }
-      }
-
-      return null;
-    },
-
-    _follow: function(event) {
-      var $channel = $(event.currentTarget).parent();
-      var jid = $channel.attr('id');
-      var role = this._getChannelDefaultAffiliation(jid);
-      var credentials = this.options.user.credentials;
-
-      if (jid && role && credentials) {
-        var animationClassName = 'rainbow';
-        var offset = $channel.offset();
-
-        // Subscribe
-        this.options.user.subscribedChannels.subscribe(jid, 'posts', role, credentials, {offset: offset, animationClass: animationClassName});
-
-        // Disable button
-        $channel.find('.follow').removeClass('callToAction').addClass('disabled');
-      }
-    },
-
-    _redirect: function(event) {
-      var jid = this.$(event.currentTarget).parent().attr('id');
-      Events.trigger('navigate', jid);
+      this._render();
     }
   });
 
