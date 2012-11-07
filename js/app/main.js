@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,7 @@ define(function(require) {
     });
     user.on('loginError', function() {
       alert('Wrong username or password.');
-      user.credentials.set({username: null, password: null});
-      user.credentials.save();
+      user.logout();
       route(user);
     });
     user.login({permanent: localStorage.loginPermanent === 'true'});

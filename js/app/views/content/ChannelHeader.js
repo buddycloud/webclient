@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,14 @@ define(function(require) {
              'click .edit': '_edit'},
 
     initialize: function() {
-      this.options.user.subscribedChannels.bind('sync', this._switchButton, this);
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
+      }
+    },
+
+    destroy: function() {
+      this.options.user.subscribedChannels.unbind('subscriptionSync', this._switchButton, this);
+      this.remove();
     },
 
     render: function() {
@@ -96,13 +103,18 @@ define(function(require) {
       return _.include(followedChannels, channel);
     },
 
-    _follow: function() {
+    _follow: function(e) {
       var channel = this.model.metadata.channel;
       var role = this.model.metadata.defaultAffiliation();
       var credentials = this.options.user.credentials;
 
-      // Subscribe
-      this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials);
+      // rainbow animation stuff
+      var animationClassName = 'channelHeader';
+      var offset = this.$el.offset();
+
+      // subscribe
+      // the final parameter is an extra thing necessary to the rainbow animation
+      this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials, {offset: offset, animationClass: animationClassName, selected: true});
 
       // Disable button
       this.$('.follow').toggleClass('disabled');
@@ -117,7 +129,7 @@ define(function(require) {
 
       // Disable button
       this.$('.unfollow').toggleClass('disabled');
-    }    
+    }
   });
 
   return ChannelHeader;

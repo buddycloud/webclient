@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,12 +32,12 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.fields = 
+      this.fields =
         {
-          'channel_name': 'title', 
-          'channel_status': 'description', 
+          'channel_name': 'title',
+          'channel_description': 'description',
           'channel_public_access': 'access_model',
-          'channel_default_role': 'default_affiliation' 
+          'channel_default_role': 'default_affiliation'
         };
       this.model.bind('change', this.render, this);
       this.model.bind('sync', this.render, this);
@@ -99,7 +99,16 @@ define(function(require) {
 
       // Save
       this._saveAvatar();
-      this.model.save({}, {credentials: this.options.user.credentials});  
+
+      var self = this;
+      this.model.save({}, {
+        credentials: this.options.user.credentials,
+        complete: function() {
+          self._enableSaveButton();
+        }
+      });
+
+      this._disableSaveButton();
     },
 
     _saveAvatar: function() {
@@ -132,7 +141,7 @@ define(function(require) {
         contentType: false,
         processData: false,
         beforeSend: function(xhr) {
-          xhr.setRequestHeader('Authorization', 
+          xhr.setRequestHeader('Authorization',
             self.options.user.credentials.authorizationHeader());
         },
         statusCode: {
@@ -143,10 +152,18 @@ define(function(require) {
       });
     },
 
+    _enableSaveButton: function() {
+      this.$('.save').removeClass('disabled').text('Save');
+    },
+
+    _disableSaveButton: function() {
+      this.$('.save').addClass('disabled').text('Saving...');
+    },
+
     _setTextFields: function() {
       // FIXME not all fields are handled by HTTP API
       // var textFields = ['channel_name', 'channel_description', 'channel_status', 'channel_location'];
-      var textFields = ['channel_name', 'channel_status'];
+      var textFields = ['channel_name', 'channel_description'];
       for (var i = 0; i < textFields.length; i++) {
         var content = this.$('#' + textFields[i]).val();
         this.model.set(this.fields[textFields[i]], content, {silent: true});
@@ -165,7 +182,7 @@ define(function(require) {
     _setAccessModel: function() {
       var accessField = this.fields['channel_public_access'];
       if (this._isChecked(this.$('#channel_public_access'))) {
-        this.model.set(accessField, 'open', {silent: true});  
+        this.model.set(accessField, 'open', {silent: true});
       } else {
         this.model.set(accessField, 'whitelist', {silent: true});
       }
@@ -174,10 +191,10 @@ define(function(require) {
     _setDefaultRole: function() {
       var defaultRoleField = this.fields['channel_default_role'];
       if (this.$('#channel_default_role').val() == 'followerPlus') {
-        this.model.set(defaultRoleField, 'publisher', {silent: true});  
+        this.model.set(defaultRoleField, 'publisher', {silent: true});
       } else if (this.$('#channel_default_role').val() == 'follower') {
         this.model.set(defaultRoleField, 'member', {silent: true});
-      }      
+      }
     }
   });
 

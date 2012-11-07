@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ define(function(require) {
   var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var template = require('text!templates/content/editHeader.html')
 
   var ChannelHeader = Backbone.View.extend({
@@ -26,6 +27,9 @@ define(function(require) {
     initialize: function() {
       this.model.bind('change', this.render, this);
       this.model.fetch();
+
+      // Avatar changed event
+      Events.on('avatarChanged', this.render, this);
     },
 
     render: function() {

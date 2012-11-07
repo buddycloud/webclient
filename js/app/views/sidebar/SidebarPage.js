@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ define(function(require) {
     className: 'sidebar',
 
     initialize: function() {
-      this.personalChannel = new PersonalChannel({model: this.model.credentials});
+      this.personalChannel = new PersonalChannel({model: this.model});
       this.actionBar = new ActionBar();
       this.channels = new Channels({model: this.model});
       this.render();

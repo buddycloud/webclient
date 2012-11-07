@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,17 @@ define(function(require) {
     },
 
     _embedly: function() {
-      this.$('p').embedly({maxWidth: 400, key: config.embedlyKey, secure: true});
+      this.$('p').embedly({
+        maxWidth: 400, 
+        key: config.embedlyKey, 
+        secure: true, 
+        success: function(oembed, dict) {
+          var elem = dict.node;
+          // If is not a link or if the link has an image
+          return oembed && (oembed.type !== 'link' || oembed.code.indexOf('img') != -1) ?
+            elem.replaceWith(oembed.code) : null;
+        }
+      });
     },
 
     _roleTag: function(username) {

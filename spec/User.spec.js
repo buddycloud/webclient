@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
@@ -104,30 +104,50 @@ define(function(require) {
     describe('logout()', function() {
       beforeEach(function() {
         user.credentials.set({username: 'bob@example.com', password: 'bob'});
+        localStorage.username = 'bob@example.com';
+        localStorage.password = 'bob';
+      
+        sessionStorage.username = 'bob@example.com';
+        sessionStorage.password = 'bob';
+      });
+
+      it('should remove session information', function() {
+        user.logout();
+        expect(localStorage.username).toBeUndefined();
+        expect(localStorage.password).toBeUndefined();
+
+        expect(sessionStorage.username).toBeUndefined();
+        expect(sessionStorage.password).toBeUndefined();
+      });
+    });
+
+    describe('endSession()', function() {
+      beforeEach(function() {
+        user.credentials.set({username: 'bob@example.com', password: 'bob'});
       });
 
       it('should decrease localStorage.loginCount', function() {
         localStorage.loginCount = '2';
-        user.logout();
+        user.endSession();
         expect(localStorage.loginCount).toBe('1');
       });
 
       it('should not decrease loginCount if user is anonymous', function() {
         user.credentials.set({username: null, password: null});
         localStorage.loginCount = '2';
-        user.logout();
+        user.endSession();
         expect(localStorage.loginCount).toBe('2');
       });
 
       it('should not decrease loginCount if it is already 0', function() {
         localStorage.loginCount = '0';
-        user.logout();
+        user.endSession();
         expect(localStorage.loginCount).toBe('0');
       });
 
       it('should reset credentials if loginCount reaches 0', function() {
         localStorage.loginCount = '1';
-        user.logout();
+        user.endSession();
         expect(localStorage.username).toBeUndefined();
         expect(user.password).toBeUndefined();
       });

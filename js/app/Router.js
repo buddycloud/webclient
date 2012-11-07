@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,9 @@ define(function(require) {
   var EditChannelPage = require('views/content/EditChannelPage');
   var ExplorePage = require('views/content/ExplorePage');
   var PreferencesPage = require('views/content/PreferencesPage');
+  var ErrorPage = require('views/content/ErrorPage');
   var SidebarPage = require('views/sidebar/SidebarPage');
+  var spinner = require('util/spinner');
   var WelcomePage = require('views/overlay/WelcomePage');
   var Events = Backbone.Events;
 
@@ -38,18 +40,19 @@ define(function(require) {
       Backbone.Router.call(this);
       this.user = user;
       if (!this.user.isAnonymous()) {
-        this._logoutOnUnload();
+        this._endSessionOnUnload();
       }
     },
 
     initialize: function() {
       Events.on('navigate', this._navigate, this);
+      Events.on('pageError', this._error, this);
     },
 
-    _logoutOnUnload: function() {
+    _endSessionOnUnload: function() {
       var user = this.user;
       window.onbeforeunload = function() {
-        user.logout();
+        user.endSession();
       };
     },
 
@@ -59,6 +62,10 @@ define(function(require) {
       if (!this.user.isAnonymous() && !this.sidebar) {
         this.sidebar = new SidebarPage({model: this.user});
       }
+      if (this.currentPage) {
+        this.currentPage.destroy();
+      }
+      spinner.replace($('.content'));
     },
 
     _navigate: function(path) {
@@ -80,12 +87,12 @@ define(function(require) {
 
     explore: function() {
       this._before();
-      new ExplorePage({user: this.user});
+      this.currentPage = new ExplorePage({user: this.user});
     },
 
     preferences: function() {
       this._before();
-      new PreferencesPage({user: this.user});
+      this.currentPage = new PreferencesPage({user: this.user});
     },
 
     channel: function(channel) {
@@ -93,12 +100,17 @@ define(function(require) {
       if (this.sidebar) {
         this.sidebar.selectChannel(channel);
       }
-      new ChannelPage({channel: channel, user: this.user});
+      this.currentPage = new ChannelPage({channel: channel, user: this.user});
     },
 
     channelEdit: function(channel) {
       this._before();
-      new EditChannelPage({channel: channel, user: this.user});
+      this.currentPage = new EditChannelPage({channel: channel, user: this.user});
+    },
+
+    _error: function(e) {
+      this._before();
+      this.currentPage = new ErrorPage({error: e});
     }
   });
 

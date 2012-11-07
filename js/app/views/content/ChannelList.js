@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,6 @@ define(function(require) {
     },
 
     _removeOpenedView: function() {
-      // Remember: Backbone 0.9.2 stable version has a memory issue on remove()
       if (this._openedDetailsView) {
         this._openedDetailsView.remove();
         this.$('.selected').removeClass('selected');

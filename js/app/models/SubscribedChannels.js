@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,11 +43,11 @@ define(function(require) {
       return _.include(['owner', 'moderator', 'publisher'], affiliation);
     },
 
-    subscribe: function(channel, node, role, credentials) {
+    subscribe: function(channel, node, role, credentials, extra) {
       var self = this;
       this.set(channel + '/' + node, role, {silent: true});
       this._saveChangedAttributes(credentials, function() {
-        self.trigger('sync', 'subscribedChannel', channel, role);
+        self.trigger('subscriptionSync', 'subscribedChannel', channel, role, extra);
         self.change();
       });
     },
@@ -58,7 +58,7 @@ define(function(require) {
       this.set(channelAndNode, 'none', {silent: true});
       this._saveChangedAttributes(credentials, function() {
         delete self.attributes[channelAndNode];
-        self.trigger('sync', 'unsubscribedChannel', channel);
+        self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
         self.change();
       });
     },

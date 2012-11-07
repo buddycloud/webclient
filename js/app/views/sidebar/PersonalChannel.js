@@ -1,5 +1,5 @@
-/*
- * Copyright 2012 Denis Washington <denisw@online.de>
+  /*
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,20 +23,30 @@ define(function(require) {
 
   var PersonalChannel = Backbone.View.extend({
     className: 'personal channel',
-    events:  
+    events:
       {
+        'click .logout': '_logout',
         'click .metadata': '_navigate',
-        'click .settings': 'showSettings',
+        'click .noSelect': 'showSettings',
         'click .showSettings' : 'hideSettings',
         'click .preferences': '_showPrefs'
       },
 
     initialize: function() {
-      this.metadata = new ChannelMetadata(this.model.username);
+      this.metadata = new ChannelMetadata(this.model.username());
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
 
       _.bindAll(this, 'showSettings', 'hideSettings');
+
+      // Avatar changed event
+      Events.on('avatarChanged', this._avatarChanged, this);
+    },
+
+    _avatarChanged: function(channel) {
+      if (channel === this.model.username()) {
+        this.render();
+      }
     },
 
     render: function() {
@@ -46,8 +56,13 @@ define(function(require) {
       avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);
     },
 
+    _logout: function() {
+      this.model.logout();
+      location.reload();
+    },
+
     selectChannel: function(channel) {
-      this.selected = (this.metadata.channel == channel);
+      this.selected = (this.metadata.channel === channel);
       if (this.selected) {
         this.$el.addClass('selected');
       } else {
@@ -56,14 +71,14 @@ define(function(require) {
     },
 
     _navigate: function() {
-      Events.trigger('navigate', this.model.username);
+      Events.trigger('navigate', this.model.username());
     },
 
     _showPrefs: function() {
       Events.trigger('navigate', 'prefs');
     },
 
-    showSettings: function() {
+    showSettings: function(event) {
       event.stopPropagation();
       this.$('.settings').removeClass('noSelect').addClass('showSettings');
 

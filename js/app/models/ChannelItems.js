@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,11 @@ define(function(require) {
 
     url: function() {
       return api.url(this.channel, 'content', 'posts');
+    },
+
+    lastItem: function() {
+      var lastItem = _.last(_.values(this.models));
+      return lastItem ? lastItem.id : null;
     },
 
     fetch: function(options) {

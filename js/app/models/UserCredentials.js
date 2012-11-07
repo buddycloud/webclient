@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,9 +58,13 @@ define(function(require) {
       }
     },
 
-    save: function(attributes) {
+    save: function(attributes, options) {
       this.set(attributes);
       this._saveToStorage(localStorage);
+
+      if (options && options.permanent) {
+        this._saveToStorage(sessionStorage);
+      }
     },
 
     addAuthorizationToAjaxOptions: function(options) {

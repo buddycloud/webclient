@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 buddycloud
+ * Copyright 2012 Denis Washington <denisw@online.de>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,32 +16,25 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var Channel = require('models/Channel')
-  var EditHeader = require('views/content/EditHeader');
-  var EditChannelView = require('views/content/EditChannelView');
+  var template = require('text!templates/content/error.html')
 
-  var EditChannelPage = Backbone.View.extend({
-    className: 'channelView',
+  var ErrorPage = Backbone.View.extend({
+    className: 'channelView clearfix',
 
     initialize: function() {
-      this.model = new Channel(this.options.channel);
-      this.view = new EditChannelView({
-        model: this.model,
-        user: this.options.user
-      });
-      this.model.bind('fetch', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials})
+      this.render();
     },
 
     render: function() {
-      $('.content').html(this.view.el);
+      $('.content').html(_.template(template, {
+        error: this.options.error,
+      }));
     },
 
     destroy: function() {
       this.remove();
-      this.view.remove();
     }
   });
 
-  return EditChannelPage;
+  return ErrorPage;
 });

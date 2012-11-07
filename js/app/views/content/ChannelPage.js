@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var Channel = require('models/Channel');
   var ChannelView = require('views/content/ChannelView');
+  var Events = Backbone.Events;
 
   var ChannelPage = Backbone.View.extend({
     className: 'channelView clearfix',
@@ -29,12 +30,18 @@ define(function(require) {
         user: this.options.user
       });
       this.model.bind('fetch', this._begin, this);
+      this.model.bind('error', this._error, this);
       this.model.fetch({credentials: this.options.user.credentials});
     },
 
     _begin: function() {
       this.render();
       this._listenForNewPosts();
+    },
+
+    _error: function(e) {
+      this.view.destroy();
+      Events.trigger('pageError', e);
     },
 
     _listenForNewPosts: function() {
@@ -51,6 +58,11 @@ define(function(require) {
     render: function() {
       this.view.render();
       $('.content').html(this.view.el);
+    },
+
+    destroy: function() {
+      this.view.destroy();
+      this.remove();
     }
   });
 

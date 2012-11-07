@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Denis Washington <denisw@online.de>
+ * Copyright 2012 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,8 @@ define(function(require) {
 
     fetch: function(options) {
       options = _.extend(options || {}, {
-        success: this._triggerFetchCallback()
+        success: this._triggerFetchCallback(),
+        error: this._triggerErrorCallback()
       });
       this.followers.fetch(options);
       this.metadata.fetch(options);
@@ -48,6 +49,19 @@ define(function(require) {
             _.include(fetched, self.metadata) &&
             _.include(fetched, self.items)) {
           self.trigger('fetch');
+        }
+      }
+    },
+
+    _triggerErrorCallback: function() {
+      var self = this;
+      var error = [];
+      return function(model, xhr) {
+        error.push(model);
+        if (_.include(error, self.followers) &&
+            _.include(error, self.metadata) &&
+            _.include(error, self.items)) {
+          self.trigger('error', {status: xhr.status, statusText: xhr.statusText});
         }
       }
     }
