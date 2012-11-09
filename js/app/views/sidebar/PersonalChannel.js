@@ -58,7 +58,8 @@ define(function(require) {
 
     _logout: function() {
       this.model.logout();
-      location.reload();
+      // Return to WelcomePage
+      Events.trigger('navigate', '/');
     },
 
     selectChannel: function(channel) {
