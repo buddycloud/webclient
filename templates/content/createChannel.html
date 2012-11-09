@@ -1,0 +1,50 @@
+<form class="stream clearfix">
+  <h2 class="pageName">Create Channel</h2>
+  <div class="avatar">
+    <label>Avatar</label>
+    <div>
+      <input type="file" id="avatar">
+      <!-- <p class="hint">or change on <a href="http://gravatar.com/">gravatar.com</a></p> -->
+    </div>
+  </div>
+  <div class="title">
+    <label for="channel_name">Channel Name</label>
+    <input type="text" id="channel_name" value=""/>
+  </div>
+  <div class="jid">
+    <label for="channel_jid">Channel ID</label>
+    <input type="text" id="channel_jid" value=""/>
+  </div>
+  <div class="description area">
+    <label for="channel_description">Description</label>
+    <textarea id="channel_description"></textarea>
+  </div>  
+  <div class="access">
+    <label for="channel_public_access">Public Access</label>
+    <div>
+      <input type="checkbox" id="channel_public_access"/>
+    </div>
+  </div>
+  <div class="role">
+    <label for="channel_default_role">Default Role</label>
+    <div>
+      <select id="channel_default_role">
+        <option value="follower">follower</option>
+        <option value="followerPlus">follower+</option>
+      </select>
+      <span class="hint followerSelected">
+        <span class="follower">
+          can only read your channel
+        </span>
+        <span class="followerPlus">
+          can read and write your channel
+        </span>
+      </span> 
+    </div>
+  </div>
+</form>
+<nav class="bottom clearfix">
+  <div class="button callToAction save">Create</div>
+  <div class="button discard">Discard</div>
+</nav>
+<a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>  

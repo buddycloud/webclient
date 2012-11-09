@@ -15,14 +15,10 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
-  var Backbone = require('backbone');
-  var avatarFallback = require('util/avatarFallback');
-  var Events = Backbone.Events;
+  var AbstractEditStream = require('views/content/AbstractEditStream');
   var template = require('text!templates/content/editChannel.html');
 
-  var EditChannelStream = Backbone.View.extend({
-    className: 'stream clearfix',
+  var EditChannelStream = AbstractEditStream.extend({
 
     events: {
       'click .save': 'save',
@@ -32,13 +28,7 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.fields =
-        {
-          'channel_name': 'title',
-          'channel_description': 'description',
-          'channel_public_access': 'access_model',
-          'channel_default_role': 'default_affiliation'
-        };
+      this._initialize();
       this.model.bind('change', this.render, this);
       this.model.bind('sync', this.render, this);
     },
@@ -47,26 +37,16 @@ define(function(require) {
       this.$el.html(_.template(template, {
         metadata: this.model
       }));
-      if (this.model) {
-        this._fillCheckbox();
-        this._selectDefaultRole();
-      } else {
-        this._removeDeleteButton();
-      }
+      this._fillCheckbox();
+      this._selectDefaultRole();
     },
 
-    _removeDeleteButton: function() {
-      this.$('.floatLeft').remove();
+    save: function() {
+      this._save();
     },
 
     _fillCheckbox: function() {
       this._check(this.$('#channel_public_access'), this._hasPublicAccess());
-    },
-
-    _check: function(element, value) {
-      if (element) {
-        element.attr('checked', value);
-      }
     },
 
     _hasPublicAccess: function() {
@@ -85,116 +65,6 @@ define(function(require) {
 
     _deleteAccount: function() {
       //TODO delete account
-    },
-
-    save: function(event) {
-      if (!this.model) {
-        // Create new ChannelMetadata
-      }
-
-      // Set fields
-      this._setTextFields();
-      this._setAccessModel();
-      this._setDefaultRole();
-
-      // Save
-      this._saveAvatar();
-
-      var self = this;
-      this.model.save({}, {
-        credentials: this.options.user.credentials,
-        complete: function() {
-          self._enableSaveButton();
-        }
-      });
-
-      this._disableSaveButton();
-    },
-
-    _saveAvatar: function() {
-      var file = this.$(':file')[0].files[0];
-      if (file) {
-        var formData = this._buildFormData(file);
-        this._sendUploadFileResquest(formData);
-      }
-    },
-
-    _buildFormData: function(file) {
-      var formData = new FormData();
-      formData.append('data', file);
-      formData.append('content-type', file.type);
-      if (file.name) {
-        formData.append('filename', file.name);
-      }
-
-      return formData;
-    },
-
-    _sendUploadFileResquest: function(formData) {
-      var self = this;
-      $.ajax({
-        type: 'PUT',
-        url: this.model.avatarUrl(),
-        crossDomain: true,
-        data: formData,
-        xhrFields: {withCredentials: true},
-        contentType: false,
-        processData: false,
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader('Authorization',
-            self.options.user.credentials.authorizationHeader());
-        },
-        statusCode: {
-          201: function() {
-            Events.trigger('avatarChanged', self.model.channel);
-          }
-        }
-      });
-    },
-
-    _enableSaveButton: function() {
-      this.$('.save').removeClass('disabled').text('Save');
-    },
-
-    _disableSaveButton: function() {
-      this.$('.save').addClass('disabled').text('Saving...');
-    },
-
-    _setTextFields: function() {
-      // FIXME not all fields are handled by HTTP API
-      // var textFields = ['channel_name', 'channel_description', 'channel_status', 'channel_location'];
-      var textFields = ['channel_name', 'channel_description'];
-      for (var i = 0; i < textFields.length; i++) {
-        var content = this.$('#' + textFields[i]).val();
-        this.model.set(this.fields[textFields[i]], content, {silent: true});
-      }
-    },
-
-    _isChecked: function(element) {
-      if (element) {
-        var checked = element.attr('checked');
-        return checked && checked === 'checked';
-      }
-
-      return false;
-    },
-
-    _setAccessModel: function() {
-      var accessField = this.fields['channel_public_access'];
-      if (this._isChecked(this.$('#channel_public_access'))) {
-        this.model.set(accessField, 'open', {silent: true});
-      } else {
-        this.model.set(accessField, 'whitelist', {silent: true});
-      }
-    },
-
-    _setDefaultRole: function() {
-      var defaultRoleField = this.fields['channel_default_role'];
-      if (this.$('#channel_default_role').val() == 'followerPlus') {
-        this.model.set(defaultRoleField, 'publisher', {silent: true});
-      } else if (this.$('#channel_default_role').val() == 'follower') {
-        this.model.set(defaultRoleField, 'member', {silent: true});
-      }
     }
   });
 

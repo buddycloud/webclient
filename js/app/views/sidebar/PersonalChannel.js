@@ -29,7 +29,8 @@ define(function(require) {
         'click .metadata': '_navigate',
         'click .noSelect': 'showSettings',
         'click .showSettings' : 'hideSettings',
-        'click .preferences': '_showPrefs'
+        'click .preferences': '_loadPrefs',
+        'click .newChannel': '_loadCreateChannel'
       },
 
     initialize: function() {
@@ -74,8 +75,12 @@ define(function(require) {
       Events.trigger('navigate', this.model.username());
     },
 
-    _showPrefs: function() {
+    _loadPrefs: function() {
       Events.trigger('navigate', 'prefs');
+    },
+
+    _loadCreateChannel: function() {
+      Events.trigger('navigate', 'new-channel');
     },
 
     showSettings: function(event) {
