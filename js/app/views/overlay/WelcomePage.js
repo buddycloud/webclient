@@ -20,7 +20,6 @@ define(function(require) {
   var Backbone = require('backbone');
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
-  var footer = require('text!templates/overlay/footer.html');
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
@@ -89,9 +88,6 @@ define(function(require) {
           // hide if the user clickes into empty space
           $(document).one('click', hideForm);
         }
-        
-        // add footer
-        $('.content').append(_.template(footer));
       }
 
       function hideForm(){

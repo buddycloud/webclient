@@ -18,6 +18,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
   var Events = Backbone.Events;
+  var footer = require('text!templates/overlay/footer.html');
   var MostActiveDiscover = require('models/MostActiveDiscover');
   var template = require('text!templates/overlay/discover.html');
 
@@ -41,6 +42,8 @@ define(function(require) {
         mostActive: mostActive,
         popular: popular
       }));
+      // Add footer
+      $('.content').append(_.template(footer));
       avatarFallback(this.$('.avatar'), undefined, 50);
     },
 
