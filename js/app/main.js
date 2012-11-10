@@ -15,7 +15,7 @@
  */
 
 requirejs.config({
-  baseUrl: 'js/vendor',
+  baseUrl: '/js/vendor',
   paths: {
     'config': '../../config',
     'templates': '../../templates',
