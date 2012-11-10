@@ -91,11 +91,11 @@ define(function(require) {
         // Followed the channel
         var defaultRole = this.model.metadata.defaultAffiliation();
         if (defaultRole === 'publisher') {
-          this.$('.newTopic').show();
+          this.$el.prepend(this.$newTopic);
         }
       } else {
         // Unfollowed the channel
-        this.$('.newTopic').hide();
+        this.$newTopic = this.$('.newTopic').detach();
       }
 
       this._renderPosts();
@@ -147,7 +147,7 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {user: this.options.user}));
       if (!this._userCanPost()) {
-        this.$('.newTopic').hide();
+        this.$newTopic = this.$('.newTopic').detach();
       }
       this._showPosts();
       this._postOnCtrlEnter();
@@ -181,15 +181,16 @@ define(function(require) {
 
     _expandNewTopicArea: function(event) {
       event.stopPropagation();
-      var newTopicArea = this.$('.newTopic');
+      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
+      var collapseNewTopicArea = $.proxy(this._collapseNewTopicArea, this);
       if(!newTopicArea.hasClass('write')){
         newTopicArea.addClass('write');
-        $(document).one('click', {self: this}, this._collapseNewTopicArea);
+        $(document).one('click', collapseNewTopicArea);
       }
     },
 
     _collapseNewTopicArea: function(event) {
-      var newTopicArea = event.data.self.$('.newTopic');
+      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
       var textArea = newTopicArea.find('textarea');
       if(textArea.val() === ""){
         newTopicArea.removeClass('write');
@@ -214,7 +215,7 @@ define(function(require) {
         wait: true,
         success: function() {
           textArea.val('');
-          self._collapseNewTopicArea({data: {self: self}});
+          self._collapseNewTopicArea();
           self._enableButton();
         }
       });

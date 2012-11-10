@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var $ = require(['jquery', 'timeago', 'jquery.embedly']);
+  require(['jquery', 'timeago', 'jquery.embedly']);
   var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
   var config = require('config');
@@ -58,9 +58,9 @@ define(function(require) {
 
     _embedly: function() {
       this.$('p').embedly({
-        maxWidth: 400, 
-        key: config.embedlyKey, 
-        secure: true, 
+        maxWidth: 400,
+        key: config.embedlyKey,
+        secure: true,
         success: function(oembed, dict) {
           var elem = dict.node;
           // If is not a link or if the link has an image
@@ -113,16 +113,17 @@ define(function(require) {
     _expandAnswerArea: function(event) {
       event.stopPropagation();
       var area = this.$('.answer');
-      if(!area.hasClass('write')){
+      var collapseAnswerArea = $.proxy(this._collapseAnswerArea, this);
+      if (!area.hasClass('write')) {
         area.addClass('write');
-        $(document).one('click', {self: this}, this._collapseAnswerArea);
+        $(document).one('click', collapseAnswerArea);
       }
     },
 
     _collapseAnswerArea: function(event) {
-      var area = event.data.self.$('.answer');
+      var area = this.$('.answer');
       var textArea = area.find('textarea');
-      if(textArea.val() === ""){
+      if (textArea.val() === "") {
         area.removeClass('write');
       }
     },
@@ -156,7 +157,7 @@ define(function(require) {
         wait: true,
         success: function() {
           textArea.val('');
-          self._collapseAnswerArea({data: {self: self}});
+          self._collapseAnswerArea();
           self._enableButton();
         }
       });
