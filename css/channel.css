@@ -7,7 +7,7 @@
   font: 0/0 a;
   color: transparent;
   text-shadow: none;
-  background: url("../img/poweredby.png") no-repeat;
+  background: url("/img/poweredby.png") no-repeat;
   position: absolute;
 }
 .avatar {
@@ -730,7 +730,7 @@
   width: 16px;
   height: 16px;
   vertical-align: top;
-  background: url("../img/spinner.gif") no-repeat;
+  background: url("/img/spinner.gif") no-repeat;
   display: inline-block;
 }
 

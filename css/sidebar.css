@@ -111,10 +111,10 @@
   position: absolute;
 }
 .sidebar button.discover span:before {
-  background: url("../img/globe.png");
+  background: url("/img/globe.png");
 }
 .sidebar button#create_topic_channel span:before {
-  background: url("../img/new.png");
+  background: url("/img/new.png");
 }
 .sidebar button#create_topic_channel {
   left: 0;
@@ -173,7 +173,7 @@
   .personal.channel .settings {
     width: 35px;
     height: 76px;
-    background: url(../img/settings_dropdown.png);
+    background: url(/img/settings_dropdown.png);
     position: absolute;
     right: 0;
     top: 0;

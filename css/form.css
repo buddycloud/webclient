@@ -74,7 +74,7 @@ input[type=search].small {
     height: 37px;
     font: 0/0 a;
     color: transparent;
-    background: url(../img/magnifier.png) no-repeat center;
+    background: url(/img/magnifier.png) no-repeat center;
     border-radius: 0 3px 3px 0;
   }
 form .optional {

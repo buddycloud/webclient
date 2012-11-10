@@ -31,11 +31,11 @@
   background-position: center;
   background-repeat: no-repeat;
 }
-.facebook { background-image: url(../img/facebook_16.png); }
-.twitter { background-image: url(../img/twitter_16.png); }
-.gplus { background-image: url(../img/google_16.png); }
-.reddit { background-image: url(../img/reddit_16.png); }
-.tumblr { background-image: url(../img/tumblr_16.png); }
+.facebook { background-image: url(/img/facebook_16.png); }
+.twitter { background-image: url(/img/twitter_16.png); }
+.gplus { background-image: url(/img/google_16.png); }
+.reddit { background-image: url(/img/reddit_16.png); }
+.tumblr { background-image: url(/img/tumblr_16.png); }
 
 /* flex box helpers */
 .centered, .justify, .horizontal {

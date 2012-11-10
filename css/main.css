@@ -87,7 +87,7 @@ a:hover, a:visited:hover {
 }
 a.internal, a:visited.internal {
   padding-left: 12px;
-  background: url("../img/beagle.png") no-repeat left 4px;
+  background: url("/img/beagle.png") no-repeat left 4px;
 }
 .hint { color: #bbb; }
 table td:not(:last-child) {

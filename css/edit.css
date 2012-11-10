@@ -85,7 +85,7 @@
   width: 16px;
   height: 16px;
   vertical-align: top;
-  background: url("../img/spinner.gif") no-repeat;
+  background: url("/img/spinner.gif") no-repeat;
   display: inline-block;
 }
 [contenteditable="true"],.contenteditable {
