@@ -57,7 +57,8 @@
   }
 .channelHeader .owner,
 .channelHeader .status,
-.channelHeader .location {
+.channelHeader .location,
+.channelHeader .about {
   white-space: nowrap;
   overflow: hidden;
   text-shadow: 0 1px 1px #fff;
@@ -68,13 +69,14 @@
   color: #1b1b1b;
   font-weight: normal;
   margin-bottom: 2px;
+  max-width: 384px;
   line-height: 28px;
 }
 .channelHeader .titleText .about {
   font-size: 12px;
   color: #6e6e6e;
+  max-width: 384px;
   position: relative;
-  cursor: pointer;
 }
 .channelHeader .titleText .about:not(.fullText) {
   max-height: 36px;
