@@ -1,6 +1,6 @@
 define({
-  baseUrl: 'https://api.buddycloud.org',
-  homeDomain: 'buddycloud.org',
+  baseUrl: 'http://api.buddycloud.highfellow.org:22024',
+  homeDomain: 'highfellow.org',
   defaultChannel: 'lounge@topics.buddycloud.org',
-  release: true
+  release: false
 });

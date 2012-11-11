@@ -1,50 +1,50 @@
 <div class="clearfix">
   <nav>
-    <a href="http://buddycloud.com/" class="about onDark">about</a>
-    <a href="https://buddycloud.org/wiki/" class="developers onDark">developers</a>
+  <a href="http://buddycloud.com/" class="about onDark"><%= l('about', {}, "about") %></a>
+  <a href="https://buddycloud.org/wiki/" class="developers onDark"><%= l('developers', {}, "developers") %></a>
   </nav>
   <div class="floatRight formHolder">
     <nav>
-      <a href="#" class="login onDark">login</a>
-      <a href="#" class="register onDark callToAction">join</a>
+    <a href="#" class="login onDark"><%= l('login', {}, "login") %></a>
+      <a href="#" class="register onDark callToAction"><%= l('join', {}, "join") %></a>
     </nav>
     <form class="clearfix register">
       <div class="horizontal fit">
         <div>
-          <label for="register_name">Username</label>
+          <label for="register_name"><%= l('username', {}, "Username") %></label>
           <input type="text" id="register_name" class="small" required="required">
         </div>
         <div>
-          <label for="register_password">Password</label>
+          <label for="register_password"><%= l('password', {}, "Password") %></label>
           <input type="password" id="register_password" class="small" required="required">
         </div>
         <div class="email">
-          <label for="register_email">Email</label>
+          <label for="register_email"><%= l('email', {}, "Email") %></label>
           <input id="register_email" class="small" type="email">
         </div>
       </div>
-      <button type="submit" id="register_submit" class="left callToAction">Join buddycloud</button>
+      <button type="submit" id="register_submit" class="left callToAction"><%= l('joinButton', {}, "Join buddycloud") %></button>
     </form>
     <form class="clearfix login">
       <div>
-        <label for="login_name">Username</label>
+        <label for="login_name"><%= l('username', {}, "Username") %></label>
         <input type="text" class="small xl" id="login_name" required="required">
       </div>
       <div>
-        <label for="login_password">Password</label><a class="forgot">Forgot Password?</a>
+        <label for="login_password"><%= l('password', {}, "Password") %></label><a class="forgot"><%= l('forgotPassword', {}, "Forgot Password?") %></a>
         <input type="password" class="small xl" id="login_password" required="required">
       </div>
       <div class="submit">
         <span class="storePassword">
           <input type="checkbox" id="store_local" />
-          <label for="store_local">stay logged in</label>
+          <label for="store_local"><%= l('keepLogin', {}, "stay logged in") %></label>
         </span>
-        <button type="submit" id="login_submit" class="callToAction">Login</button>
+        <button type="submit" id="login_submit" class="callToAction"><%= l('loginButton', {}, "Login") %></button>
       </div>
     </form>
-  </div>
+  </div> 
 </div>
 <div class="hero centered stretchWidth vertical">
   <h1>buddycloud</h1>
-  <p>Share, discover and communicate in a magically simple way.</p>
+  <p><%= l('welcomeMessage', {}, "Share, discover and communicate in a magically simple way.") %></p>
 </div>
