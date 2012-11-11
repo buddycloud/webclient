@@ -20,6 +20,7 @@ define(function(require) {
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
+  require('util/autoResize');
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -152,6 +153,7 @@ define(function(require) {
       this._showPosts();
       this._postOnCtrlEnter();
       this._hideSpinner();
+      this.$('.newTopic .expandingArea').autoResize();
     },
 
     _userCanPost: function() {

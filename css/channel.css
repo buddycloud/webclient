@@ -229,6 +229,73 @@
   position: relative;
   overflow: hidden;
 }
+
+/* big thanks to http://www.alistapart.com/articles/expanding-text-areas-made-elegant/ */
+.expandingArea {
+  position: relative;
+  background: #fff;
+  z-index: 2;
+  min-height: 34px;
+}
+
+.expandingArea > textarea,
+.expandingArea > pre {
+  padding: 6px 5px;
+  background: transparent;
+  font: 13px/19.5px sans-serif;
+  /* Make the text soft-wrap */
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.expandingArea > textarea {
+  width: 100%;
+  /* This height is used when JS is disabled */
+}
+.expandingArea.active > textarea {
+  /* Hide any scrollbars */
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  /* Remove WebKit user-resize widget */
+  resize: none;
+}
+.expandingArea > pre {
+  display: none;
+}
+.expandingArea.active > pre {
+  display: block;
+  /* Hide the text; just using it for sizing */
+  visibility: hidden;
+}
+
+/* custom styles/transitions */
+.expandingArea {
+  border: 1px solid rgba(0,0,0,0.13);
+  box-shadow: inset 1px 1px rgba(0,0,0,0.05);
+  -webkit-transition: min-height 250ms, margin 250ms;
+     -moz-transition: min-height 250ms, margin 250ms;
+      -ms-transition: min-height 250ms, margin 250ms;
+       -o-transition: min-height 250ms, margin 250ms;
+          transition: min-height 250ms, margin 250ms;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+       -o-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.stream .newTopic.write .expandingArea,
+.stream .answer.write .expandingArea {
+  min-height: 50px;
+  color: #000;
+  resize: vertical;
+  margin-bottom: 34px;
+}
+
+/* NOT NECESSARY BECAUSE OF AUTO RESIZING PLUGIN
 .stream .newTopic textarea,
 .stream .answer textarea {
   width: 100%;
@@ -256,6 +323,7 @@
           box-sizing: border-box;
 }
   /* this disables transitions while resizing the textarea */
+  /* NOT NECESSARY BECAUSE OF AUTO RESIZING PLUGIN
   .stream .answer textarea:active {
     -webkit-transition: none;
        -moz-transition: none;
@@ -263,6 +331,7 @@
          -o-transition: none;
             transition: none;
   }
+  /* NOT NECESSARY BECAUSE OF AUTO RESIZING PLUGIN
   .stream .newTopic.write textarea,
   .stream .answer.write textarea {
     height: 50px;
@@ -270,6 +339,7 @@
     resize: vertical;
     margin-bottom: 34px;
   }
+  */
   .stream .controls {
     bottom: 1px;
     right: 0;
@@ -606,6 +676,7 @@
     width: 100%;
     position: relative;
   }
+  /* NOT NECESSARY BECAUSE OF AUTO RESIZING PLUGIN
   .post .answer textarea {
     border: 1px solid rgba(0,0,0,0.05);
     box-shadow: none;
@@ -616,6 +687,7 @@
         1px 1px white,
         inset 1px 1px rgba(0,0,0,0.05);
     }
+  */
   .post .comments .answer .avatar {
     width: 34px;
     left: 84px;

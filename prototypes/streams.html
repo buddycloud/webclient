@@ -219,7 +219,10 @@
           <section class="newTopic">
             <img class="avatar" src="avatars/user1.jpg" />
             <div class="holder">
-              <textarea placeholder="New Topic..."></textarea>
+              <div class="expandingArea">
+                <pre><span></span><br></pre>
+                <textarea placeholder="New Topic..."></textarea>
+              </div>
               <div class="controls clearfix">
                 <div class="hint">ctrl + enter to post</div>
                 <div class="button callToAction createComment">Post</div>
@@ -265,7 +268,10 @@
                 <section class="answer">
                   <img class="avatar" src="avatars/user1.jpg" />
                   <div class="holder">
-                    <textarea placeholder="comment"></textarea>
+                    <div class="expandingArea">
+                      <pre><span></span><br></pre>
+                      <textarea placeholder="comment"></textarea>
+                    </div>
                     <div class="controls clearfix">
                       <div class="hint">ctrl + enter to post</div>
                       <div class="button callToAction createComment">Post</div>
@@ -292,7 +298,10 @@
                 <section class="answer">
                   <img class="avatar" src="avatars/user1.jpg" />
                   <div class="holder">
-                    <textarea placeholder="comment"></textarea>
+                    <div class="expandingArea">
+                      <pre><span></span><br></pre>
+                      <textarea placeholder="comment"></textarea>
+                    </div>
                     <div class="controls clearfix">
                       <div class="hint">ctrl + enter to post</div>
                       <div class="button callToAction createComment">Post</div>
@@ -359,7 +368,10 @@
                 <section class="answer">
                   <img class="avatar" src="avatars/user1.jpg" />
                   <div class="holder">
-                    <textarea placeholder="comment"></textarea>
+                    <div class="expandingArea">
+                      <pre><span></span><br></pre>
+                      <textarea placeholder="comment"></textarea>
+                    </div>
                     <div class="controls clearfix">
                       <div class="hint">ctrl + enter to post</div>
                       <div class="button callToAction createComment">Post</div>
@@ -418,7 +430,10 @@
                 <section class="answer">
                   <img class="avatar" src="avatars/user1.jpg" />
                   <div class="holder">
-                    <textarea placeholder="comment"></textarea>
+                    <div class="expandingArea">
+                      <pre><span></span><br></pre>
+                      <textarea placeholder="comment"></textarea>
+                    </div>
                     <div class="controls clearfix">
                       <div class="hint">ctrl + enter to post</div>
                       <div class="button callToAction createComment">Post</div>
@@ -999,6 +1014,37 @@
   $('.settings li').click(function(event){
     event.stopPropagation();
   });
+
+
+  $.fn.autoResize = function() {
+
+    this.filter('.expandingArea').each(function() {
+
+      var $this = $(this);
+      var $textarea = $this.find('textarea');
+      var $span = $this.find('span');
+      var textarea = $textarea[0];
+      var span = $span[0];
+
+      if (textarea.addEventListener) {
+        textarea.addEventListener('input', function() {
+          span.textContent = textarea.value;
+        }, false);
+        span.textContent = textarea.value;
+      } else if (textarea.attachEvent) {
+        // IE8 compatibility
+        textarea.attachEvent('onpropertychange', function() {
+          span.innerText = textarea.value;
+        });
+        span.innerText = textarea.value;
+      }
+      // Enable extra CSS
+      $this.addClass('active');
+
+    });
+  }
+
+  $('.expandingArea').autoResize();
 </script>
 </body>
 </html>
