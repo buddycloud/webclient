@@ -19,7 +19,6 @@ define(function(require) {
   var _ = require('underscore');
   var Backbone = require('backbone');
   var l10n = require('l10n');
-  var l = l10n.get;
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
   var footer = require('text!templates/overlay/footer.html');
@@ -62,7 +61,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template, {l: l}));
+      this.$el.html(_.template(template, {l: l10n.get}));
       this.$el.append(this.discover.el);
       $('.content').addClass('homepage').html(this.el);
 
