@@ -79,7 +79,6 @@ function consoleWarn(message) {
 function parseResource(href, lang, successCallback, failureCallback) {
   var errors=false;
 
-  console.log(lang);
   // handle escaped characters (backslashes) in a string
   function evalString(text) {
     if (text.lastIndexOf('\\') < 0)
@@ -740,8 +739,6 @@ var l10n = {
   loadResource: parseResource,
   get: function(key, args, fallback) {
     var data = getL10nData(key, args);
-    console.log(data);
-    console.log(fallback);
     if (data && ('textContent' in data)) {
       return data.textContent;
     } else if (fallback) {
