@@ -35,6 +35,7 @@ define(function(require) {
     initialize: function() {
       _.bindAll(this, 'login');
       this.discover = new DiscoverOverlay();
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
     },
 
     login: function(event) {
@@ -62,8 +63,7 @@ define(function(require) {
     },
 
     render: function() {
-      var localTemplate = l10nBrowser.localiseHTML(template, {});
-      this.$el.html(_.template(localTemplate, {l: l10n.get}));
+      this.$el.html(_.template(this.localTemplate, {l: l10n.get}));
       this.$el.append(this.discover.el);
       $('.content').addClass('homepage').html(this.el);
 

@@ -27,9 +27,8 @@ define(['l10n'],
         var l10ntag = /<([-A-Za-z0-9_]+) [^>]*?data-l10n-token=['"]([-A-Za-z0-9_]+)['"][^>]*?>/;
         var tag = /<\/?([-A-Za-z0-9_]+)[^>]*>/;
         var match, name, token, starttag, depth, contents, result='', index = 0;
-        while (l10ntag.test(html)) {
+        while ((index = html.search(l10ntag)) != -1) {
           // find an l10n tag.
-          index = html.search(l10ntag);   
           match = html.match(l10ntag);
           starttag = match[0];
           name = match[1];
@@ -39,8 +38,7 @@ define(['l10n'],
           // now look for the end of the tag.
           depth = 0;
           contents = '';
-          while (tag.test(html)) {
-            index = html.search(tag);
+          while ((index = html.search(tag)) != -1) {
             match = html.match(tag);
             contents += html.slice(0,index);
             html = html.slice(index + match[0].length);
