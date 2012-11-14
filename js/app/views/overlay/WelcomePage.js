@@ -32,6 +32,7 @@ define(function(require) {
     initialize: function() {
       _.bindAll(this, 'login');
       this.discover = new DiscoverOverlay();
+      this.render();
     },
 
     login: function(event) {
@@ -95,10 +96,16 @@ define(function(require) {
       }
     },
 
-    remove: function() {
-      $('.content').removeClass('homepage')
-      Backbone.Model.prototype.fetch.call(this);
+    destroy: function() {
+      this.discover.remove();
+      $('.content').removeClass('homepage');
+      this.remove();
     }
+
+    //remove: function() {
+    //  $('.content').removeClass('homepage')
+    //  Backbone.Model.prototype.fetch.call(this);
+    //}
   });
 
   return WelcomePage;

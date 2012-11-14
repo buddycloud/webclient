@@ -46,7 +46,9 @@ define(function(require) {
 
     destroy: function() {
       $('.content').off('scroll', this.checkScroll);
-      this.options.user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
+      }
       this.remove();
     },
 

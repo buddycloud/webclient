@@ -48,11 +48,8 @@ define(function(require) {
     },
 
     _redirect: function(event) {
-      //TODO need anon view (prototypes/anon.html)
-      //var jid = this.$(event.currentTarget).attr('id');
-      //if (jid) {
-      //  Events.trigger('navigate', jid);
-      //}
+      var jid = this.$(event.currentTarget).attr('id');
+      Events.trigger('navigate', jid);
     }
   });
 

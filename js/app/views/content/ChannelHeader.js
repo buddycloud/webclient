@@ -35,7 +35,9 @@ define(function(require) {
     },
 
     destroy: function() {
-      this.options.user.subscribedChannels.unbind('subscriptionSync', this._switchButton, this);
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.unbind('subscriptionSync', this._switchButton, this);
+      }
       this.remove();
     },
 

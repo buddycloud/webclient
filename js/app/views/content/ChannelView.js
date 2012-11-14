@@ -15,6 +15,8 @@
  */
 
 define(function(require) {
+  var animations = require('util/animations');
+  var AnonBar = require('views/content/AnonBar');
   var Backbone = require('backbone');
   var ChannelHeader = require('views/content/ChannelHeader');
   var ChannelStream = require('views/content/ChannelStream');
@@ -22,6 +24,8 @@ define(function(require) {
 
   var ChannelView = Backbone.View.extend({
     className: 'channelView clearfix',
+
+    events: {'click .join': '_showOverlay'},
 
     initialize: function() {
       this.header = new ChannelHeader({
@@ -36,6 +40,18 @@ define(function(require) {
         model: this.model,
         user: this.options.user
       });
+
+      if (this.options.user.isAnonymous()) {
+        this.bar = new AnonBar();
+      }
+    },
+
+    _showOverlay: function() {
+      var $overlay = $('.overlay');
+      $overlay.show();
+      document.redraw();
+      $overlay.addClass('visible');
+      $overlay.find('input').first().focus();
     },
 
     render: function() {
@@ -46,11 +62,18 @@ define(function(require) {
       this.details.render();
       $centered.append(this.stream.el);
       $centered.append(this.details.el);
+      
+      if (this.bar) {
+        this.$el.append(this.bar.el);
+      }
       this.$el.append(this.header.el);
       this.$el.append($centered);
     },
 
     destroy: function() {
+      if (this.bar) {
+        this.bar.remove();
+      }
       this.header.destroy();
       this.stream.destroy();
       this.details.destroy();

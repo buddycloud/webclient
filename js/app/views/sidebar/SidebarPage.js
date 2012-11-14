@@ -40,6 +40,7 @@ define(function(require) {
     },
 
     destroy: function() {
+      $('.sidebar').addClass('hidden');
       this.personalChannel.remove();
       this.actionBar.remove();
       this.channels.remove();
