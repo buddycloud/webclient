@@ -63,7 +63,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {}));
+      this.$el.html(_.template(this.localTemplate));
       this.$el.append(this.discover.el);
       $('.content').addClass('homepage').html(this.el);
 
