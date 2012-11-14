@@ -38,7 +38,7 @@ define(function(require) {
   var Router = require('Router');
   var User = require('models/User');
   var config = require('config');
-  var lang = navigator.language;
+  var lang;
 
   function initialize() {
     var user = new User;
@@ -58,7 +58,14 @@ define(function(require) {
     var router = new Router(user);
     Backbone.history.start({pushState: config.release});
   }
-
+  
+  if (typeof(navigator.browserLanguage) != 'undefined') {
+    // handle IE.
+    lang = navigator.browserLanguage;
+  } else {
+    // everyone else
+    lang = navigator.language;
+  }
   l10n.setAdapter(l10nBrowser, {baseURL: 'locales/'});
   l10n.setMarkFallbacks();
   l10n.loadResource('data.properties', lang, 
