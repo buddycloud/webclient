@@ -42,7 +42,6 @@ define(function(require) {
 
   function initialize() {
     var user = new User;
-    console.log(l10n.getData());
     user.credentials.fetch();
     user.on('loginSuccess', function() {
       route(user);
@@ -75,6 +74,5 @@ define(function(require) {
         console.log('Failed to load locale data');
       }
       )
-  //initialize();
 });
 

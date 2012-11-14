@@ -36,6 +36,8 @@ define(function(require) {
       _.bindAll(this, 'login');
       this.discover = new DiscoverOverlay();
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      this.localFooter = l10nBrowser.localiseHTML(footer, {});
+      console.log(this.localFooter);
     },
 
     login: function(event) {
@@ -63,7 +65,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {l: l10n.get}));
+      this.$el.html(_.template(this.localTemplate, {}));
       this.$el.append(this.discover.el);
       $('.content').addClass('homepage').html(this.el);
 
@@ -94,7 +96,7 @@ define(function(require) {
         }
         
         // add footer
-        $('.content').append(_.template(footer));
+        $('.content').append(_.template(this.localFooter, {}));
       }
 
       function hideForm(){
