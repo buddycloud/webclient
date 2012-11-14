@@ -20,7 +20,7 @@
     font: 0/0 a;
     color: transparent;
     vertical-align: top;
-    background: url("../img/buddycloud.png") no-repeat center;
+    background: url("/img/buddycloud.png") no-repeat center;
     display: inline-block;
   }
 .userbar .joinBuddycloud {

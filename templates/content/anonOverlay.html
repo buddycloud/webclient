@@ -1,0 +1,33 @@
+<div class="modal twoWindowed">
+  <div class="close">Close</div>
+  <div class="left">
+    <h2>buddycloud login</h2>
+    <!--<p><span>Not yet a user?</span> <a href="#" class="register">Register</a></p>-->
+  </div>
+  <form class="login right clearfix">
+    <span class="errors"></span>
+    <div>
+      <label for="auth_name">Username</label>
+      <input type="text" id="auth_name" name="name" required autofocus />
+    </div>
+    <div>
+      <label for="auth_pwd">Password</label>
+      <input type="password" id="auth_pwd" name="password" required />
+    </div>
+    <div>
+      <!-- placceholder for the email input field -->
+      <!--<label for="auth_email">Email</label>
+      <input type="password" id="auth_email" name="password" />-->
+    </div>
+    <div class="submit">
+      <span class="storePassword">
+        <input type="checkbox" id="store_local" />
+        <label for="store_local">remember password</label>
+      </span>
+      <span class="loading">
+        <span class="spinner"></span>Logging you in..
+      </span>
+      <button type="submit" id="auth_submit" class="callToAction">Login</button>
+    </div>
+  </form>
+</div>

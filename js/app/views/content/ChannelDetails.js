@@ -30,7 +30,9 @@ define(function(require) {
     },
 
     destroy: function() {
-      this.options.user.subscribedChannels.unbind('subscriptionSync', this._updateFollowersList, this);
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.unbind('subscriptionSync', this._updateFollowersList, this);
+      }
       this.remove();
     },
 

@@ -292,7 +292,7 @@ label[for="store_local"] > span {
 }
 .centerBox .hero {
   height: 319px;
-  background: url("../img/images/hero.jpg");
+  background: url("/img/images/hero.jpg");
   border-radius: 3px 3px 0 0;
   box-shadow: 0 1px rgba(255,255,255,0.34) inset,0 0 1px rgba(255,255,255,0.34) inset;
 }

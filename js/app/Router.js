@@ -59,9 +59,12 @@ define(function(require) {
     // It would be nice if we could wrap its route function
     // or just use something like https://github.com/boazsender/backbone.routefilter
     _before: function(route) {
-      if (!this.user.isAnonymous() && !this.sidebar) {
+      if (this.user.isAnonymous() && this.sidebar) {
+        this.sidebar.destroy();
+      } else if (!this.user.isAnonymous() && !this.sidebar) {
         this.sidebar = new SidebarPage({model: this.user});
       }
+
       if (this.currentPage) {
         this.currentPage.destroy();
       }
@@ -75,7 +78,11 @@ define(function(require) {
     default: function() {
       this._before();
       if (this.user.isAnonymous()) {
-        new WelcomePage({model: this.user}).render();
+        if (this.sidebar) {
+          this.sidebar.destroy();
+        }
+
+        this.currentPage = new WelcomePage({model: this.user});
       } else {
         if (this.user.channels().length < 5) {
           this.navigate('explore', {trigger: true});

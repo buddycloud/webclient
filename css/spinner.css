@@ -3,7 +3,7 @@
   width: 21px;
   height: 21px;
   margin-right: 6px;
-  background: url(../img/spinner.png);
+  background: url(/img/spinner.png);
   display: inline-block;
   vertical-align: middle;
   -webkit-animation: spin 2.1s linear infinite;
@@ -16,7 +16,7 @@
     width: 75px;
     height: 75px;
     margin: 0;
-    background: url(../img/spinner_yellow.png) no-repeat center;
+    background: url(/img/spinner_yellow.png) no-repeat center;
   }
   
 @-webkit-keyframes spin {

@@ -32,7 +32,7 @@
   width: 16px;
   height: 16px;
   margin: 5px -5px 0 0;
-  background: url("../img/info.png") no-repeat;
+  background: url("/img/info.png") no-repeat;
   display: block;
   float: right;
   opacity: .55;
@@ -97,11 +97,11 @@
   height: 18px;
   content: "";
   vertical-align: top;
-  background: url("../img/unlock-small.png") no-repeat center;
+  background: url("/img/unlock-small.png") no-repeat center;
   display: inline-block;
 }
 .channelDetails .closed .title:after {
-  background: url("../img/lock-small.png") no-repeat center;
+  background: url("/img/lock-small.png") no-repeat center;
 }
 .channelDetails .previous {
   text-decoration: line-through;
@@ -252,10 +252,10 @@
 .adminAction .info li {
   padding-left: 18px;
   line-height: 21px;
-  background: url("../img/plus.png") no-repeat 2px center;
+  background: url("/img/plus.png") no-repeat 2px center;
 }
 .adminAction .info li.negative {
-  background: url("../img/minus.png") no-repeat 2px center;
+  background: url("/img/minus.png") no-repeat 2px center;
 }
 .adminAction .actionRow {
   display: none;

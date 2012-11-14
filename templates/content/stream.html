@@ -1,7 +1,10 @@
 <section class="newTopic">
   <img class="avatar" src="<%= user.avatarUrl(50) %>">
   <div class="holder">
-    <textarea placeholder="New Topic..."></textarea>
+    <div class="expandingArea">
+        <pre><span></span><br></pre>
+        <textarea placeholder="New Topic..."></textarea>
+    </div>
     <div class="controls clearfix">
       <div class="hint">ctrl + enter to post</div>
       <div class="button callToAction createComment">Post</div>

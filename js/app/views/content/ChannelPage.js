@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  var AnonChannelOverlay = require('views/content/AnonChannelOverlay');
   var Backbone = require('backbone');
   var Channel = require('models/Channel');
   var ChannelView = require('views/content/ChannelView');
@@ -32,6 +33,10 @@ define(function(require) {
       this.model.bind('fetch', this._begin, this);
       this.model.bind('error', this._error, this);
       this.model.fetch({credentials: this.options.user.credentials});
+
+      if (this.options.user.isAnonymous()) {
+        this.overlay = new AnonChannelOverlay({model: this.options.user});  
+      }
     },
 
     _begin: function() {
@@ -57,10 +62,29 @@ define(function(require) {
 
     render: function() {
       this.view.render();
-      $('.content').html(this.view.el);
+      var $content = $('.content');
+
+      if (this.overlay) {
+        this._renderAnonPage($content);
+      } else {
+        $content.html(this.view.el);
+      }
+    },
+
+    _renderAnonPage: function(content) {
+      this.overlay.render();
+      var $center = $('<div class="stupidFirefoxFlexBoxBug centered stretchWidth stretchHeight">');
+      $center.html(this.view.el);
+      
+      content.addClass('anonView');
+      content.append(this.overlay.el);
+      content.append($center);
     },
 
     destroy: function() {
+      if (this.overlay) {
+        this.overlay.remove();
+      }
       this.view.destroy();
       this.remove();
     }

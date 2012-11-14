@@ -22,7 +22,6 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
-  var footer = require('text!templates/overlay/footer.html');
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
@@ -36,8 +35,7 @@ define(function(require) {
       _.bindAll(this, 'login');
       this.discover = new DiscoverOverlay();
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
-      this.localFooter = l10nBrowser.localiseHTML(footer, {});
-      console.log(this.localFooter);
+      this.render();
     },
 
     login: function(event) {
@@ -94,9 +92,6 @@ define(function(require) {
           // hide if the user clickes into empty space
           $(document).one('click', hideForm);
         }
-        
-        // add footer
-        $('.content').append(_.template(this.localFooter, {}));
       }
 
       function hideForm(){
@@ -104,10 +99,16 @@ define(function(require) {
       }
     },
 
-    remove: function() {
-      $('.content').removeClass('homepage')
-      Backbone.Model.prototype.fetch.call(this);
+    destroy: function() {
+      this.discover.remove();
+      $('.content').removeClass('homepage');
+      this.remove();
     }
+
+    //remove: function() {
+    //  $('.content').removeClass('homepage')
+    //  Backbone.Model.prototype.fetch.call(this);
+    //}
   });
 
   return WelcomePage;

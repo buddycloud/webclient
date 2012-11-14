@@ -20,6 +20,7 @@ define(function(require) {
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
   var template = require('text!templates/content/stream.html')
+  require('util/autoResize');
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -29,7 +30,7 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.isLoading = false;
+      this.isLoading = true;
       this._postViews = [];
       this.model.items.bind('reset', this._getAndRenderPosts, this);
       this.model.items.bind('addPost', this._prependNewPost, this);
@@ -44,7 +45,10 @@ define(function(require) {
     },
 
     destroy: function() {
-      this.options.user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
+      $('.content').off('scroll', this.checkScroll);
+      if (this.options.user.subscribedChannels) {
+        this.options.user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
+      }
       this.remove();
     },
 
@@ -57,7 +61,6 @@ define(function(require) {
 
       if(!this.isLoading && (content.scrollTop() + content.prop('clientHeight') + triggerPoint > content.prop('scrollHeight'))) {
         var self = this;
-        this.isLoading = true;
 
         // Last loaded post id
         var lastItem = this.model.items.lastItem();
@@ -70,7 +73,6 @@ define(function(require) {
             success: function() {
               self._appendPosts();
               self._hideSpinner();
-              self.isLoading = false;
             }
           });
         }
@@ -78,10 +80,12 @@ define(function(require) {
     },
 
     _hideSpinner: function() {
+      this.isLoading = false;
       this.$('.loader').hide();
     },
 
     _showSpinner: function() {
+      this.isLoading = true;
       this.$('.loader').show();
     },
 
@@ -90,11 +94,11 @@ define(function(require) {
         // Followed the channel
         var defaultRole = this.model.metadata.defaultAffiliation();
         if (defaultRole === 'publisher') {
-          this.$('.newTopic').show();
+          this.$el.prepend(this.$newTopic);
         }
       } else {
         // Unfollowed the channel
-        this.$('.newTopic').hide();
+        this.$newTopic = this.$('.newTopic').detach();
       }
 
       this._renderPosts();
@@ -146,11 +150,12 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(template, {user: this.options.user}));
       if (!this._userCanPost()) {
-        this.$('.newTopic').hide();
+        this.$newTopic = this.$('.newTopic').detach();
       }
       this._showPosts();
       this._postOnCtrlEnter();
       this._hideSpinner();
+      this.$('.newTopic .expandingArea').autoResize();
     },
 
     _userCanPost: function() {
@@ -180,15 +185,16 @@ define(function(require) {
 
     _expandNewTopicArea: function(event) {
       event.stopPropagation();
-      var newTopicArea = this.$('.newTopic');
+      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
+      var collapseNewTopicArea = $.proxy(this._collapseNewTopicArea, this);
       if(!newTopicArea.hasClass('write')){
         newTopicArea.addClass('write');
-        $(document).one('click', {self: this}, this._collapseNewTopicArea);
+        $(document).one('click', collapseNewTopicArea);
       }
     },
 
     _collapseNewTopicArea: function(event) {
-      var newTopicArea = event.data.self.$('.newTopic');
+      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
       var textArea = newTopicArea.find('textarea');
       if(textArea.val() === ""){
         newTopicArea.removeClass('write');
@@ -213,7 +219,7 @@ define(function(require) {
         wait: true,
         success: function() {
           textArea.val('');
-          self._collapseNewTopicArea({data: {self: self}});
+          self._collapseNewTopicArea();
           self._enableButton();
         }
       });

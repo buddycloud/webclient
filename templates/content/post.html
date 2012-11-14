@@ -2,7 +2,7 @@
   <img class="avatar" src="<%= post.authorAvatarUrl(50) %>" />
   <div class="usermeta">
     <div class="name"><%= post.author.split('@', 2)[0] %></div>
-    <div class="jid"><%= post.author %></div>    
+    <div class="jid"><%= post.author %></div>
   </div>
   <div class="postmeta">
     <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%= post.updated %>"></time>
@@ -15,7 +15,7 @@
        <img class="avatar" src="<%= comment.authorAvatarUrl(34) %>" />
        <div class="usermeta">
          <div class="name"><%= comment.author.split('@', 2)[0] %></div>
-         <div class="jid"><%= comment.author %></div>    
+         <div class="jid"><%= comment.author %></div>
        </div>
        <div class="postmeta">
          <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%= comment.updated %>"></time>
@@ -26,7 +26,10 @@
   <section class="answer">
     <img class="avatar" src="<%= user.avatarUrl() %>">
     <div class="holder">
-      <textarea placeholder="comment"></textarea>
+      <div class="expandingArea">
+        <pre><span></span><br></pre>
+        <textarea placeholder="comment"></textarea>
+      </div>
       <div class="controls clearfix">
         <div class="hint">ctrl + enter to post</div>
         <div class="button callToAction createComment">Post</div>

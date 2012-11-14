@@ -39,6 +39,14 @@ define(function(require) {
       $sidebar.removeClass('hidden');
     },
 
+    destroy: function() {
+      $('.sidebar').addClass('hidden');
+      this.personalChannel.remove();
+      this.actionBar.remove();
+      this.channels.remove();
+      this.remove();
+    },
+
     selectChannel: function(channel) {
       this.personalChannel.selectChannel(channel);
       this.channels.selectChannel(channel);

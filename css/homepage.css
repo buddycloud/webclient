@@ -6,7 +6,7 @@
   content: "";
   height: 530px;
   width: 100%;
-  background: white url(../img/Clouds_by_Felix_Niklas.jpg) no-repeat bottom;
+  background: white url(/img/Clouds_by_Felix_Niklas.jpg) no-repeat bottom;
   background-size: cover;
   position: absolute;
 }

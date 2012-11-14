@@ -1,6 +1,6 @@
 body.startpage {
-  background: #eee url("../img/images/Coffee_by_Felix_Niklas.jpg") no-repeat;
-  background: #eee url("../img/images/logo.png") no-repeat center center;
+  background: #eee url("/img/images/Coffee_by_Felix_Niklas.jpg") no-repeat;
+  background: #eee url("/img/images/logo.png") no-repeat center center;
   -webkit-background-size: cover;
      -moz-background-size: cover;
       -ms-background-size: cover;
