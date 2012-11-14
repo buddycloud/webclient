@@ -24,24 +24,29 @@ define(['l10n'],
           'param',
         ];
 
-        var l10ntag = /^(.*?)(<([-A-Za-z0-9_]+) [^>]*?data-l10n=['"]([-A-Za-z0-9_]+)['"][^>]*?>)/;
-        var anytag = /^(.*?)(<\/?([-A-Za-z0-9_]+)[^>]*>)/;
+        var l10ntag = /<([-A-Za-z0-9_]+) [^>]*?data-l10n=['"]([-A-Za-z0-9_]+)['"][^>]*?>/;
+        var anytag = /<\/?([-A-Za-z0-9_]+)[^>]*>/;
         var match, name, token, starttag, tag, depth, contents, result='', index = 0;
-        while ((match = html.match(l10ntag)) != null) {
+        console.log('parsing template');
+        while ((index = html.search(l10ntag)) != -1) {
           // find an l10n tag.
-          result += match[1];
-          starttag = match[2];
-          name = match[3];
-          token = match[4];
-          html = html.slice(match[0].length);
+          match = html.match(l10ntag);
+          console.log(match);
+          result += html.slice(0, index);
+          starttag = match[0];
+          name = match[1];
+          token = match[2];
+          html = html.slice(index + match[0].length);
           // now look for the end of the tag.
           depth = 0;
           contents = '';
-          while ((match = html.match(anytag)) != null) {
-            contents += match[1];
-            tag = match[2];
-            name = match[3];
-            html = html.slice(match[0].length);
+          while ((index = html.search(anytag)) != -1) {
+            match = html.match(anytag);
+            console.log(match);
+            contents += html.slice(0, index);
+            tag = match[0];
+            name = match[1];
+            html = html.slice(index + match[0].length);
             if (match[0].substring(1,2) == '/') {
               // an end tag
               if (depth == 0) {
