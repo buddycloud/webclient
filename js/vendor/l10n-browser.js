@@ -24,7 +24,7 @@ define(['l10n'],
           'param',
         ];
 
-        var l10ntag = /^(.*?)(<([-A-Za-z0-9_]+) [^>]*?data-l10n-token=['"]([-A-Za-z0-9_]+)['"][^>]*?>)/;
+        var l10ntag = /^(.*?)(<([-A-Za-z0-9_]+) [^>]*?data-l10n=['"]([-A-Za-z0-9_]+)['"][^>]*?>)/;
         var anytag = /^(.*?)(<\/?([-A-Za-z0-9_]+)[^>]*>)/;
         var match, name, token, starttag, tag, depth, contents, result='', index = 0;
         while ((match = html.match(l10ntag)) != null) {
