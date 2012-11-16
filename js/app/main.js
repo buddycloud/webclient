@@ -33,9 +33,12 @@ requirejs.config({
 });
 
 define(function(require) {
+  var l10n = require('l10n');
+  var l10nBrowser = require('l10n-browser');
   var Router = require('Router');
   var User = require('models/User');
   var config = require('config');
+  var lang;
 
   function initialize() {
     var user = new User;
@@ -55,7 +58,21 @@ define(function(require) {
     var router = new Router(user);
     Backbone.history.start({pushState: config.release});
   }
-
-  initialize();
+  
+  if (typeof(navigator.browserLanguage) != 'undefined') {
+    // handle IE.
+    lang = navigator.browserLanguage;
+  } else {
+    // everyone else
+    lang = navigator.language;
+  }
+  l10n.setAdapter(l10nBrowser, {baseURL: 'locales/'});
+  l10n.setMarkFallbacks();
+  l10n.loadResource('data.properties', lang, 
+      initialize, // do this once the locale data has loaded
+      function(err) {
+        console.log('Failed to load locale data');
+      }
+      )
 });
 

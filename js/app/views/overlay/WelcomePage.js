@@ -18,6 +18,8 @@ define(function(require) {
   var $ = require('jquery');
   var _ = require('underscore');
   var Backbone = require('backbone');
+  var l10n = require('l10n');
+  var l10nBrowser = require('l10n-browser');
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
 
@@ -32,6 +34,7 @@ define(function(require) {
     initialize: function() {
       _.bindAll(this, 'login');
       this.discover = new DiscoverOverlay();
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.render();
     },
 
@@ -60,7 +63,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(this.localTemplate));
       this.$el.append(this.discover.el);
       $('.content').addClass('homepage').html(this.el);
 
