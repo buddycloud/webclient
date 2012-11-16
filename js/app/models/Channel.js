@@ -20,11 +20,13 @@ define(function(require) {
   var ChannelItems = require('models/ChannelItems');
   var ChannelMetadata = require('models/ChannelMetadata');
   var ModelBase = require('models/ModelBase');
+  var SimilarChannels = require('models/SimilarChannels');
 
   var Channel = ModelBase.extend({
     constructor: function(name) {
       ModelBase.call(this);
       this.name = name;
+      this.similarChannels = new SimilarChannels(name);
       this.followers = new ChannelFollowers(name);
       this.metadata = new ChannelMetadata(name);
       this.items = new ChannelItems(name);
@@ -38,6 +40,7 @@ define(function(require) {
       this.followers.fetch(options);
       this.metadata.fetch(options);
       this.items.fetch(options);
+      this.similarChannels.fetch(options);
     },
 
     _triggerFetchCallback: function() {
@@ -47,7 +50,8 @@ define(function(require) {
         fetched.push(model);
         if (_.include(fetched, self.followers) &&
             _.include(fetched, self.metadata) &&
-            _.include(fetched, self.items)) {
+            _.include(fetched, self.items) &&
+            _.include(fetched, self.similarChannels)) {
           self.trigger('fetch');
         }
       }
@@ -60,7 +64,8 @@ define(function(require) {
         error.push(model);
         if (_.include(error, self.followers) &&
             _.include(error, self.metadata) &&
-            _.include(error, self.items)) {
+            _.include(error, self.items) &&
+            _.include(error, self.similarChannels)) {
           self.trigger('error', {status: xhr.status, statusText: xhr.statusText});
         }
       }

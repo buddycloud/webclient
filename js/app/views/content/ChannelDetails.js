@@ -67,16 +67,22 @@ define(function(require) {
       this._populateChannelLists();
       this.moderatorsList.render();
       this.followersList.render();
+      this.similarList.render();
       this.$('.holder').append(this.moderatorsList.el);
       this.$('.holder').append(this.followersList.el);
+      this.$('.holder').append(this.similarList.el);
     },
 
     _populateChannelLists: function() {
+      // Followers
       var types = this.model.followers.byType();
       var moderators = (types['owner'] || []).concat(types['moderator'] || []);
       var followers = (types['publisher'] || []).concat(types['member'] || []);
       this.moderatorsList.model = moderators;
       this.followersList.model = followers;
+
+      // Similar Channels
+      this.similarList.model = this.model.similarChannels.usernames();
     },
 
     _isInitialized: function() {
@@ -88,6 +94,7 @@ define(function(require) {
       if (!this._isInitialized()) {
         this.moderatorsList = new ChannelList({title: 'moderators', role: 'Moderator'});
         this.followersList = new ChannelList({title: 'followers', role: 'Follower'});
+        this.similarList = new ChannelList({title: 'similar', role: 'Similar'});
 
         this._renderChannelLists();
       }
