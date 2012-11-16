@@ -65,7 +65,7 @@ define(function(require) {
         if (_.include(error, self.followers) &&
             _.include(error, self.metadata) &&
             _.include(error, self.items) &&
-            _.include(fetched, self.similarChannels)) {
+            _.include(error, self.similarChannels)) {
           self.trigger('error', {status: xhr.status, statusText: xhr.statusText});
         }
       }
