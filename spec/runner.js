@@ -33,6 +33,7 @@ define(function(require) {
   require('spec/Item.spec');
   require('spec/PostNotifications.spec');
   require('spec/Search.spec');
+  require('spec/SimilarChannels.spec');
   require('spec/SubscribedChannels.spec');
   require('spec/User.spec');
   require('spec/UserCredentials.spec');

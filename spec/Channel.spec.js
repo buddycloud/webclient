@@ -19,6 +19,7 @@ define(function(require) {
   var ChannelFollowers = require('models/ChannelFollowers');
   var ChannelItems = require('models/ChannelItems');
   var ChannelMetadata = require('models/ChannelMetadata');
+  var SimilarChannels = require('models/SimilarChannels');
 
   describe('Channel', function() {
     var channel;
@@ -32,9 +33,11 @@ define(function(require) {
       expect(channel.followers instanceof ChannelFollowers).toBeTruthy();
       expect(channel.metadata instanceof ChannelMetadata).toBeTruthy();
       expect(channel.items instanceof ChannelItems).toBeTruthy();
+      expect(channel.similarChannels instanceof SimilarChannels).toBeTruthy();
       expect(channel.followers.channel).toBe(channel.name);
       expect(channel.metadata.channel).toBe(channel.name);
       expect(channel.items.channel).toBe(channel.name);
+      expect(channel.similarChannels.channel).toBe(channel.name);
     });
 
     describe('fetch()', function() {
@@ -42,10 +45,12 @@ define(function(require) {
         spyOn(channel.followers, 'fetch');
         spyOn(channel.metadata, 'fetch');
         spyOn(channel.items, 'fetch');
+        spyOn(channel.similarChannels, 'fetch');
         channel.fetch();
         expect(channel.followers.fetch).toHaveBeenCalled();
         expect(channel.metadata.fetch).toHaveBeenCalled();
         expect(channel.items.fetch).toHaveBeenCalled();
+        expect(channel.similarChannels.fetch).toHaveBeenCalled();
       });
 
       it('should trigger "fetch" if all submodels are fetched', function() {
@@ -57,6 +62,9 @@ define(function(require) {
         });
         spyOn(channel.items, 'fetch').andCallFake(function(options) {
           options.success(channel.items);
+        });
+        spyOn(channel.similarChannels, 'fetch').andCallFake(function(options) {
+          options.success(channel.similarChannels);
         });
         spyOn(channel, 'trigger');
         channel.fetch();
