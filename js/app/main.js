@@ -66,7 +66,7 @@ define(function(require) {
     // everyone else
     lang = navigator.language;
   }
-  l10n.setAdapter(l10nBrowser, {baseURL: 'locales/'});
+  l10n.setAdapter(l10nBrowser, {baseURL: '/locales/'});
   l10n.setMarkFallbacks();
   l10n.loadResource('data.properties', lang, 
       initialize, // do this once the locale data has loaded
