@@ -26,7 +26,7 @@ define(function(require) {
     _initialize: function() {
       this.fields =
         {
-          'channel_name': 'title',
+          'channel_title': 'title',
           'channel_description': 'description',
           'channel_public_access': 'access_model',
           'channel_default_role': 'default_affiliation'
@@ -39,31 +39,35 @@ define(function(require) {
       }
     },
 
-    _save: function(event) {
-      // Set fields
-      this._setTextFields();
-      this._setAccessModel();
-      this._setDefaultRole();
-
-      // Save
-      this._saveAvatar();
-
-      var self = this;
-      this.model.save({}, {
-        credentials: this.options.user.credentials,
-        complete: function() {
-          self._enableSaveButton();
-        }
-      });
-
-      this._disableSaveButton();
+    _setFields: function(model) {
+      this._setTextFields(model);
+      this._setAccessModel(model);
+      this._setDefaultRole(model);
     },
 
-    _saveAvatar: function() {
+    _save: function(model, callback) {
+      // Set fields
+      this._setFields(model);
+
+      // Save
+      this._saveAvatar(model);
+
+      var self = this;
+      model.save({}, {
+        credentials: this.options.user.credentials,
+        complete: function() {
+          if (callback) {
+            callback();
+          }
+        }
+      });
+    },
+
+    _saveAvatar: function(model) {
       var file = this.$(':file')[0].files[0];
       if (file) {
         var formData = this._buildFormData(file);
-        this._sendUploadFileResquest(formData);
+        this._sendUploadFileResquest(formData, model);
       }
     },
 
@@ -78,11 +82,11 @@ define(function(require) {
       return formData;
     },
 
-    _sendUploadFileResquest: function(formData) {
+    _sendUploadFileResquest: function(formData, model) {
       var self = this;
       $.ajax({
         type: 'PUT',
-        url: this.model.avatarUrl(),
+        url: model.avatarUrl(),
         crossDomain: true,
         data: formData,
         xhrFields: {withCredentials: true},
@@ -94,27 +98,19 @@ define(function(require) {
         },
         statusCode: {
           201: function() {
-            Events.trigger('avatarChanged', self.model.channel);
+            Events.trigger('avatarChanged', model.channel);
           }
         }
       });
     },
 
-    _enableSaveButton: function() {
-      this.$('.save').removeClass('disabled').text('Save');
-    },
-
-    _disableSaveButton: function() {
-      this.$('.save').addClass('disabled').text('Saving...');
-    },
-
-    _setTextFields: function() {
+    _setTextFields: function(model) {
       // FIXME not all fields are handled by HTTP API
-      // var textFields = ['channel_name', 'channel_description', 'channel_status', 'channel_location'];
-      var textFields = ['channel_name', 'channel_description'];
+      // var textFields = ['channel_title', 'channel_description', 'channel_status', 'channel_location'];
+      var textFields = ['channel_title', 'channel_description'];
       for (var i = 0; i < textFields.length; i++) {
         var content = this.$('#' + textFields[i]).val();
-        this.model.set(this.fields[textFields[i]], content, {silent: true});
+        model.set(this.fields[textFields[i]], content, {silent: true});
       }
     },
 
@@ -127,21 +123,21 @@ define(function(require) {
       return false;
     },
 
-    _setAccessModel: function() {
+    _setAccessModel: function(model) {
       var accessField = this.fields['channel_public_access'];
       if (this._isChecked(this.$('#channel_public_access'))) {
-        this.model.set(accessField, 'open', {silent: true});
+        model.set(accessField, 'open', {silent: true});
       } else {
-        this.model.set(accessField, 'whitelist', {silent: true});
+        model.set(accessField, 'whitelist', {silent: true});
       }
     },
 
-    _setDefaultRole: function() {
+    _setDefaultRole: function(model) {
       var defaultRoleField = this.fields['channel_default_role'];
       if (this.$('#channel_default_role').val() == 'followerPlus') {
-        this.model.set(defaultRoleField, 'publisher', {silent: true});
+        model.set(defaultRoleField, 'publisher', {silent: true});
       } else if (this.$('#channel_default_role').val() == 'follower') {
-        this.model.set(defaultRoleField, 'member', {silent: true});
+        model.set(defaultRoleField, 'member', {silent: true});
       }
     }
   });

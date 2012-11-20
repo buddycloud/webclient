@@ -24,25 +24,34 @@ define(function(require) {
       'click .save': 'save',
       'click .discard': 'render',
       'click .twoStepConfirmation .stepOne': '_renderConfirmButton',
-      'click .twoStepConfirmation .stepTwo': '_deleteAccount'
+      'click .twoStepConfirmation .stepTwo': '_delete'
     },
 
     initialize: function() {
       this._initialize();
-      this.model.bind('change', this.render, this);
-      this.model.bind('sync', this.render, this);
+      this.model.metadata.bind('change', this.render, this);
+      this.model.metadata.bind('sync', this.render, this);
     },
 
     render: function() {
       this.$el.html(_.template(template, {
-        metadata: this.model
+        metadata: this.model.metadata
       }));
       this._fillCheckbox();
       this._selectDefaultRole();
     },
 
     save: function() {
-      this._save();
+      this._save(this.model.metadata, this._enableSaveButton);
+      this._disableSaveButton();
+    },
+
+    _enableSaveButton: function() {
+      this.$('.save').removeClass('disabled').text('Save');
+    },
+
+    _disableSaveButton: function() {
+      this.$('.save').addClass('disabled').text('Saving...');
     },
 
     _fillCheckbox: function() {
@@ -50,11 +59,11 @@ define(function(require) {
     },
 
     _hasPublicAccess: function() {
-      return this.model.accessModel() === 'open';
+      return this.model.metadata.accessModel() === 'open';
     },
 
     _selectDefaultRole: function() {
-      if (this.model.defaultAffiliation() === 'publisher') {
+      if (this.model.metadata.defaultAffiliation() === 'publisher') {
         this.$('#channel_default_role').val('followerPlus');
       }
     },
@@ -63,8 +72,25 @@ define(function(require) {
       this.$('.twoStepConfirmation').toggleClass('confirmed');
     },
 
-    _deleteAccount: function() {
-      //TODO delete account
+    _delete: function() {
+      var self = this;
+      $.ajax({
+        type: 'DELETE',
+        url: this.model.url(),
+        crossDomain: true,
+        xhrFields: {withCredentials: true},
+        contentType: false,
+        processData: false,
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization',
+            self.options.user.credentials.authorizationHeader());
+        },
+        statusCode: {
+          200: function() {
+            Events.trigger('navigate', '/');
+          }
+        }
+      });
     }
   });
 

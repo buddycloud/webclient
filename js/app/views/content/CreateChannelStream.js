@@ -15,15 +15,21 @@
  */
 
 define(function(require) {
+  var $ = require('jquery');
   var AbstractEditStream = require('views/content/AbstractEditStream');
+  var api = require('util/api');
+  var Backbone = require('backbone');
+  var Channel = require('models/Channel');
   var ChannelMetadata = require('models/ChannelMetadata');
+  var config = require('config');
+  var Events = Backbone.Events;
   var template = require('text!templates/content/createChannel.html');
 
   var CreateChannelStream = AbstractEditStream.extend({
 
     events: {
-      'click .save': 'save',
-      'click .discard': 'render',
+      'click .save': 'create',
+      'click .discard': 'render'
     },
 
     initialize: function() {
@@ -32,15 +38,45 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(template, {
+        domain: this._topicsDomain()
+      }));
     },
 
-    save: function() {
+    _topicsDomain: function() {
+      return '@topics.' + config.homeDomain;
+    },
+
+    create: function() {
       var channel = this._getChannel();
+      var self = this;
       if (channel) {
-        this.model = new ChannelMetadata(channel);
-        this._save();
+        channel += this._topicsDomain();
+        this.model = new Channel(channel);
+        this.model.save({}, {
+          credentials: this.options.user.credentials,
+          complete: function() {
+            self.saveMetadata();
+          }
+        });
+
+        this._disableCreateButton();
       }
+    },
+
+    saveMetadata: function() {
+      this._save(this.model.metadata, this.redirectToChannel());
+    },
+
+    redirectToChannel: function() {
+      var self = this;
+      return function() {
+        Events.trigger('navigate', self.model.name);  
+      }
+    },
+
+    _disableCreateButton: function() {
+      this.$('.save').addClass('disabled').text('Creating...');
     },
 
     _getChannel: function() {
