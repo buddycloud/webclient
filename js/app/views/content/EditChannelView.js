@@ -24,7 +24,7 @@ define(function(require) {
 
     initialize: function() {
       this.header = new EditHeader({
-        model: this.model
+        model: this.model.metadata
       });
       this.stream = new EditChannelStream({
         model: this.model,
