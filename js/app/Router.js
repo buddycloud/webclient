@@ -17,6 +17,7 @@
 define(function(require) {
   var Backbone = require('backbone');
   var ChannelPage = require('views/content/ChannelPage');
+  var CreateChannelPage = require('views/content/CreateChannelPage');
   var config = require('config');
   var EditChannelPage = require('views/content/EditChannelPage');
   var ExplorePage = require('views/content/ExplorePage');
@@ -32,6 +33,7 @@ define(function(require) {
       '': 'default',
       'explore': 'explore',
       'prefs': 'preferences',
+      'new-channel': 'newChannel',
       ':channel': 'channel',
       ':channel/edit' : 'channelEdit'
     },
@@ -113,6 +115,11 @@ define(function(require) {
     channelEdit: function(channel) {
       this._before();
       this.currentPage = new EditChannelPage({channel: channel, user: this.user});
+    },
+
+    newChannel: function(channel) {
+      this._before();
+      this.currentPage = new CreateChannelPage({user: this.user});
     },
 
     _error: function(e) {

@@ -16,28 +16,28 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var EditHeader = require('views/content/EditHeader');
-  var EditChannelStream = require('views/content/EditChannelStream');
+  var CreateChannelStream = require('views/content/CreateChannelStream')
 
-  var EditChannelView = Backbone.View.extend({
+  var CreateChannelPage = Backbone.View.extend({
     className: 'channelView',
 
     initialize: function() {
-      this.header = new EditHeader({
-        model: this.model
-      });
-      this.stream = new EditChannelStream({
-        model: this.model,
+      this.view = new CreateChannelStream({
         user: this.options.user
       });
+
       this.render();
     },
 
     render: function() {
-      this.$el.append(this.header.el);
-      this.$el.append(this.stream.el);
+      $('.content').html(this.view.el);
+    },
+
+    destroy: function() {
+      this.remove();
+      this.view.remove();
     }
   });
 
-  return EditChannelView;
+  return CreateChannelPage;
 });

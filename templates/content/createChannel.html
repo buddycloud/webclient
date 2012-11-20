@@ -1,5 +1,5 @@
 <form class="stream clearfix">
-  <h2 class="pageName">Edit Channel</h2>
+  <h2 class="pageName">Create Channel</h2>
   <div class="avatar">
     <label>Avatar</label>
     <div>
@@ -9,24 +9,16 @@
   </div>
   <div class="title">
     <label for="channel_title">Channel Title</label>
-    <input type="text" id="channel_title" value="<%= metadata.title() || '' %>"/>
+    <input type="text" id="channel_title" value=""/>
+  </div>
+  <div class="jid">
+    <label for="channel_jid">Channel ID</label>
+    <input type="text" placeholder="<%- domain %>" id="channel_jid" value=""/>
   </div>
   <div class="description area">
     <label for="channel_description">Description</label>
-    <textarea id="channel_description"><%- metadata.description() || '' %></textarea>
+    <textarea id="channel_description"></textarea>
   </div>  
-  <!--
-    Not handled yet
-  <div class="status">
-    <label for="channel_mood">Status</label>
-    <input type="text" id="channel_status" placeholder="How are you doing?" value="<%= metadata.description() || '' %>"/>
-  </div> -->
-  <!--
-    Location isn't currently handled 
-    <div class="location">
-    <label for="channel_location">Current Location</label>
-    <input type="text" id="channel_location" /> 
-  </div> -->
   <div class="access">
     <label for="channel_public_access">Public Access</label>
     <div>
@@ -50,12 +42,9 @@
       </span> 
     </div>
   </div>
-</form>  
+</form>
 <nav class="bottom clearfix">
-  <div class="floatLeft twoStepConfirmation">
-    <div class="button white delete stepOne">Delete Channel</div>
-    <div class="button danger stepTwo">Confirm</div>
-  </div>
-  <div class="button callToAction save">Save</div>
+  <div class="button callToAction save">Create</div>
   <div class="button discard">Discard</div>
 </nav>
+<a href="http://www.buddycloud.com" id="poweredby">powered by buddycloud</a>  
