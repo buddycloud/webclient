@@ -17,6 +17,7 @@
 define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
+  var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
   var footer = require('text!templates/overlay/footer.html');
   var MostActiveDiscover = require('models/MostActiveDiscover');
@@ -31,6 +32,8 @@ define(function(require) {
     initialize: function() {
       this.model = new MostActiveDiscover();
       this.model.doDiscover({max: 10});
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      this.localFooter = l10nBrowser.localiseHTML(footer, {});
       this.model.bind('sync', this.render, this);
     },
 
@@ -38,12 +41,12 @@ define(function(require) {
       // FIXME popular must show the channels with biggest number of followers
       var mostActive = this.model.models.slice(0, 5);
       var popular = this.model.models.slice(5, 10);
-      this.$el.html(_.template(template, {
+      this.$el.html(_.template(this.localTemplate, {
         mostActive: mostActive,
         popular: popular
       }));
       // Add footer
-      $('.content').append(_.template(footer));
+      $('.content').append(_.template(this.localFooter));
       avatarFallback(this.$('.avatar'), undefined, 50);
     },
 
