@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  var api = require('util/api');
   var Backbone = require('backbone');
   var ChannelFollowers = require('models/ChannelFollowers');
   var ChannelItems = require('models/ChannelItems');
@@ -30,6 +31,10 @@ define(function(require) {
       this.followers = new ChannelFollowers(name);
       this.metadata = new ChannelMetadata(name);
       this.items = new ChannelItems(name);
+    },
+
+    url: function() {
+      return api.url(this.name);
     },
 
     fetch: function(options) {
@@ -69,6 +74,14 @@ define(function(require) {
           self.trigger('error', {status: xhr.status, statusText: xhr.statusText});
         }
       }
+    },
+
+    sync: function(method, model, options) {
+      if (method === 'update') {
+        // Always POST
+        method = 'create';
+      }
+      Backbone.sync.call(this, method, model, options);
     }
   });
 

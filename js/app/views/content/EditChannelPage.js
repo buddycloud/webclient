@@ -30,7 +30,7 @@ define(function(require) {
         user: this.options.user
       });
       this.model.bind('fetch', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials})
+      this.model.fetch({credentials: this.options.user.credentials});
     },
 
     render: function() {
