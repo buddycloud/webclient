@@ -32,7 +32,7 @@ define(function(require) {
     routes: {
       '': 'default',
       'explore': 'explore',
-      'prefs': 'preferences',
+      // TODO wait for fixes on HTTP API 'prefs': 'preferences',
       'new-channel': 'newChannel',
       ':channel': 'channel',
       ':channel/edit' : 'channelEdit'
@@ -99,10 +99,11 @@ define(function(require) {
       this.currentPage = new ExplorePage({user: this.user});
     },
 
-    preferences: function() {
+    // TODO wait for fixes on HTTP API 
+    /*preferences: function() {
       this._before();
       this.currentPage = new PreferencesPage({user: this.user});
-    },
+    },*/
 
     channel: function(channel) {
       this._before();
