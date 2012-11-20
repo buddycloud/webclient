@@ -23,6 +23,7 @@ define(function(require) {
   var Events = Backbone.Events;
   var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html');
+  var embedTemplate = require('text!templates/content/embed.html');
 
   var PostView = Backbone.View.extend({
     tagName: 'article',
@@ -63,10 +64,19 @@ define(function(require) {
         key: config.embedlyKey,
         secure: true,
         success: function(oembed, dict) {
-          var elem = dict.node;
           // If is not a link or if the link has an image
-          return oembed && (oembed.type !== 'link' || oembed.code.indexOf('img') != -1) ?
-            elem.replaceWith(oembed.code) : null;
+          if (oembed.type !== 'link' || oembed.thumbnail_url) {
+            var html = _.template(embedTemplate, {
+              maxWidth: 400,
+              url: oembed.url || dict.url,
+              title: (oembed.type !== 'photo') ? (oembed.title || dict.url) : undefined,
+              img:   (oembed.type === 'photo') ? oembed.url : oembed.thumbnail_url,
+              width: (oembed.type === 'photo') ? oembed.width : oembed.thumbnail_width,
+              html: oembed.html,
+              description: oembed.description
+            });
+            dict.node.parent().after(html);
+          }
         }
       });
     },
