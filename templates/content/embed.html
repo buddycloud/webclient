@@ -1,0 +1,15 @@
+<div class="embed">
+<% if (title) { %>
+  <a class="title" href="<%= url %>"><%= title %></a>
+<% }
+   if (html) { print(html); }
+   else if (img) { %>
+  <a href="<%= url %>">
+    <img src="<%= img %>" width="<%= Math.min(maxWidth, width) %>"
+    <% if (description) { %>alt="<%= description %>"<% } %>/>
+  </a>
+<% }
+   if (description && description.length > 0) { %>
+  <div class="description"><%= description %></div>
+<% } %>
+</div>

@@ -16,21 +16,17 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var Channel = require('models/Channel')
-  var EditHeader = require('views/content/EditHeader');
-  var EditChannelView = require('views/content/EditChannelView');
+  var CreateChannelStream = require('views/content/CreateChannelStream')
 
-  var EditChannelPage = Backbone.View.extend({
+  var CreateChannelPage = Backbone.View.extend({
     className: 'channelView',
 
     initialize: function() {
-      this.model = new Channel(this.options.channel);
-      this.view = new EditChannelView({
-        model: this.model,
+      this.view = new CreateChannelStream({
         user: this.options.user
       });
-      this.model.bind('fetch', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials});
+
+      this.render();
     },
 
     render: function() {
@@ -43,5 +39,5 @@ define(function(require) {
     }
   });
 
-  return EditChannelPage;
+  return CreateChannelPage;
 });

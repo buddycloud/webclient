@@ -27,7 +27,7 @@ define(function(require) {
         model: this.model.metadata
       });
       this.stream = new EditChannelStream({
-        model: this.model.metadata,
+        model: this.model,
         user: this.options.user
       });
       this.render();
