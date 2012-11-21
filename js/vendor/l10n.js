@@ -24,6 +24,8 @@ if (typeof define !== 'function') { var define = require('amdefine')(module) }
 
 /**
  * Modified for nodejs and requirejs by Andrew Baxter <andy@highfellow.org>, Aug 2012
+ *
+ * Modified version kept at: https://github.com/highfellow/js-l10n
  **/
 
 /*jshint browser: true, devel: true, es5: true, globalstrict: true */
@@ -37,7 +39,7 @@ var gLanguage = '';
 var gLoader = null; // resource loader function.
 var gMacros = {};
 var gReadyState = 'loading';
-var gMarkFallbacks;
+var gMarkFallbacks = false;
 
 // read-only setting -- we recommend to load l10n resources synchronously
 var gAsyncResourceLoading = true;
