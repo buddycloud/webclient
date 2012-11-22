@@ -40,8 +40,9 @@ var gLoader = null; // resource loader function.
 var gMacros = {};
 var gReadyState = 'loading';
 
-// mark fallback strings with _string_ (useful when debugging)
-var gMarkFallbacks = false; 
+// mark fallback strings with _string_ , and translated
+// strings with ~string~ (useful when debugging)
+var gMarkStrings = false; 
 
 // read-only setting -- we recommend to load l10n resources synchronously
 var gAsyncResourceLoading = true;
@@ -737,16 +738,16 @@ var l10n = {
   // lang - language to load from the resource.
   // successCallback - called once a language has been loaded.
   // failureCallback - called if loading fails.
-  setMarkFallbacks: function() {
-    gMarkFallbacks = true;
+  setMarkStrings: function() {
+    gMarkStrings = true;
   },
   loadResource: parseResource,
   get: function(key, args, fallback) {
     var data = getL10nData(key, args);
     if (data && ('textContent' in data)) {
-      return data.textContent;
+      return gMarkStrings ? '~' + data.textContent + '~' : data.textContent;
     } else if (fallback) {
-      return gMarkFallbacks ? '_' + fallback + '_' : fallback;
+      return gMarkStrings ? '_' + fallback + '_' : fallback;
     } else {
       return '{{' + key + '}}';
     }

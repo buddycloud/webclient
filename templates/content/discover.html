@@ -1,8 +1,8 @@
 <div class="discoverChannels clearfix">
   <div class="local span-2">
-    <h1>Local</h1>
+    <h1 data-l10n="discoveryLocal">Local</h1>
     <div class="mostActive span-1">
-      <h2>Most Active</h2>
+      <h2 data-l10n="discoveryActive">Most Active</h2>
       <% if (mostActive) { %>
       <div class="list">
         <% _.each(mostActive, function(channel) { %>
@@ -12,14 +12,14 @@
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
+          <div class="follow button callToAction" data-l10n="followButton">Follow</div>
         </div>
         <% }); %>
       </div>
       <% } %>
     </div>
     <div class="popular span-1">
-      <h2>Recommended</h2>
+      <h2 data-l10n="discoveryRecommended">Recommended</h2>
       <% if (recommended) { %>
       <div class="list">
         <% _.each(recommended, function(channel) { %>
@@ -29,7 +29,7 @@
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
+          <div class="follow button callToAction" data-l10n="followButton">Follow</div>
         </div>
         <% }); %>
       </div>
@@ -37,9 +37,9 @@
     </div>
   </div>
   <div class="global span-2">
-    <h1>Global</h1>
+    <h1 data-l10n="discoveryGlobal">Global</h1>
     <div class="mostActive span-1">
-      <h2>Most Active</h2>
+      <h2 data-l10n="discoveryActive">Most Active</h2>
       <% if (mostActive) { %>
       <div class="list">
         <% _.each(mostActive, function(channel) { %>
@@ -49,14 +49,14 @@
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
+          <div class="follow button callToAction" data-l10n="followButton">Follow</div>
         </div>
         <% }); %>
       </div>
       <% } %>
     </div>
     <div class="popular span-1">
-      <h2>Recommended</h2>
+      <h2 data-l10n="discoveryRecommended">Recommended</h2>
       <% if (recommended) { %>
       <div class="list">
         <% _.each(recommended, function(channel) { %>
@@ -66,7 +66,7 @@
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
+          <div class="follow button callToAction" data-l10n="followButton">Follow</div>
         </div>
         <% }); %>
       </div>
