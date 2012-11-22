@@ -36,7 +36,6 @@ define(function(require) {
 
     initialize: function() {
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
-      template = undefined;
       this.metadata = new ChannelMetadata(this.model.username());
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();

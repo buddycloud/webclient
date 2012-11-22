@@ -32,7 +32,6 @@ define(function(require) {
 
     initialize: function() {
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
-      template = undefined;
     },
 
     render: function() {

@@ -26,7 +26,6 @@ define(function(require) {
 
     initialize: function() {
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
-      template = undefined;
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._updateFollowersList, this);
       }

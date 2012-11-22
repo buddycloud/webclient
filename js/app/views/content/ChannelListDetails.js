@@ -17,6 +17,7 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelListDetails.html')
   var Events = Backbone.Events;
 
@@ -26,12 +27,13 @@ define(function(require) {
     positions: ['first', 'second', 'third', 'fourth'],
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.$el.addClass(this.positions[this.options.position]);
       this.render();
     },
 
     render: function() {
-      this.$el.html(_.template(template, {
+      this.$el.html(_.template(this.localTemplate, {
         channel: this.options.channel,
         role: this.options.role
       }));
