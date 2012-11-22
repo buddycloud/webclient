@@ -16,6 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/anonBar.html')
   var Events = Backbone.Events;
 
@@ -26,6 +27,8 @@ define(function(require) {
              'click .home': 'home'},
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      template = undefined;
       this.render();
     },
 
@@ -38,7 +41,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(this.localTemplate));
     }
   });
 

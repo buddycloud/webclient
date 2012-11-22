@@ -33,7 +33,9 @@ define(function(require) {
       this.model = new MostActiveDiscover();
       this.model.doDiscover({max: 10});
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      template = undefined;
       this.localFooter = l10nBrowser.localiseHTML(footer, {});
+      footer = undefined;
       this.model.bind('sync', this.render, this);
     },
 

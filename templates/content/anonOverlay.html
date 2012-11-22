@@ -1,17 +1,17 @@
 <div class="modal twoWindowed">
-  <div class="close">Close</div>
+  <div class="close" data-l10n="closeButton">Close</div>
   <div class="left">
-    <h2>buddycloud login</h2>
+    <h2 data-l10n="buddycloudLogin">buddycloud login</h2>
     <!--<p><span>Not yet a user?</span> <a href="#" class="register">Register</a></p>-->
   </div>
   <form class="login right clearfix">
     <span class="errors"></span>
     <div>
-      <label for="auth_name">Username</label>
+      <label for="auth_name" data-l10n="username">Username</label>
       <input type="text" id="auth_name" name="name" required autofocus />
     </div>
     <div>
-      <label for="auth_pwd">Password</label>
+      <label for="auth_pwd" data-l10n="password">Password</label>
       <input type="password" id="auth_pwd" name="password" required />
     </div>
     <div>
@@ -22,12 +22,13 @@
     <div class="submit">
       <span class="storePassword">
         <input type="checkbox" id="store_local" />
-        <label for="store_local">remember password</label>
+        <label for="store_local" data-l10n="keepLogin">stay logged in</label>
       </span>
       <span class="loading">
-        <span class="spinner"></span>Logging you in..
+        <span class="spinner"></span>
+        <span data-l10n="loggingIn">Logging you in..</span>
       </span>
-      <button type="submit" id="auth_submit" class="callToAction">Login</button>
+      <button type="submit" id="auth_submit" class="callToAction" data-l10n="loginButton">Login</button>
     </div>
   </form>
 </div>

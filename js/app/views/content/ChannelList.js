@@ -19,6 +19,7 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelListDetails = require('views/content/ChannelListDetails');
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelList.html');
 
   var ChannelList = Backbone.View.extend({
@@ -29,9 +30,14 @@ define(function(require) {
       'click .showAll': '_showAll'
     },
 
+    initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      template = undefined;
+    },
+
     render: function() {
       if (this.model.length > 0) {
-        this.$el.html(_.template(template, {
+        this.$el.html(_.template(this.localTemplate, {
           title: this.options.title,
           channels: this.model,
           avatarUrl: api.avatarUrl

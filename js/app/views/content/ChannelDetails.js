@@ -17,6 +17,7 @@
 define(function(require) {
   var Backbone = require('backbone');
   var ChannelList = require('views/content/ChannelList');
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelDetails.html')
 
   var ChannelDetails = Backbone.View.extend({
@@ -24,6 +25,8 @@ define(function(require) {
     events: {'click .infoToggle': '_toggleInfo'},
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      template = undefined;
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._updateFollowersList, this);
       }
@@ -60,7 +63,7 @@ define(function(require) {
 
     render: function() {
       var metadata = this.model.metadata;
-      this.$el.html(_.template(template, {metadata: metadata}));
+      this.$el.html(_.template(this.localTemplate, {metadata: metadata}));
     },
 
     _renderChannelLists: function() {

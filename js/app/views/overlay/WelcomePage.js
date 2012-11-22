@@ -34,6 +34,7 @@ define(function(require) {
       _.bindAll(this, 'login');
       this.discover = new DiscoverOverlay();
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      template = undefined;
       this.render();
     },
 
