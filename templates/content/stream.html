@@ -3,11 +3,11 @@
   <div class="holder">
     <div class="expandingArea">
         <pre><span></span><br></pre>
-        <textarea placeholder="New Topic..."></textarea>
+    <textarea placeholder="<%= l('newTopic', {}, 'New Topic...') %>"></textarea>
     </div>
     <div class="controls clearfix">
-      <div class="hint">ctrl + enter to post</div>
-      <div class="button callToAction createComment">Post</div>
+      <div class="hint" data-l10n="postHint">ctrl + enter to post</div>
+      <div class="button callToAction createComment" data-l10n="postButton">Post</div>
     </div>
   </div>
 </section>

@@ -21,6 +21,8 @@ define(function(require) {
   var config = require('config');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var l10n = require('l10n');
+  var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html');
   var embedTemplate = require('text!templates/content/embed.html');
@@ -35,15 +37,17 @@ define(function(require) {
     },
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model.bind('addComment', this.render, this);
     },
 
     render: function() {
-      this.$el.html(_.template(template, {
+      this.$el.html(_.template(this.localTemplate, {
         post: this.model,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
-        linkify: linkify
+        linkify: linkify,
+        l: l10n.get
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
       this._showPostTime();

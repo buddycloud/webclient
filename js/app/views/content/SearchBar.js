@@ -17,6 +17,7 @@
 define(function(require) {
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var l10n = require('l10n');
   var template = require('text!templates/content/searchBar.html')
 
   var SearchBar = Backbone.View.extend({
@@ -32,7 +33,10 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(template, 
+          {
+            l: l10n.get
+          }));
     }
   });
 

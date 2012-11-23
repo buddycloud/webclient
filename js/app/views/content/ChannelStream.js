@@ -19,6 +19,8 @@ define(function(require) {
   var Backbone = require('backbone');
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
+  var l10n = require('l10n');
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/stream.html')
   require('util/autoResize');
 
@@ -30,6 +32,7 @@ define(function(require) {
     },
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.isLoading = true;
       this._postViews = [];
       this.model.items.bind('reset', this._getAndRenderPosts, this);
@@ -148,7 +151,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template, {user: this.options.user}));
+      this.$el.html(_.template(this.localTemplate, {user: this.options.user, l: l10n.get}));
       if (!this._userCanPost()) {
         this.$newTopic = this.$('.newTopic').detach();
       }
