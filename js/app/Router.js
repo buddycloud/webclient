@@ -96,6 +96,9 @@ define(function(require) {
 
     explore: function() {
       this._before();
+      if (this.sidebar) {
+        this.sidebar.unSelectChannel();
+      }
       this.currentPage = new ExplorePage({user: this.user});
     },
 

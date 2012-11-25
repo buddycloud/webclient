@@ -50,6 +50,11 @@ define(function(require) {
     selectChannel: function(channel) {
       this.personalChannel.selectChannel(channel);
       this.channels.selectChannel(channel);
+    },
+
+    unSelectChannel: function() {
+      this.personalChannel.selectChannel('');
+      this.channels.selectChannel('');
     }
   });
 
