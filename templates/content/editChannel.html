@@ -1,5 +1,5 @@
 <form class="stream clearfix">
-  <h2 class="pageName" data-l10n="editChannel">Edit Channel</h2>
+  <h2 class="pageName" data-l10n="editChannel">Edit channel</h2>
   <div class="avatar">
     <label data-l10n="avatarLabel">Avatar</label>
     <div>
@@ -8,11 +8,11 @@
     </div>
   </div>
   <div class="title">
-    <label for="channel_title" data-l10n="channelTitle">Channel Title</label>
+    <label for="channel_title" data-l10n="channelTitle">Channel title</label>
     <input type="text" id="channel_title" value="<%= metadata.title() || '' %>"/>
   </div>
   <div class="description area">
-    <label for="channel_description" data-l10n="channelDescription">Description</label>
+    <label for="channel_description" data-l10n="channelDescription">Channel description</label>
     <textarea id="channel_description"><%- metadata.description() || '' %></textarea>
   </div>  
   <!--
@@ -28,13 +28,13 @@
     <input type="text" id="channel_location" /> 
   </div> -->
   <div class="access">
-    <label for="channel_public_access" data-l10n="publicAccess">Public Access</label>
+    <label for="channel_public_access" data-l10n="publicAccess">Open channel</label>
     <div>
       <input type="checkbox" id="channel_public_access"/>
     </div>
   </div>
   <div class="role">
-    <label for="channel_default_role" data-l10n="defaultRole">Default Role</label>
+    <label for="channel_default_role" data-l10n="defaultRole">Default role</label>
     <div>
       <select id="channel_default_role">
         <option value="follower" data-l10n="followerRole">follower</option>
@@ -45,7 +45,7 @@
           can only read your channel
         </span>
         <span class="followerPlus" data-l10n="followerPlusInfo">
-          can read and write your channel
+          can read and post messages in your channel
         </span>
       </span> 
     </div>
@@ -53,7 +53,7 @@
 </form>  
 <nav class="bottom clearfix">
   <div class="floatLeft twoStepConfirmation">
-    <div class="button white delete stepOne" data-l10n="deleteChannel">Delete Channel</div>
+    <div class="button white delete stepOne" data-l10n="deleteChannel">Delete channel</div>
     <div class="button danger stepTwo" data-l10n="confirmButton">Confirm</div>
   </div>
   <div class="button callToAction save" data-l10n="saveButton">Save</div>
