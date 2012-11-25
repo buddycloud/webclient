@@ -86,7 +86,7 @@ define(function(require) {
 
         this.currentPage = new WelcomePage({model: this.user});
       } else {
-        if (this.user.channels().length < 5) {
+        if (this.user.channels().length <= 5) {
           this.navigate('explore', {trigger: true});
         } else {
           this.navigate(this.user.username(), {trigger: true});
@@ -99,7 +99,7 @@ define(function(require) {
       this.currentPage = new ExplorePage({user: this.user});
     },
 
-    // TODO wait for fixes on HTTP API 
+    // TODO wait for fixes on HTTP API
     /*preferences: function() {
       this._before();
       this.currentPage = new PreferencesPage({user: this.user});
