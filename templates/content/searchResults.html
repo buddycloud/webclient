@@ -1,7 +1,7 @@
 <div class="discoverChannels clearfix">
   <div class="local span-2">
     <div class="span-1">
-      <h2>Channels</h2>
+      <h2 data-l10n="channels">Channels</h2>
       <% if (channels) { %>
       <div class="list">
         <% _.each(channels, function(channel) { %>
@@ -11,14 +11,14 @@
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
-          <div class="follow button callToAction">Follow</div>
+          <div class="follow button callToAction" data-l10n="followButton">Follow</div>
         </div>
         <% }); %>
       </div>
       <% } %>
     </div>
     <div class="span-1">
-      <h2>Posts</h2>
+      <h2 data-l10n="posts">Posts</h2>
       <% if (posts) { %>
       <div class="list posts">
         <% _.each(posts, function(post) { %>

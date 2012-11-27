@@ -22,6 +22,7 @@ define(function(require) {
   var Channel = require('models/Channel');
   var ChannelMetadata = require('models/ChannelMetadata');
   var config = require('config');
+  var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
   var template = require('text!templates/content/createChannel.html');
 
@@ -34,11 +35,12 @@ define(function(require) {
 
     initialize: function() {
       this._initialize();
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.render();
     },
 
     render: function() {
-      this.$el.html(_.template(template, {
+      this.$el.html(_.template(this.localTemplate, {
         domain: this._topicsDomain()
       }));
     },

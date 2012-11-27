@@ -17,6 +17,7 @@
 define(function(require) {
   var AbstractExploreView = require('views/content/AbstractExploreView');
   var spinner = require('util/spinner');
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/searchResults.html')
 
   var SearchView = AbstractExploreView.extend({
@@ -28,6 +29,7 @@ define(function(require) {
     },
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this._defineGetter('channels', function() {
         return this.model.channels.models;
       });
@@ -37,7 +39,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template, {
+      this.$el.html(_.template(this.localTemplate, {
         channels: this.channels,
         posts: this.model.posts.models
       }));

@@ -1,40 +1,40 @@
 <form class="stream clearfix" onsubmit="return false;">
-  <h2 class="pageName">Preferences</h2>
+  <h2 class="pageName" data-l10n="preferences">Preferences</h2>
   <div class="email">
-    <label for="email_address">Email Address</label>
+    <label for="email_address" data-l10n="email">Email</label>
     <input type="text" id="email_address" value="<%= preferences.email() %>" />
   </div>
   <div class="notify">
-    <label>Notifications</label>
+    <label data-l10n="notifications">Notifications</label>
     <div>
       <div>
         <input type="checkbox" id="newFollowers"/>
-        <label for="newFollowers">new followers</label>
+        <label for="newFollowers" data-l10n="prefsNewFollowers">new followers</label>
       </div>
       <div>
         <input type="checkbox" id="mentions"/>
-        <label for="mentions">@mentions</label>
+        <label for="mentions" data-l10n="prefsMentions">@mentions</label>
       </div>
       <div>
         <input type="checkbox" id="ownChannel"/>
-        <label for="ownChannel">posts on my channel</label>
+        <label for="ownChannel" data-l10n="prefsMyChannel">posts on my channel</label>
       </div>
       <div>
         <input type="checkbox" id="followedChannels"/>
-        <label for="followedChannels">posts on any channel I follow</label>
+        <label for="followedChannels" data-l10n="prefsAnyChannel">posts on any channel I follow</label>
       </div>
       <div>
         <input type="checkbox" id="threads"/>
-        <label for="threads">posts on threads I posted in</label>
+        <label for="threads" data-l10n="prefsThreads">posts on threads I posted in</label>
       </div>
     </div>
   </div>
 </form>
 <nav class="bottom clearfix">
   <div class="floatLeft twoStepConfirmation clearfix">
-    <div class="button white delete stepOne">Delete Account</div>
-    <div class="button danger stepTwo">Confirm</div>
+    <div class="button white delete stepOne" data-l10n="deleteAccount">Delete account</div>
+    <div class="button danger stepTwo" data-l10n="confirmButton">Confirm</div>
   </div>
-  <div class="button callToAction save">Save</div>
-  <div class="button discard">Discard</div>
+  <div class="button callToAction save" data-l10n="saveButton">Save</div>
+  <div class="button discard" data-l10n="discardButton">Discard</div>
 </nav>

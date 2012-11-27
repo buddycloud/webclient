@@ -67,7 +67,8 @@ define(function(require) {
     lang = navigator.language;
   }
   l10n.setAdapter(l10nBrowser, {baseURL: '/locales/'});
-  l10n.setMarkFallbacks();
+  // uncomment the following line to mark all localised strings in the rendered interface (useful for debugging localisation code).
+  //l10n.setMarkStrings();
   l10n.loadResource('data.properties', lang, 
       initialize, // do this once the locale data has loaded
       function(err) {
