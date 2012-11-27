@@ -16,6 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/sidebar/actionBar.html')
   var Events = Backbone.Events;
 
@@ -23,8 +24,12 @@ define(function(require) {
     className: 'actionBar clearfix',
     events: {'click .discover': '_navigate'},
 
+    initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
+    },
+
     render: function() {
-      this.$el.html(_.template(template));
+      this.$el.html(_.template(this.localTemplate));
     },
 
     _navigate: function() {

@@ -19,6 +19,7 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/header.html')
 
   var ChannelHeader = Backbone.View.extend({
@@ -29,6 +30,7 @@ define(function(require) {
              'click .edit': '_edit'},
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
       }
@@ -43,7 +45,7 @@ define(function(require) {
 
     render: function() {
       var metadata = this.model.metadata;
-      this.$el.html(_.template(template, {metadata: metadata}));
+      this.$el.html(_.template(this.localTemplate, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
       this._renderButtons();
     },

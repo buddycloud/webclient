@@ -1,7 +1,7 @@
 <div class="local span-2">
-  <h1>Local</h1>
+  <h1 data-l10n="discoveryLocal">Local</h1>
     <div class="mostActive span-1">
-      <h2>Most Active</h2>
+      <h2 data-l10n="discoveryActive">Most active</h2>
       <% if (mostActive) { %>
       <div class="list">
         <% _.each(mostActive, function(channel) { %>
@@ -17,7 +17,7 @@
       <% } %>
     </div>
     <div class="popular span-1">
-      <h2>Popular</h2>
+      <h2 data-l10n="discoveryPopular">Popular</h2>
       <% if (popular) { %>
       <div class="list">
         <% _.each(popular, function(channel) { %>
@@ -34,9 +34,9 @@
     </div>
 </div>
 <div class="global span-2">
-  <h1>Global</h1>
+  <h1 data-l10n="discoveryGlobal">Global</h1>
     <div class="mostActive span-1">
-      <h2>Most Active</h2>
+      <h2 data-l10n="discoveryActive">Most Active</h2>
       <% if (mostActive) { %>
       <div class="list">
         <% _.each(mostActive, function(channel) { %>
@@ -52,7 +52,7 @@
       <% } %>
     </div>
     <div class="popular span-1">
-      <h2>Popular</h2>
+      <h2 data-l10n="discoveryPopular">Popular</h2>
       <% if (popular) { %>
       <div class="list">
         <% _.each(popular, function(channel) { %>

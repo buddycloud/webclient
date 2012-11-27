@@ -19,6 +19,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/sidebar/personalChannel.html');
+  var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
 
   var PersonalChannel = Backbone.View.extend({
@@ -34,6 +35,7 @@ define(function(require) {
       },
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.metadata = new ChannelMetadata(this.model.username());
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
@@ -51,7 +53,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template, {
+      this.$el.html(_.template(this.localTemplate, {
         metadata: this.metadata
       }));
       avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);

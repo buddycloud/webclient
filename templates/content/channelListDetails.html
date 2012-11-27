@@ -6,15 +6,15 @@
       <div class="currentRole"><%- role %></div>
     </section>
     <section class="action changeRole">
-      <h5>Change Role</h5>
+      <h5 data-l10n="changeRole">Change role</h5>
       <select>
-        <option value="moderator">Moderator</option>
-        <option value="followerPlus">Follower+Post</option>
-        <option value="follower" selected>Follower</option>
+        <option value="moderator" data-l10n="moderatorRole">moderator</option>
+        <option value="followerPlus" data-l10n="followerPlusRole">follower+post</option>
+        <option value="follower" selected data-l10n="followerRole">follower</option>
       </select>
       <section class="info">
         <div class="moderator">
-          <ul>
+          <ul data-l10n="moderatorRights">
             <li>read your channel</li>
             <li>write comments &amp; messages</li>
             <li>post new topics</li>
@@ -24,34 +24,34 @@
           </ul>
         </div>
         <div class="followerPlus">
-          <ul>
+          <ul data-l10n="followerPlusRights">
             <li>read your channel</li>
             <li>write comments &amp; messages</li>
             <li>post new topics</li>
           </ul>
         </div>
         <div class="follower">
-          <ul>
+          <ul data-l10n="followerRights">
             <li>read your channel</li>
           </ul>
         </div>
       </section>
     </section>
     <section class="action banUser">
-      <h5>Ban User</h5>
+      <h5 data-l10n="banUser">Ban User</h5>
       <div class="info">
         <ul>
-          <li class="negative">Remove access to channel.</li>
+          <li class="negative" data-l10n="banUserInfo">Remove channel access.</li>
         </ul>
       </div>
     </section>
     <section class="actionRow choose">
-      <div class="changeRoleButton">Change Role</div>
-      <div class="banUserButton">Ban User</div>
+      <div class="changeRoleButton" data-l10n="changeRole">Change role</div>
+      <div class="banUserButton" data-l10n="banUser">Ban User</div>
     </section>
     <section class="actionRow confirm">
-      <div class="cancelButton">Cancel</div>
-      <div class="okButton">Ok</div>
+      <div class="cancelButton" data-l10n="cancelButton">Cancel</div>
+      <div class="okButton" data-l10n="okButton">Ok</div>
     </section>
   </div><!-- /box -->
 </div><!-- /holder -->

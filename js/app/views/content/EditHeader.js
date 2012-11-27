@@ -19,12 +19,14 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/editHeader.html')
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
 
     initialize: function() {
+      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model.bind('change', this.render, this);
       this.model.fetch();
 
@@ -33,7 +35,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template, {metadata: this.model}));
+      this.$el.html(_.template(this.localTemplate, {metadata: this.model}));
       avatarFallback(this.$('.avatar'), this.model.channelType(), 75);
     }
   });
