@@ -57,11 +57,7 @@ define(['l10n'],
             return html.indexOf('<');
           } else {
             index = html.indexOf('data-l10n');
-            if (index == -1) {
-              return -1;
-            } else {
-              return html.lastIndexOf('<', index);
-            }
+            return index === -1 ? index : html.lastIndexOf('<', index);
           }
         }
 
@@ -71,17 +67,17 @@ define(['l10n'],
           var index, match, token, name, contents, result, endTag, l10nGet, ret;
           if (depth > 10) throw new Error("max depth exceeded");
           result = ""; endTag = "";
-          while ((index = findTag(html, allTags)) != -1) {
+          while ((index = findTag(html, allTags)) !== -1) {
             match = html.slice(index).match(anytag);
             result += html.slice(0, index);
             html = html.slice(index + match[0].length);
-            if (match[0].substring(1,2) == '/') {
+            if (match[0].substring(1,2) === '/') {
               // it's an end tag so return to previous level.
               endTag = match[0];
               break;
             }
             name = match[1];
-            if (match[0].indexOf('data-l10n') != -1) {
+            if (match[0].indexOf('data-l10n') !== -1) {
               // it's an l10n tag so localise it
               match = match[0].match(l10ntag);
               token = match[2];
@@ -116,7 +112,7 @@ define(['l10n'],
 
       function getLoader(options) {
         var baseURL;
-        if (typeof(options) == 'object' && typeof(options.baseURL) == 'string') {
+        if (typeof(options) === 'object' && typeof(options.baseURL) === 'string') {
           baseURL = options.baseURL;
         } else {
           baseURL = ''; // base URL defaults to the current document path.
@@ -128,8 +124,8 @@ define(['l10n'],
             xhr.overrideMimeType('text/plain; charset=utf-8');
           }
           xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4) {
-              if (xhr.status == 200 || xhr.status === 0) {
+            if (xhr.readyState === 4) {
+              if (xhr.status === 200 || xhr.status === 0) {
                 if (success)
                   success(xhr.responseText);
               } else {
