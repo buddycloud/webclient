@@ -59,7 +59,7 @@ define(function(require) {
     Backbone.history.start({pushState: config.release});
   }
   
-  if (typeof(navigator.browserLanguage) != 'undefined') {
+  if (typeof(navigator.browserLanguage) !== 'undefined') {
     // handle IE.
     lang = navigator.browserLanguage;
   } else {
