@@ -159,6 +159,8 @@ define(function(require) {
       this._postOnCtrlEnter();
       this._hideSpinner();
       this.$('.newTopic .expandingArea').autoResize();
+
+      return this;
     },
 
     _userCanPost: function() {

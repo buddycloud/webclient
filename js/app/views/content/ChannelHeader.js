@@ -48,6 +48,8 @@ define(function(require) {
       this.$el.html(_.template(this.localTemplate, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
       this._renderButtons();
+
+      return this;
     },
 
     _switchButton: function(action) {

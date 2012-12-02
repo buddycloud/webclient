@@ -63,16 +63,20 @@ define(function(require) {
     render: function() {
       var metadata = this.model.metadata;
       this.$el.html(_.template(this.localTemplate, {metadata: metadata}));
+
+      return this;
     },
 
     _renderChannelLists: function() {
+      var $holder = this.$('.holder');
+
       this._populateChannelLists();
       this.moderatorsList.render();
       this.followersList.render();
       this.similarList.render();
-      this.$('.holder').append(this.moderatorsList.el);
-      this.$('.holder').append(this.followersList.el);
-      this.$('.holder').append(this.similarList.el);
+      $holder.append(this.moderatorsList.el);
+      $holder.append(this.followersList.el);
+      $holder.append(this.similarList.el);
     },
 
     _populateChannelLists: function() {
