@@ -188,7 +188,7 @@
     display: none;
   }
   .personal.channel .popup li {
-    width: 120px;
+    /*width: 120px;*/
   }
   .personal.channel .showSettings .popup {
     display: -webkit-box;
