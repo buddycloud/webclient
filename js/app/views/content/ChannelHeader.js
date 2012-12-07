@@ -19,6 +19,7 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/header.html')
 
@@ -31,6 +32,8 @@ define(function(require) {
 
     initialize: function() {
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      this.followStr = l10n.get('followButton', {}, "Follow");
+      this.unfollowStr = l10n.get('unfollowButton', {}, "Unfollow");
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
       }
@@ -54,10 +57,10 @@ define(function(require) {
       var button;
       if (action === 'subscribedChannel') {
         button = this.$('.follow');
-        button.toggleClass('follow unfollow').text('Unfollow');
+        button.toggleClass('follow unfollow').text(this.unfollowStr);
       } else {
         button = this.$('.unfollow');
-        button.toggleClass('unfollow follow').text('Follow');
+        button.toggleClass('unfollow follow').text(this.followStr);
       }
       button.removeClass('disabled');
     },
@@ -76,7 +79,7 @@ define(function(require) {
 
           if (this._follows()) {
             var button = this.$('.follow');
-            button.toggleClass('follow unfollow').text('Unfollow');
+            button.toggleClass('follow unfollow').text(this.unfollowStr);
           }
         }
       }
