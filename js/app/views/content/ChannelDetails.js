@@ -90,7 +90,7 @@ define(function(require) {
       this.followersList.model = followers;
 
       // Similar Channels
-      //this.similarList.model = this.model.similarChannels.usernames();
+      this.similarList.model = this.model.similarChannels.usernames();
     },
 
     _isInitialized: function() {
@@ -102,7 +102,7 @@ define(function(require) {
       if (!this._isInitialized()) {
         this.moderatorsList = new ChannelList({title: l('moderatorsList', {}, 'moderators'), role: l('moderatorCaps', {}, 'Moderator')});
         this.followersList = new ChannelList({title: l('followersList', {}, 'followers'), role: l('followerCaps', {}, 'Follower')});
-        //this.similarList = new ChannelList({title: l('similarList', {}, 'similar'), role: l('similarList', {}, 'similar')});
+        this.similarList = new ChannelList({title: l('similarList', {}, 'similar'), role: l('similarList', {}, 'similar')});
 
         this._renderChannelLists();
       }
