@@ -17,6 +17,7 @@
 define(function(require) {
   var Backbone = require('backbone');
   var ChannelList = require('views/content/ChannelList');
+  var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelDetails.html')
 
