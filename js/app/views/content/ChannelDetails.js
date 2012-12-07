@@ -17,8 +17,10 @@
 define(function(require) {
   var Backbone = require('backbone');
   var ChannelList = require('views/content/ChannelList');
+  var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelDetails.html')
+  var l = l10n.get;
 
   var ChannelDetails = Backbone.View.extend({
     className: 'channelDetails hidden',
@@ -98,9 +100,9 @@ define(function(require) {
     _toggleInfo: function() {
       this.$el.toggleClass('hidden');
       if (!this._isInitialized()) {
-        this.moderatorsList = new ChannelList({title: 'moderators', role: 'Moderator'});
-        this.followersList = new ChannelList({title: 'followers', role: 'Follower'});
-        this.similarList = new ChannelList({title: 'similar', role: 'Similar'});
+        this.moderatorsList = new ChannelList({title: l('moderatorsList', {}, 'moderators'), role: l('moderatorCaps', {}, 'Moderator')});
+        this.followersList = new ChannelList({title: l('followersList', {}, 'followers'), role: l('followerCaps', {}, 'Follower')});
+        this.similarList = new ChannelList({title: l('similarList', {}, 'similar'), role: l('similarCaps', {}, 'Similar')});
 
         this._renderChannelLists();
       }
