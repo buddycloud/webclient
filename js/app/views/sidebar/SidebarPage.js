@@ -21,7 +21,7 @@ define(function(require) {
   var PersonalChannel = require('views/sidebar/PersonalChannel');
 
   var SidebarPage = Backbone.View.extend({
-    className: 'sidebar',
+    className: 'sidebar hidden',
 
     initialize: function() {
       this.personalChannel = new PersonalChannel({model: this.model});
@@ -32,9 +32,8 @@ define(function(require) {
 
     render: function() {
       var $sidebar = $('.sidebar');
-      this.actionBar.render();
       $sidebar.append(this.personalChannel.el);
-      $sidebar.append(this.actionBar.el);
+      $sidebar.append(this.actionBar.render().el);
       $sidebar.append(this.channels.el);
       $sidebar.removeClass('hidden');
     },

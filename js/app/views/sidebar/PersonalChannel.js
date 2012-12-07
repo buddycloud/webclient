@@ -87,8 +87,12 @@ define(function(require) {
     },
 
     showSettings: function(event) {
+      var $settings = this.$('.settings');
+      var $settingsPopup = $settings.find('.popup');
+      var settingsPopupLeft = (($settingsPopup.width() - 35) / 2) * -1;
       event.stopPropagation();
-      this.$('.settings').removeClass('noSelect').addClass('showSettings');
+      $settings.removeClass('noSelect').addClass('showSettings');
+      $settingsPopup.css('left', settingsPopupLeft + 'px');
 
       // Hide settings clicking elsewhere
       $('body, html').on('click', this.hideSettings);

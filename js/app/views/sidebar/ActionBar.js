@@ -30,6 +30,8 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(this.localTemplate));
+
+      return this;
     },
 
     _navigate: function() {

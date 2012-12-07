@@ -57,17 +57,16 @@ define(function(require) {
     render: function() {
       // This was necessary to replicate the same structure of prototype
       var $centered = $('<div class="centered start"></div>');
-      this.header.render();
-      this.stream.render();
-      this.details.render();
-      $centered.append(this.stream.el);
-      $centered.append(this.details.el);
-      
-      if (this.bar) {
-        this.$el.append(this.bar.el);
-      }
-      this.$el.append(this.header.el);
+
+      $centered.append(this.stream.render().el);
+      $centered.append(this.details.render().el);
+      this.$el.append(this.header.render().el);
       this.$el.append($centered);
+
+      if (this.options.user.isAnonymous()) {
+        this.$el.addClass('centered vertical start')
+        this.$el.prepend(this.bar.el);
+      }
     },
 
     destroy: function() {

@@ -35,7 +35,7 @@ define(function(require) {
       this.model.fetch({credentials: this.options.user.credentials});
 
       if (this.options.user.isAnonymous()) {
-        this.overlay = new AnonChannelOverlay({model: this.options.user});  
+        this.overlay = new AnonChannelOverlay({model: this.options.user});
       }
     },
 
@@ -68,14 +68,15 @@ define(function(require) {
         this._renderAnonPage($content);
       } else {
         $content.html(this.view.el);
+        $content.removeClass('full');
       }
     },
 
     _renderAnonPage: function(content) {
       this.overlay.render();
-      var $center = $('<div class="stupidFirefoxFlexBoxBug centered stretchWidth stretchHeight">');
+      var $center = $('<div class="stupidFirefoxFlexBoxBug centered stretchWidth stretchHeight"></div>');
       $center.html(this.view.el);
-      
+
       content.addClass('anonView');
       content.append(this.overlay.el);
       content.append($center);

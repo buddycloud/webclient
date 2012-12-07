@@ -159,6 +159,8 @@ define(function(require) {
       this._postOnCtrlEnter();
       this._hideSpinner();
       this.$('.newTopic .expandingArea').autoResize();
+
+      return this;
     },
 
     _userCanPost: function() {
@@ -179,9 +181,10 @@ define(function(require) {
 
     _postOnCtrlEnter: function() {
       var self = this;
-      this.$('.newTopic textarea').keyup(function(event) {
+      this.$('.newTopic textarea').keydown(function(event) {
         if (event.ctrlKey && event.keyCode == 13 /* Enter */) {
           self._post();
+          event.preventDefault();
         }
       });
     },
@@ -214,14 +217,15 @@ define(function(require) {
 
     _post: function() {
       this._disableButton();
-      var textArea = this.$('.newTopic textarea');
-      var content = textArea.val();
+      var expandingArea = this.$('.newTopic .expandingArea');
+      var content = expandingArea.find('textarea').val();
       var self = this;
       this.model.items.create({content: content}, {
         credentials: this.options.user.credentials,
         wait: true,
         success: function() {
-          textArea.val('');
+          expandingArea.find('textarea').val('').blur();
+          expandingArea.find('span').text('');
           self._collapseNewTopicArea();
           self._enableButton();
         }
