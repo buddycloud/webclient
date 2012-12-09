@@ -19,8 +19,10 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/header.html')
+  var l = l10n.get;
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
@@ -56,10 +58,10 @@ define(function(require) {
       var button;
       if (action === 'subscribedChannel') {
         button = this.$('.follow');
-        button.toggleClass('follow unfollow').text('Unfollow');
+        button.toggleClass('follow unfollow').text(l('unfollowButton', {}, "Unfollow"));
       } else {
         button = this.$('.unfollow');
-        button.toggleClass('unfollow follow').text('Follow');
+        button.toggleClass('unfollow follow').text(l('followButton', {}, "Follow"));
       }
       button.removeClass('disabled');
     },
@@ -78,7 +80,7 @@ define(function(require) {
 
           if (this._follows()) {
             var button = this.$('.follow');
-            button.toggleClass('follow unfollow').text('Unfollow');
+            button.toggleClass('follow unfollow').text(l('unfollowButton', {}, "Unfollow"));
           }
         }
       }
