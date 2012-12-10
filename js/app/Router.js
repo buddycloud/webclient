@@ -80,10 +80,6 @@ define(function(require) {
     default: function() {
       this._before();
       if (this.user.isAnonymous()) {
-        if (this.sidebar) {
-          this.sidebar.destroy();
-        }
-
         this.currentPage = new WelcomePage({model: this.user});
       } else {
         if (this.user.channels().length <= 5) {
