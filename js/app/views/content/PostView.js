@@ -37,7 +37,7 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.channelName = this.options.channel.channel;
+      this.channelName = this.options.items.channel;
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model.bind('addComment', this.render, this);
     },
@@ -165,7 +165,7 @@ define(function(require) {
 
       this._disableButton();
 
-      var comment = this.options.channel.create({
+      var comment = this.options.items.create({
         content: content,
         replyTo: this.model.id
       }, {

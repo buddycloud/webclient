@@ -167,7 +167,7 @@ define(function(require) {
     _viewForPost: function(post) {
       var view = new PostView({
         model: post,
-        channel: this.model,
+        items: this.model,
         user: this.options.user
       });
       return view;
