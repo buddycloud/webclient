@@ -66,7 +66,7 @@ define(function(require) {
       this.$('p').embedly({
         maxWidth: 400,
         key: config.embedlyKey,
-        secure: true,
+        secure: config.embedlySecure,
         success: function(oembed, dict) {
           // If is not a link or if the link has an image
           if (oembed.type !== 'link' || oembed.thumbnail_url) {
