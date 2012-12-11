@@ -16,7 +16,6 @@
 
 define(function(require) {
   var api = require('util/api');
-  var Backbone = require('backbone');
   var CollectionBase = require('models/CollectionBase')
   var Item = require('models/Item');
 

@@ -16,7 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var Channel = require('models/Channel')
+  var ChannelMetadata = require('models/ChannelMetadata')
   var EditHeader = require('views/content/EditHeader');
   var EditChannelView = require('views/content/EditChannelView');
 
@@ -24,17 +24,19 @@ define(function(require) {
     className: 'channelView',
 
     initialize: function() {
-      this.model = new Channel(this.options.channel);
+      this.model = new ChannelMetadata(this.options.channel);
       this.view = new EditChannelView({
         model: this.model,
         user: this.options.user
       });
-      this.model.bind('fetch', this.render, this);
+      this.model.bind('change', this.render, this);
       this.model.fetch({credentials: this.options.user.credentials});
     },
 
     render: function() {
-      $('.content').html(this.view.el);
+      var $content = $('.content');
+      $content.html(this.view.el);
+      $content.removeClass('full');
     },
 
     destroy: function() {

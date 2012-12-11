@@ -18,6 +18,7 @@ define(function(require) {
   var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var ChannelMetadata = require('models/ChannelMetadata');
   var Events = Backbone.Events;
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
@@ -32,6 +33,10 @@ define(function(require) {
              'click .edit': '_edit'},
 
     initialize: function() {
+      this.model = new ChannelMetadata(this.options.channel);
+      this.model.bind('change', this.render, this);
+      this.model.fetch();
+
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
@@ -46,12 +51,10 @@ define(function(require) {
     },
 
     render: function() {
-      var metadata = this.model.metadata;
+      var metadata = this.model;
       this.$el.html(_.template(this.localTemplate, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
       this._renderButtons();
-
-      return this;
     },
 
     _switchButton: function(action) {
@@ -71,7 +74,7 @@ define(function(require) {
         // Hide both buttons
         this._hideButtons('edit', 'follow');
       } else {
-        if (this._itsMe() || this._isOwner()) {
+        if (this._isOwner()) {
           // Show only edit button
           this._hideButtons('follow');
         } else {
@@ -87,7 +90,7 @@ define(function(require) {
     },
 
     _edit: function() {
-      Events.trigger('navigate', this.model.name + '/edit');
+      Events.trigger('navigate', this.model.channel + '/edit');
     },
 
     _hideButtons: function() {
@@ -97,23 +100,19 @@ define(function(require) {
     },
 
     _isOwner: function() {
-      var username = this.options.user.username();
-      return this.model.followers.isOwner(username);
-    },
-
-    _itsMe: function() {
-      return this.options.user.username().indexOf(this.model.name) != -1;
+      var channel = this.model.channel;
+      return this.options.user.subscribedChannels.isOwner(channel);
     },
 
     _follows: function() {
       var followedChannels = this.options.user.subscribedChannels.channels();
-      var channel = this.model.metadata.channel;
+      var channel = this.model.channel;
       return _.include(followedChannels, channel);
     },
 
     _follow: function(e) {
-      var channel = this.model.metadata.channel;
-      var role = this.model.metadata.defaultAffiliation();
+      var channel = this.model.channel;
+      var role = this.model.defaultAffiliation();
       var credentials = this.options.user.credentials;
 
       // rainbow animation stuff
@@ -129,7 +128,7 @@ define(function(require) {
     },
 
     _unfollow: function() {
-      var channel = this.model.metadata.channel;
+      var channel = this.model.channel;
       var credentials = this.options.user.credentials;
 
       // Unsubscribe
