@@ -19,7 +19,7 @@ define(function(require) {
   var ModelBase = require('models/ModelBase');
   var SimilarChannels = require('models/SimilarChannels');
 
-  var ChannelDetails = ModelBase.extend({
+  var Channel = ModelBase.extend({
     constructor: function(name) {
       ModelBase.call(this);
       this.name = name;
@@ -61,5 +61,5 @@ define(function(require) {
     }
   });
 
-  return ChannelDetails;
+  return Channel;
 });
