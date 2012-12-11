@@ -17,7 +17,6 @@
 define(function(require) {
   var AnonChannelOverlay = require('views/content/AnonChannelOverlay');
   var Backbone = require('backbone');
-  var Channel = require('models/Channel');
   var ChannelView = require('views/content/ChannelView');
   var Events = Backbone.Events;
 
@@ -25,39 +24,18 @@ define(function(require) {
     className: 'channelView clearfix',
 
     initialize: function() {
-      this.model = new Channel(this.options.channel);
       this.view = new ChannelView({
-        model: this.model,
+        channel: this.options.channel,
         user: this.options.user
       });
-      this.model.bind('fetch', this._begin, this);
+      /*this.model.bind('fetch', this._begin, this);
       this.model.bind('error', this._error, this);
-      this.model.fetch({credentials: this.options.user.credentials});
+      this.model.fetch({credentials: this.options.user.credentials});*/
+      this.render();
 
       if (this.options.user.isAnonymous()) {
         this.overlay = new AnonChannelOverlay({model: this.options.user});
       }
-    },
-
-    _begin: function() {
-      this.render();
-      this._listenForNewPosts();
-    },
-
-    _error: function(e) {
-      this.view.destroy();
-      Events.trigger('pageError', e);
-    },
-
-    _listenForNewPosts: function() {
-      var user = this.options.user;
-      var items = this.model.items;
-      user.notifications.on('new', function(item) {
-        if (item.source == items.channel) {
-          items.add(item);
-        }
-      });
-      user.notifications.listen({credentials: user.credentials});
     },
 
     render: function() {

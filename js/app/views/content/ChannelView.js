@@ -29,15 +29,15 @@ define(function(require) {
 
     initialize: function() {
       this.header = new ChannelHeader({
-        model: this.model,
+        channel: this.options.channel,
         user: this.options.user
       });
       this.stream = new ChannelStream({
-        model: this.model,
+        channel: this.options.channel,
         user: this.options.user
       });
       this.details = new ChannelDetails({
-        model: this.model,
+        channel: this.options.channel,
         user: this.options.user
       });
 
@@ -58,9 +58,9 @@ define(function(require) {
       // This was necessary to replicate the same structure of prototype
       var $centered = $('<div class="centered start"></div>');
 
-      $centered.append(this.stream.render().el);
-      $centered.append(this.details.render().el);
-      this.$el.append(this.header.render().el);
+      $centered.append(this.stream.el);
+      $centered.append(this.details.el);
+      this.$el.append(this.header.el);
       this.$el.append($centered);
 
       if (this.options.user.isAnonymous()) {

@@ -37,6 +37,17 @@ define(function(require) {
       return _.uniq(channelsList);
     },
 
+    role: function(channel) {
+      var postsNode = channel + '/posts';
+      return this.attributes[postsNode];
+    },
+
+    isOwner: function(channel) {
+      var postsNode = channel + '/posts';
+      var affiliation = this.attributes[postsNode];
+      return affiliation === 'owner';      
+    },
+
     isPostingAllowed: function(channel) {
       var postsNode = channel + '/posts';
       var affiliation = this.attributes[postsNode];
