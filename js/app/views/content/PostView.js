@@ -37,6 +37,7 @@ define(function(require) {
     },
 
     initialize: function() {
+      this.channelName = this.options.channel.channel;
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model.bind('addComment', this.render, this);
     },
@@ -86,7 +87,8 @@ define(function(require) {
     },
 
     _roleTag: function() {
-      var role = this.options.user.subscribedChannels.role(this.options.channel.channel);
+      var user = this.options.user;
+      var role = user.subscribedChannels.role(this.channelName);
       if (role == 'owner' || role == 'moderator') {
         return role;
       } else {
@@ -111,8 +113,7 @@ define(function(require) {
       if (user.isAnonymous()) {
         return false;
       } else {
-        var channelName = this.options.channel.channel;
-        return user.subscribedChannels.isPostingAllowed(channelName);
+        return user.subscribedChannels.isPostingAllowed(this.channelName);
       }
     },
 
