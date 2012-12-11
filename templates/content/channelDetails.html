@@ -6,11 +6,12 @@
   <section class="meta">
     <p class="address">
       <span class="title" data-l10n="address">Channel address:</span>
-      <span class="data"><%= metadata.channel %></span>
+      <span class="data"><%= channel %></span>
     </p>
-    <p class="<%= metadata.accessModel() == 'open' ? 'open' : 'closed' %>">
+    <!-- FIXME ChannelDetails.js doesn't have access to ChannelMetadata.js -->
+    <p class="open">
       <span class="title" data-l10n="channelIs">This channel is:</span>
-      <span class="data"><%= metadata.accessModel() == 'open' ? 'Public' : 'Private' %></span>
+      <span class="data">Public</span>
     </p>
     <p class="broadcast">
       <span class="title" data-l10n="broadcastingFor">Broadcasting for:</span>

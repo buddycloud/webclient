@@ -17,11 +17,12 @@
 define(function(require) {
   var $ = require('jquery');
   var Backbone = require('backbone');
+  var ChannelItems = require('models/ChannelItems');
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
-  var template = require('text!templates/content/stream.html')
+  var template = require('text!templates/content/stream.html');
   require('util/autoResize');
 
   var ChannelStream = Backbone.View.extend({
@@ -33,10 +34,11 @@ define(function(require) {
 
     initialize: function() {
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      this._initModel();
+
       this.isLoading = true;
       this._postViews = [];
-      this.model.items.bind('reset', this._getAndRenderPosts, this);
-      this.model.items.bind('addPost', this._prependNewPost, this);
+      this.model.bind('addPost', this._prependNewPost, this);
 
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
@@ -45,6 +47,35 @@ define(function(require) {
       // Scroll event
       _.bindAll(this, 'checkScroll');
       $('.content').scroll(this.checkScroll);
+    },
+
+    _initModel: function() {
+      this.model = new ChannelItems(this.options.channel);
+      this.model.bind('reset', this._begin, this);
+      this.model.bind('error', this._error, this);
+      this.model.fetch();
+    },
+
+    _begin: function() {
+      this._getAndRenderPosts();
+      this.render();
+      this._listenForNewPosts();
+    },
+
+    _error: function(e) {
+      this.destroy();
+      Events.trigger('pageError', e);
+    },
+
+    _listenForNewPosts: function() {
+      var user = this.options.user;
+      var items = this.model;
+      user.notifications.on('new', function(item) {
+        if (item.source == items.channel) {
+          items.add(item);
+        }
+      });
+      user.notifications.listen({credentials: user.credentials});
     },
 
     destroy: function() {
@@ -66,11 +97,11 @@ define(function(require) {
         var self = this;
 
         // Last loaded post id
-        var lastItem = this.model.items.lastItem();
+        var lastItem = this.model.lastItem();
 
         if (lastItem) {
           this._showSpinner();
-          this.model.items.fetch({
+          this.model.fetch({
             data: {after: lastItem},
             silent: true,
             success: function() {
@@ -95,8 +126,7 @@ define(function(require) {
     _subscribeAction: function(action) {
       if (action === 'subscribedChannel') {
         // Followed the channel
-        var defaultRole = this.model.metadata.defaultAffiliation();
-        if (defaultRole === 'publisher') {
+        if (this._userCanPost()) {
           this.$el.prepend(this.$newTopic);
         }
       } else {
@@ -114,7 +144,7 @@ define(function(require) {
     },
 
     _getAndRenderPosts: function() {
-      var posts = this.model.items.posts();
+      var posts = this.model.posts();
       var self = this;
       _.each(posts, function(post) {
         var view = self._viewForPost(post);
@@ -124,7 +154,7 @@ define(function(require) {
     },
 
     _appendPosts: function() {
-      var posts = this.model.items.posts();
+      var posts = this.model.posts();
       var self = this;
       _.each(posts, function(post) {
         var view = self._viewForPost(post);
@@ -159,8 +189,6 @@ define(function(require) {
       this._postOnCtrlEnter();
       this._hideSpinner();
       this.$('.newTopic .expandingArea').autoResize();
-
-      return this;
     },
 
     _userCanPost: function() {
@@ -168,7 +196,7 @@ define(function(require) {
       if (user.isAnonymous()) {
         return false;
       } else {
-        return user.subscribedChannels.isPostingAllowed(this.model.name);
+        return user.subscribedChannels.isPostingAllowed(this.model.channel);
       }
     },
 
@@ -220,7 +248,7 @@ define(function(require) {
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
       var self = this;
-      this.model.items.create({content: content}, {
+      this.model.create({content: content}, {
         credentials: this.options.user.credentials,
         wait: true,
         success: function() {

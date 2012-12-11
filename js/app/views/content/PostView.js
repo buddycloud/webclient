@@ -85,8 +85,8 @@ define(function(require) {
       });
     },
 
-    _roleTag: function(username) {
-      var role = this.options.channel.followers.get(username);
+    _roleTag: function() {
+      var role = this.options.user.subscribedChannels.role(this.options.channel.channel);
       if (role == 'owner' || role == 'moderator') {
         return role;
       } else {
@@ -111,7 +111,7 @@ define(function(require) {
       if (user.isAnonymous()) {
         return false;
       } else {
-        var channelName = this.options.channel.name;
+        var channelName = this.options.channel.channel;
         return user.subscribedChannels.isPostingAllowed(channelName);
       }
     },
@@ -164,7 +164,7 @@ define(function(require) {
 
       this._disableButton();
 
-      var comment = this.options.channel.items.create({
+      var comment = this.options.channel.create({
         content: content,
         replyTo: this.model.id
       }, {
