@@ -201,6 +201,7 @@
   background:     -ms-linear-gradient(top, #fff 0%, #eee 100%);
   background:      -o-linear-gradient(top, #fff 0%, #eee 100%);
   background:         linear-gradient(to bottom, #fff 0%, #eee 100%);
+  border-radius: 5px 5px 0 0;
   display: block;
   overflow: hidden;
   position: relative;
@@ -295,7 +296,6 @@
 
 .stream .preview {
   border-bottom: 1px solid rgba(0,0,0,0.13);
-  border-radius: 5px 5px 0 0;
   padding: 1em 21px 1em 84px;
   background: #eee;
 }
