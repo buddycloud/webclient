@@ -55,6 +55,7 @@ define(function(require) {
       this._addNoCommentsClassIfNeeded();
       this._adjustCommentAreaVisibility();
       this._commentOnCtrlEnter();
+      this._previewEmbed();
       this.$('.expandingArea').autoResize();
     },
 
@@ -106,6 +107,37 @@ define(function(require) {
           self._comment(event);
         }
       });
+    },
+
+    _previewEmbed: function() {
+      var self = this;
+      this.previewTimeout = null;
+      this.$('.answer textarea').keydown(function(event) {
+        if (self.previewTimeout) {
+          clearTimeout(self.previewTimeout);
+        }
+        self.previewTimeout = setTimeout(function() { self._addPreview(); }, 500);
+      });
+    },
+
+    _addPreview: function() {
+      var preview = this.$('.preview');
+      var content = this.$('.answer textarea').val();
+      var urls = linkify.urls(content);
+      preview.empty();
+      if (urls) {
+        $.embedly(urls, embedlify(function(node, html) {
+          preview.append(html);
+        }));
+      }
+    },
+
+    _disablePreview: function() {
+      if (this.previewTimeout) {
+        clearTimeout(this.previewTimeout);
+        this.previewTimeout = null;
+      }
+      this.$('.preview').empty()
     },
 
     _expandAnswerArea: function(event) {

@@ -232,7 +232,7 @@ define(function(require) {
     },
 
     _addPreview: function() {
-      var preview = this.$('.preview');
+      var preview = this.$('.newTopic + .preview');
       var content = this.$('.newTopic textarea').val();
       var urls = linkify.urls(content);
       preview.empty();
@@ -248,7 +248,7 @@ define(function(require) {
         clearTimeout(this.previewTimeout);
         this.previewTimeout = null;
       }
-      this.$('.preview').empty()
+      this.$('.newTopic + .preview').empty()
     },
 
     _expandNewTopicArea: function(event) {
