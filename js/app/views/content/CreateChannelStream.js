@@ -56,7 +56,7 @@ define(function(require) {
         this.model = new ChannelMetadata(channel);
 
         $.ajax({
-          type: 'POST',
+          type: 'PUT',
           url: api.url(this.model.channel),
           crossDomain: true,
           xhrFields: {withCredentials: true},
