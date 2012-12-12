@@ -46,7 +46,7 @@ define(function(require) {
         post: this.model,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
-        linkify: linkify,
+        linkify: linkify.linkify,
         l: l10n.get
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);

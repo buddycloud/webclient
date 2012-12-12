@@ -43,5 +43,12 @@ define(function(require) {
     );
   }
 
-  return linkify;
+  function urls(content) {
+    return content.match(URL_REGEX);
+  }
+
+  return {
+    linkify: linkify,
+    urls: urls
+  };
 });
