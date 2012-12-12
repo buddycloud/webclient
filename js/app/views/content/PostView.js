@@ -18,14 +18,13 @@ define(function(require) {
   require(['jquery', 'timeago', 'jquery.embedly', 'util/autoResize']);
   var _ = require('underscore')
   var avatarFallback = require('util/avatarFallback');
-  var config = require('config');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var embedlify = require('util/embedlify');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html');
-  var embedTemplate = require('text!templates/content/embed.html');
 
   var PostView = Backbone.View.extend({
     tagName: 'article',
@@ -64,26 +63,9 @@ define(function(require) {
     },
 
     _embedly: function() {
-      this.$('p').embedly({
-        maxWidth: 400,
-        key: config.embedlyKey,
-        secure: config.embedlySecure,
-        success: function(oembed, dict) {
-          // If is not a link or if the link has an image
-          if (oembed.type !== 'link' || oembed.thumbnail_url) {
-            var html = _.template(embedTemplate, {
-              maxWidth: 400,
-              url: oembed.url || dict.url,
-              title: (oembed.type !== 'photo') ? (oembed.title || dict.url) : undefined,
-              img:   (oembed.type === 'photo') ? oembed.url : oembed.thumbnail_url,
-              width: (oembed.type === 'photo') ? oembed.width : oembed.thumbnail_width,
-              html: oembed.html,
-              description: oembed.description
-            });
-            dict.node.parent().after(html);
-          }
-        }
-      });
+      this.$('p').embedly(embedlify(function(node, html) {
+        node.parent().after(html);
+      }));
     },
 
     _roleTag: function() {
