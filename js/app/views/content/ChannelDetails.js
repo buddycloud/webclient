@@ -30,7 +30,7 @@ define(function(require) {
     initialize: function() {
       this.model = new Channel(this.options.channel);
       this.model.bind('fetch', this.render, this);
-      this.model.fetch();
+      this.model.fetch({credentials: this.options.user.credentials});
 
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
       if (this.options.user.subscribedChannels) {

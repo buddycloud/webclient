@@ -53,7 +53,7 @@ define(function(require) {
       this.model = new ChannelItems(this.options.channel);
       this.model.bind('reset', this._begin, this);
       this.model.bind('error', this._error, this);
-      this.model.fetch();
+      this.model.fetch({credentials: this.options.user.credentials});
     },
 
     _begin: function() {
