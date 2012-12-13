@@ -33,10 +33,15 @@
  *  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
  */
 
+// allows use with nodejs, using the amdefine module.
+if (typeof define !== 'function') {
+      var define = require('amdefine')(module);
+}
+
 define(['l10n'],
     function(l10n) {
       function TimeAgo(element, options) {
-        this.startInterval = 60000;
+        this.startInterval = 30000;
         this.init(element, options);
       }
   
@@ -90,18 +95,17 @@ define(['l10n'],
           newestTimeSrc = this.$element.findAndSelf(this.options.selector).filter(filter).attr(this.options.attr);
           newestTime = this.parse(newestTimeSrc);
           newestTimeInMinutes = this.getTimeDistanceInMinutes(newestTime);
-          if (newestTimeInMinutes >= 0 && newestTimeInMinutes <= 44 && this.startInterval !== 60000) {
-            this.startInterval = 60000;
-            return this.restartTimer();
-          } else if (newestTimeInMinutes >= 45 && newestTimeInMinutes <= 89 && this.startInterval !== 60000 * 22) {
-            this.startInterval = 60000 * 22;
-            return this.restartTimer();
-          } else if (newestTimeInMinutes >= 90 && newestTimeInMinutes <= 2519 && this.startInterval !== 60000 * 30) {
-            this.startInterval = 60000 * 30;
-            return this.restartTimer();
-          } else if (newestTimeInMinutes >= 2520 && this.startInterval !== 60000 * 60 * 12) {
-            this.startInterval = 60000 * 60 * 12;
-            return this.restartTimer();
+          var unit = 0;
+          while (true) {
+            if (l10nUnits[unit].updateStop || newestTimeInMinutes < l10nUnits[unit + 1].minutes) {
+              if (this.startInterval !== l10nUnits[unit].minutes * 30000) {
+                this.startInterval = l10nUnits[unit].minutes * 30000;
+                return this.restartTimer();
+              } else {
+                return null;
+              }
+            }
+            unit++;
           }
         }
       };
@@ -109,7 +113,7 @@ define(['l10n'],
       TimeAgo.prototype.timeAgoInWords = function(timeString) {
         var absolutTime;
         absolutTime = this.parse(timeString);
-        return "" + this.options.lang.prefixes.ago + (this.distanceOfTimeInWords(absolutTime));
+        return this.distanceOfTimeInWords(absolutTime);
       };
   
       TimeAgo.prototype.parse = function(iso8601) {
@@ -131,36 +135,27 @@ define(['l10n'],
       TimeAgo.prototype.distanceOfTimeInWords = function(absolutTime) {
         var dim;
         dim = this.getTimeDistanceInMinutes(absolutTime);
-        if (dim && !isNaN(dim)) {
-          if (dim === 0) {
-            return "now";
-          } else if (dim === 1) {
-            return "1 " + this.options.lang.units.minute;
-          } else if (dim >= 2 && dim <= 44) {
-            return "" + dim + " " + this.options.lang.units.minutes;
-          } else if (dim >= 45 && dim <= 89) {
-            return "1 " + this.options.lang.units.hour;
-          } else if (dim >= 90 && dim <= 1439) {
-            return "" + (Math.round(dim / 60)) + " " + this.options.lang.units.hours;
-          } else if (dim >= 1440 && dim <= 2519) {
-            return "1 " + this.options.lang.units.day;
-          } else if (dim >= 2520 && dim <= 43199) {
-            return "" + (Math.round(dim / 1440)) + " " + this.options.lang.units.days;
-          } else if (dim >= 43200 && dim <= 86399) {
-            return "1 " + this.options.lang.units.month;
-          } else if (dim >= 86400 && dim <= 525599) {
-            return "" + (Math.round(dim / 43200)) + " " + this.options.lang.units.months;
-          } else if (dim >= 525600 && dim <= 655199) {
-            return "1 " + this.options.lang.units.year;
-          } else if (dim >= 655200 && dim <= 914399) {
-            return "" + this.options.lang.prefixes.over + " 1 " + this.options.lang.units.year;
-          } else if (dim >= 914400 && dim <= 1051199) {
-            return "" + this.options.lang.prefixes.almost + " 2 " + this.options.lang.units.years;
-          } else {
-            return "" + (Math.round(dim / 525600)) + " " + this.options.lang.units.years;
-          }
+        var defaults = $.fn.timeago.defaults;
+        if (dim < 1) {
+          return l10n.get(defaults.l10nBase + defaults.l10nNow, {}, "now");
         } else {
-          return "";
+          var unit = 0;
+          var l10nUnits = defaults.l10nUnits;
+          var n = 0;
+          while (true) {
+            if (unit === l10nUnits.length - 1) {
+              n = Math.round(dim / l10nUnits[unit].minutes);
+              break;
+            }
+            n = Math.round(dim / l10nUnits[unit].baseMinutes);
+            if (n < l10nUnits[unit].base[0]) {
+              break;
+            }
+            unit++;
+          }
+          return l10n.get(defaults.l10nBase +
+            l10nUnits[unit].l10nUnit, {n : n}, 
+            "" + n + " minutes ago");
         }
       };
 
@@ -189,34 +184,70 @@ define(['l10n'],
     
       $.fn.timeago.defaults = {
         selector: 'time.timeago',
-        l10nBase: 'timeAgo',
         attr: 'datetime',
         dir: 'up',
-        lang: {
-          units: {
-            second: "second",
-            seconds: "seconds",
-            minute: "minute",
-            minutes: "minutes",
-            hour: "hour",
-            hours: "hours",
-            day: "day",
-            days: "days",
-            month: "month",
-            months: "months",
-            year: "year",
-            years: "years"
-          },
-          prefixes: {
-            over: "over",
-            almost: "almost",
-            ago: ""
-          }
-        }
+        l10nBase: 'timeAgo', // base l10n token
+        l10nNow: 'Now', // token suffix for short times
+        l10nUnits:
+          [
+            { 
+              l10nUnit: 'Minutes',
+              base: [60], // minutes in an hour
+              minutes: 1
+            },
+            { 
+              l10nUnit: 'Hours',
+              base: [24] // hours in a day
+            },
+            {
+              l10nUnit: 'Days',
+              base: [7], // days in a week.
+              updateStop: true // stop incrementing update times here
+            },
+            {
+              l10nUnit: 'Weeks',
+              base: 
+                [
+                  4, // weeks in a 30 day month
+                  2 // extra days
+                ]
+            },
+            {
+              l10nUnit: 'Months',
+              base: 
+                [
+                  12, // 30 day months in a year
+                  0, // extra weeks
+                  5, // extra days
+                  5, // extra hours
+                  48 // extra minutes
+                ]
+            },
+            {
+              l10nUnit: 'Years',
+              base: null // last one
+            }
+          ]
       };
-  
+
+      // precalculate length in minutes of each unit on module load.
+      var unit = 0;
+      var l10nUnits = $.fn.timeago.defaults.l10nUnits;
+      while (l10nUnits[unit].base !== null) {
+        var base = l10nUnits[unit].base;
+        if (l10nUnits[unit + 1].minutes === undefined) {
+          l10nUnits[unit + 1].minutes = 0;
+        }
+        for (var i = 0; i < base.length; i++) {
+          l10nUnits[unit + 1].minutes += base[i] * l10nUnits[unit - i].minutes;
+        }
+        if (unit < l10nUnits.length - 1) {
+          l10nUnits[unit].baseMinutes = l10nUnits[unit + 1].minutes / l10nUnits[unit].base[0];
+        }
+        unit++;
+      }
+
       return TimeAgo;
  
     });
-  
-  
+
