@@ -19,7 +19,6 @@ define(function(require) {
   var AbstractEditStream = require('views/content/AbstractEditStream');
   var api = require('util/api');
   var Backbone = require('backbone');
-  var Channel = require('models/Channel');
   var ChannelMetadata = require('models/ChannelMetadata');
   var config = require('config');
   var l10nBrowser = require('l10n-browser');
@@ -54,11 +53,23 @@ define(function(require) {
       var self = this;
       if (channel) {
         channel += this._topicsDomain();
-        this.model = new Channel(channel);
-        this.model.save({}, {
-          credentials: this.options.user.credentials,
-          complete: function() {
-            self.saveMetadata();
+        this.model = new ChannelMetadata(channel);
+
+        $.ajax({
+          type: 'POST',
+          url: api.url(this.model.channel),
+          crossDomain: true,
+          xhrFields: {withCredentials: true},
+          contentType: false,
+          processData: false,
+          beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization',
+              self.options.user.credentials.authorizationHeader());
+          },
+          statusCode: {
+            200: function() {
+              self.saveMetadata();
+            }
           }
         });
 
@@ -67,7 +78,7 @@ define(function(require) {
     },
 
     saveMetadata: function() {
-      this._save(this.model.metadata, this.redirectToChannel());
+      this._save(this.model, this.redirectToChannel());
     },
 
     redirectToChannel: function() {

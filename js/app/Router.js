@@ -32,7 +32,7 @@ define(function(require) {
     routes: {
       '': 'default',
       'explore': 'explore',
-      // TODO wait for fixes on HTTP API 'prefs': 'preferences',
+      'prefs': 'preferences',
       'new-channel': 'newChannel',
       ':channel': 'channel',
       ':channel/edit' : 'channelEdit'
@@ -80,10 +80,6 @@ define(function(require) {
     default: function() {
       this._before();
       if (this.user.isAnonymous()) {
-        if (this.sidebar) {
-          this.sidebar.destroy();
-        }
-
         this.currentPage = new WelcomePage({model: this.user});
       } else {
         if (this.user.channels().length <= 5) {
@@ -102,11 +98,10 @@ define(function(require) {
       this.currentPage = new ExplorePage({user: this.user});
     },
 
-    // TODO wait for fixes on HTTP API
-    /*preferences: function() {
+    preferences: function() {
       this._before();
       this.currentPage = new PreferencesPage({user: this.user});
-    },*/
+    },
 
     channel: function(channel) {
       this._before();

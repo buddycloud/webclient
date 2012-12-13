@@ -37,6 +37,7 @@ define(function(require) {
     },
 
     initialize: function() {
+      this.channelName = this.options.items.channel;
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model.bind('addComment', this.render, this);
     },
@@ -66,7 +67,7 @@ define(function(require) {
       this.$('p').embedly({
         maxWidth: 400,
         key: config.embedlyKey,
-        secure: true,
+        secure: config.embedlySecure,
         success: function(oembed, dict) {
           // If is not a link or if the link has an image
           if (oembed.type !== 'link' || oembed.thumbnail_url) {
@@ -85,8 +86,9 @@ define(function(require) {
       });
     },
 
-    _roleTag: function(username) {
-      var role = this.options.channel.followers.get(username);
+    _roleTag: function() {
+      var user = this.options.user;
+      var role = user.subscribedChannels.role(this.channelName);
       if (role == 'owner' || role == 'moderator') {
         return role;
       } else {
@@ -111,8 +113,7 @@ define(function(require) {
       if (user.isAnonymous()) {
         return false;
       } else {
-        var channelName = this.options.channel.name;
-        return user.subscribedChannels.isPostingAllowed(channelName);
+        return user.subscribedChannels.isPostingAllowed(this.channelName);
       }
     },
 
@@ -164,7 +165,7 @@ define(function(require) {
 
       this._disableButton();
 
-      var comment = this.options.channel.items.create({
+      var comment = this.options.items.create({
         content: content,
         replyTo: this.model.id
       }, {

@@ -30,7 +30,9 @@ define(function(require) {
     },
 
     render: function() {
-      $('.content').html(this.view.el);
+      var $content = $('.content');
+      $content.html(this.view.el);
+      $content.removeClass('full');
     },
 
     destroy: function() {

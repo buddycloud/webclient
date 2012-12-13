@@ -16,6 +16,7 @@
 
 define(function(require) {
   var AbstractEditStream = require('views/content/AbstractEditStream');
+  var api = require('util/api');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/editChannel.html');
 
@@ -31,20 +32,20 @@ define(function(require) {
     initialize: function() {
       this._initialize();
       this.localTemplate = l10nBrowser.localiseHTML(template, {});
-      this.model.metadata.bind('change', this.render, this);
-      this.model.metadata.bind('sync', this.render, this);
+      this.model.bind('change', this.render, this);
+      this.model.bind('sync', this.render, this);
     },
 
     render: function() {
       this.$el.html(_.template(this.localTemplate, {
-        metadata: this.model.metadata
+        metadata: this.model
       }));
       this._fillCheckbox();
       this._selectDefaultRole();
     },
 
     save: function() {
-      this._save(this.model.metadata, this._enableSaveButton);
+      this._save(this.model, this._enableSaveButton);
       this._disableSaveButton();
     },
 
@@ -61,11 +62,11 @@ define(function(require) {
     },
 
     _hasPublicAccess: function() {
-      return this.model.metadata.accessModel() === 'open';
+      return this.model.accessModel() === 'open';
     },
 
     _selectDefaultRole: function() {
-      if (this.model.metadata.defaultAffiliation() === 'publisher') {
+      if (this.model.defaultAffiliation() === 'publisher') {
         this.$('#channel_default_role').val('followerPlus');
       }
     },
@@ -78,7 +79,7 @@ define(function(require) {
       var self = this;
       $.ajax({
         type: 'DELETE',
-        url: this.model.url(),
+        url: api.url(this.model.channel),
         crossDomain: true,
         xhrFields: {withCredentials: true},
         contentType: false,

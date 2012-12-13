@@ -57,7 +57,10 @@ define(function(require) {
       this.searchbar.render();
       this.$el.append(this.searchbar.el);
       this.$el.append(this.discoverView.el);
-      $('.content').html(this.el);
+
+      var $content = $('.content');
+      $content.html(this.el);
+      $content.removeClass('full');
     },
 
     destroy: function() {
