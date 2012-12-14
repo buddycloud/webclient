@@ -135,6 +135,8 @@ define(['l10n'],
       TimeAgo.prototype.distanceOfTimeInWords = function(absolutTime) {
         var dim;
         dim = this.getTimeDistanceInMinutes(absolutTime);
+        console.log(dim);
+        if (isNaN(dim)) return "";
         var defaults = $.fn.timeago.defaults;
         if (dim < 1) {
           return l10n.get(defaults.l10nBase + defaults.l10nNow, {}, "now");
