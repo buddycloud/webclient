@@ -22,13 +22,14 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelDetails.html')
   var l = l10n.get;
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var ChannelDetails = Backbone.View.extend({
     className: 'channelDetails hidden',
     events: {'click .infoToggle': '_toggleInfo'},
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model = new Channel(this.options.channel);
       this.model.bind('fetch', this.render, this);
       this.model.fetch({credentials: this.options.user.credentials});

@@ -20,7 +20,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelListDetails.html')
   var Events = Backbone.Events;
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var ChannelListDetails = Backbone.View.extend({
     className: 'adminAction',
@@ -28,6 +28,7 @@ define(function(require) {
     positions: ['first', 'second', 'third', 'fourth'],
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.$el.addClass(this.positions[this.options.position]);
       this.render();
     },

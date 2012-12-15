@@ -26,7 +26,7 @@ define(function(require) {
   var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html');
   var embedTemplate = require('text!templates/content/embed.html');
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var PostView = Backbone.View.extend({
     tagName: 'article',
@@ -38,6 +38,7 @@ define(function(require) {
     },
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.channelName = this.options.items.channel;
       this.model.bind('addComment', this.render, this);
     },

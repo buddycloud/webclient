@@ -21,7 +21,7 @@ define(function(require) {
   var template = require('text!templates/sidebar/personalChannel.html');
   var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var PersonalChannel = Backbone.View.extend({
     className: 'personal channel',
@@ -36,6 +36,7 @@ define(function(require) {
       },
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.metadata = new ChannelMetadata(this.model.username());
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();

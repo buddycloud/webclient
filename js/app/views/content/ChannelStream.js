@@ -24,7 +24,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/stream.html');
   require('util/autoResize');
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -34,6 +34,7 @@ define(function(require) {
     },
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this._initModel();
 
       this.isLoading = true;

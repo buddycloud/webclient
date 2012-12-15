@@ -24,7 +24,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/header.html')
   var l = l10n.get;
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
@@ -34,6 +34,7 @@ define(function(require) {
              'click .edit': '_edit'},
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model = new ChannelMetadata(this.options.channel);
       this.model.bind('change', this.render, this);
       this.model.fetch({credentials: this.options.user.credentials});

@@ -22,8 +22,8 @@ define(function(require) {
   var footer = require('text!templates/overlay/footer.html');
   var MostActiveDiscover = require('models/MostActiveDiscover');
   var template = require('text!templates/overlay/discover.html');
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
-  var localFooter = l10nBrowser.localiseHTML(footer, {});
+  var localTemplate;
+  var localFooter;
 
   var DiscoverOverlay = Backbone.View.extend({
 
@@ -32,6 +32,8 @@ define(function(require) {
     },
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
+      if (!localFooter) localFooter = l10nBrowser.localiseHTML(footer, {});
       this.model = new MostActiveDiscover();
       this.model.doDiscover({max: 10});
       this.model.bind('sync', this.render, this);

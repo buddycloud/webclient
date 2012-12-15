@@ -21,7 +21,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var WelcomePage = Backbone.View.extend({
     className: 'discoverChannels middle clearfix',
@@ -33,6 +33,7 @@ define(function(require) {
 
     initialize: function() {
       _.bindAll(this, 'login');
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.discover = new DiscoverOverlay();
       this.render();
     },

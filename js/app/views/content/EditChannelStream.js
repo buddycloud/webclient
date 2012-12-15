@@ -19,7 +19,7 @@ define(function(require) {
   var api = require('util/api');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/editChannel.html');
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var EditChannelStream = AbstractEditStream.extend({
 
@@ -31,6 +31,7 @@ define(function(require) {
     },
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this._initialize();
       this.model.bind('change', this.render, this);
       this.model.bind('sync', this.render, this);

@@ -21,12 +21,13 @@ define(function(require) {
   var Events = Backbone.Events;
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/editHeader.html')
-  var localTemplate = l10nBrowser.localiseHTML(template, {});
+  var localTemplate;
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model.bind('change', this.render, this);
       this.model.fetch();
 
