@@ -24,6 +24,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/header.html')
   var l = l10n.get;
+  var localTemplate;
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
@@ -33,11 +34,11 @@ define(function(require) {
              'click .edit': '_edit'},
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model = new ChannelMetadata(this.options.channel);
       this.model.bind('change', this.render, this);
       this.model.fetch({credentials: this.options.user.credentials});
 
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
       }
@@ -52,7 +53,7 @@ define(function(require) {
 
     render: function() {
       var metadata = this.model;
-      this.$el.html(_.template(this.localTemplate, {metadata: metadata}));
+      this.$el.html(_.template(localTemplate, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
       this._renderButtons();
     },

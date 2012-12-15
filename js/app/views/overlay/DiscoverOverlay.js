@@ -22,6 +22,8 @@ define(function(require) {
   var footer = require('text!templates/overlay/footer.html');
   var MostActiveDiscover = require('models/MostActiveDiscover');
   var template = require('text!templates/overlay/discover.html');
+  var localTemplate;
+  var localFooter;
 
   var DiscoverOverlay = Backbone.View.extend({
 
@@ -30,10 +32,10 @@ define(function(require) {
     },
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
+      if (!localFooter) localFooter = l10nBrowser.localiseHTML(footer, {});
       this.model = new MostActiveDiscover();
       this.model.doDiscover({max: 10});
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
-      this.localFooter = l10nBrowser.localiseHTML(footer, {});
       this.model.bind('sync', this.render, this);
     },
 
@@ -41,12 +43,12 @@ define(function(require) {
       // FIXME popular must show the channels with biggest number of followers
       var mostActive = this.model.models.slice(0, 5);
       var popular = this.model.models.slice(5, 10);
-      this.$el.html(_.template(this.localTemplate, {
+      this.$el.html(_.template(localTemplate, {
         mostActive: mostActive,
         popular: popular
       }));
       // Add footer
-      $('.content').append(_.template(this.localFooter));
+      $('.content').append(_.template(localFooter));
       avatarFallback(this.$('.avatar'), undefined, 50);
     },
 

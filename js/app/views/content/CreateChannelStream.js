@@ -24,6 +24,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
   var template = require('text!templates/content/createChannel.html');
+  var localTemplate;
 
   var CreateChannelStream = AbstractEditStream.extend({
 
@@ -33,13 +34,13 @@ define(function(require) {
     },
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this._initialize();
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.render();
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {
+      this.$el.html(_.template(localTemplate, {
         domain: this._topicsDomain()
       }));
     },

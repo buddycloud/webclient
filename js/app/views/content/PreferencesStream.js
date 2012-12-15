@@ -21,6 +21,7 @@ define(function(require) {
   var Preferences = require('models/Preferences');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/preferences.html');
+  var localTemplate;
 
   var PreferencesStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -33,7 +34,7 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template,{});
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.checkboxes = 
         {
           'newFollowers': 'followMyChannel',
@@ -48,7 +49,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {
+      this.$el.html(_.template(localTemplate, {
         preferences: this.model
       }));
 
