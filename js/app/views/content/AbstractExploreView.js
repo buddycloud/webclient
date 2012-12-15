@@ -19,7 +19,6 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Events = Backbone.Events;
 
-
   var AbstractExploreView = Backbone.View.extend({
 
     _render: function() {
