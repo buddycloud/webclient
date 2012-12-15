@@ -19,6 +19,7 @@ define(function(require) {
   var api = require('util/api');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/editChannel.html');
+  var localTemplate = l10nBrowser.localiseHTML(template, {});
 
   var EditChannelStream = AbstractEditStream.extend({
 
@@ -31,13 +32,12 @@ define(function(require) {
 
     initialize: function() {
       this._initialize();
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model.bind('change', this.render, this);
       this.model.bind('sync', this.render, this);
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {
+      this.$el.html(_.template(localTemplate, {
         metadata: this.model
       }));
       this._fillCheckbox();

@@ -21,6 +21,7 @@ define(function(require) {
   var ChannelListDetails = require('views/content/ChannelListDetails');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelList.html');
+  var localTemplate = l10nBrowser.localiseHTML(template, {});
 
   var ChannelList = Backbone.View.extend({
     tagName: 'section',
@@ -30,13 +31,9 @@ define(function(require) {
       'click .showAll': '_showAll'
     },
 
-    initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
-    },
-
     render: function() {
       if (this.model.length > 0) {
-        this.$el.html(_.template(this.localTemplate, {
+        this.$el.html(_.template(localTemplate, {
           title: this.options.title,
           channels: this.model,
           avatarUrl: api.avatarUrl

@@ -24,6 +24,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/stream.html');
   require('util/autoResize');
+  var localTemplate = l10nBrowser.localiseHTML(template, {});
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -33,7 +34,6 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this._initModel();
 
       this.isLoading = true;
@@ -181,7 +181,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {user: this.options.user, l: l10n.get}));
+      this.$el.html(_.template(localTemplate, {user: this.options.user, l: l10n.get}));
       if (!this._userCanPost()) {
         this.$newTopic = this.$('.newTopic').detach();
       }

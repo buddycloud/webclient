@@ -20,6 +20,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/anonOverlay.html')
+  var localTemplate = l10nBrowser.localiseHTML(template, {});
 
   var AnonChannelOverlay = Backbone.View.extend({
     className: 'overlay',
@@ -27,12 +28,8 @@ define(function(require) {
     events: {'click .close': '_removeOverlay',
              'submit form.login': 'login'},
 
-    initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
-    },
-
     render: function() {
-      this.$el.html(_.template(this.localTemplate));
+      this.$el.html(_.template(localTemplate));
     },
 
     login: function(event) {

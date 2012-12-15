@@ -19,17 +19,17 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/sidebar/actionBar.html')
   var Events = Backbone.Events;
+  var localTemplate = l10nBrowser.localiseHTML(template, {});
 
   var ActionBar = Backbone.View.extend({
     className: 'actionBar clearfix',
     events: {'click .discover': '_navigate'},
 
     initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate));
+      this.$el.html(_.template(localTemplate));
 
       return this;
     },

@@ -19,6 +19,7 @@ define(function(require) {
   var spinner = require('util/spinner');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/discover.html')
+  var localTemplate = l10nBrowser.localiseHTML(template, {});
 
   var DiscoverView = AbstractExploreView.extend({
     className: 'discoverChannels clearfix',
@@ -29,7 +30,6 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this._defineGetter('channels', function() {
         return _.union(this.model.mostActive.models, this.model.recommendations.models);
       });
@@ -40,7 +40,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {
+      this.$el.html(_.template(localTemplate, {
         mostActive: this.model.mostActive.models,
         recommended: this.model.recommendations.models
       }));

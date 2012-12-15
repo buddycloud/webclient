@@ -19,6 +19,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/anonBar.html')
   var Events = Backbone.Events;
+  var localTemplate = l10nBrowser.localiseHTML(template, {});
 
   var AnonBar = Backbone.View.extend({
     className: 'navigation clearfix',
@@ -27,7 +28,6 @@ define(function(require) {
              'click .home': 'home'},
 
     initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       this.render();
     },
 
@@ -40,7 +40,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate));
+      this.$el.html(_.template(localTemplate));
     }
   });
 
