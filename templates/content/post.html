@@ -7,7 +7,7 @@
   <div class="postmeta">
     <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%= post.updated %>"></time>
   </div>
-  <p><%- linkify(post.content) %></p>
+  <p><%= linkify(post.content) %></p>
 </section>
 <section class="comments">
   <% _.each(post.comments, function(comment) { %>
@@ -20,7 +20,7 @@
        <div class="postmeta">
          <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%= comment.updated %>"></time>
        </div>
-       <p><%- linkify(comment.content) %></p>
+       <p><%= linkify(comment.content) %></p>
      </section>
   <% }) %>
   <section class="answer">
