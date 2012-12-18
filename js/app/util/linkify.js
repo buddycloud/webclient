@@ -32,7 +32,8 @@ define(function(require) {
     ].join(''));
   
   function linkify(content) {
-    // parse the content string into an array of content type objects.
+    // convert urls and channel refs to hyperlinks.
+    // html-escape the rest of the text.
     if (content === undefined) content = "";
     var parts = [];
     content.split('\n').forEach(function(line) {
