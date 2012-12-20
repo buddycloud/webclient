@@ -28,11 +28,8 @@ define(function(require) {
         channel: this.options.channel,
         user: this.options.user
       });
+      
       this.render();
-
-      if (this.options.user.isAnonymous()) {
-        
-      }
     },
 
     render: function() {
