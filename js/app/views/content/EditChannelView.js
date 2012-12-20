@@ -16,15 +16,17 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var EditHeader = require('views/content/EditHeader');
+  var ChannelHeader = require('views/content/ChannelHeader');
   var EditChannelStream = require('views/content/EditChannelStream');
 
   var EditChannelView = Backbone.View.extend({
     className: 'channelView',
 
     initialize: function() {
-      this.header = new EditHeader({
-        model: this.model
+      this.header = new ChannelHeader({
+        model: this.model,
+        user: this.options.user,
+        edit: true
       });
       this.stream = new EditChannelStream({
         model: this.model,
