@@ -16,7 +16,6 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var EditHeader = require('views/content/EditHeader');
   var PreferencesView = require('views/content/PreferencesView');
 
   var PreferencesPage = Backbone.View.extend({
