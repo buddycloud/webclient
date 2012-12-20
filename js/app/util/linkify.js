@@ -15,32 +15,49 @@
  */
 
 define(function(require) {
-  // Thanks to John Gruber:
-  // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
-  var URL_REGEX = /\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/g;
+  var _ = require('underscore');
 
-  var CHANNEL_REGEX = /[\w\d][\w\d-_%&<>.]+@[\w\d-]{3,}\.[\w\d-]{2,}(\.[\w]{2,6})?/g;
-
+  var LINKS_REGEX = new RegExp([
+    '^(.*?)',
+    '(?:',
+    // Thanks to John Gruber:
+    // http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+    // (with '(?:' for included groups).
+    '\\b((?:[a-z][\\w-]+:(?:/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\((?:[^\\s()<>]+|(?:\\([^\\s()<>]+\\)))*\\))+(?:\\((?:[^\\s()<>]+|(?:\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:\'".,<>?«»“”‘’]))\\b',
+    '|',
+    // Channel regex.
+    '\\b([\\w\\d][\\w\\d-_%&<>.]+@[\\w\\d-]{3,}\\.[\\w\\d-]{2,}(?:\\.[\\w]{2,6})?)\\b',
+    ')',
+    '(.*)$'
+    ].join(''));
+  
   function linkify(content) {
-    return linkMentions(linkUrls(content));
-  }
-
-  function safeString(content) {
-    return $('<div/>').text(content).html();
-  }
-
-  function linkUrls(content) {
-    return content.replace(
-      URL_REGEX,
-      '<a href="$&" target="_blank" rel="nofollow">$&</a>'
-    );
-  }
-
-  function linkMentions(content) {
-    return content.replace(
-      CHANNEL_REGEX,
-      '<a class="internal" href="/#\$&">\$&</a>'
-    );
+    // convert urls and channel refs to hyperlinks.
+    // html-escape the rest of the text.
+    if (content === undefined) content = "";
+    var parts = [];
+    content.split('\n').forEach(function(line) {
+      var m, lineParts = [];
+      while (line.length > 0) {
+        if (m = line.match(LINKS_REGEX, "i")) {
+          if (m[1]) {
+            lineParts.push(_.escape(m[1]));
+          }
+          if (m[2]) {
+            lineParts.push('<a href="' + m[2] + '" target="_blank" rel="nofollow">' + m[2] + '</a>');
+          }
+          if (m[3]) {
+            lineParts.push('<a class="internal" href="/#' + m[3] +'">' + m[3] + '</a>');
+          }
+          line = m[4] || "";
+        } else {
+          lineParts.push(_.escape(line));
+          line = "";
+        }
+      }
+      parts.push(lineParts.join(''));
+    });
+    return parts.join('\n');
   }
 
   return linkify;

@@ -16,7 +16,7 @@
 
 define(function(require) {
   require(['jquery', 'timeago', 'jquery.embedly', 'util/autoResize']);
-  var _ = require('underscore')
+  var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var config = require('config');
   var Backbone = require('backbone');
