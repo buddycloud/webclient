@@ -16,6 +16,7 @@
 
 define(function(require) {
   var $ = require('jquery');
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelItems = require('models/ChannelItems');
   var Events = Backbone.Events;
@@ -184,12 +185,14 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(localTemplate, {user: this.options.user, l: l10n.get}));
       if (!this._userCanPost()) {
-        this.$newTopic = this.$('.newTopic').detach();
+        this.$('.newTopic').detach();
+      } else {
+        avatarFallback(this.$('.newTopic .avatar'), 'personal', 50);
+        this.$('.newTopic .expandingArea').autoResize();
       }
       this._showPosts();
       this._postOnCtrlEnter();
       this._hideSpinner();
-      this.$('.newTopic .expandingArea').autoResize();
     },
 
     _userCanPost: function() {
