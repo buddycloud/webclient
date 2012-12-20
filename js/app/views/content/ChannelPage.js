@@ -59,7 +59,7 @@ define(function(require) {
     },
 
     _renderOverlay: function() {
-      this.overlay = this.overlay = new AnonChannelOverlay({model: this.options.user});
+      this.overlay = new AnonChannelOverlay({model: this.options.user});
       this.overlay.render();
     },
 
