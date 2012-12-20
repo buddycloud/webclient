@@ -17,7 +17,7 @@
 define(function(require) {
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
-  var EditHeader = require('views/content/EditHeader');
+  var ChannelHeader = require('views/content/ChannelHeader');
   var PreferencesStream = require('views/content/PreferencesStream');
 
   var PreferencesView = Backbone.View.extend({
@@ -25,8 +25,10 @@ define(function(require) {
 
     initialize: function() {
       this.metadata = new ChannelMetadata(this.options.user.username());
-      this.header = new EditHeader({
-        model: this.metadata
+      this.header = new ChannelHeader({
+        model: this.metadata,
+        user: this.options.user,
+        edit: true
       });
       this.stream = new PreferencesStream({
         user: this.options.user

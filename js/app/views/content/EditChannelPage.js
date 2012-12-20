@@ -17,7 +17,6 @@
 define(function(require) {
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata')
-  var EditHeader = require('views/content/EditHeader');
   var EditChannelView = require('views/content/EditChannelView');
 
   var EditChannelPage = Backbone.View.extend({
