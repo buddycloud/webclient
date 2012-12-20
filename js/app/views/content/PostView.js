@@ -88,13 +88,16 @@ define(function(require) {
     },
 
     _roleTag: function() {
-      var user = this.options.user;
-      var role = user.subscribedChannels.role(this.channelName);
-      if (role == 'owner' || role == 'moderator') {
-        return role;
-      } else {
-        return '';
+      var subscribedChannels = this.options.user.subscribedChannels;
+
+      if (subscribedChannels) {
+        var role = subscribedChannels.role(this.channelName);
+        if (role === 'owner' || role === 'moderator') {
+          return role;
+        }
       }
+
+      return '';
     },
 
     _addNoCommentsClassIfNeeded: function() {

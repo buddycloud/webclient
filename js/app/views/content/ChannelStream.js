@@ -72,7 +72,7 @@ define(function(require) {
       var user = this.options.user;
       var items = this.model;
       user.notifications.on('new', function(item) {
-        if (item.source == items.channel) {
+        if (item.source === items.channel) {
           items.add(item);
         }
       });
