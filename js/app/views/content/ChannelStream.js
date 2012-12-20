@@ -94,8 +94,9 @@ define(function(require) {
     checkScroll: function() {
       var content = $('.content');
       var triggerPoint = 200; // 200px from the bottom
+      var offset = content.scrollTop() + content.prop('clientHeight') + triggerPoint;
 
-      if(!this.isLoading && (content.scrollTop() + content.prop('clientHeight') + triggerPoint > content.prop('scrollHeight'))) {
+      if(!this.isLoading && (offset > content.prop('scrollHeight'))) {
         var self = this;
 
         // Last loaded post id

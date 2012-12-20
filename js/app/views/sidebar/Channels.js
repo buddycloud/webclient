@@ -240,6 +240,9 @@ define(function(require) {
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
       this._resetUnreadCount(channel);
+
+      // Scroll up
+      this.$el.scrollTop(0);
     },
 
     _resetUnreadCount: function(channel) {
