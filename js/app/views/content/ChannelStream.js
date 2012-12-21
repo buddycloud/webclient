@@ -185,15 +185,19 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(localTemplate, {user: this.options.user, l: l10n.get}));
-      if (!this._userCanPost()) {
-        this.$('.newTopic').detach();
-      } else {
-        avatarFallback(this.$('.newTopic .avatar'), 'personal', 50);
-        this.$('.newTopic .expandingArea').autoResize();
-      }
+      this._prepareNewTopic();
       this._showPosts();
       this._postOnCtrlEnter();
       this._hideSpinner();
+    },
+
+    _prepareNewTopic: function() {
+      avatarFallback(this.$('.newTopic .avatar'), 'personal', 50);
+      this.$('.newTopic .expandingArea').autoResize();
+
+      if (!this._userCanPost()) {
+        this.$newTopic = this.$('.newTopic').detach();
+      }      
     },
 
     _userCanPost: function() {
