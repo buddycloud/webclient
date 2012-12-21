@@ -72,6 +72,9 @@ define(function(require) {
     },
 
     save: function(event) {
+      // FIXME Workaround to not get events from disabled save button
+      if (this.$('.save').hasClass('disabled')) return;
+
       var email = this.$('#email_address').val();
 
       if (email) {
@@ -86,7 +89,22 @@ define(function(require) {
           self._isChecked(self.$('#' + checkbox)));
       });
       this.model.set('email', email);
-      this.model.save({}, {credentials: this.options.user.credentials});
+      this.model.save({}, {
+        credentials: this.options.user.credentials,
+        complete: this._enableSaveButton()
+      });
+      this._disableSaveButton();
+    },
+
+    _enableSaveButton: function() {
+      var self = this;
+      return function() {
+        self.$('.save').removeClass('disabled').text('Save');
+      }
+    },
+
+    _disableSaveButton: function() {
+      this.$('.save').addClass('disabled').text('Saving...');
     },
 
     _check: function(element, value) {
