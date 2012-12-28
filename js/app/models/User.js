@@ -144,7 +144,7 @@ define(function(require) {
       };
 
       $.ajax(options);
-    },
+    }
   });
 
   return User;

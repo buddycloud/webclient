@@ -16,7 +16,7 @@
 
 define(function(require) {
   var api = require('util/api');
-  var CollectionBase = require('models/CollectionBase')
+  var CollectionBase = require('models/CollectionBase');
   var Item = require('models/Item');
 
   var ChannelItems = CollectionBase.extend({
@@ -98,6 +98,10 @@ define(function(require) {
       });
 
       return completeThreads;
+    },
+
+    sync: function(method, model, options) {
+      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 

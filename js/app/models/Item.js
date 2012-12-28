@@ -15,11 +15,17 @@
  */
 
 define(function(require) {
+  require('backbone-indexeddb');
   var api = require('util/api');
   var ModelBase = require('models/ModelBase');
+  var ItemData = require('models/db/ItemData');  
 
   var Item = ModelBase.extend({
     initialize: function() {
+      // IndexedDB
+      this.database = ItemData;
+      this.storeName = ItemData.id;
+
       this._initializeComments();
       this._defineGetter('author', function() {
         var author = this.get('author');
@@ -69,6 +75,10 @@ define(function(require) {
 
     authorAvatarUrl: function(size) {
       return api.avatarUrl(this.author, size);
+    },
+
+    sync: function(method, model, options) {
+      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 

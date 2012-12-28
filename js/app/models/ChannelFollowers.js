@@ -92,6 +92,10 @@ define(function(require) {
       return _.any(followers, function(role) {
         return role == 'owner';
       });
+    },
+
+    sync: function(method, model, options) {
+      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 

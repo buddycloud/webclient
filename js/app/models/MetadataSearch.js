@@ -45,6 +45,10 @@ define(function(require) {
       } else {
         return resp;
       }
+    },
+
+    sync: function(method, model, options) {
+      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 

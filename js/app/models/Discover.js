@@ -43,6 +43,10 @@ define(function(require) {
           self.trigger('fetch');
         }
       }
+    },
+
+    sync: function(method, model, options) {
+      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 

@@ -37,6 +37,10 @@ define(function(require) {
 
     updated: function() {
       return this.get('updated') || this.get('published');
+    },
+
+    sync: function(method, model, options) {
+      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 
