@@ -6,8 +6,8 @@
       <% if (mostActive) { %>
       <div class="list">
         <% _.each(mostActive, function(channel) { %>
-        <div class="channel justify" id="<%= channel.jid() %>">
-          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
+        <div class="channel justify" id="<%- channel.jid() %>">
+          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
@@ -23,8 +23,8 @@
       <% if (recommended) { %>
       <div class="list">
         <% _.each(recommended, function(channel) { %>
-        <div class="channel justify" id="<%= channel.jid() %>">
-          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
+        <div class="channel justify" id="<%- channel.jid() %>">
+          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
@@ -43,8 +43,8 @@
       <% if (mostActive) { %>
       <div class="list">
         <% _.each(mostActive, function(channel) { %>
-        <div class="channel justify" id="<%= channel.jid() %>">
-          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
+        <div class="channel justify" id="<%- channel.jid() %>">
+          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
@@ -60,8 +60,8 @@
       <% if (recommended) { %>
       <div class="list">
         <% _.each(recommended, function(channel) { %>
-        <div class="channel justify" id="<%= channel.jid() %>">
-          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
+        <div class="channel justify" id="<%- channel.jid() %>">
+          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>

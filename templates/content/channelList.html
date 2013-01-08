@@ -2,9 +2,9 @@
 <div class="list">
   <% _.each(channels, function(channel, index) { %>
     <% if (index < 8) { %>
-    <img title="<%= channel %>" src="<%= avatarUrl(channel, 50) %>">
+    <img title="<%- channel %>" src="<%- avatarUrl(channel, 50) %>">
     <% } else { %>
-    <img title="<%= channel %>" src="<%= avatarUrl(channel, 50) %>" style="display: none">
+    <img title="<%- channel %>" src="<%- avatarUrl(channel, 50) %>" style="display: none">
     <% } %>
   <% }); %>
   <% if (channels.length > 8) { %>

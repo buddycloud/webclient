@@ -1,24 +1,24 @@
 <section class="opener <%= roleTag(post.author) %>">
-  <img class="avatar" src="<%= post.authorAvatarUrl(50) %>" />
+  <img class="avatar" src="<%- post.authorAvatarUrl(50) %>" />
   <div class="usermeta">
-    <div class="name"><%= post.author.split('@', 2)[0] %></div>
-    <div class="jid"><%= post.author %></div>
+    <div class="name"><%- post.author.split('@', 2)[0] %></div>
+    <div class="jid"><%- post.author %></div>
   </div>
   <div class="postmeta">
-    <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%= post.updated %>"></time>
+    <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%- post.updated %>"></time>
   </div>
   <p><%= linkify(post.content) %></p>
 </section>
 <section class="comments">
   <% _.each(post.comments, function(comment) { %>
      <section class="comment <%= roleTag(comment.author) %>">
-       <img class="avatar" src="<%= comment.authorAvatarUrl(34) %>" />
+       <img class="avatar" src="<%- comment.authorAvatarUrl(34) %>" />
        <div class="usermeta">
-         <div class="name"><%= comment.author.split('@', 2)[0] %></div>
-         <div class="jid"><%= comment.author %></div>
+         <div class="name"><%- comment.author.split('@', 2)[0] %></div>
+         <div class="jid"><%- comment.author %></div>
        </div>
        <div class="postmeta">
-         <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%= comment.updated %>"></time>
+         <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%- comment.updated %>"></time>
        </div>
        <p><%= linkify(comment.content) %></p>
      </section>
@@ -27,7 +27,7 @@
     <div class="holder">
       <div class="expandingArea">
         <pre><span></span><br></pre>
-      <textarea placeholder="<%= l('commentHint', {}, 'comment') %>"></textarea>
+      <textarea placeholder="<%- l('commentHint', {}, 'comment') %>"></textarea>
       </div>
       <div class="controls clearfix">
         <div class="hint" data-l10n="postHint">ctrl + enter to post</div>
