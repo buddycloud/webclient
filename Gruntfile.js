@@ -12,12 +12,21 @@ module.exports = function(grunt) {
       }
     },
 
+    testacular: {
+      unit: {
+        configFile: 'testacular.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      }
+    },
+
     watch: {}
   });
 
   // Plug-ins
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('gruntacular');
 
   // Tasks
   grunt.registerTask('default', ['server']);
