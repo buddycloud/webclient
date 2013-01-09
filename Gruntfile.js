@@ -31,4 +31,5 @@ module.exports = function(grunt) {
   // Tasks
   grunt.registerTask('default', ['server']);
   grunt.registerTask('server', ['connect', 'watch']);
+  grunt.registerTask('test', ['testacular']);
 }
