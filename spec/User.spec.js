@@ -19,18 +19,11 @@ define(function(require) {
 
   describe('User', function() {
     var user;
-    var realLocalStorage = localStorage;
 
     beforeEach(function() {
+      localStorage.clear();
+      sessionStorage.clear();
       user = new User;
-      Object.defineProperty(window, 'localStorage', {
-        value: {},
-        writable: true
-      });
-    });
-
-    afterEach(function() {
-      window.localStorage = realLocalStorage;
     });
 
     describe('login()', function() {

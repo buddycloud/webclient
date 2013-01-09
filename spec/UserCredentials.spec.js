@@ -19,24 +19,11 @@ define(function(require) {
 
   describe('UserCredentials', function() {
     var credentials;
-    var realLocalStorage = localStorage;
-    var realSessionStorage = sessionStorage;
 
     beforeEach(function() {
+      localStorage.clear();
+      sessionStorage.clear();
       credentials = new UserCredentials();
-      Object.defineProperty(window, 'localStorage', {
-        value: {},
-        writable: true
-      });
-      Object.defineProperty(window, 'sessionStorage', {
-        value: {},
-        writable: true
-      });
-    });
-
-    afterEach(function() {
-      window.localStorage = realLocalStorage;
-      window.sessionStorage = realSessionStorage;
     });
 
     describe('set()', function() {
