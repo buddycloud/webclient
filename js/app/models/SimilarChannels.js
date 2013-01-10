@@ -48,10 +48,6 @@ define(function(require) {
       });
 
       return usernames;
-    },
-
-    sync: function(method, model, options) {
-      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 

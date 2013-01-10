@@ -30,6 +30,10 @@ define(function(require) {
       this.subscribedChannels = null;
     },
 
+    _currentTime: function() {
+      return new Date().toISOString();
+    },
+
     isAnonymous: function() {
       return !this.credentials.username;
     },
@@ -47,7 +51,7 @@ define(function(require) {
     },
 
     channels: function() {
-      return this.subscribedChannels.channels();
+      return this.subscribedChannels ? this.subscribedChannels.channels() : null;
     },
 
     login: function(options) {
@@ -64,6 +68,7 @@ define(function(require) {
             if (!self._loginPermanent) {
               self._increaseLoginCount();
             }
+            self.lastSession = localStorage[self.credentials.username];
             self.trigger('loginSuccess');
           }
         });
@@ -71,7 +76,12 @@ define(function(require) {
     },
 
     logout: function() {
+      this._saveLastSessionTime();
       this.credentials.save({username: null, password: null}, {permanent: true});
+    },
+
+    _saveLastSessionTime: function() {
+      localStorage[this.credentials.username] = this._currentTime();
     },
 
     _tryFetchingSubscribedChannels: function(options) {
@@ -91,6 +101,7 @@ define(function(require) {
 
     endSession: function() {
       if (!this.isAnonymous()) {
+        this._saveLastSessionTime();
         if (this._loginPermanent) {
           this.credentials.save();
         } else {

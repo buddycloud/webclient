@@ -23,16 +23,77 @@ define(function(require) {
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
+  var Sync = require('models/Sync');
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
     events: {'click .channel': '_navigateToChannel'},
 
     initialize: function() {
+      this._unreadCounts = localStorage['unreadCounts'] ? 
+        JSON.parse(localStorage['unreadCounts']) : {};
       this.metadatas = [];
-      this._unreadCounts = {};
       this._getChannelsMetadata();
+      this._getUnreadCounters();
       this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
+    },
+
+    _getUnreadCounters: function() {
+      var lastSession = this.model.lastSession;
+      if (lastSession) {
+        this.sync = new Sync();
+        this.sync.doSync(lastSession, this.model.credentials,
+          this._updateCounters());        
+      }
+    },
+
+    _updateCounters: function() {
+      var self = this;
+      return function(model) {
+        _.each(model.counters(), function(counter, channel) {
+          self._increaseUnreadCount(channel, counter);
+        });
+        
+        // Render
+        for (var channel in self._unreadCounts) {
+          self._renderUnreadCount(channel);
+        }
+      }
+    },
+
+    _storeUnreadCounts: function() {
+      localStorage['unreadCounts'] = JSON.stringify(this._unreadCounts);
+    },
+
+    _resetUnreadCount: function(channel) {
+      this._unreadCounts[channel] = 0;
+
+      // Persist
+      this._storeUnreadCounts();
+    },
+
+    _increaseUnreadCount: function(channel, value) {
+      var prev = this._unreadCounts[channel] || 0;
+      this._unreadCounts[channel] = prev + value;
+
+      // Persist
+      this._storeUnreadCounts();
+    },
+
+    _renderUnreadCount: function(channel) {
+      var channelEl = this.$('.channel[data-href="' + channel + '"]');
+      var countEl = channelEl.find('.counter');
+      var count = this._unreadCounts[channel];
+      if (count > 0) {
+        if (count > 50) {
+          countEl.text('50+'); 
+        } else {
+          countEl.text(count);
+        }
+        countEl.show();
+      } else {
+        countEl.hide();
+      }
     },
 
     _updateChannels: function(action, channel, role, extra) {
@@ -210,29 +271,11 @@ define(function(require) {
       user.notifications.on('new', function(item) {
         var channel = item.source;
         if (channel != self.selected) {
-          self._increaseUnreadCount(channel);
+          self._increaseUnreadCount(channel, 1);
+          self._renderUnreadCount(channel);
         }
       });
       user.notifications.listen({credentials: user.credentials});
-    },
-
-    _increaseUnreadCount: function(channel) {
-      var numUnread = this._unreadCounts[channel];
-      numUnread = numUnread ? numUnread + 1 : 1;
-      this._unreadCounts[channel] = numUnread;
-      this._renderUnreadCount(channel);
-    },
-
-    _renderUnreadCount: function(channel) {
-      var channelEl = this.$('.channel[data-href="' + channel + '"]');
-      var countEl = channelEl.find('.counter');
-      var count = this._unreadCounts[channel];
-      if (count > 0) {
-        countEl.text(count);
-        countEl.show();
-      } else {
-        countEl.hide();
-      }
     },
 
     selectChannel: function(channel) {
@@ -240,14 +283,10 @@ define(function(require) {
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
       this._resetUnreadCount(channel);
+      this._renderUnreadCount(channel);
 
       // Scroll up
       this.$el.scrollTop(0);
-    },
-
-    _resetUnreadCount: function(channel) {
-      this._unreadCounts[channel] = 0;
-      this._renderUnreadCount(channel);
     },
 
     _rainbowAnimation: function($channel, channelType, offset, animationClassName, selected) {

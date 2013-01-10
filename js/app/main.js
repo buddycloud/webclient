@@ -36,7 +36,6 @@ define(function(require) {
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var Router = require('Router');
-  var Sync = require('models/Sync');
   var User = require('models/User');
   var config = require('config');
   var lang;
@@ -45,7 +44,6 @@ define(function(require) {
     var user = new User;
     user.credentials.fetch();
     user.on('loginSuccess', function() {
-      doSync(user);
       route(user);
     });
     user.on('loginError', function() {
@@ -54,12 +52,6 @@ define(function(require) {
       route(user);
     });
     user.login({permanent: localStorage.loginPermanent === 'true'});
-  }
-
-  function doSync(user) {
-    var sync = Sync.getInstance(user);
-    sync.bind('reset', route(user));
-    sync.fetch();
   }
 
   function route(user) {

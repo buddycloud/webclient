@@ -15,37 +15,55 @@
  */
 
 define(function(require) {
-  var api = require('models/util/api');
-  var CollectionBase = require('models/CollectionBase');
-  var instance = null;
+  var api = require('util/api');
+  var ModelBase = require('models/ModelBase');
+  var Item = require('models/Item');
 
-  var Sync = CollectionBase.extend({
-    constructor: function(user) {
-      if (instance !== null) {
-        throw new Error("Cannot instantiate more than one Sync, use Sync.getInstance()");
-      } 
-
-      CollectionBase.call(this);
-      this.user = user;
+  var Sync = ModelBase.extend({
+    constructor: function() {
+      ModelBase.call(this);
     },
 
     url: function() {
       return api.url('sync');
     },
 
-    doSync: function() {
-      var query = {max: 20};
-      this.fetch({data: query, credentials: this.user.credentials}); 
+    doSync: function(since, credentials, callback) {
+      var max = 51; // Max number of posts stored by the client
+      var query = {'since': since, 'max': max, counters: 'true'};
+
+      this.fetch({
+        data: query, 
+        success: callback, 
+        'credentials': credentials
+      });
+    },
+
+    counters: function() {
+      var result = {};
+      _.each(this.attributes, function(value, node) {
+        result[node.split('/')[2]] = value;
+      });
+
+      return result;
+    },
+
+    parse: function(resp, xhr) {
+      // This typeof(resp) === 'string') comparison is necessary
+      // because the HTTP API returns a plain text and Backbone
+      // parses it like an attribute
+      if (typeof(resp) === 'string') {
+        return {};
+      } else if (typeof(resp) === 'object') {
+        var result = {};
+        _.each(resp, function(value, node) {
+          result[node] = value;
+        });
+        return result;
+      }
+      return resp;
     }
   });
-
-  Sync.getInstance = function(user) {
-    if (instance === null) {
-      instance = new Sync(user);
-    }
-
-    return instance;
-  };
 
   return Sync;
 });
