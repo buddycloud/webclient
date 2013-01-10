@@ -58,10 +58,6 @@ define(function(require) {
         };
         this.fetch(options);
       }
-    },
-
-    sync: function(method, model, options) {
-      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 

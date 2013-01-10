@@ -58,10 +58,6 @@ define(function(require) {
           self.trigger('error', {status: xhr.status, statusText: xhr.statusText});
         }
       }
-    },
-
-    sync: function(method, model, options) {
-      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 
