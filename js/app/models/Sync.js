@@ -28,7 +28,7 @@ define(function(require) {
       return api.url('sync');
     },
 
-    doSync: function(since, credentials, callback) {
+    doQuery: function(since, credentials, callback) {
       var max = 51; // Max number of posts stored by the client
       var query = {'since': since, 'max': max, counters: 'true'};
 

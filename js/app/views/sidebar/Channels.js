@@ -42,7 +42,7 @@ define(function(require) {
       var lastSession = this.model.lastSession;
       if (lastSession) {
         this.sync = new Sync();
-        this.sync.doSync(lastSession, this.model.credentials,
+        this.sync.doQuery(lastSession, this.model.credentials,
           this._updateCounters());        
       }
     },
