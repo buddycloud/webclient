@@ -98,10 +98,6 @@ define(function(require) {
       });
 
       return completeThreads;
-    },
-
-    sync: function(method, model, options) {
-      Backbone.ajaxSync.call(this, method, model, options);
     }
   });
 

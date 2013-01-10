@@ -112,7 +112,7 @@ define(function(require) {
         }
       }
       
-      Backbone.ajaxSync.call(this, method, model, options);
+      Backbone.sync.call(this, method, model, options);
     }
   });
 
