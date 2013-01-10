@@ -15,27 +15,24 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
+  var api = require('util/api');
+  var ModelBase = require('models/ModelBase');
+  var UnreadCounterData = require('models/db/UnreadCounterData');
+  require('backbone-indexeddb');
 
-  var ModelBase = Backbone.Model.extend({
-    fetch: function(options) {
-      if (options && options.credentials) {
-        options.credentials.addAuthorizationToAjaxOptions(options);
-      }
-      Backbone.Model.prototype.fetch.call(this, options);
-    },
+  var UnreadCounters = ModelBase.extend({
+    constructor: function() {
+      ModelBase.call(this);
 
-    save: function(attributes, options) {
-      if (options && options.credentials) {
-        options.credentials.addAuthorizationToAjaxOptions(options);
-      }
-      Backbone.Model.prototype.save.call(this, attributes, options);
+      // IdexedDB
+      this.database = UnreadCounterData;
+      this.storeName = UnreadCounterData.id;
     },
 
     sync: function(method, model, options) {
-      Backbone.ajaxSync.call(this, method, model, options);
+      Backbone.sync.call(this, method, model, options);
     }
   });
 
-  return ModelBase;
+  return UnreadCounters;
 });
