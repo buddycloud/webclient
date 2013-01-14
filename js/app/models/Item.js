@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  var _ = require('underscore');
   var api = require('util/api');
   var ModelBase = require('models/ModelBase'); 
 
@@ -55,7 +56,7 @@ define(function(require) {
     },
 
     _defineGetter: function(name, getter) {
-      getter = getter ? getter.bind(this) : this.get.bind(this, name);
+      getter = getter ? _.bind(getter, this) : _.bind(this.get, this, name);
       Object.defineProperty(this, name, {get: getter});
     },
 
