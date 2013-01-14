@@ -15,23 +15,13 @@
  */
 
 define(function(require) {
-  var api = require('util/api');
-  var ModelBase = require('models/ModelBase');
-  var UnreadCounterData = require('models/db/UnreadCounterData');
+  var Backbone = require('backbone');
+  var UnreadCountersData = require('models/db/UnreadCountersData');
   require('backbone-indexeddb');
 
-  var UnreadCounters = ModelBase.extend({
-    constructor: function() {
-      ModelBase.call(this);
-
-      // IdexedDB
-      this.database = UnreadCounterData;
-      this.storeName = UnreadCounterData.id;
-    },
-
-    sync: function(method, model, options) {
-      Backbone.sync.call(this, method, model, options);
-    }
+  var UnreadCounters = Backbone.Model.extend({
+    database: UnreadCountersData,
+    storeName: UnreadCountersData.id
   });
 
   return UnreadCounters;

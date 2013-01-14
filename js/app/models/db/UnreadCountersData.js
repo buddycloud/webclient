@@ -21,16 +21,26 @@ define(function(require) {
       {
         version: 1,
         migrate: function(transaction, next) {
-          var store
+          transaction.db.createObjectStore("unread-counters");
+          next();
+        }
+      },
+      {
+        version: 2,
+        migrate: function(transaction, next) {
+          var store;
 
           if (!transaction.db.objectStoreNames.contains("unread-counters")) {
-            store = transaction.db.createObjectStore("unread-counters")
+            store = transaction.db.createObjectStore("unread-counters");
           } else {
-            store = transaction.objectStore("unread-counters")
+            store = transaction.db.objectStore("unread-counters");
           }
 
-          store.createIndex("userIndex", "user", { unique: true })
-          next()
+          if (!store.indexNames.contains("userIndex")) {
+             store.createIndex("userIndex", "user", { unique: true });
+          }
+
+          next();
         }
       }
     ]

@@ -30,73 +30,6 @@ define(function(require) {
     className: 'channels antiscroll-wrap',
     events: {'click .channel': '_navigateToChannel'},
 
-    /*initialize: function() {
-      this._unreadCounts = localStorage['unreadCounts'] ? 
-        JSON.parse(localStorage['unreadCounts']) : {};
-      this.metadatas = [];
-      this._getChannelsMetadata();
-      this._getUnreadCounters();
-      this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
-    },
-
-    _getUnreadCounters: function() {
-      var lastSession = this.model.lastSession;
-      if (lastSession) {
-        this.sync = new Sync();
-        this.sync.doQuery(lastSession, this.model.credentials,
-          this._updateCounters());        
-      }
-    },
-
-    _updateCounters: function() {
-      var self = this;
-      return function(model) {
-        _.each(model.counters(), function(counter, channel) {
-          self._increaseUnreadCount(channel, counter);
-        });
-        
-        // Render
-        for (var channel in self._unreadCounts) {
-          self._renderUnreadCount(channel);
-        }
-      }
-    },
-
-    _storeUnreadCounts: function() {
-      localStorage['unreadCounts'] = JSON.stringify(this._unreadCounts);
-    },
-
-    _resetUnreadCount: function(channel) {
-      this._unreadCounts[channel] = 0;
-
-      // Persist
-      this._storeUnreadCounts();
-    },
-
-    _increaseUnreadCount: function(channel, value) {
-      var prev = this._unreadCounts[channel] || 0;
-      this._unreadCounts[channel] = prev + value;
-
-      // Persist
-      this._storeUnreadCounts();
-    },
-
-    _renderUnreadCount: function(channel) {
-      var channelEl = this.$('.channel[data-href="' + channel + '"]');
-      var countEl = channelEl.find('.counter');
-      var count = this._unreadCounts[channel];
-      if (count > 0) {
-        if (count > 50) {
-          countEl.text('50+'); 
-        } else {
-          countEl.text(count);
-        }
-        countEl.show();
-      } else {
-        countEl.hide();
-      }
-    },*/
-
     initialize: function() {
       this._initUnreadCounters();
       this.metadatas = [];
@@ -107,6 +40,7 @@ define(function(require) {
     _initUnreadCounters: function() {
       this.unreadCounters = new UnreadCounters({user: this.model.username()});
       this.unreadCounters.bind('change', this._syncUnreadCounters, this);
+      this.unreadCounters.once('error', this._syncUnreadCounters, this);
       this.unreadCounters.fetch();
     },
 
@@ -120,7 +54,7 @@ define(function(require) {
       if (lastSession) {
         this.sync = new Sync();
         this.sync.doQuery(lastSession, this.model.credentials,
-          this._updateCounters());        
+          this._updateCounters());
       }
     },
 
@@ -130,7 +64,7 @@ define(function(require) {
         _.each(model.counters(), function(counter, channel) {
           self._increaseUnreadCount(channel, counter);
         });
-        
+
         // Render
         for (var channel in self._unreadCounts) {
           self._renderUnreadCount(channel);
@@ -140,7 +74,7 @@ define(function(require) {
 
     _storeUnreadCounts: function() {
       this.unreadCounters.save({
-        user: this.model.username, 
+        user: this.model.username(),
         counters: JSON.stringify(this._unreadCounts)
       });
     },
