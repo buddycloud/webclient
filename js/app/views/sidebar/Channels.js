@@ -41,11 +41,10 @@ define(function(require) {
     _initUnreadCounters: function() {
       this.unreadCounters = new UnreadCounters();
       this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
-      this.unreadCounters.fetch({conditions: {user: this.model.username()}});
+      this.unreadCounters.fetch({conditions: {'user': this.model.username()}});
     },
 
     _syncUnreadCounters: function() {
-      this._unreadCounts = this.unreadCounters.unreadCounts() || {};
       var lastSession = this.model.lastSession;
       if (lastSession) {
         var options = {
@@ -61,48 +60,27 @@ define(function(require) {
 
     _updateAndRenderCounters: function() {
       var self = this;
+      var username = this.model.username();
       return function(model) {
         _.each(model.counters(), function(counter, channel) {
           if (self.selected !== channel) {
-            self._increaseUnreadCount(channel, counter);
-            self._storeUnreadCounter(channel);
+            self.unreadCounters.increaseCounter(username, channel, counter);
+          } else {
+            self.unreadCounters.resetCounter(username, channel);
           }
         });
 
-        for (var channel in self._unreadCounts) {
+        for (var channel in self.unreadCounters.unreadCounts()) {
           self._renderUnreadCount(channel);
         }
       }
     },
 
-    _storeUnreadCounter: function(channel) {
-      var counter = this._unreadCounts[channel];
-      var unreadCount = this.unreadCounters.getUnreadCount(channel);
-      if (unreadCount) {
-        // Update
-        unreadCount.set({'counter': counter});
-      } else {
-        // Create
-        unreadCount = {
-          'user': this.model.username(),
-          'channel': channel,
-          'counter': counter
-        };
-      }
-
-      this.unreadCounters.create(unreadCount);
-    },
-
-    _increaseUnreadCount: function(channel, value) {
-      var prev = this._unreadCounts[channel] || 0;
-      this._unreadCounts[channel] = prev + value;
-    },
-
     _renderUnreadCount: function(channel) {
       var channelEl = this.$('.channel[data-href="' + channel + '"]');
       var countEl = channelEl.find('.counter');
-      var count = this._unreadCounts[channel];
-      if (count && count > 0) {
+      var count = this.unreadCounters.getCounter(channel);
+      if (count > 0) {
         if (count > 50) {
           countEl.text('50+');
         } else {
@@ -289,8 +267,7 @@ define(function(require) {
       user.notifications.on('new', function(item) {
         var channel = item.source;
         if (channel != self.selected) {
-          self._increaseUnreadCount(channel, 1);
-          self._storeUnreadCounter(channel);
+          self.unreadCounters.incrementCounter(user.username(), channel);
           self._renderUnreadCount(channel);
         }
       });
@@ -302,11 +279,8 @@ define(function(require) {
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
-      if (this._unreadCounts) {
-        /*delete this._unreadCounts[channel];
-        this.unreadCounters.removeUnreadCount(channel);*/
-        this._unreadCounts[channel] = 0;
-        this._storeUnreadCounter(channel);
+      if (this.unreadCounters.isReady()) {
+        this.unreadCounters.resetCounter(this.model.username(), channel);
         this._renderUnreadCount(channel);
       }
 

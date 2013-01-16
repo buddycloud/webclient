@@ -25,6 +25,19 @@ define(function(require) {
     database: UnreadCountersData,
     storeName: UnreadCountersData.id,
 
+    initialize: function() {
+      this._isReady = false;
+      this.bind('reset', this._setReady(), this);
+    },
+
+    _setReady: function() {
+      this._isReady = true;
+    },
+
+    isReady: function() {
+      return this._isReady;
+    },
+
     unreadCounts: function() {
       var counters = {};
 
@@ -43,6 +56,46 @@ define(function(require) {
       var temp = this.where({'channel': channel});
       // Unread counters should be unique
       return temp.length === 1 ? temp[0] : null;
+    },
+
+    getCounter: function(channel) {
+      var unreadCount = this.getUnreadCount(channel);
+      return unreadCount ? unreadCount.get('counter') : 0;
+    },
+
+    resetCounter: function(user, channel) {
+      var unreadCount = this.getUnreadCount(channel);
+      if (unreadCount) {
+        // Update
+        unreadCount.set({'counter': 0});
+      } else {
+        // Create
+        unreadCount = this._buildUnreadCounter(user, channel, 0);
+      }
+
+      this.create(unreadCount);
+    },
+
+    _buildUnreadCounter: function(user, channel, counter) {
+      return {'user': user, 'channel': channel, 'counter': counter};
+    },
+
+    incrementCounter: function(user, channel) {
+      this.increaseCounter(user, channel, 1);
+    },
+
+    increaseCounter: function(user, channel, value) {
+      var unreadCount = this.getUnreadCount(channel);
+      if (unreadCount) {
+        // Update
+        var prev = unreadCount.get('counter');
+        unreadCount.set({'counter': prev + value});
+      } else {
+        // Create
+        unreadCount = this._buildUnreadCounter(user, channel, value);
+      }
+
+      this.create(unreadCount);
     }
   });
 
