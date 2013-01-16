@@ -48,7 +48,8 @@ define(function(require) {
     },
 
     sync: function(method, model, options) {
-      Backbone.ajaxSync.call(this, method, model, options);
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
     }
   });
 
