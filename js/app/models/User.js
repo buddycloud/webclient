@@ -30,6 +30,10 @@ define(function(require) {
       this.subscribedChannels = null;
     },
 
+    _earliestTime: function() {
+      return new Date(1970, 0, 1).toISOString();
+    },
+
     _currentTime: function() {
       return new Date().toISOString();
     },
@@ -68,7 +72,8 @@ define(function(require) {
             if (!self._loginPermanent) {
               self._increaseLoginCount();
             }
-            self.lastSession = localStorage[self.credentials.username];
+            self.lastSession = localStorage[self.credentials.username] || 
+              self._earliestTime(); // FIXME workaround to get last session
             self.trigger('loginSuccess');
           }
         });

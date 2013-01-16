@@ -45,17 +45,14 @@ define(function(require) {
     },
 
     _syncUnreadCounters: function() {
-      var lastSession = this.model.lastSession;
-      if (lastSession) {
-        var options = {
-          data: {'since': lastSession, 'max': 51, counters: 'true'},
-          credentials: this.model.credentials,
-          success: this._updateAndRenderCounters()
-        };
+      var options = {
+        data: {'since': this.model.lastSession, 'max': 51, counters: 'true'},
+        credentials: this.model.credentials,
+        success: this._updateAndRenderCounters()
+      };
 
-        this.sync = new Sync();
-        this.sync.fetch(options);
-      }
+      this.sync = new Sync();
+      this.sync.fetch(options);
     },
 
     _updateAndRenderCounters: function() {
@@ -70,8 +67,9 @@ define(function(require) {
           }
         });
 
-        for (var channel in self.unreadCounters.unreadCounts()) {
-          self._renderUnreadCount(channel);
+        var channels = self.unreadCounters.pluck('channel');
+        for (var i in channels) {
+          self._renderUnreadCount(channels[i]);
         }
       }
     },

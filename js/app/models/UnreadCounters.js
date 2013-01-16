@@ -38,20 +38,6 @@ define(function(require) {
       return this._isReady;
     },
 
-    unreadCounts: function() {
-      var counters = {};
-
-      this.models.forEach(function(unreadCount) {
-	    	var channel = unreadCount.get('channel');
-	    	var counter = unreadCount.get('counter');
-      	if (channel && counter) {
-          counters[channel] = counter;
-      	}
-      });
-
-      return counters;
-    },
-
     getUnreadCount: function(channel) {
       var temp = this.where({'channel': channel});
       // Unread counters should be unique
