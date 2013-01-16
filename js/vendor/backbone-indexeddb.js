@@ -566,7 +566,9 @@
         var success = options.success;
         options.success = function(resp) {
             resolve();
-            if (success) success(object, resp, options);
+            // Modified to fit Backbone version 0.9.9
+            // if (success) success(resp, object, options);
+            if (success) success(resp, object, options);
             object.trigger('sync', object, resp, options);
         };
 

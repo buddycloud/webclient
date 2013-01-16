@@ -16,29 +16,13 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var UnreadCounter = require('models/UnreadCounter');
   var UnreadCountersData = require('models/db/UnreadCountersData');
   require('backbone-indexeddb');
 
-  var UnreadCounters = Backbone.Collection.extend({
-  	model: UnreadCounter,
+  var UnreadCounter = Backbone.Model.extend({
     database: UnreadCountersData,
-    storeName: UnreadCountersData.id,
-
-    unreadCounts: function() {
-      var counters = {};
-
-      this.models.forEach(function(unreadCounter) {
-	    	var channel = unreadCounter.get('channel');
-	    	var counter = unreadCounter.get('counter');
-      	if (channel && counter) {
-          counters[channel] = counter;
-      	}
-      });
-
-      return counters;
-    }
+    storeName: UnreadCountersData.id
   });
 
-  return UnreadCounters;
+  return UnreadCounter;
 });

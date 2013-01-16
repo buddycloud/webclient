@@ -28,17 +28,6 @@ define(function(require) {
       return api.url('sync');
     },
 
-    doQuery: function(since, credentials, callback) {
-      var max = 51; // Max number of posts stored by the client
-      var query = {'since': since, 'max': max, counters: 'true'};
-
-      this.fetch({
-        data: query, 
-        success: callback, 
-        'credentials': credentials
-      });
-    },
-
     counters: function() {
       var result = {};
       _.each(this.attributes, function(value, node) {

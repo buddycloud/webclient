@@ -24,6 +24,7 @@ define(function(require) {
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
   var Sync = require('models/Sync');
+  var UnreadCounter = require('models/UnreadCounter');
   var UnreadCounters = require('models/UnreadCounters');
 
   var Channels = Backbone.View.extend({
@@ -39,59 +40,51 @@ define(function(require) {
 
     _initUnreadCounters: function() {
       this.unreadCounters = new UnreadCounters({user: this.model.username()});
-      this.unreadCounters.bind('change', this._syncUnreadCounters, this);
-      this.unreadCounters.once('error', this._syncUnreadCounters, this);
+      this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
       this.unreadCounters.fetch();
     },
 
     _syncUnreadCounters: function() {
-      this._unreadCounts = {};
-      if (this.unreadCounters.get('counters')) {
-        this._unreadCounts = JSON.parse(this.unreadCounters.get('counters'));
-      }
-
+      this._unreadCounts = this.unreadCounters.unreadCounts() || {};
       var lastSession = this.model.lastSession;
       if (lastSession) {
+        var options = {
+          data: {'since': lastSession, 'max': 51, counters: 'true'},
+          credentials: this.model.credentials,
+          success: this._updateAndRenderCounters()
+        };
+
         this.sync = new Sync();
-        this.sync.doQuery(lastSession, this.model.credentials,
-          this._updateCounters());
+        this.sync.fetch(options);
       }
     },
 
-    _updateCounters: function() {
+    _updateAndRenderCounters: function() {
       var self = this;
       return function(model) {
         _.each(model.counters(), function(counter, channel) {
           self._increaseUnreadCount(channel, counter);
+          self._storeUnreadCounter(channel);
         });
 
-        // Render
         for (var channel in self._unreadCounts) {
           self._renderUnreadCount(channel);
         }
       }
     },
 
-    _storeUnreadCounts: function() {
-      this.unreadCounters.save({
-        user: this.model.username(),
-        counters: JSON.stringify(this._unreadCounts)
+    _storeUnreadCounter: function(channel) {
+      var counter = this._unreadCounts[channel];
+      this.unreadCounters.create({
+        'user': this.model.username(),
+        'channel': channel,
+        'counter': counter
       });
-    },
-
-    _resetUnreadCount: function(channel) {
-      this._unreadCounts[channel] = 0;
-
-      // Persist
-      this._storeUnreadCounts();
     },
 
     _increaseUnreadCount: function(channel, value) {
       var prev = this._unreadCounts[channel] || 0;
       this._unreadCounts[channel] = prev + value;
-
-      // Persist
-      this._storeUnreadCounts();
     },
 
     _renderUnreadCount: function(channel) {
@@ -100,7 +93,7 @@ define(function(require) {
       var count = this._unreadCounts[channel];
       if (count > 0) {
         if (count > 50) {
-          countEl.text('50+'); 
+          countEl.text('50+');
         } else {
           countEl.text(count);
         }
@@ -286,6 +279,7 @@ define(function(require) {
         var channel = item.source;
         if (channel != self.selected) {
           self._increaseUnreadCount(channel, 1);
+          self._storeUnreadCounter(channel);
           self._renderUnreadCount(channel);
         }
       });
@@ -298,7 +292,8 @@ define(function(require) {
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
       if (this._unreadCounts) {
-        this._resetUnreadCount(channel);
+        this._unreadCounts[channel] = 0;
+        this._storeUnreadCounter(channel);
         this._renderUnreadCount(channel);
       }
 

@@ -197,7 +197,7 @@ define(function(require) {
 
       if (!this._userCanPost()) {
         this.$newTopic = this.$('.newTopic').detach();
-      }      
+      }
     },
 
     _userCanPost: function() {
