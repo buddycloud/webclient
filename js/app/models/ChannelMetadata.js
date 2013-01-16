@@ -61,7 +61,8 @@ define(function(require) {
         // Always POST
         method = 'create';
       }
-      Backbone.ajaxSync.call(this, method, model, options);
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
     }
   });
 
