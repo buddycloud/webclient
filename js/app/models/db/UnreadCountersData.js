@@ -30,7 +30,6 @@ define(function(require) {
           }
 
           store.createIndex('userIndex', 'user', { unique: false });
-          store.createIndex('channelIndex', 'channel', { unique: true });
 
           next();
         }

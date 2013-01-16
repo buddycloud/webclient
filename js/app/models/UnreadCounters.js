@@ -28,15 +28,21 @@ define(function(require) {
     unreadCounts: function() {
       var counters = {};
 
-      this.models.forEach(function(unreadCounter) {
-	    	var channel = unreadCounter.get('channel');
-	    	var counter = unreadCounter.get('counter');
+      this.models.forEach(function(unreadCount) {
+	    	var channel = unreadCount.get('channel');
+	    	var counter = unreadCount.get('counter');
       	if (channel && counter) {
           counters[channel] = counter;
       	}
       });
 
       return counters;
+    },
+
+    getUnreadCount: function(channel) {
+      var temp = this.where({'channel': channel});
+      // Unread counters should be unique
+      return temp.length === 1 ? temp[0] : null;
     }
   });
 

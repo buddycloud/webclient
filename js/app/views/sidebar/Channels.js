@@ -63,8 +63,10 @@ define(function(require) {
       var self = this;
       return function(model) {
         _.each(model.counters(), function(counter, channel) {
-          self._increaseUnreadCount(channel, counter);
-          self._storeUnreadCounter(channel);
+          if (self.selected !== channel) {
+            self._increaseUnreadCount(channel, counter);
+            self._storeUnreadCounter(channel);
+          }
         });
 
         for (var channel in self._unreadCounts) {
@@ -75,11 +77,20 @@ define(function(require) {
 
     _storeUnreadCounter: function(channel) {
       var counter = this._unreadCounts[channel];
-      this.unreadCounters.create({
-        'user': this.model.username(),
-        'channel': channel,
-        'counter': counter
-      });
+      var unreadCount = this.unreadCounters.getUnreadCount(channel);
+      if (unreadCount) {
+        // Update
+        unreadCount.set({'counter': counter});
+      } else {
+        // Create
+        unreadCount = {
+          'user': this.model.username(),
+          'channel': channel,
+          'counter': counter
+        };
+      }
+
+      this.unreadCounters.create(unreadCount);
     },
 
     _increaseUnreadCount: function(channel, value) {
@@ -91,7 +102,7 @@ define(function(require) {
       var channelEl = this.$('.channel[data-href="' + channel + '"]');
       var countEl = channelEl.find('.counter');
       var count = this._unreadCounts[channel];
-      if (count > 0) {
+      if (count && count > 0) {
         if (count > 50) {
           countEl.text('50+');
         } else {
@@ -292,6 +303,8 @@ define(function(require) {
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
       if (this._unreadCounts) {
+        /*delete this._unreadCounts[channel];
+        this.unreadCounters.removeUnreadCount(channel);*/
         this._unreadCounts[channel] = 0;
         this._storeUnreadCounter(channel);
         this._renderUnreadCount(channel);
