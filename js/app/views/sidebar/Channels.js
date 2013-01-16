@@ -39,9 +39,9 @@ define(function(require) {
     },
 
     _initUnreadCounters: function() {
-      this.unreadCounters = new UnreadCounters({user: this.model.username()});
+      this.unreadCounters = new UnreadCounters();
       this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
-      this.unreadCounters.fetch();
+      this.unreadCounters.fetch({conditions: {user: this.model.username()}});
     },
 
     _syncUnreadCounters: function() {
