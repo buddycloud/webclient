@@ -16,7 +16,7 @@
 
 define(function(require) {
   var api = require('util/api');
-  var CollectionBase = require('models/CollectionBase')
+  var CollectionBase = require('models/CollectionBase');
   var Item = require('models/Item');
 
   var ChannelItems = CollectionBase.extend({

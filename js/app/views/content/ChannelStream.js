@@ -55,7 +55,7 @@ define(function(require) {
       this.model = new ChannelItems(this.options.channel);
       this.model.bind('reset', this._begin, this);
       this.model.bind('error', this._error, this);
-      this.model.fetch({credentials: this.options.user.credentials});
+      this.model.fetch({data: {max: 51}, credentials: this.options.user.credentials});
     },
 
     _begin: function() {
@@ -105,7 +105,7 @@ define(function(require) {
         if (lastItem) {
           this._showSpinner();
           this.model.fetch({
-            data: {after: lastItem},
+            data: {after: lastItem, max: 51},
             silent: true,
             success: function() {
               self._appendPosts();
@@ -197,7 +197,7 @@ define(function(require) {
 
       if (!this._userCanPost()) {
         this.$newTopic = this.$('.newTopic').detach();
-      }      
+      }
     },
 
     _userCanPost: function() {
