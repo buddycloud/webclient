@@ -76,7 +76,6 @@ define(function(require) {
       if (this.$('.save').hasClass('disabled')) return;
 
       var email = this.$('#email_address').val();
-
       if (email) {
         this._savePreferences(email);
       }

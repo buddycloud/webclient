@@ -23,16 +23,71 @@ define(function(require) {
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
+  var Sync = require('models/Sync');
+  var UnreadCounter = require('models/UnreadCounter');
+  var UnreadCounters = require('models/UnreadCounters');
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
     events: {'click .channel': '_navigateToChannel'},
 
     initialize: function() {
+      this._initUnreadCounters();
       this.metadatas = [];
-      this._unreadCounts = {};
       this._getChannelsMetadata();
       this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
+    },
+
+    _initUnreadCounters: function() {
+      this.unreadCounters = new UnreadCounters();
+      this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
+      this.unreadCounters.fetch({conditions: {'user': this.model.username()}});
+    },
+
+    _syncUnreadCounters: function() {
+      var options = {
+        data: {'since': this.model.lastSession, 'max': 51, counters: 'true'},
+        credentials: this.model.credentials,
+        success: this._updateAndRenderCounters()
+      };
+
+      this.sync = new Sync();
+      this.sync.fetch(options);
+    },
+
+    _updateAndRenderCounters: function() {
+      var self = this;
+      var username = this.model.username();
+      return function(model) {
+        _.each(model.counters(), function(counter, channel) {
+          if (self.selected !== channel) {
+            self.unreadCounters.increaseCounter(username, channel, counter);
+          } else {
+            self.unreadCounters.resetCounter(username, channel);
+          }
+        });
+
+        var channels = self.unreadCounters.pluck('channel');
+        for (var i in channels) {
+          self._renderUnreadCount(channels[i]);
+        }
+      }
+    },
+
+    _renderUnreadCount: function(channel) {
+      var channelEl = this.$('.channel[data-href="' + channel + '"]');
+      var countEl = channelEl.find('.counter');
+      var count = this.unreadCounters.getCounter(channel);
+      if (count > 0) {
+        if (count > 50) {
+          countEl.text('50+');
+        } else {
+          countEl.text(count);
+        }
+        countEl.show();
+      } else {
+        countEl.hide();
+      }
     },
 
     _updateChannels: function(action, channel, role, extra) {
@@ -210,44 +265,25 @@ define(function(require) {
       user.notifications.on('new', function(item) {
         var channel = item.source;
         if (channel != self.selected) {
-          self._increaseUnreadCount(channel);
+          self.unreadCounters.incrementCounter(user.username(), channel);
+          self._renderUnreadCount(channel);
         }
       });
       user.notifications.listen({credentials: user.credentials});
-    },
-
-    _increaseUnreadCount: function(channel) {
-      var numUnread = this._unreadCounts[channel];
-      numUnread = numUnread ? numUnread + 1 : 1;
-      this._unreadCounts[channel] = numUnread;
-      this._renderUnreadCount(channel);
-    },
-
-    _renderUnreadCount: function(channel) {
-      var channelEl = this.$('.channel[data-href="' + channel + '"]');
-      var countEl = channelEl.find('.counter');
-      var count = this._unreadCounts[channel];
-      if (count > 0) {
-        countEl.text(count);
-        countEl.show();
-      } else {
-        countEl.hide();
-      }
     },
 
     selectChannel: function(channel) {
       this.selected = channel;
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
-      this._resetUnreadCount(channel);
+
+      if (this.unreadCounters.isReady()) {
+        this.unreadCounters.resetCounter(this.model.username(), channel);
+        this._renderUnreadCount(channel);
+      }
 
       // Scroll up
       this.$el.scrollTop(0);
-    },
-
-    _resetUnreadCount: function(channel) {
-      this._unreadCounts[channel] = 0;
-      this._renderUnreadCount(channel);
     },
 
     _rainbowAnimation: function($channel, channelType, offset, animationClassName, selected) {
