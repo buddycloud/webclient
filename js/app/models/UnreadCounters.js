@@ -41,7 +41,7 @@ define(function(require) {
     getUnreadCount: function(channel) {
       var temp = this.where({'channel': channel});
       // Unread counters should be unique
-      return temp.length === 1 ? temp[0] : null;
+      return temp.length > 0 ? temp[0] : null;
     },
 
     getCounter: function(channel) {
@@ -52,14 +52,17 @@ define(function(require) {
     resetCounter: function(user, channel) {
       var unreadCount = this.getUnreadCount(channel);
       if (unreadCount) {
-        // Update
-        unreadCount.set({'counter': 0});
+        var prev = unreadCount.get('counter');
+        if (prev > 0) {
+          // Update
+          unreadCount.set({'counter': 0});
+          this.create(unreadCount);
+        }
       } else {
         // Create
         unreadCount = this._buildUnreadCounter(user, channel, 0);
+        this.create(unreadCount);
       }
-
-      this.create(unreadCount);
     },
 
     _buildUnreadCounter: function(user, channel, counter) {

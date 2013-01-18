@@ -59,17 +59,20 @@ define(function(require) {
       var self = this;
       var username = this.model.username();
       return function(model) {
+        var toRender = self.unreadCounters.pluck('channel').sort();
         _.each(model.counters(), function(counter, channel) {
           if (self.selected !== channel) {
             self.unreadCounters.increaseCounter(username, channel, counter);
           } else {
             self.unreadCounters.resetCounter(username, channel);
           }
+          self._renderUnreadCount(channel);
+          toRender.splice(toRender.indexOf(channel, true), 1);
         });
 
-        var channels = self.unreadCounters.pluck('channel');
-        for (var i in channels) {
-          self._renderUnreadCount(channels[i]);
+        // Render remaining channels
+        for (var i in toRender) {
+          self._renderUnreadCount(toRender[i]);
         }
       }
     },
