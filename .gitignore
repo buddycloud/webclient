@@ -3,3 +3,5 @@
 *.swp
 locales/wti-config.wti
 
+
+.DS_Store
