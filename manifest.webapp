@@ -1,6 +1,6 @@
 {
   "name": "buddycloud",
-  "description": "My elevator pitch goes here",
+  "description": "buddycloud is a distributed social network that let's you share, communicate and update those around you.",
   "launch_path": "/",
   "icons": {
     "128": "/img/icon-128.png"
