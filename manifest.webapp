@@ -1,0 +1,13 @@
+{
+  "name": "buddycloud",
+  "description": "My elevator pitch goes here",
+  "launch_path": "/",
+  "icons": {
+    "128": "/img/icon-128.png"
+  },
+  "developer": {
+    "name": "Buddycloud Dev Team",
+    "url": "http://buddycloud.org"
+  },
+  "default_locale": "en"
+}
