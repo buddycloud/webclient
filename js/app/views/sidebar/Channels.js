@@ -209,41 +209,39 @@ define(function(require) {
       this._movingChannels = 0;
     },
 
-    _bubbleDestination: function(channel, channelPos) {
+    _channelToMove: function(channel, channelPos) {
       var destination = channelPos;
-      var unreadCounters = this.unreadCounters;
-      var count = unreadCounters.getCounter(channel);
+      var count = this.unreadCounters.getCounter(channel);
+      var channelToMove = null;
       for (var i in this.metadatas) {
         var other = this.metadatas[i].channel;
         if (other !== channel) {
           var position = this.$('.channel[data-href="' + other + '"]').position().top;
-          if (unreadCounters.getCounter(other) < count && position < destination) {
+          if (this.unreadCounters.getCounter(other) < count && position < destination) {
             destination = position;
+            channelToMove = other;
           }
         }
       }
-      return destination;
+
+      return channelToMove;
     },
 
     _bubbleUp: function(channel) {
       var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
       var bubblingChannelPos = bubblingChannel.position().top;
-      var bubbleDestination = this._bubbleDestination(channel, bubblingChannelPos);
-      if (bubbleDestination !== bubblingChannelPos) {
-        this._bubble(bubblingChannel, bubblingChannelPos + bubbleDestination)
-      }
-    },
+      var channelToMove = this._channelToMove(channel, bubblingChannelPos);
+      if (channelToMove) {
+        var bubbleDestination = bubblingChannelPos + this._$innerHolder.scrollTop();
+        var $channelToMove = this.$('.channel[data-href="' + channelToMove + '"]');
 
-    _bubbleToTop: function(target) {
-      var bubblingChannel = $(target);
-      var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
-      this._bubble(bubblingChannel, bubbleDestination);
-    },
-
-    _bubble: function(bubblingChannel, bubbleDestination) {
-      if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
-        this._shrinkStartArea(bubblingChannel, bubbleDestination);
-        this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
+        if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
+          this._shrinkStartArea(bubblingChannel, bubbleDestination);
+          // start animation
+          this._triggerShrinkingAnimation(bubblingChannel, bubbleDestination);
+          $channelToMove.before(bubblingChannel);
+          this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
+        }
       }
     },
 
@@ -258,13 +256,10 @@ define(function(require) {
       document.redraw();
       startingArea.bind(animations.transitionsEndEvent(), {propertyName: 'height'}, this._removeOldSpot);
       startingArea.css('height', 0);
-      // start animation
-      this._triggerShrinkingAnimation(bubblingChannel, bubbleDestination);
     },
 
     _triggerShrinkingAnimation: function(bubblingChannel, bubbleDestination) {
       bubblingChannel.detach().css('top', bubbleDestination);
-      this._$innerHolder.prepend(bubblingChannel);
     },
 
     _growDestinationArea: function(bubblingChannel, bubbleClasses, animationClass, callback) {
@@ -307,7 +302,7 @@ define(function(require) {
       var self = this;
       user.notifications.on('new', function(item) {
         var channel = item.source;
-        if (channel != self.selected) {
+        if (channel !== self.selected) {
           self.unreadCounters.incrementCounter(user.username(), channel);
           self._renderUnreadCount(channel);
           self._bubbleUp(channel);
@@ -323,8 +318,10 @@ define(function(require) {
 
       var unreadCounters = this.unreadCounters;
       if (unreadCounters && unreadCounters.isReady()) {
-        unreadCounters.resetCounter(this.model.username(), channel);
-        this._renderUnreadCount(channel);
+        if (unreadCounters.getCounter(channel) > 0) {
+          unreadCounters.resetCounter(this.model.username(), channel);
+          this._renderUnreadCount(channel);
+        }
       }
     },
 
