@@ -32,7 +32,6 @@ define(function(require) {
     events: {'click .channel': '_navigateToChannel'},
 
     initialize: function() {
-      this._initUnreadCounters();
       this.metadatas = [];
       this._getChannelsMetadata();
       this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
@@ -48,32 +47,27 @@ define(function(require) {
       var options = {
         data: {'since': this.model.lastSession, 'max': 51, counters: 'true'},
         credentials: this.model.credentials,
-        success: this._updateAndRenderCounters()
+        success: this._updateCounters()
       };
 
       this.sync = new Sync();
       this.sync.fetch(options);
     },
 
-    _updateAndRenderCounters: function() {
+    _updateCounters: function() {
       var self = this;
       var username = this.model.username();
       return function(model) {
-        var toRender = self.unreadCounters.pluck('channel').sort();
         _.each(model.counters(), function(counter, channel) {
           if (self.selected !== channel) {
             self.unreadCounters.increaseCounter(username, channel, counter);
           } else {
             self.unreadCounters.resetCounter(username, channel);
           }
-          self._renderUnreadCount(channel);
-          toRender.splice(toRender.indexOf(channel, true), 1);
         });
 
-        // Render remaining channels
-        for (var i in toRender) {
-          self._renderUnreadCount(toRender[i]);
-        }
+        self.render();
+        self._listenForNewItems();
       }
     },
 
@@ -133,17 +127,36 @@ define(function(require) {
       metadata.fetch({success: callback});
     },
 
+    _renderCounters: function() {
+      for (var i in this.metadatas) {
+        this._renderUnreadCount(this.metadatas[i].channel);
+      }
+    },
+
     render: function() {
+      this._sortChannels();
       this.$el.html(_.template(template, {
         metadatas: this.metadatas,
         selected: this.selected
       }));
+      this._renderCounters();
       avatarFallback(this.$('.channel img'), undefined, 50);
       this._setupAnimation();
     },
 
+    _sortChannels: function() {
+      var unreadCounters = this.unreadCounters;
+      this.metadatas.sort(
+        function(a, b) {
+          var aCount = unreadCounters.getCounter(a.channel);
+          var bCount = unreadCounters.getCounter(b.channel);
+          return bCount - aCount;
+        }
+      );
+    },
+
     _navigateToChannel: function(event) {
-      this._bubble(event.currentTarget);
+      //this._bubbleToTop(event.currentTarget);
       this._dispatchNavigationEvent(event.currentTarget.dataset['href']);
     },
 
@@ -153,7 +166,7 @@ define(function(require) {
 
     _getChannelsMetadata: function() {
       var self = this;
-      var callback = this._triggerRenderCallback();
+      var callback = this._triggerInitUnreadCountersCallback();
 
       _.each(this.model.subscribedChannels.channels(), function(channel, index) {
         if (!self._itsMe(channel)) {
@@ -177,14 +190,13 @@ define(function(require) {
       }
     },
 
-    _triggerRenderCallback: function() {
+    _triggerInitUnreadCountersCallback: function() {
       var self = this;
       var fetched = [];
       return function(model) {
         fetched.push(model);
         if (fetched.length === self.metadatas.length) {
-          self.render();
-          self._listenForNewItems();
+          self._initUnreadCounters();
         }
       }
     },
@@ -197,10 +209,38 @@ define(function(require) {
       this._movingChannels = 0;
     },
 
-    _bubble: function(target) {
+    _bubbleDestination: function(channel, channelPos) {
+      var destination = channelPos;
+      var unreadCounters = this.unreadCounters;
+      var count = unreadCounters.getCounter(channel);
+      for (var i in this.metadatas) {
+        var other = this.metadatas[i].channel;
+        if (other !== channel) {
+          var position = this.$('.channel[data-href="' + other + '"]').position().top;
+          if (unreadCounters.getCounter(other) < count && position < destination) {
+            destination = position;
+          }
+        }
+      }
+      return destination;
+    },
+
+    _bubbleUp: function(channel) {
+      var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
+      var bubblingChannelPos = bubblingChannel.position().top;
+      var bubbleDestination = this._bubbleDestination(channel, bubblingChannelPos);
+      if (bubbleDestination !== bubblingChannelPos) {
+        this._bubble(bubblingChannel, bubblingChannelPos + bubbleDestination)
+      }
+    },
+
+    _bubbleToTop: function(target) {
       var bubblingChannel = $(target);
       var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
+      this._bubble(bubblingChannel, bubbleDestination);
+    },
 
+    _bubble: function(bubblingChannel, bubbleDestination) {
       if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
         this._shrinkStartArea(bubblingChannel, bubbleDestination);
         this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
@@ -270,6 +310,7 @@ define(function(require) {
         if (channel != self.selected) {
           self.unreadCounters.incrementCounter(user.username(), channel);
           self._renderUnreadCount(channel);
+          self._bubbleUp(channel);
         }
       });
       user.notifications.listen({credentials: user.credentials});
@@ -280,13 +321,11 @@ define(function(require) {
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
-      if (this.unreadCounters.isReady()) {
-        this.unreadCounters.resetCounter(this.model.username(), channel);
+      var unreadCounters = this.unreadCounters;
+      if (unreadCounters && unreadCounters.isReady()) {
+        unreadCounters.resetCounter(this.model.username(), channel);
         this._renderUnreadCount(channel);
       }
-
-      // Scroll up
-      this.$el.scrollTop(0);
     },
 
     _rainbowAnimation: function($channel, channelType, offset, animationClassName, selected) {
