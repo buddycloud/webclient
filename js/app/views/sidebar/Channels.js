@@ -209,80 +209,88 @@ define(function(require) {
       this._movingChannels = 0;
     },
 
-    _bubbleDownSpot: function(channel, channelPos) {
-      var channelToMove = null;
-      for (var i in this.metadatas) {
-        var other = this.metadatas[i].channel;
-        if (other !== channel) {
-          var $other = this.$('.channel[data-href="' + other + '"]');
-          var position = $other.position().top;
-          if (position - this._channelHeight > channelPos) {
-            channelToMove = other;
-          }
-          if (this.unreadCounters.getCounter(other) === 0) {
-            break;
-          }
+    _channelIdx: function(channel) {
+      for (var i = 0; i < this.metadatas.length; i++) {
+        if (channel === this.metadatas[i].channel) {
+          return i;
         }
       }
 
-      return channelToMove;
+      return -1;
     },
 
-    _bubbleUpSpot: function(channel, channelPos) {
-      var channelToMove = null;
-      var destination = channelPos;
-      var count = this.unreadCounters.getCounter(channel);
+    _bubbleDownSpot: function(channel) {
+      var idx = this._channelIdx(channel);
+      if (idx === this.metadatas.length - 1) return -1; // Bubble not needed
 
-      for (var i in this.metadatas) {
-        var other = this.metadatas[i].channel;
-        if (other !== channel) {
-          var $other = this.$('.channel[data-href="' + other + '"]');
-          var position = $other.position().top;
-          if (this.unreadCounters.getCounter(other) < count && position < destination) {
-            destination = position;
-            channelToMove = other;
+      if (idx != -1) {
+        var i = idx;
+        var counters = this.unreadCounters;
+        while (i + 1 < this.metadatas.length) {
+          if (counters.getCounter(this.metadatas[i+1].channel) > 0) {
+            var temp = this.metadatas[i+1];
+            this.metadatas[i+1] = this.metadatas[i];
+            this.metadatas[i] = temp;
+            idx = i + 1;
           }
+          i++;
         }
       }
 
-      return channelToMove;
+      return idx;
+    },
+
+    _bubbleUpSpot: function(channel) {
+      var idx = this._channelIdx(channel);
+      if (idx <= 0) return -1; // Bubble not needed
+
+      var i = idx;
+      var counters = this.unreadCounters;
+      var count = counters.getCounter(channel);
+      while (i - 1 > 0) {
+        if (count > counters.getCounter(this.metadatas[i-1].channel)) {
+          var temp = this.metadatas[i-1];
+          this.metadatas[i-1] = this.metadatas[i];
+          this.metadatas[i] = temp;
+          idx = i - 1;
+        }
+        i--;
+      }
+
+      return idx;
     },
 
     _bubbleUp: function(channel) {
-      var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
-      var bubblingChannelPos = bubblingChannel.position().top;
-      var channelToMove = this._bubbleUpSpot(channel, bubblingChannelPos);
+      var spot = this._bubbleUpSpot(channel);
+      if (spot != -1) {
+        var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
+        var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
+        this._shrinkStartArea(bubblingChannel, bubbleDestination);
 
-      if (channelToMove) {
-        var bubbleDestination = bubblingChannelPos + this._$innerHolder.scrollTop();
-        var $channelToMove = this.$('.channel[data-href="' + channelToMove + '"]');
-
-        if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
-          this._shrinkStartArea(bubblingChannel, bubbleDestination);
-          $channelToMove.before(bubblingChannel);
-          this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
+        if (spot === 0) {
+          this._$innerHolder.prepend(bubblingChannel);
+        } else {
+          var channelToMove = this.metadatas[spot+1].channel;
+          this.$('.channel[data-href="' + channelToMove + '"]').before(bubblingChannel);
         }
-        this._sortChannels();
+        this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
       }
     },
 
     _bubbleDown: function(channel) {
-      var $bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
-      var bubblingChannelPos = $bubblingChannel.position().top;
-      var channelToMove = this._bubbleDownSpot(channel, bubblingChannelPos);
+      var spot = this._bubbleDownSpot(channel);
+      if (spot > 0) {
+        var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
+        var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
+        this._shrinkStartArea(bubblingChannel, bubbleDestination);
 
-      if (channelToMove) {
-        var bubbleDestination = bubblingChannelPos + this._$innerHolder.scrollTop();
-        var $channelToMove = this.$('.channel[data-href="' + channelToMove + '"]');
-
-        this._shrinkStartArea($bubblingChannel, bubbleDestination);
-        if (this.unreadCounters.getCounter(channelToMove) > 0) {
-          $channelToMove.after($bubblingChannel);
+        if (spot === this.metadatas.length - 1) {
+          this._$innerHolder.append(bubblingChannel);
         } else {
-          $channelToMove.before($bubblingChannel);
+          var channelToMove = this.metadatas[spot+1].channel;
+          this.$('.channel[data-href="' + channelToMove + '"]').before(bubblingChannel);
         }
-        this._growDestinationArea($bubblingChannel, 'bubbleHolder', 'bubbling');
-        this._sortChannels();
+        this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
       }
     },
 
