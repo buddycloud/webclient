@@ -209,14 +209,35 @@ define(function(require) {
       this._movingChannels = 0;
     },
 
-    _channelToMove: function(channel, channelPos) {
-      var destination = channelPos;
-      var count = this.unreadCounters.getCounter(channel);
+    _bubbleDownSpot: function(channel, channelPos) {
       var channelToMove = null;
       for (var i in this.metadatas) {
         var other = this.metadatas[i].channel;
         if (other !== channel) {
-          var position = this.$('.channel[data-href="' + other + '"]').position().top;
+          var $other = this.$('.channel[data-href="' + other + '"]');
+          var position = $other.position().top;
+          if (position - this._channelHeight > channelPos) {
+            channelToMove = other;
+          }
+          if (this.unreadCounters.getCounter(other) === 0) {
+            break;
+          }
+        }
+      }
+
+      return channelToMove;
+    },
+
+    _bubbleUpSpot: function(channel, channelPos) {
+      var channelToMove = null;
+      var destination = channelPos;
+      var count = this.unreadCounters.getCounter(channel);
+
+      for (var i in this.metadatas) {
+        var other = this.metadatas[i].channel;
+        if (other !== channel) {
+          var $other = this.$('.channel[data-href="' + other + '"]');
+          var position = $other.position().top;
           if (this.unreadCounters.getCounter(other) < count && position < destination) {
             destination = position;
             channelToMove = other;
@@ -230,18 +251,38 @@ define(function(require) {
     _bubbleUp: function(channel) {
       var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
       var bubblingChannelPos = bubblingChannel.position().top;
-      var channelToMove = this._channelToMove(channel, bubblingChannelPos);
+      var channelToMove = this._bubbleUpSpot(channel, bubblingChannelPos);
+
       if (channelToMove) {
         var bubbleDestination = bubblingChannelPos + this._$innerHolder.scrollTop();
         var $channelToMove = this.$('.channel[data-href="' + channelToMove + '"]');
 
         if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
           this._shrinkStartArea(bubblingChannel, bubbleDestination);
-          // start animation
-          this._triggerShrinkingAnimation(bubblingChannel, bubbleDestination);
           $channelToMove.before(bubblingChannel);
           this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
         }
+        this._sortChannels();
+      }
+    },
+
+    _bubbleDown: function(channel) {
+      var $bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
+      var bubblingChannelPos = $bubblingChannel.position().top;
+      var channelToMove = this._bubbleDownSpot(channel, bubblingChannelPos);
+
+      if (channelToMove) {
+        var bubbleDestination = bubblingChannelPos + this._$innerHolder.scrollTop();
+        var $channelToMove = this.$('.channel[data-href="' + channelToMove + '"]');
+
+        this._shrinkStartArea($bubblingChannel, bubbleDestination);
+        if (this.unreadCounters.getCounter(channelToMove) > 0) {
+          $channelToMove.after($bubblingChannel);
+        } else {
+          $channelToMove.before($bubblingChannel);
+        }
+        this._growDestinationArea($bubblingChannel, 'bubbleHolder', 'bubbling');
+        this._sortChannels();
       }
     },
 
@@ -256,6 +297,7 @@ define(function(require) {
       document.redraw();
       startingArea.bind(animations.transitionsEndEvent(), {propertyName: 'height'}, this._removeOldSpot);
       startingArea.css('height', 0);
+      this._triggerShrinkingAnimation(bubblingChannel, bubbleDestination);
     },
 
     _triggerShrinkingAnimation: function(bubblingChannel, bubbleDestination) {
@@ -321,6 +363,7 @@ define(function(require) {
         if (unreadCounters.getCounter(channel) > 0) {
           unreadCounters.resetCounter(this.model.username(), channel);
           this._renderUnreadCount(channel);
+          this._bubbleDown(channel);
         }
       }
     },
