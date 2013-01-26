@@ -32,7 +32,6 @@ define(function(require) {
     events: {'click .channel': '_navigateToChannel'},
 
     initialize: function() {
-      this._initUnreadCounters();
       this.metadatas = [];
       this._getChannelsMetadata();
       this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
@@ -48,32 +47,27 @@ define(function(require) {
       var options = {
         data: {'since': this.model.lastSession, 'max': 51, counters: 'true'},
         credentials: this.model.credentials,
-        success: this._updateAndRenderCounters()
+        success: this._updateCounters()
       };
 
       this.sync = new Sync();
       this.sync.fetch(options);
     },
 
-    _updateAndRenderCounters: function() {
+    _updateCounters: function() {
       var self = this;
       var username = this.model.username();
       return function(model) {
-        var toRender = self.unreadCounters.pluck('channel').sort();
         _.each(model.counters(), function(counter, channel) {
           if (self.selected !== channel) {
             self.unreadCounters.increaseCounter(username, channel, counter);
           } else {
             self.unreadCounters.resetCounter(username, channel);
           }
-          self._renderUnreadCount(channel);
-          toRender.splice(toRender.indexOf(channel, true), 1);
         });
 
-        // Render remaining channels
-        for (var i in toRender) {
-          self._renderUnreadCount(toRender[i]);
-        }
+        self.render();
+        self._listenForNewItems();
       }
     },
 
@@ -133,17 +127,36 @@ define(function(require) {
       metadata.fetch({success: callback});
     },
 
+    _renderCounters: function() {
+      for (var i in this.metadatas) {
+        this._renderUnreadCount(this.metadatas[i].channel);
+      }
+    },
+
     render: function() {
+      this._sortChannels();
       this.$el.html(_.template(template, {
         metadatas: this.metadatas,
         selected: this.selected
       }));
+      this._renderCounters();
       avatarFallback(this.$('.channel img'), undefined, 50);
       this._setupAnimation();
     },
 
+    _sortChannels: function() {
+      var unreadCounters = this.unreadCounters;
+      this.metadatas.sort(
+        function(a, b) {
+          var aCount = unreadCounters.getCounter(a.channel);
+          var bCount = unreadCounters.getCounter(b.channel);
+          return bCount - aCount;
+        }
+      );
+    },
+
     _navigateToChannel: function(event) {
-      this._bubble(event.currentTarget);
+      //this._bubbleToTop(event.currentTarget);
       this._dispatchNavigationEvent(event.currentTarget.dataset['href']);
     },
 
@@ -153,7 +166,7 @@ define(function(require) {
 
     _getChannelsMetadata: function() {
       var self = this;
-      var callback = this._triggerRenderCallback();
+      var callback = this._triggerInitUnreadCountersCallback();
 
       _.each(this.model.subscribedChannels.channels(), function(channel, index) {
         if (!self._itsMe(channel)) {
@@ -177,14 +190,13 @@ define(function(require) {
       }
     },
 
-    _triggerRenderCallback: function() {
+    _triggerInitUnreadCountersCallback: function() {
       var self = this;
       var fetched = [];
       return function(model) {
         fetched.push(model);
         if (fetched.length === self.metadatas.length) {
-          self.render();
-          self._listenForNewItems();
+          self._initUnreadCounters();
         }
       }
     },
@@ -197,12 +209,87 @@ define(function(require) {
       this._movingChannels = 0;
     },
 
-    _bubble: function(target) {
-      var bubblingChannel = $(target);
-      var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
+    _channelIdx: function(channel) {
+      for (var i = 0; i < this.metadatas.length; i++) {
+        if (channel === this.metadatas[i].channel) {
+          return i;
+        }
+      }
 
-      if (this._needsBubbling(bubblingChannel, bubbleDestination)) {
+      return -1;
+    },
+
+    _bubbleDownSpot: function(channel) {
+      var idx = this._channelIdx(channel);
+      if (idx === this.metadatas.length - 1) return -1; // Bubble not needed
+
+      if (idx != -1) {
+        var i = idx;
+        var counters = this.unreadCounters;
+        while (i + 1 < this.metadatas.length) {
+          if (counters.getCounter(this.metadatas[i+1].channel) > 0) {
+            var temp = this.metadatas[i+1];
+            this.metadatas[i+1] = this.metadatas[i];
+            this.metadatas[i] = temp;
+            idx = i + 1;
+          }
+          i++;
+        }
+      }
+
+      return idx;
+    },
+
+    _bubbleUpSpot: function(channel) {
+      var idx = this._channelIdx(channel);
+      if (idx <= 0) return -1; // Bubble not needed
+
+      var i = idx;
+      var counters = this.unreadCounters;
+      var count = counters.getCounter(channel);
+      while (i - 1 > 0) {
+        if (count > counters.getCounter(this.metadatas[i-1].channel)) {
+          var temp = this.metadatas[i-1];
+          this.metadatas[i-1] = this.metadatas[i];
+          this.metadatas[i] = temp;
+          idx = i - 1;
+        }
+        i--;
+      }
+
+      return idx;
+    },
+
+    _bubbleUp: function(channel) {
+      var spot = this._bubbleUpSpot(channel);
+      if (spot != -1) {
+        var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
+        var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
         this._shrinkStartArea(bubblingChannel, bubbleDestination);
+
+        if (spot === 0) {
+          this._$innerHolder.prepend(bubblingChannel);
+        } else {
+          var channelToMove = this.metadatas[spot+1].channel;
+          this.$('.channel[data-href="' + channelToMove + '"]').before(bubblingChannel);
+        }
+        this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
+      }
+    },
+
+    _bubbleDown: function(channel) {
+      var spot = this._bubbleDownSpot(channel);
+      if (spot > 0) {
+        var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
+        var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
+        this._shrinkStartArea(bubblingChannel, bubbleDestination);
+
+        if (spot === this.metadatas.length - 1) {
+          this._$innerHolder.append(bubblingChannel);
+        } else {
+          var channelToMove = this.metadatas[spot+1].channel;
+          this.$('.channel[data-href="' + channelToMove + '"]').before(bubblingChannel);
+        }
         this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
       }
     },
@@ -218,13 +305,11 @@ define(function(require) {
       document.redraw();
       startingArea.bind(animations.transitionsEndEvent(), {propertyName: 'height'}, this._removeOldSpot);
       startingArea.css('height', 0);
-      // start animation
       this._triggerShrinkingAnimation(bubblingChannel, bubbleDestination);
     },
 
     _triggerShrinkingAnimation: function(bubblingChannel, bubbleDestination) {
       bubblingChannel.detach().css('top', bubbleDestination);
-      this._$innerHolder.prepend(bubblingChannel);
     },
 
     _growDestinationArea: function(bubblingChannel, bubbleClasses, animationClass, callback) {
@@ -267,9 +352,10 @@ define(function(require) {
       var self = this;
       user.notifications.on('new', function(item) {
         var channel = item.source;
-        if (channel != self.selected) {
+        if (channel !== self.selected) {
           self.unreadCounters.incrementCounter(user.username(), channel);
           self._renderUnreadCount(channel);
+          self._bubbleUp(channel);
         }
       });
       user.notifications.listen({credentials: user.credentials});
@@ -280,13 +366,14 @@ define(function(require) {
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
-      if (this.unreadCounters.isReady()) {
-        this.unreadCounters.resetCounter(this.model.username(), channel);
-        this._renderUnreadCount(channel);
+      var unreadCounters = this.unreadCounters;
+      if (unreadCounters && unreadCounters.isReady()) {
+        if (unreadCounters.getCounter(channel) > 0) {
+          unreadCounters.resetCounter(this.model.username(), channel);
+          this._renderUnreadCount(channel);
+          this._bubbleDown(channel);
+        }
       }
-
-      // Scroll up
-      this.$el.scrollTop(0);
     },
 
     _rainbowAnimation: function($channel, channelType, offset, animationClassName, selected) {
