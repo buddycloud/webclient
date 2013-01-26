@@ -1,0 +1,44 @@
+<VirtualHost *:80>
+        # push any HTTP requests to HTTPS
+        ServerName              EXAMPLE.COM
+        RewriteEngine           On
+        RewriteCond             %{HTTPS} off
+        RewriteRule             (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+</VirtualHost>
+ 
+<VirtualHost *:443>
+        ServerName              EXAMPLE.COM
+        DocumentRoot            /var/www/EXAMPLE.COM
+        LogLevel                alert
+        ErrorLog                /var/log/apache2/EXAMPLE.COM-error.log
+        CustomLog               /var/log/apache2/EXAMPLE.COM-access.log combined
+        SSLEngine               On
+        SSLCertificateFile      /etc/apache2/certs/EXAMPLE.COM.pem
+        SSLCertificateKeyFile   /etc/apache2/certs/EXAMPLE.COM.key
+        SSLCertificateChainFile /etc/apache2/certs/sub.class1.server.ca.crt
+        # from https://www.startssl.com/certs/sub.class1.server.ca.crt
+ 
+        # redirect everything except static content
+        RewriteEngine On
+        RewriteCond %{REQUEST_URI} !^/js/
+        RewriteCond %{REQUEST_URI} !^/css/ 
+        RewriteCond %{REQUEST_URI} !^/img/
+        RewriteCond %{REQUEST_URI} !^/locales/
+        RewriteCond %{REQUEST_URI} !^/config\.js$
+        RewriteCond %{REQUEST_URI} !^/favicon\.ico$
+        RewriteCond %{REQUEST_URI} !^(.*)\.html$
+        RewriteRule ^(.*)$ /index.html
+ 
+        # Enable sensible caching
+        FileETag                             None
+        ExpiresActive                        On
+        ExpiresDefault                       "access plus 1 seconds"
+        ExpiresByType text/html              "access plus 1 days"
+        ExpiresByType image/jpeg             "access plus 1 days"
+        ExpiresByType image/png              "access plus 1 days"
+        ExpiresByType text/css               "access plus 1 days"
+        ExpiresByType application/javascript "access plus 1 days"
+ 
+        # For Firefox OS Manifest file serving
+        AddType application/x-web-app-manifest+json .webapp
+</VirtualHost>
