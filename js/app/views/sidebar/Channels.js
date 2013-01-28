@@ -242,19 +242,19 @@ define(function(require) {
 
     _bubbleUpSpot: function(channel) {
       var idx = this._channelIdx(channel);
-      if (idx <= 0) return -1; // Bubble not needed
-
-      var i = idx;
-      var counters = this.unreadCounters;
-      var count = counters.getCounter(channel);
-      while (i - 1 > 0) {
-        if (count > counters.getCounter(this.metadatas[i-1].channel)) {
-          var temp = this.metadatas[i-1];
-          this.metadatas[i-1] = this.metadatas[i];
-          this.metadatas[i] = temp;
-          idx = i - 1;
+      if (idx != -1) {
+        var i = idx;
+        var counters = this.unreadCounters;
+        var count = counters.getCounter(channel);
+        while (i - 1 > 0) {
+          if (count > counters.getCounter(this.metadatas[i-1].channel)) {
+            var temp = this.metadatas[i-1];
+            this.metadatas[i-1] = this.metadatas[i];
+            this.metadatas[i] = temp;
+            idx = i - 1;
+          }
+          i--;
         }
-        i--;
       }
 
       return idx;
@@ -265,15 +265,18 @@ define(function(require) {
       if (spot != -1) {
         var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
         var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
-        this._shrinkStartArea(bubblingChannel, bubbleDestination);
 
-        if (spot === 0) {
-          this._$innerHolder.prepend(bubblingChannel);
-        } else {
-          var channelToMove = this.metadatas[spot+1].channel;
-          this.$('.channel[data-href="' + channelToMove + '"]').before(bubblingChannel);
+        if (this._needsBubblingUp(bubblingChannel, bubbleDestination)) {
+          this._shrinkStartArea(bubblingChannel, bubbleDestination);
+
+          if (spot === 0) {
+            this._$innerHolder.prepend(bubblingChannel);
+          } else {
+            var channelToMove = this.metadatas[spot+1].channel;
+            this.$('.channel[data-href="' + channelToMove + '"]').before(bubblingChannel);
+          }
+          this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
         }
-        this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
       }
     },
 
@@ -281,22 +284,28 @@ define(function(require) {
       var spot = this._bubbleDownSpot(channel);
       if (spot > 0) {
         var bubblingChannel = this.$('.channel[data-href="' + channel + '"]');
-        var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
-        this._shrinkStartArea(bubblingChannel, bubbleDestination);
+        if (this._needsBubbling(bubblingChannel)) {
+          var bubbleDestination = bubblingChannel.position().top + this._$innerHolder.scrollTop();
+          this._shrinkStartArea(bubblingChannel, bubbleDestination);
 
-        if (spot === this.metadatas.length - 1) {
-          this._$innerHolder.append(bubblingChannel);
-        } else {
-          var channelToMove = this.metadatas[spot+1].channel;
-          this.$('.channel[data-href="' + channelToMove + '"]').before(bubblingChannel);
+          if (spot === this.metadatas.length - 1) {
+            this._$innerHolder.append(bubblingChannel);
+          } else {
+            var $channelToMove = this.$('.channel[data-href="' + this.metadatas[spot+1].channel + '"]');
+            $channelToMove.before(bubblingChannel);
+          }
+          this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
         }
-        this._growDestinationArea(bubblingChannel, 'bubbleHolder', 'bubbling');
       }
     },
 
-    _needsBubbling: function(bubblingChannel, bubbleDestination) {
+    _needsBubblingUp: function(bubblingChannel, bubbleDestination) {
       // if the selected channel is not the first or the bubble one
-      return bubbleDestination !== 0 && !bubblingChannel.parent().hasClass('bubbleHolder');
+      return bubbleDestination !== 0 && this._needsBubbling(bubblingChannel);
+    },
+
+    _needsBubbling: function(bubblingChannel) {
+      return  !bubblingChannel.parent().hasClass('bubbleHolder');
     },
 
     _shrinkStartArea: function(bubblingChannel, bubbleDestination) {
@@ -324,6 +333,23 @@ define(function(require) {
     _triggerGrowingAnimation: function(bubblingChannel, animationClass) {
       bubblingChannel.addClass(animationClass).css({'top': 0, 'left': 0, 'z-index': ++this._movingChannels + 1});
       bubblingChannel.parent().css('height', this._channelHeight);
+      // FIXME Workaround for channels that are being put in top of each other
+      // this._adjustNewSpot not being called when the bubblingChannel is the top one
+      this._ensureNewSpotAdjust(bubblingChannel);
+    },
+
+    _ensureNewSpotAdjust: function(bubblingChannel) {
+      var self = this;
+      setTimeout(function() {
+        if (bubblingChannel.parent().hasClass('bubbleHolder')) {
+          bubblingChannel.removeClass('bubbling');
+          bubblingChannel.css({'height': '', 'z-index': ''});
+          bubblingChannel.unwrap();
+          bubblingChannel.unbind(animation.transitionsEndEvent());
+          self.movingChannels--;
+        }
+      },
+      1500);
     },
 
     _removeOldSpot: function(event) {
