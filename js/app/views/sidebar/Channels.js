@@ -57,12 +57,16 @@ define(function(require) {
     _updateCounters: function() {
       var self = this;
       var username = this.model.username();
+      var unreadCounters = this.unreadCounters;
       return function(model) {
         _.each(model.counters(), function(counter, channel) {
           if (self.selected !== channel) {
-            self.unreadCounters.increaseCounter(username, channel, counter);
+            unreadCounters.increaseCounter(username, channel, counter);
+            if (channel === username) {
+              Events.trigger('personalChannelCounter', unreadCounters.getCounter(channel));
+            }
           } else {
-            self.unreadCounters.resetCounter(username, channel);
+            unreadCounters.resetCounter(username, channel);
           }
         });
 
@@ -357,13 +361,18 @@ define(function(require) {
 
     _listenForNewItems: function() {
       var user = this.model;
+      var unreadCounters = this.unreadCounters;
       var self = this;
       user.notifications.on('new', function(item) {
         var channel = item.source;
         if (channel !== self.selected) {
-          self.unreadCounters.incrementCounter(user.username(), channel);
-          self._renderUnreadCount(channel);
-          self._bubbleUp(channel);
+          unreadCounters.incrementCounter(user.username(), channel);
+          if (channel === user.username()) {
+            Events.trigger('personalChannelCounter', unreadCounters.getCounter(channel));
+          } else {
+            self._renderUnreadCount(channel);
+            self._bubbleUp(channel);
+          }
         }
       });
       user.notifications.listen({credentials: user.credentials});
@@ -375,11 +384,17 @@ define(function(require) {
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
       var unreadCounters = this.unreadCounters;
+      var username = this.model.username();
       if (unreadCounters && unreadCounters.isReady()) {
         if (unreadCounters.getCounter(channel) > 0) {
-          unreadCounters.resetCounter(this.model.username(), channel);
-          this._renderUnreadCount(channel);
-          this._bubbleDown(channel);
+          unreadCounters.resetCounter(username, channel);
+
+          if (channel === username) {
+            Events.trigger('personalChannelCounter', 0);
+          } else {
+            this._renderUnreadCount(channel);
+            this._bubbleDown(channel);
+          }
         }
       }
     },
