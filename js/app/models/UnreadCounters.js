@@ -49,17 +49,6 @@ define(function(require) {
       return unreadCount ? unreadCount.get('counter') : 0;
     },
 
-    getAllCounters: function() {
-      var result = {};
-      var allChannels = this.pluck('channel');
-      for (var i in allChannels) {
-        var channel = allChannels[i];
-        result[channel] = this.getCounter(channel);
-      }
-
-      return result;
-    },
-
     resetCounter: function(user, channel) {
       var unreadCount = this._getUnreadCount(channel);
       if (unreadCount) {

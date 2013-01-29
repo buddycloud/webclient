@@ -113,12 +113,8 @@ define(function(require) {
     },
 
     _removeMetadata: function(channel) {
-      var self = this;
-      _.each(this.metadatas, function(metadata, index) {
-        if (metadata.channel === channel) {
-          self.metadatas.splice(index, 1);
-        }
-      });
+      var spot = this._channelSpot(channel);
+      this.metadatas.splice(spot, 1);
     },
 
     _fetchMetadata: function(channel, callback) {
@@ -186,7 +182,7 @@ define(function(require) {
           metadata: model,
           selected: false
         });
-        self._rainbowAnimation($(channel), model.channelType(), extra.offset, extra.animationClass, extra.selected);
+        self._rainbowAnimation($(channel), model.channel, model.channelType(), extra.offset, extra.animationClass, extra.selected);
       }
     },
 
@@ -219,12 +215,13 @@ define(function(require) {
     },
 
     _bubbleUpSpot: function(channel, oldSpot) {
-      var counters = this.unreadCounters.getAllCounters();
-      var count = counters[channel];
+      var counters = this.unreadCounters;
+      var count = counters.getCounter(channel);
       var bubbleSpot = oldSpot;
 
       for (var i = oldSpot; i - 1 > 0; i--) {
-        if (count > counters[this.metadatas[i - 1].channel]) {
+        var prev = this.metadatas[i - 1].channel;
+        if (count > counters.getCounter(prev)) {
           var temp = this.metadatas[i-1];
           this.metadatas[i-1] = this.metadatas[i];
           this.metadatas[i] = temp;
@@ -236,12 +233,13 @@ define(function(require) {
     },
 
     _bubbleDownSpot: function(channel, oldSpot) {
-      var counters = this.unreadCounters.getAllCounters();
-      var count = counters[channel];
+      var counters = this.unreadCounters;
+      var count = counters.getCounter(channel);
       var bubbleSpot = oldSpot;
 
       for (var i = oldSpot; i + 1 < this.metadatas.length; i++) {
-        if (count < counters[this.metadatas[i + 1].channel]) {
+        var next = this.metadatas[i + 1].channel;
+        if (count < counters.getCounter(next)) {
           var temp = this.metadatas[i+1];
           this.metadatas[i+1] = this.metadatas[i];
           this.metadatas[i] = temp;
@@ -329,11 +327,11 @@ define(function(require) {
           bubblingChannel.removeClass('bubbling');
           bubblingChannel.css({'height': '', 'z-index': ''});
           bubblingChannel.unwrap();
-          bubblingChannel.unbind(animation.transitionsEndEvent());
+          bubblingChannel.unbind(animations.transitionsEndEvent());
           self.movingChannels--;
         }
       },
-      1500);
+      2000);
     },
 
     _removeOldSpot: function(event) {
@@ -345,15 +343,15 @@ define(function(require) {
 
     _adjustNewSpot: function(event) {
       var $this = $(this);
-      var data = event.data;
-
-      if (data && data.callback) {
-        data.callback();
-      }
       $this.removeClass('bubbling');
       $this.css({'height': '', 'z-index': ''});
       $this.unwrap();
       $this.unbind(event.originalEvent.type);
+
+      var data = event.data;
+      if (data && data.callback) {
+        data.callback();
+      }
       data.self._movingChannels--;
     },
 
@@ -386,15 +384,15 @@ define(function(require) {
       }
     },
 
-    _rainbowAnimation: function($channel, channelType, offset, animationClassName, selected) {
+    _rainbowAnimation: function($channel, channel, channelType, offset, animationClassName, selected) {
       var self = this;
 
       this._setupFlyingChannel($channel, channelType, offset);
       // trigger the fly-in animation
-      this._growDestinationArea($channel, 'bubbleHolder rainbowBubble', animationClassName, this._rainbowAnimationCallback($channel, selected));
+      this._growDestinationArea($channel, 'bubbleHolder rainbowBubble', animationClassName, this._rainbowAnimationCallback($channel, channel, selected));
     },
 
-    _rainbowAnimationCallback: function($channel, selected) {
+    _rainbowAnimationCallback: function($channel, channel, selected) {
       var self = this;
       return function() {
         self.$el.removeClass('rainbowAnimationRunning');
@@ -402,6 +400,7 @@ define(function(require) {
           self.$('.selected').removeClass('selected');
           $channel.addClass('selected').css({left: '', top: ''});
         }
+        setTimeout(function() {self._bubble(channel, self.metadatas.length - 1, 0)}, 1000);
       }
     },
 
