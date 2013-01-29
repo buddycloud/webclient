@@ -38,19 +38,30 @@ define(function(require) {
       return this._isReady;
     },
 
-    getUnreadCount: function(channel) {
+    _getUnreadCount: function(channel) {
       var temp = this.where({'channel': channel});
       // Unread counters should be unique
       return temp.length > 0 ? temp[0] : null;
     },
 
     getCounter: function(channel) {
-      var unreadCount = this.getUnreadCount(channel);
+      var unreadCount = this._getUnreadCount(channel);
       return unreadCount ? unreadCount.get('counter') : 0;
     },
 
+    getAllCounters: function() {
+      var result = {};
+      var allChannels = this.pluck('channel');
+      for (var i in allChannels) {
+        var channel = allChannels[i];
+        result[channel] = this.getCounter(channel);
+      }
+
+      return result;
+    },
+
     resetCounter: function(user, channel) {
-      var unreadCount = this.getUnreadCount(channel);
+      var unreadCount = this._getUnreadCount(channel);
       if (unreadCount) {
         var prev = unreadCount.get('counter');
         if (prev > 0) {
@@ -74,7 +85,7 @@ define(function(require) {
     },
 
     increaseCounter: function(user, channel, value) {
-      var unreadCount = this.getUnreadCount(channel);
+      var unreadCount = this._getUnreadCount(channel);
       if (unreadCount) {
         // Update
         var prev = unreadCount.get('counter');
