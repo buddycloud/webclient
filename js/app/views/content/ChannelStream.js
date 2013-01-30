@@ -31,7 +31,7 @@ define(function(require) {
     className: 'stream clearfix',
     events: {
       'click .newTopic': '_expandNewTopicArea',
-      'click .createComment': '_post'
+      'click .createComment': '_post',
     },
 
     initialize: function() {
@@ -46,9 +46,15 @@ define(function(require) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
       }
 
+      _.bindAll(this, 'checkScroll', 'dndFileStart', 'dndFileLeave');
+      
       // Scroll event
-      _.bindAll(this, 'checkScroll');
       $('.content').scroll(this.checkScroll);
+
+      // global file drag and drop event
+      $('.content').on('dragover', this.dndFileStart);
+      $('.content').on('dragleave', this.dndFileLeave);
+      $('.content').on('drop', function(e){e.preventDefault()}); //maybe something to put global if people get used to it.
     },
 
     _initModel: function() {
@@ -113,6 +119,25 @@ define(function(require) {
             }
           });
         }
+      }
+    },
+
+    dndFileStart: function(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      //evt.dataTransfer.dropEffect = 'copy'
+
+      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
+      if(!newTopicArea.hasClass('write')){
+        newTopicArea.addClass('write');
+      }
+    },
+
+    dndFileLeave: function() {
+      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
+      var textArea = newTopicArea.find('textarea');
+      if(newTopicArea.hasClass('write')){
+        newTopicArea.removeClass('write');
       }
     },
 
