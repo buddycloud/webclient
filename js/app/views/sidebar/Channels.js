@@ -230,7 +230,7 @@ define(function(require) {
       var count = counters.getCounter(channel);
       var bubbleSpot = oldSpot;
 
-      for (var i = oldSpot; i - 1 > 0; i--) {
+      for (var i = oldSpot; i - 1 >= 0; i--) {
         var prev = this.metadatas[i - 1].channel;
         if (count > counters.getCounter(prev)) {
           var temp = this.metadatas[i-1];
