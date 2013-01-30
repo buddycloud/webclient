@@ -151,7 +151,13 @@ define(function(require) {
           var aCount = unreadCounters.getCounter(a.channel);
           var bCount = unreadCounters.getCounter(b.channel);
           var diff = bCount - aCount;
-          return diff !== 0 ? diff : a.title().localeCompare(b.title());
+          if (diff === 0) {
+            var aTitle = a.title() || a.channel;
+            var bTitle = b.title() || b.channel;
+            return aTitle.localeCompare(bTitle);
+          }
+
+          return diff;
         }
       );
     },
