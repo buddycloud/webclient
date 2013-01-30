@@ -123,7 +123,7 @@ define(function(require) {
 
     _fetchMetadata: function(channel, callback) {
       var metadata = new ChannelMetadata(channel);
-      this.metadatas.push(metadata);
+      this.metadatas.unshift(metadata);
       metadata.fetch({success: callback});
     },
 
@@ -381,7 +381,7 @@ define(function(require) {
     selectChannel: function(channel) {
       var prev = this.selected;
       var username = this.model.username();
-      if (prev && prev !== username) {
+      if (prev && prev !== username && prev != channel) {
         // Previous channel should go to the right place
         this._bubbleDown(prev);
       }
@@ -418,7 +418,8 @@ define(function(require) {
         self.$el.removeClass('rainbowAnimationRunning');
         if (selected) {
           self.$('.selected').removeClass('selected');
-          $channel.addClass('selected').css({left: '', top: ''});
+          //$channel.addClass('selected').css({left: '', top: ''});
+          self.selectChannel(channel);
         }
       }
     },
