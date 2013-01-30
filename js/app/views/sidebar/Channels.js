@@ -379,12 +379,18 @@ define(function(require) {
     },
 
     selectChannel: function(channel) {
+      var prev = this.selected;
+      var username = this.model.username();
+      if (prev && prev !== username) {
+        // Previous channel should go to the right place
+        this._bubbleDown(prev);
+      }
+
       this.selected = channel;
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
       var unreadCounters = this.unreadCounters;
-      var username = this.model.username();
       if (unreadCounters && unreadCounters.isReady()) {
         if (unreadCounters.getCounter(channel) > 0) {
           unreadCounters.resetCounter(username, channel);
@@ -393,7 +399,6 @@ define(function(require) {
             Events.trigger('personalChannelCounter', 0);
           } else {
             this._renderUnreadCount(channel);
-            this._bubbleDown(channel);
           }
         }
       }
@@ -415,7 +420,6 @@ define(function(require) {
           self.$('.selected').removeClass('selected');
           $channel.addClass('selected').css({left: '', top: ''});
         }
-        setTimeout(function() {self._bubble(channel, self.metadatas.length - 1, 0)}, 1000);
       }
     },
 
