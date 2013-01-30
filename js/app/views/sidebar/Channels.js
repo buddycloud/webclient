@@ -150,7 +150,8 @@ define(function(require) {
         function(a, b) {
           var aCount = unreadCounters.getCounter(a.channel);
           var bCount = unreadCounters.getCounter(b.channel);
-          return bCount - aCount;
+          var diff = bCount - aCount;
+          return diff !== 0 ? diff : a.title().localeCompare(b.title());
         }
       );
     },
