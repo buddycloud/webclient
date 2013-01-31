@@ -1,3 +1,15 @@
 #!/usr/bin/node
 
+/*
+	Apache commands
+	
+    RewriteCond %{REQUEST_URI} !^/js/
+    RewriteCond %{REQUEST_URI} !^/css/ 
+    RewriteCond %{REQUEST_URI} !^/img/
+    RewriteCond %{REQUEST_URI} !^/locales/
+    RewriteCond %{REQUEST_URI} !^/config\.js$
+    RewriteCond %{REQUEST_URI} !^/favicon\.ico$
+    RewriteCond %{REQUEST_URI} !^(.*)\.html$
+    RewriteRule ^(.*)$ /index.html*/
+
 console.log("dev server started");
