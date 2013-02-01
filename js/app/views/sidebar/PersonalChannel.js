@@ -45,11 +45,28 @@ define(function(require) {
 
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
+
+      // Unread counter event
+      Events.on('personalChannelCounter', this._renderCounter, this);
     },
 
     _avatarChanged: function(channel) {
       if (channel === this.model.username()) {
         this.render();
+      }
+    },
+
+    _renderCounter: function(count) {
+      var countEl = this.$el.find('.counter');
+      if (count > 0) {
+        if (count > 50) {
+          countEl.text('50+');
+        } else {
+          countEl.text(count);
+        }
+        countEl.show();
+      } else {
+        countEl.hide();
       }
     },
 
