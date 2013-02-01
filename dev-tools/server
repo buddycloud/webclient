@@ -22,6 +22,7 @@ app.use('/js', express.static(mdir + '/js'));
 app.use('/css', express.static(mdir + '/css'));
 app.use('/img', express.static(mdir + '/img'));
 app.use('/locales', express.static(mdir + '/locales'));
+app.use('/templates', express.static(mdir + '/templates'));
 app.get('/config.js', function(req, res) {
     fs.readFile(mdir + '/config.js', 'utf8', function(error, file) {
         res.contentType('application/javascript');
