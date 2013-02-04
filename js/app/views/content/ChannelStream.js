@@ -66,7 +66,7 @@ define(function(require) {
     },
 
     _error: function(e, xhr) {
-      if (xhr.status === 401 || xhr.status === 403) {
+      if (xhr && xhr.status === 403) {
         this._renderPrivateChannel();
       } else {
         this.destroy();

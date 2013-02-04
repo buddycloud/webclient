@@ -385,10 +385,14 @@ define(function(require) {
       user.notifications.listen({credentials: user.credentials});
     },
 
+    _shouldBubble: function(prev, username, channel) {
+      return prev && prev !== username && prev !== channel;
+    },
+
     selectChannel: function(channel) {
       var prev = this.selected;
       var username = this.model.username();
-      if (prev && prev !== username && prev != channel) {
+      if (this._shouldBubble(prev, username, channel)) {
         // Previous channel should go to the right place
         this._bubbleDown(prev);
       }
