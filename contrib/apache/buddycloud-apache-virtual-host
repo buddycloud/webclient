@@ -8,7 +8,7 @@
  
 <VirtualHost *:443>
         ServerName              EXAMPLE.COM
-        DocumentRoot            /var/www/EXAMPLE.COM
+        DocumentRoot            /usr/share/buddycloud-webclient
         LogLevel                alert
         ErrorLog                /var/log/apache2/EXAMPLE.COM-error.log
         CustomLog               /var/log/apache2/EXAMPLE.COM-access.log combined
