@@ -28,6 +28,10 @@ define(function(require) {
       this.bind('add', this._itemAdded, this);
     },
 
+    comparator: function(item) {
+      return -item.updated;
+    },
+
     _itemAdded: function(item) {
       if (item.isPost()) {
         this.trigger('addPost', item);

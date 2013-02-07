@@ -45,7 +45,7 @@ define(function(require) {
     isOwner: function(channel) {
       var postsNode = channel + '/posts';
       var affiliation = this.attributes[postsNode];
-      return affiliation === 'owner';      
+      return affiliation === 'owner';
     },
 
     isPostingAllowed: function(channel) {
