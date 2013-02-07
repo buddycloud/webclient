@@ -291,8 +291,7 @@ define(function(require) {
     },
 
     _needsBubbling: function(bubblingPost) {
-      console.log(bubblingPost.position().top);
-      return true;
+      return !bubblingPost.is(':first-child');
     }
   });
 
