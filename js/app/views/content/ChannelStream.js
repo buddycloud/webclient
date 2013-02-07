@@ -285,7 +285,8 @@ define(function(require) {
       if (this._needsBubbling(target)) {
         // FIXME: Primitive version from bubbling
         target.detach();
-        target.preprendTo(this.$('.posts'));
+        var $posts = this.$('.posts');
+        $posts.prepend(target);
         $('.content').scrollTop(0);
       }
     },
