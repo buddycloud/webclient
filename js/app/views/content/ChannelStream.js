@@ -16,6 +16,7 @@
 
 define(function(require) {
   var $ = require('jquery');
+  var animations = require('util/animations');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelItems = require('models/ChannelItems');
@@ -282,17 +283,16 @@ define(function(require) {
     },
 
     _bubble: function(target) {
-      if (this._needsBubbling(target)) {
+      var $bubblingPost = $(target);
+      if (this._needsBubbling($bubblingPost)) {
         // FIXME: Primitive version from bubbling
-        target.detach();
-        this.$('.posts').prepend(target);
-        document.redraw();
+        this.$('.posts').prepend($bubblingPost);
         $('.content').scrollTop(0);
       }
     },
 
-    _needsBubbling: function(bubblingPost) {
-      return !bubblingPost.is(':first-child');
+    _needsBubbling: function($bubblingPost) {
+      return !$bubblingPost.is(':first-child');
     }
   });
 

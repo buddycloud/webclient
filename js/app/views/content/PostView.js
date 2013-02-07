@@ -45,7 +45,7 @@ define(function(require) {
 
     _addComment: function() {
       this.render();
-      Events.trigger('postBubble', this.$el);
+      Events.trigger('postBubble', this.el);
     },
 
     render: function() {
