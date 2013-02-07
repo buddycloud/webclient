@@ -50,6 +50,9 @@ define(function(require) {
       // Scroll event
       _.bindAll(this, 'checkScroll');
       $('.content').scroll(this.checkScroll);
+
+      // Bubble up post
+      Events.on('postBubble', this._bubble, this);
     },
 
     _initModel: function() {
@@ -276,6 +279,20 @@ define(function(require) {
           self._enableButton();
         }
       });
+    },
+
+    _bubble: function(target) {
+      if (this._needsBubbling(target)) {
+        // FIXME: Primitive version from bubbling
+        target.detach();
+        this.$('.posts').prepend(target);
+        $('.content').scrollTop(0);
+      }
+    },
+
+    _needsBubbling: function(bubblingPost) {
+      console.log(bubblingPost.position().top);
+      return true;
     }
   });
 
