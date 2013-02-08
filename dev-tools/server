@@ -18,22 +18,23 @@ var app = express();
 
 var mdir = __dirname + '/..'
 
+function staticFile(fileName, mimeType) {
+    return function(req, res) {
+        fs.readFile(mdir + fileName, 'utf8', function(error, file) {
+            if (mimeType)
+                res.contentType(mimeType);
+            res.send(file);
+        });
+    };
+};
+
 app.use('/js', express.static(mdir + '/js'));
 app.use('/css', express.static(mdir + '/css'));
 app.use('/img', express.static(mdir + '/img'));
 app.use('/locales', express.static(mdir + '/locales'));
 app.use('/templates', express.static(mdir + '/templates'));
-app.get('/config.js', function(req, res) {
-    fs.readFile(mdir + '/config.js', 'utf8', function(error, file) {
-        res.contentType('application/javascript');
-        res.send(file);
-    });
-});
-app.get('*', function(req, res) {
-    fs.readFile(mdir + '/index.html', 'utf8', function(error, file) {
-        res.send(file);
-    });
-});
+app.get('/config.js', staticFile('/config.js', 'application/javascript'));
+app.get('*', staticFile('/index.html'));
 
 app.listen(3000);
 
