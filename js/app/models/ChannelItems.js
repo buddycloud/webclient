@@ -28,9 +28,10 @@ define(function(require) {
       this.bind('add', this._itemAdded, this);
     },
 
+    /* TODO: there is something wrong with items "updated" field
     comparator: function(item) {
       return -item.updated;
-    },
+    },*/
 
     _itemAdded: function(item) {
       if (item.isPost()) {
