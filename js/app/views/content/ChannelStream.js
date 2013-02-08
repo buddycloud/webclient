@@ -42,7 +42,7 @@ define(function(require) {
 
       this.isLoading = true;
       this._postViews = [];
-      this.model.bind('addPost', this._prependNewPost, this);
+      this.model.bind('addPost', this._prependPost, this);
 
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
@@ -189,7 +189,7 @@ define(function(require) {
       return view;
     },
 
-    _prependNewPost: function(post) {
+    _prependPost: function(post) {
       var view = this._viewForPost(post);
       this._postViews.unshift(view);
       view.render();
@@ -282,17 +282,10 @@ define(function(require) {
       });
     },
 
-    _bubble: function(target) {
-      var $bubblingPost = $(target);
-      if (this._needsBubbling($bubblingPost)) {
-        // FIXME: Primitive version from bubbling
-        this.$('.posts').prepend($bubblingPost);
-        $('.content').scrollTop(0);
-      }
-    },
-
-    _needsBubbling: function($bubblingPost) {
-      return !$bubblingPost.is(':first-child');
+    _bubble: function(post) {
+      // FIXME: Primitive version from bubbling
+      this._prependPost(post);
+      $('.content').scrollTop(0);
     }
   });
 

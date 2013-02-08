@@ -43,9 +43,17 @@ define(function(require) {
       this.model.bind('addComment', this._addComment, this);
     },
 
-    _addComment: function() {
-      this.render();
-      Events.trigger('postBubble', this.el);
+    _addComment: function(item, post) {
+      if (this._needsBubbling()) {
+        this.remove();
+        Events.trigger('postBubble', post);
+      } else {
+        this.render();
+      }
+    },
+
+    _needsBubbling: function() {
+      return !this.$el.is(':first-child');
     },
 
     render: function() {
