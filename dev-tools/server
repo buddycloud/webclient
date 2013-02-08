@@ -15,6 +15,7 @@
 var express = require('express');
 var fs = require('fs');
 var app = express();
+app.use(express.logger('tiny'));
 
 var mdir = __dirname + '/..'
 
@@ -40,4 +41,4 @@ app.get('*', staticFile('/index.html'));
 
 app.listen(3000);
 
-console.log(__dirname + "dev server started");
+console.log("dev server started on http://localhost:3000/");
