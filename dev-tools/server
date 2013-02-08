@@ -32,8 +32,10 @@ app.use('/js', express.static(mdir + '/js'));
 app.use('/css', express.static(mdir + '/css'));
 app.use('/img', express.static(mdir + '/img'));
 app.use('/locales', express.static(mdir + '/locales'));
+app.use('/spec', express.static(mdir + '/spec'));
 app.use('/templates', express.static(mdir + '/templates'));
 app.get('/config.js', staticFile('/config.js', 'application/javascript'));
+app.get('/test.html', staticFile('/test.html'));
 app.get('*', staticFile('/index.html'));
 
 app.listen(3000);
