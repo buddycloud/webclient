@@ -22,11 +22,13 @@ define(function(require) {
   var ChannelItems = require('models/ChannelItems');
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
+  var embedlify = require('util/embedlify');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
+  var linkify = require('util/linkify');
   var template = require('text!templates/content/stream.html');
   var privateTemplate = require('text!templates/content/private.html');
-  require('util/autoResize');
+  require(['jquery.embedly', 'util/autoResize']);
   var localTemplate;
 
   var ChannelStream = Backbone.View.extend({
@@ -201,6 +203,7 @@ define(function(require) {
       this._prepareNewTopic();
       this._showPosts();
       this._postOnCtrlEnter();
+      this._previewEmbed();
       this._hideSpinner();
     },
 
@@ -239,6 +242,37 @@ define(function(require) {
       });
     },
 
+    _previewEmbed: function() {
+      var self = this;
+      this.previewTimeout = null;
+      this.$('.newTopic textarea').keydown(function(event) {
+        if (self.previewTimeout) {
+          clearTimeout(self.previewTimeout);
+        }
+        self.previewTimeout = setTimeout(function() { self._addPreview(); }, 500);
+      });
+    },
+
+    _addPreview: function() {
+      var preview = this.$('.newTopic + .preview');
+      var content = this.$('.newTopic textarea').val();
+      var urls = linkify.urls(content);
+      preview.empty();
+      if (urls) {
+        $.embedly(urls, embedlify(function(node, html) {
+          preview.append(html);
+        }));
+      }
+    },
+
+    _disablePreview: function() {
+      if (this.previewTimeout) {
+        clearTimeout(this.previewTimeout);
+        this.previewTimeout = null;
+      }
+      this.$('.newTopic + .preview').empty()
+    },
+
     _expandNewTopicArea: function(event) {
       event.stopPropagation();
       var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
@@ -267,6 +301,7 @@ define(function(require) {
 
     _post: function() {
       this._disableButton();
+      this._disablePreview();
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
       var self = this;

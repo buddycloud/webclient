@@ -60,5 +60,27 @@ define(function(require) {
     return parts.join('\n');
   }
 
-  return linkify;
+  function urls(content) {
+    var urls = [];
+    content.split('\n').forEach(function(line) {
+      var m;
+      while (line.length > 0) {
+        if (m = line.match(LINKS_REGEX, "i")) {
+          if (m[2]) urls.push(m[2]);
+          line = m[4] || "";
+        } else {
+          line = "";
+        }
+      }
+    });
+    if (urls.length > 0)
+        return urls;
+    else
+        return null;
+  }
+
+  return {
+    linkify: linkify,
+    urls: urls
+  };
 });
