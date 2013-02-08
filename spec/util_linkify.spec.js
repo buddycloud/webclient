@@ -49,8 +49,8 @@ define(function(require) {
         var urls2 = linkify.urls('https://www.example.org/ http://example.com/abc');
         var urls3 = linkify.urls('channel@domain.tld ftp://domain.tld');
         var urls4 = linkify.urls('No URL here');
-        expect(urls1).toEqual(['http://google.com/']);
-        expect(urls2).toEqual(['https://www.example.org/', 'http://example.com/abc']);
+        expect(urls1).toEqual(['http://google.com']);
+        expect(urls2).toEqual(['https://www.example.org', 'http://example.com/abc']);
         expect(urls3).toEqual(['ftp://domain.tld']);
         expect(urls4).toBe(null);
       });

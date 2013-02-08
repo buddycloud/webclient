@@ -1,0 +1,21 @@
+{
+  "name": "buddycloud-webclient",
+  "version": "0.0.0",
+  "author": "buddycloud",
+  "description": "Web interface for the buddycloud network",
+  "license": "Apache 2.0",
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-connect": "~0.1.0",
+    "grunt-contrib-watch": "~0.1.0",
+    "gruntacular": "~0.1.0",
+    "express": "~3.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/buddycloud/buddycloud-webclient.git"
+  },
+  "engine": {
+    "node": ">=0.8"
+  }
+}

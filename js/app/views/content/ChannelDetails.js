@@ -22,17 +22,18 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelDetails.html')
   var l = l10n.get;
+  var localTemplate;
 
   var ChannelDetails = Backbone.View.extend({
     className: 'channelDetails hidden',
     events: {'click .infoToggle': '_toggleInfo'},
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.model = new Channel(this.options.channel);
       this.model.bind('fetch', this.render, this);
-      this.model.fetch();
+      this.model.fetch({credentials: this.options.user.credentials});
 
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._updateFollowersList, this);
       }
@@ -68,7 +69,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {channel: this.options.channel}));
+      this.$el.html(_.template(localTemplate, {channel: this.options.channel}));
       return this;
     },
 

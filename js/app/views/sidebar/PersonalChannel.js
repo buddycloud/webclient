@@ -21,6 +21,7 @@ define(function(require) {
   var template = require('text!templates/sidebar/personalChannel.html');
   var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
+  var localTemplate;
 
   var PersonalChannel = Backbone.View.extend({
     className: 'personal channel',
@@ -35,7 +36,7 @@ define(function(require) {
       },
 
     initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.metadata = new ChannelMetadata(this.model.username());
       this.metadata.bind('change', this.render, this);
       this.metadata.fetch();
@@ -44,6 +45,9 @@ define(function(require) {
 
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
+
+      // Unread counter event
+      Events.on('personalChannelCounter', this._renderCounter, this);
     },
 
     _avatarChanged: function(channel) {
@@ -52,8 +56,22 @@ define(function(require) {
       }
     },
 
+    _renderCounter: function(count) {
+      var countEl = this.$el.find('.counter');
+      if (count > 0) {
+        if (count > 50) {
+          countEl.text('50+');
+        } else {
+          countEl.text(count);
+        }
+        countEl.show();
+      } else {
+        countEl.hide();
+      }
+    },
+
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {
+      this.$el.html(_.template(localTemplate, {
         metadata: this.metadata
       }));
       avatarFallback(this.$('.avatar img'), this.metadata.channelType(), 50);

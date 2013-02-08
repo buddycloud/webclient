@@ -16,7 +16,6 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var EditHeader = require('views/content/EditHeader');
   var PreferencesView = require('views/content/PreferencesView');
 
   var PreferencesPage = Backbone.View.extend({
@@ -30,7 +29,9 @@ define(function(require) {
     },
 
     render: function() {
-      $('.content').html(this.view.el);
+      var $content = $('.content');
+      $content.html(this.view.el);
+      $content.removeClass('full');
     },
 
     destroy: function() {

@@ -5,8 +5,8 @@
       <% if (mostActive) { %>
       <div class="list">
         <% _.each(mostActive, function(channel) { %>
-        <div class="channel justify" id="<%= channel.jid() %>">
-          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
+        <div class="channel justify" id="<%- channel.jid() %>">
+          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
@@ -21,8 +21,8 @@
       <% if (popular) { %>
       <div class="list">
         <% _.each(popular, function(channel) { %>
-        <div class="channel justify" id="<%= channel.jid() %>">
-          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
+        <div class="channel justify" id="<%- channel.jid() %>">
+          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
@@ -41,7 +41,7 @@
       <div class="list">
         <% _.each(mostActive, function(channel) { %>
         <div class="channel justify">
-          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
+          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
@@ -57,7 +57,7 @@
       <div class="list">
         <% _.each(popular, function(channel) { %>
         <div class="channel justify">
-          <img class="avatar" data-type="<%= channel.channelType() %>" src="<%= channel.jidAvatarUrl(50) %>"></img>
+          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>

@@ -24,6 +24,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/header.html')
   var l = l10n.get;
+  var localTemplate;
 
   var ChannelHeader = Backbone.View.extend({
     className: 'channelHeader justify',
@@ -33,14 +34,20 @@ define(function(require) {
              'click .edit': '_edit'},
 
     initialize: function() {
-      this.model = new ChannelMetadata(this.options.channel);
-      this.model.bind('change', this.render, this);
-      this.model.fetch();
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
 
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      if (!this.model) {
+        this.model = new ChannelMetadata(this.options.channel);
+      }
+      this.model.bind('change', this.render, this);
+      this.model.fetch({credentials: this.options.user.credentials});
+
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
       }
+
+      // Avatar changed event
+      Events.on('avatarChanged', this.render, this);
     },
 
     destroy: function() {
@@ -52,7 +59,7 @@ define(function(require) {
 
     render: function() {
       var metadata = this.model;
-      this.$el.html(_.template(this.localTemplate, {metadata: metadata}));
+      this.$el.html(_.template(localTemplate, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
       this._renderButtons();
     },
@@ -70,16 +77,16 @@ define(function(require) {
     },
 
     _renderButtons: function() {
-      if (this.options.user.isAnonymous()) {
+      if (this.options.user.isAnonymous() || this.options.edit) {
         // Hide both buttons
-        this._hideButtons('edit', 'follow');
+        this.hideButtons();
       } else {
         if (this._isOwner()) {
           // Show only edit button
-          this._hideButtons('follow');
+          this._hideFollowButton();
         } else {
           // Show only (un)follow button
-          this._hideButtons('edit');
+          this._hideEditButton();
 
           if (this._follows()) {
             var button = this.$('.follow');
@@ -93,10 +100,17 @@ define(function(require) {
       Events.trigger('navigate', this.model.channel + '/edit');
     },
 
-    _hideButtons: function() {
-      for (var i = 0; i < arguments.length; i++) {
-        this.$('.' + arguments[i]).hide();
-      }
+    hideButtons: function() {
+      this._hideEditButton();
+      this._hideFollowButton();
+    },
+
+    _hideFollowButton: function() {
+      this.$('.follow').hide();
+    },
+
+    _hideEditButton: function() {
+      this.$('.edit').hide();
     },
 
     _isOwner: function() {

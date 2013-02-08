@@ -28,7 +28,7 @@ define(function(require) {
     },
 
     newFollowers: function() {
-      return this._isTrue(this.get('followRequest')) || 
+      return this._isTrue(this.get('followRequest')) ||
              this._isTrue(this.get('followMyChannel'))
     },
 
@@ -55,7 +55,7 @@ define(function(require) {
     parse: function(resp, xhr) {
       if (!resp.email) {
         // Workaround for old accounts (without email)
-        this.trigger('change');  
+        this.trigger('change');
       }
 
       return resp;
@@ -66,7 +66,8 @@ define(function(require) {
         // always POST
         method = 'create';
       }
-      Backbone.sync.call(this, method, model, options);
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
     }
   });
 

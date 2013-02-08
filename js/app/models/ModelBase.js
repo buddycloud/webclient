@@ -30,6 +30,11 @@ define(function(require) {
         options.credentials.addAuthorizationToAjaxOptions(options);
       }
       Backbone.Model.prototype.save.call(this, attributes, options);
+    },
+
+    sync: function(method, model, options) {
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
     }
   });
 

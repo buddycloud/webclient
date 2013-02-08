@@ -28,21 +28,15 @@ define(function(require) {
         channel: this.options.channel,
         user: this.options.user
       });
-      /*this.model.bind('fetch', this._begin, this);
-      this.model.bind('error', this._error, this);
-      this.model.fetch({credentials: this.options.user.credentials});*/
-      this.render();
 
-      if (this.options.user.isAnonymous()) {
-        this.overlay = new AnonChannelOverlay({model: this.options.user});
-      }
+      this.render();
     },
 
     render: function() {
       this.view.render();
       var $content = $('.content');
 
-      if (this.overlay) {
+      if (this.options.user.isAnonymous()) {
         this._renderAnonPage($content);
       } else {
         $content.html(this.view.el);
@@ -50,14 +44,20 @@ define(function(require) {
       }
     },
 
-    _renderAnonPage: function(content) {
-      this.overlay.render();
+    _renderAnonPage: function($content) {
+      this._renderOverlay();
+
       var $center = $('<div class="stupidFirefoxFlexBoxBug centered stretchWidth stretchHeight"></div>');
       $center.html(this.view.el);
 
-      content.addClass('anonView');
-      content.append(this.overlay.el);
-      content.append($center);
+      $content.addClass('anonView');
+      $content.append(this.overlay.el);
+      $content.append($center);
+    },
+
+    _renderOverlay: function() {
+      this.overlay = new AnonChannelOverlay({model: this.options.user});
+      this.overlay.render();
     },
 
     destroy: function() {

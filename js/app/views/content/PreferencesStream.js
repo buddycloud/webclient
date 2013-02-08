@@ -21,6 +21,7 @@ define(function(require) {
   var Preferences = require('models/Preferences');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/preferences.html');
+  var localTemplate;
 
   var PreferencesStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -33,7 +34,7 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template,{});
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.checkboxes = 
         {
           'newFollowers': 'followMyChannel',
@@ -48,7 +49,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {
+      this.$el.html(_.template(localTemplate, {
         preferences: this.model
       }));
 
@@ -71,8 +72,10 @@ define(function(require) {
     },
 
     save: function(event) {
-      var email = this.$('#email_address').val();
+      // FIXME Workaround to not get events from disabled save button
+      if (this.$('.save').hasClass('disabled')) return;
 
+      var email = this.$('#email_address').val();
       if (email) {
         this._savePreferences(email);
       }
@@ -84,8 +87,23 @@ define(function(require) {
         self.model.set(self.checkboxes[checkbox], 
           self._isChecked(self.$('#' + checkbox)));
       });
+      this.model.set('email', email);
+      this.model.save({}, {
+        credentials: this.options.user.credentials,
+        complete: this._enableSaveButton()
+      });
+      this._disableSaveButton();
+    },
 
-      this.model.save({}, {credentials: this.options.user.credentials});
+    _enableSaveButton: function() {
+      var self = this;
+      return function() {
+        self.$('.save').removeClass('disabled').text('Save');
+      }
+    },
+
+    _disableSaveButton: function() {
+      this.$('.save').addClass('disabled').text('Saving...');
     },
 
     _check: function(element, value) {

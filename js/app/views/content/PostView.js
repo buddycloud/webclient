@@ -16,7 +16,7 @@
 
 define(function(require) {
   require(['jquery', 'timeago', 'jquery.embedly', 'util/autoResize']);
-  var _ = require('underscore')
+  var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
@@ -25,6 +25,8 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
   var template = require('text!templates/content/post.html');
+  var embedTemplate = require('text!templates/content/embed.html');
+  var localTemplate;
 
   var PostView = Backbone.View.extend({
     tagName: 'article',
@@ -36,13 +38,26 @@ define(function(require) {
     },
 
     initialize: function() {
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.channelName = this.options.items.channel;
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
-      this.model.bind('addComment', this.render, this);
+      this.model.bind('addComment', this._addComment, this);
+    },
+
+    _addComment: function(item, post) {
+      if (this._needsBubbling()) {
+        this.remove();
+        Events.trigger('postBubble', post);
+      } else {
+        this.render();
+      }
+    },
+
+    _needsBubbling: function() {
+      return !this.$el.is(':first-child');
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {
+      this.$el.html(_.template(localTemplate, {
         post: this.model,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
@@ -70,13 +85,16 @@ define(function(require) {
     },
 
     _roleTag: function() {
-      var user = this.options.user;
-      var role = user.subscribedChannels.role(this.channelName);
-      if (role == 'owner' || role == 'moderator') {
-        return role;
-      } else {
-        return '';
+      var subscribedChannels = this.options.user.subscribedChannels;
+
+      if (subscribedChannels) {
+        var role = subscribedChannels.role(this.channelName);
+        if (role === 'owner' || role === 'moderator') {
+          return role;
+        }
       }
+
+      return '';
     },
 
     _addNoCommentsClassIfNeeded: function() {

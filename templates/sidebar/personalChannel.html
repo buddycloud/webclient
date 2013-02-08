@@ -1,12 +1,12 @@
 <div class="metadata">
   <div class="avatar">
-    <img src="<%= metadata.avatarUrl(50) %>" />
-    <!-- <span class="channelpost counter">2</span> -->
+    <img src="<%- metadata.avatarUrl(50) %>" />
+    <span class="channelpost counter" style="display: none;">0</span>
     <!-- <span class="message counter">2</span> -->
   </div>
   <div class="info">
-    <span class="owner"><%= metadata.title() %></span>
-    <span class="status"><%= metadata.description() %></span>
+    <span class="owner"><%- metadata.title() %></span>
+    <span class="status"><%- metadata.description() %></span>
   </div>
 </div>
 <div class="settings noSelect">
@@ -15,8 +15,7 @@
       <div class="arrow"></div>
       <ul>
         <li class="newChannel" data-l10n="createTopicChannel">Create a topic Channel</li>
-        <!-- TODO wait for fixes on HTTP API
-        <li class="preferences" data-l10n="preferences">Preferences</li> -->
+        <li class="preferences" data-l10n="preferences">Preferences</li>
         <li class="logout" data-l10n="logoutButton">Logout</li>
       </ul>
     </div>

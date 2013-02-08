@@ -45,7 +45,7 @@ define(function(require) {
     isOwner: function(channel) {
       var postsNode = channel + '/posts';
       var affiliation = this.attributes[postsNode];
-      return affiliation === 'owner';      
+      return affiliation === 'owner';
     },
 
     isPostingAllowed: function(channel) {
@@ -111,7 +111,8 @@ define(function(require) {
           method = 'create';
         }
       }
-      Backbone.sync.call(this, method, model, options);
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
     }
   });
 

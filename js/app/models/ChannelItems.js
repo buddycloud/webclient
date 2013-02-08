@@ -16,7 +16,7 @@
 
 define(function(require) {
   var api = require('util/api');
-  var CollectionBase = require('models/CollectionBase')
+  var CollectionBase = require('models/CollectionBase');
   var Item = require('models/Item');
 
   var ChannelItems = CollectionBase.extend({
@@ -27,6 +27,11 @@ define(function(require) {
       this.channel = channel;
       this.bind('add', this._itemAdded, this);
     },
+
+    /* TODO: there is something wrong with items "updated" field
+    comparator: function(item) {
+      return -item.updated;
+    },*/
 
     _itemAdded: function(item) {
       if (item.isPost()) {

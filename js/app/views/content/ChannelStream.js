@@ -16,6 +16,8 @@
 
 define(function(require) {
   var $ = require('jquery');
+  var animations = require('util/animations');
+  var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelItems = require('models/ChannelItems');
   var Events = Backbone.Events;
@@ -25,7 +27,9 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
   var template = require('text!templates/content/stream.html');
+  var privateTemplate = require('text!templates/content/private.html');
   require(['jquery.embedly', 'util/autoResize']);
+  var localTemplate;
 
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -35,12 +39,12 @@ define(function(require) {
     },
 
     initialize: function() {
-      this.localTemplate = l10nBrowser.localiseHTML(template, {});
+      if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this._initModel();
 
       this.isLoading = true;
       this._postViews = [];
-      this.model.bind('addPost', this._prependNewPost, this);
+      this.model.bind('addPost', this._prependPost, this);
 
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
@@ -49,13 +53,16 @@ define(function(require) {
       // Scroll event
       _.bindAll(this, 'checkScroll');
       $('.content').scroll(this.checkScroll);
+
+      // Bubble up post
+      Events.on('postBubble', this._bubble, this);
     },
 
     _initModel: function() {
       this.model = new ChannelItems(this.options.channel);
       this.model.bind('reset', this._begin, this);
       this.model.bind('error', this._error, this);
-      this.model.fetch();
+      this.model.fetch({data: {max: 51}, credentials: this.options.user.credentials});
     },
 
     _begin: function() {
@@ -64,16 +71,24 @@ define(function(require) {
       this._listenForNewPosts();
     },
 
-    _error: function(e) {
-      this.destroy();
-      Events.trigger('pageError', e);
+    _error: function(e, xhr) {
+      if (xhr && xhr.status === 403) {
+        this._renderPrivateChannel();
+      } else {
+        this.destroy();
+        Events.trigger('pageError', e);
+      }
+    },
+
+    _renderPrivateChannel: function() {
+      this.$el.html(_.template(privateTemplate));
     },
 
     _listenForNewPosts: function() {
       var user = this.options.user;
       var items = this.model;
       user.notifications.on('new', function(item) {
-        if (item.source == items.channel) {
+        if (item.source === items.channel) {
           items.add(item);
         }
       });
@@ -94,8 +109,9 @@ define(function(require) {
     checkScroll: function() {
       var content = $('.content');
       var triggerPoint = 200; // 200px from the bottom
+      var offset = content.scrollTop() + content.prop('clientHeight') + triggerPoint;
 
-      if(!this.isLoading && (content.scrollTop() + content.prop('clientHeight') + triggerPoint > content.prop('scrollHeight'))) {
+      if(!this.isLoading && (offset > content.prop('scrollHeight'))) {
         var self = this;
 
         // Last loaded post id
@@ -104,7 +120,7 @@ define(function(require) {
         if (lastItem) {
           this._showSpinner();
           this.model.fetch({
-            data: {after: lastItem},
+            data: {after: lastItem, max: 51},
             silent: true,
             success: function() {
               self._appendPosts();
@@ -175,7 +191,7 @@ define(function(require) {
       return view;
     },
 
-    _prependNewPost: function(post) {
+    _prependPost: function(post) {
       var view = this._viewForPost(post);
       this._postViews.unshift(view);
       view.render();
@@ -183,15 +199,21 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(this.localTemplate, {user: this.options.user, l: l10n.get}));
-      if (!this._userCanPost()) {
-        this.$newTopic = this.$('.newTopic').detach();
-      }
+      this.$el.html(_.template(localTemplate, {user: this.options.user, l: l10n.get}));
+      this._prepareNewTopic();
       this._showPosts();
       this._postOnCtrlEnter();
       this._previewEmbed();
       this._hideSpinner();
+    },
+
+    _prepareNewTopic: function() {
+      avatarFallback(this.$('.newTopic .avatar'), 'personal', 50);
       this.$('.newTopic .expandingArea').autoResize();
+
+      if (!this._userCanPost()) {
+        this.$newTopic = this.$('.newTopic').detach();
+      }
     },
 
     _userCanPost: function() {
@@ -293,6 +315,12 @@ define(function(require) {
           self._enableButton();
         }
       });
+    },
+
+    _bubble: function(post) {
+      // FIXME: Primitive version from bubbling
+      this._prependPost(post);
+      $('.content').scrollTop(0);
     }
   });
 

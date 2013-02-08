@@ -35,7 +35,7 @@ define(function(require) {
       it('should call doDiscover() on each submodel', function() {
         spyOn(discover.mostActive, 'doDiscover');
         spyOn(discover.recommendations, 'doDiscover');
-        discover.doDiscover('alice@example.com');
+        discover.doDiscover({user: 'alice@example.com'});
         expect(discover.mostActive.doDiscover).toHaveBeenCalled();
         expect(discover.recommendations.doDiscover).toHaveBeenCalled();
       });
@@ -48,7 +48,7 @@ define(function(require) {
           options.success(discover.recommendations);
         });
         spyOn(discover, 'trigger');
-        discover.doDiscover('alice@example.com');
+        discover.doDiscover({user: 'alice@example.com'});
         expect(discover.trigger).toHaveBeenCalledWith('fetch');
       });
     });
