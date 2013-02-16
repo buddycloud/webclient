@@ -47,10 +47,17 @@ table {
 	border-spacing: 0;
 }
 
-/*mobile related stuff*/
+/*homepage*/
 
 * {
 	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
+}
+
+nav a.onDark {
+  color: #8b8989;
+  text-shadow: 0 1px #eee9e9;
+  text-decoration:none;
+  padding: 3px;
 }
 
 .register {
@@ -63,34 +70,81 @@ table {
 
 .hero {
 	text-align: center;
+	text-shadow: 0 1px 1px black;
+	padding: 10px;
 }
 
 .hero h1 {
 	font-size: 30px;
 }
 
+/*discover*/
+
 .local h1 {
 	display: none;
 }
 
+.global h1{
+	display: none;
+}
+
 .mostActive {
-	margin-top: 10px;
-	border: solid black 1px;
+  margin-top: 10px;
+  border: solid black 1px;
 }
 
 .popular {
-	border: solid black 1px;
+  border: solid black 1px;
 }
 
 h2 {
-	font-size: 20px;
-	text-align: center;
+  padding: 10px;
+  font-size: 20px;
+  text-align: center;
 }
 
-.channel {
-	background-color: #C4CED1;
-	border: solid black 1px;
-	padding: 10px;
+.discoverChannels .list {
+  margin-bottom: 34px;
+  clear: both;
+}
+
+.discoverChannels .channel {
+  width: 100%;
+  height: auto;
+  padding: 2px;
+  cursor: pointer;
+  table-layout: fixed;
+  clear: both;
+}
+
+.discoverChannels .channel .avatar {
+  margin: 3px;
+  position: static;
+  float:left;
+}
+
+.discoverChannels .channel .info .owner {
+  color: rgba(0,0,0,0.89);
+  font-size: 14px;
+  font-weight:bold
+}
+.discoverChannels .channel .info .about {
+  color: rgba(0,0,0,0.65);
+  max-height: 33px;
+  overflow: hidden;
+  display: block;
+  font-size: 11px;
+}
+
+footer {
+  padding: 10px;
+  font-size: 12px;
+  border-top: 1px solid hsl(0,0%,90%);
+}
+
+footer p {
+  color: #333;
+  text-align: center;
 }
 
 /*channel view*/
