@@ -64,14 +64,10 @@ nav a.onDark {
 	display: none;
 }
 
-.login {
-	display: none;
-}
-
 .hero {
 	text-align: center;
 	text-shadow: 0 1px 1px black;
-	padding: 10px;
+	padding: 20px;
 }
 
 .hero h1 {
@@ -81,34 +77,35 @@ nav a.onDark {
 /*discover*/
 
 .local h1 {
-	display: none;
+  color: #8b8989;
+  text-shadow: 1px 1px #eee9e9;
+  font-size: 25px;
 }
 
-.global h1{
-	display: none;
+.global h1 {
+  color: #8b8989;
+  text-shadow: 1px 1px #eee9e9;
+  font-size: 25px;
 }
 
 .mostActive {
   margin-top: 10px;
-  border: solid black 1px;
-}
-
-.popular {
-  border: solid black 1px;
 }
 
 h2 {
+  color: #696969;
+  text-shadow: 1px 1px #eee9e9;
   padding: 10px;
   font-size: 20px;
   text-align: center;
 }
 
-.discoverChannels .list {
+.list {
   margin-bottom: 34px;
   clear: both;
 }
 
-.discoverChannels .channel {
+.channel {
   width: 100%;
   height: auto;
   padding: 2px;
@@ -117,18 +114,18 @@ h2 {
   clear: both;
 }
 
-.discoverChannels .channel .avatar {
+.channel .avatar {
   margin: 3px;
   position: static;
   float:left;
 }
 
-.discoverChannels .channel .info .owner {
+.channel .info .owner {
   color: rgba(0,0,0,0.89);
   font-size: 14px;
   font-weight:bold
 }
-.discoverChannels .channel .info .about {
+.channel .info .about, .status {
   color: rgba(0,0,0,0.65);
   max-height: 33px;
   overflow: hidden;
@@ -147,7 +144,64 @@ footer p {
   text-align: center;
 }
 
+/*sidebar*/
+
+.counter {
+	float: right;
+	font-size: 0;
+}
+
+/*personal channel*/
+.personal.channel {
+  background-color: #778899;
+}
+
+.personal.channel .info {
+  width: 100%;
+  height: auto;
+  padding: 2px;
+  cursor: pointer;
+  table-layout: fixed;
+  clear: both;
+}
+
+.personal.channel .avatar {
+  margin: 3px;
+  position: static;
+  float:left;
+}
+
+.personal.channel .info .owner {
+  color: rgba(0,0,0,0.89);
+  font-size: 14px;
+  font-weight:bold
+}
+
+.personal.channel .info .status {
+  color: rgba(0,0,0,0.65);
+  max-height: 33px;
+  overflow: hidden;
+  display: block;
+  font-size: 11px;
+}
+
+.personal.channel .settings {
+  display: none;
+}
+
+/*action bar*/
+.actionBar {
+  display: none;
+}
+
+/*channels*/
+
+
 /*channel view*/
+
+.content {
+	display: none;
+}
 
 .home {
 	display: none;
@@ -168,9 +222,6 @@ footer p {
 .left h2 {
 	display: none;
 }
-
-
-
 
 .posts .post {
 	background-color: #C4CED1;
