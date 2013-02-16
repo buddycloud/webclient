@@ -24,6 +24,7 @@ define(function(require) {
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/stream.html');
+  var privateTemplate = require('text!templates/content/private.html');
   require('util/autoResize');
   var localTemplate;
 
@@ -64,9 +65,17 @@ define(function(require) {
       this._listenForNewPosts();
     },
 
-    _error: function(e) {
-      this.destroy();
-      Events.trigger('pageError', e);
+    _error: function(e, xhr) {
+      if (xhr && xhr.status === 403) {
+        this._renderPrivateChannel();
+      } else {
+        this.destroy();
+        Events.trigger('pageError', e);
+      }
+    },
+
+    _renderPrivateChannel: function() {
+      this.$el.html(_.template(privateTemplate));
     },
 
     _listenForNewPosts: function() {
