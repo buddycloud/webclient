@@ -98,7 +98,7 @@ define(function(require) {
       var self = this;
       return function() {
         self.$('.save').removeClass('disabled').addClass('completed').text('Saved');
-        setTimeout(self._enableSaveButton(), 1000);
+        setTimeout(self._enableSaveButton(), 7000);
       }
     },
 
