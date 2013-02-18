@@ -20,6 +20,7 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelItems = require('models/ChannelItems');
+  var config = require('config');
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
   var embedlify = require('util/embedlify');
@@ -76,7 +77,7 @@ define(function(require) {
         this._renderPrivateChannel();
       } else {
         this.destroy();
-        Events.trigger('pageError', e);
+        Events.trigger('pageError', config.homeDomain, e);
       }
     },
 

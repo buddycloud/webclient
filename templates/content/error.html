@@ -1,5 +1,8 @@
 <div class="channelHeader justify">
-  <div class="flex titleText">
+  <div class="flex">
+    <h2 class="owner"><%- domain %> API server error.</h2>
+    <% if (error.status && error.statusText) { %>
     <h2 class="owner"><%- error.status %> - <%- error.statusText %></h2>
+    <% } %>
   </div>
 </div>
