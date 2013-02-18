@@ -148,12 +148,11 @@ footer p {
 
 .counter {
 	float: right;
-	font-size: 0;
 }
 
 /*personal channel*/
 .personal.channel {
-  background-color: #778899;
+  background-color: #C4CED1;
 }
 
 .personal.channel .info {
@@ -199,7 +198,7 @@ footer p {
 
 /*channel view*/
 
-.content {
+.channelView {
 	display: none;
 }
 
