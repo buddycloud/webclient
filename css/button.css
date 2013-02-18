@@ -185,6 +185,7 @@ nav a.callToAction {
       0 1px hsl(81, 40%, 40%) inset,
       0 1px rgba(0,0,0,0.05);
   }
+
 .button.onDark.callToAction,
 button.onDark.callToAction,
 nav a.onDark.callToAction {
@@ -223,6 +224,13 @@ nav a.danger:active {
   border-color: rgba(0,0,0,0.21);
   border-top-color: rgba(0,0,0,0.24);
   box-shadow: 0 1px rgba(255,255,255,0.89);
+  cursor: default;
+}
+
+.button.completed, .button.completed:hover, .button.completed:active {
+  text-shadow: none;
+  background: rgba(172, 29, 33, 1);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.55) inset,0 1px rgba(0,0,0,0.05);
   cursor: default;
 }
 
