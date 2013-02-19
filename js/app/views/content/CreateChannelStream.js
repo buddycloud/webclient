@@ -87,7 +87,7 @@ define(function(require) {
       var subscribedChannels = self.options.user.subscribedChannels;
       return function() {
         Events.trigger('navigate', self.model.channel);
-        Events.trigger('channelCreated', self.model.channel);
+        Events.trigger('channelCreated');
       }
     },
 
