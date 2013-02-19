@@ -38,9 +38,16 @@ define(function(require) {
     },
 
     _initUnreadCounters: function() {
-      this.unreadCounters = new UnreadCounters();
-      this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
-      this.unreadCounters.fetch({conditions: {'user': this.model.username()}});
+      if (this._supportsIndexedDB()) {
+        // Fetch and store counters
+        this.unreadCounters = new UnreadCounters();
+        this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
+        this.unreadCounters.fetch({conditions: {'user': this.model.username()}});
+      } else {
+        // Render channels and listen for new posts
+        self.render();
+        self._listenForNewItems();
+      }
     },
 
     _syncUnreadCounters: function() {
@@ -128,8 +135,10 @@ define(function(require) {
     },
 
     _renderCounters: function() {
-      for (var i in this.metadatas) {
-        this._renderUnreadCount(this.metadatas[i].channel);
+      if (this.unreadCounters) {
+        for (var i in this.metadatas) {
+          this._renderUnreadCount(this.metadatas[i].channel);
+        }
       }
     },
 
@@ -148,9 +157,13 @@ define(function(require) {
       var unreadCounters = this.unreadCounters;
       this.metadatas.sort(
         function(a, b) {
-          var aCount = unreadCounters.getCounter(a.channel);
-          var bCount = unreadCounters.getCounter(b.channel);
-          var diff = bCount - aCount;
+          var diff = 0;
+          if (unreadCounters) {
+            var aCount = unreadCounters.getCounter(a.channel);
+            var bCount = unreadCounters.getCounter(b.channel);
+            diff = bCount - aCount;
+          }
+
           if (diff === 0) {
             var aTitle = a.title() || a.channel;
             var bTitle = b.title() || b.channel;
@@ -180,6 +193,12 @@ define(function(require) {
           self._fetchMetadata(channel, callback);
         }
       });
+    },
+
+    _supportsIndexedDB: function() {
+      var window.indexedDB = window.indexedDB || window.mozIndexedDB ||
+                             window.webkitIndexedDB || window.msIndexedDB;
+      return window.indexedDB ? true : false;
     },
 
     _itsMe: function(channel) {
@@ -226,17 +245,19 @@ define(function(require) {
     },
 
     _bubbleUpSpot: function(channel, oldSpot) {
-      var counters = this.unreadCounters;
-      var count = counters.getCounter(channel);
       var bubbleSpot = oldSpot;
+      var counters = this.unreadCounters;
+      if (counters) {
+        var count = counters.getCounter(channel);
 
-      for (var i = oldSpot; i - 1 >= 0; i--) {
-        var prev = this.metadatas[i - 1].channel;
-        if (count > counters.getCounter(prev)) {
-          var temp = this.metadatas[i-1];
-          this.metadatas[i-1] = this.metadatas[i];
-          this.metadatas[i] = temp;
-          bubbleSpot = i - 1;
+        for (var i = oldSpot; i - 1 >= 0; i--) {
+          var prev = this.metadatas[i - 1].channel;
+          if (count > counters.getCounter(prev)) {
+            var temp = this.metadatas[i-1];
+            this.metadatas[i-1] = this.metadatas[i];
+            this.metadatas[i] = temp;
+            bubbleSpot = i - 1;
+          }
         }
       }
 
@@ -244,17 +265,20 @@ define(function(require) {
     },
 
     _bubbleDownSpot: function(channel, oldSpot) {
-      var counters = this.unreadCounters;
-      var count = counters.getCounter(channel);
       var bubbleSpot = oldSpot;
+      var counters = this.unreadCounters;
 
-      for (var i = oldSpot; i + 1 < this.metadatas.length; i++) {
-        var next = this.metadatas[i + 1].channel;
-        if (count < counters.getCounter(next)) {
-          var temp = this.metadatas[i+1];
-          this.metadatas[i+1] = this.metadatas[i];
-          this.metadatas[i] = temp;
-          bubbleSpot = i + 1;
+      if (counters) {
+        var count = counters.getCounter(channel);
+
+        for (var i = oldSpot; i + 1 < this.metadatas.length; i++) {
+          var next = this.metadatas[i + 1].channel;
+          if (count < counters.getCounter(next)) {
+            var temp = this.metadatas[i+1];
+            this.metadatas[i+1] = this.metadatas[i];
+            this.metadatas[i] = temp;
+            bubbleSpot = i + 1;
+          }
         }
       }
 
@@ -372,7 +396,7 @@ define(function(require) {
       var self = this;
       user.notifications.on('new', function(item) {
         var channel = item.source;
-        if (channel !== self.selected) {
+        if (unreadCounters && channel !== self.selected) {
           unreadCounters.incrementCounter(user.username(), channel);
           if (channel === user.username()) {
             Events.trigger('personalChannelCounter', unreadCounters.getCounter(channel));
