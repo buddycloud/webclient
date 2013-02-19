@@ -196,7 +196,7 @@ define(function(require) {
     },
 
     _supportsIndexedDB: function() {
-      var window.indexedDB = window.indexedDB || window.mozIndexedDB ||
+      window.indexedDB = window.indexedDB || window.mozIndexedDB ||
                              window.webkitIndexedDB || window.msIndexedDB;
       return window.indexedDB ? true : false;
     },

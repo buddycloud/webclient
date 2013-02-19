@@ -48,6 +48,9 @@ define(function(require) {
 
       // Avatar changed event
       Events.on('avatarChanged', this.render, this);
+
+      // Created channel event
+      Events.on('channelCreated', this._follow, this);
     },
 
     destroy: function() {
@@ -124,21 +127,25 @@ define(function(require) {
       return _.include(followedChannels, channel);
     },
 
-    _follow: function(e) {
-      var channel = this.model.channel;
-      var role = this.model.defaultAffiliation();
-      var credentials = this.options.user.credentials;
-
+    _follow: function(channel) {
       // rainbow animation stuff
       var animationClassName = 'channelHeader';
       var offset = this.$el.offset();
 
-      // subscribe
-      // the final parameter is an extra thing necessary to the rainbow animation
-      this.options.user.subscribedChannels.subscribe(channel, 'posts', role, credentials, {offset: offset, animationClass: animationClassName, selected: true});
+      var subscribedChannels = this.options.user.subscribedChannels;
+      if (channel) {
+        subscribedChannels.addChannel(this.model.channel, 'posts', 'owner', {offset: offset, animationClass: animationClassName, selected: true});
+      } else {
+        var role = this.model.defaultAffiliation();
+        var credentials = this.options.user.credentials;
 
-      // Disable button
-      this.$('.follow').toggleClass('disabled');
+        // subscribe
+        // the final parameter is an extra thing necessary to the rainbow animation
+        subscribedChannels.subscribe(this.model.channel, 'posts', role, credentials, {offset: offset, animationClass: animationClassName, selected: true});
+
+        // Disable button
+        this.$('.follow').toggleClass('disabled');
+      }
     },
 
     _unfollow: function() {
