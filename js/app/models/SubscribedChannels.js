@@ -69,7 +69,10 @@ define(function(require) {
       this.set(channelAndNode, 'none', {silent: true});
       this._saveChangedAttributes(credentials, function() {
         delete self.attributes[channelAndNode];
-        self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
+        // FIXME: workaround to trigger the event only once
+        if (node === 'posts') {
+          self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
+        }
         self.change();
       });
     },

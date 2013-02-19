@@ -147,6 +147,9 @@ define(function(require) {
 
       // Unsubscribe
       this.options.user.subscribedChannels.unsubscribe(channel, 'posts', credentials);
+      // Other nodes
+      this.options.user.subscribedChannels.unsubscribe(channel, 'geoloc', credentials);
+      this.options.user.subscribedChannels.unsubscribe(channel, 'status', credentials);
 
       // Disable button
       this.$('.unfollow').toggleClass('disabled');
