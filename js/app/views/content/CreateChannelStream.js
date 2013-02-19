@@ -55,8 +55,7 @@ define(function(require) {
       if (channel) {
         channel += this._topicsDomain();
         this.model = new ChannelMetadata(channel);
-
-        $.ajax({
+        var options = {
           type: 'POST',
           url: api.url(this.model.channel),
           crossDomain: true,
@@ -72,8 +71,9 @@ define(function(require) {
               self.saveMetadata();
             }
           }
-        });
+        };
 
+        $.ajax(options);
         this._disableCreateButton();
       }
     },

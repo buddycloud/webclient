@@ -53,7 +53,6 @@ define(function(require) {
       var self = this;
       this.$('.modal').one(animations.transitionsEndEvent(), function() {
         self.$el.hide();
-        
         if (callback) {
           callback();
         }

@@ -78,7 +78,7 @@ define(function(require) {
 
     _delete: function() {
       var self = this;
-      $.ajax({
+      var options = {
         type: 'DELETE',
         url: api.url(this.model.channel),
         crossDomain: true,
@@ -94,7 +94,9 @@ define(function(require) {
             Events.trigger('navigate', '/');
           }
         }
-      });
+      };
+
+      $.ajax(options);
     }
   });
 
