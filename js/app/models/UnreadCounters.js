@@ -29,10 +29,7 @@ define(function(require) {
     initialize: function() {
       this._isReady = false;
       this.bind('reset', this._setReady(), this);
-    },
-
-    useIndexedDB: function() {
-      return true;
+      this.useIndexedDB = true;
     },
 
     _setReady: function() {
@@ -96,10 +93,7 @@ define(function(require) {
   var UnreadCounters = ModelBase.extend({
     initialize: function() {
       this._unreadCounts = {};
-    },
-
-    useIndexedDB: function() {
-      return false;
+      this.useIndexedDB = false;
     },
 
     isReady: function() {

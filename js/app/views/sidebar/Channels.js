@@ -39,7 +39,7 @@ define(function(require) {
 
     _initUnreadCounters: function() {
       this.unreadCounters = new UnreadCounters();
-      if (this.unreadCounters.useIndexedDB()) {
+      if (this.unreadCounters.useIndexedDB) {
         // Fetch and store counters
         this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
         this.unreadCounters.fetch({conditions: {'user': this.model.username()}});
