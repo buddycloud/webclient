@@ -1,4 +1,5 @@
 define({
+	// if you just want to develop, set these two to buddycloud.org
   baseUrl: 'https://api.EXAMPLE.COM',
   homeDomain: 'EXAMPLE.COM',
   defaultChannel: 'lounge@topics.buddycloud.org',
