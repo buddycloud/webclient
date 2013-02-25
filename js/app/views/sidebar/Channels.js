@@ -35,6 +35,9 @@ define(function(require) {
       this.metadatas = [];
       this._getChannelsMetadata();
       this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
+
+      // Avatar changed event
+      Events.on('avatarChanged', this._avatarChanged, this);
     },
 
     _initUnreadCounters: function() {
@@ -137,6 +140,14 @@ define(function(require) {
     _renderCounters: function() {
       for (var i in this.metadatas) {
         this._renderUnreadCount(this.metadatas[i].channel);
+      }
+    },
+
+    _avatarChanged: function(channel) {
+      var index = this._channelSpot(channel);
+      if (index > -1) {
+        var $imgEl = this.$('.channel[data-href="' + channel + '"]').find('img');
+        $imgEl.attr('src', this.metadatas[index].avatarUrl(50) + '&' + new Date().getTime());
       }
     },
 
