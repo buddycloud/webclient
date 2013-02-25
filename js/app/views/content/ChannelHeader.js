@@ -51,10 +51,17 @@ define(function(require) {
       }
 
       // Avatar changed event
-      Events.on('avatarChanged', this.render, this);
+      Events.on('avatarChanged', this._avatarChanged, this);
 
       // Created channel event
       Events.on('channelCreated', this._channelCreated, this);
+    },
+
+    _avatarChanged: function(channel) {
+      if (channel === this.model.channel) {
+        var $imgEl = this.$el.find('img');
+        $imgEl.attr('src', this.model.avatarUrl(50) + '&' + new Date().getTime());
+      }
     },
 
     _channelCreated: function() {
