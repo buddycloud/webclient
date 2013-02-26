@@ -54,6 +54,12 @@ define(function(require) {
       return _.include(['owner', 'moderator', 'publisher'], affiliation);
     },
 
+    isDeletingAllowed: function(channel) {
+      var postsNode = channel + '/posts';
+      var affiliation = this.attributes[postsNode];
+      return _.include(['owner', 'moderator'], affiliation);
+    },
+
     addChannel: function(channel, node, role, extra) {
       // Manually add
       this.attributes[channel + '/' + node] = role;

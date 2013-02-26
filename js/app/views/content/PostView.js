@@ -68,6 +68,7 @@ define(function(require) {
         l: l10n.get
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
+      this._actionButton();
       this._showPostTime();
       this._embedly();
       this._addNoCommentsClassIfNeeded();
@@ -75,6 +76,14 @@ define(function(require) {
       this._commentOnCtrlEnter();
       this._previewEmbed();
       this.$('.expandingArea').autoResize();
+    },
+
+    _actionButton: function() {
+      var user = this.options.user;
+      var channel = this.options.items.channel;
+      if (!user.subscribedChannels.isDeletingAllowed(channel)) {
+        this.$('.action').remove();
+      }
     },
 
     _showPostTime: function() {
