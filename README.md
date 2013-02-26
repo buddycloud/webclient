@@ -15,6 +15,11 @@ Setup
 
 All setup instructions are avaliable on the [buddycloud wiki](https://buddycloud.org/wiki/Install#buddycloud_webclient_setup)
 
+Development
+===========
+Install everything with `npm install` and then run the `dev-tools/server`.
+Set the `config.js` to a valid server, if you don't have one set up just use buddycloud.org.
+
 Documentation
 =============
 

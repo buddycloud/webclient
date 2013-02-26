@@ -121,9 +121,9 @@ define(function(require) {
       this.currentPage = new CreateChannelPage({user: this.user});
     },
 
-    _error: function(e) {
+    _error: function(domain, error) {
       this._before();
-      this.currentPage = new ErrorPage({error: e});
+      this.currentPage = new ErrorPage({'domain': domain, 'error': error});
     }
   });
 

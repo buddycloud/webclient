@@ -16,6 +16,7 @@
 
 define(function(require) {
   var _ = require('underscore');
+  var $ = require('jquery');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
@@ -36,10 +37,13 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
 
+      // Flag to handle created channels
+      this._created = false;
+
       if (!this.model) {
         this.model = new ChannelMetadata(this.options.channel);
       }
-      this.model.bind('change', this.render, this);
+      this.model.bind('change', this._build, this);
       this.model.fetch({credentials: this.options.user.credentials});
 
       if (this.options.user.subscribedChannels) {
@@ -47,7 +51,33 @@ define(function(require) {
       }
 
       // Avatar changed event
-      Events.on('avatarChanged', this.render, this);
+      Events.on('avatarChanged', this._avatarChanged, this);
+
+      // Created channel event
+      Events.on('channelCreated', this._channelCreated, this);
+    },
+
+    _avatarChanged: function(channel) {
+      if (channel === this.model.channel) {
+        var $imgEl = this.$el.find('img');
+        $imgEl.attr('src', this.model.avatarUrl(50) + '&' + new Date().getTime());
+      }
+    },
+
+    _channelCreated: function() {
+      this._created = true;
+    },
+
+    _build: function() {
+      var self = this;
+      var channel = this.model.channel;
+      $.when(
+        this.render()
+      ).done(function() {
+        if (self._created === true) {
+          self._create(channel);
+        }
+      });
     },
 
     destroy: function() {
@@ -124,7 +154,15 @@ define(function(require) {
       return _.include(followedChannels, channel);
     },
 
-    _follow: function(e) {
+    _create: function(channel) {
+      var animationClassName = 'channelHeader';
+      var offset = this.$el.offset();
+
+      var subscribedChannels = this.options.user.subscribedChannels;
+      subscribedChannels.addChannel(channel, 'posts', 'owner', {offset: offset, animationClass: animationClassName, selected: true});
+    },
+
+    _follow: function() {
       var channel = this.model.channel;
       var role = this.model.defaultAffiliation();
       var credentials = this.options.user.credentials;
@@ -147,6 +185,9 @@ define(function(require) {
 
       // Unsubscribe
       this.options.user.subscribedChannels.unsubscribe(channel, 'posts', credentials);
+      // Other nodes
+      this.options.user.subscribedChannels.unsubscribe(channel, 'geoloc', credentials);
+      this.options.user.subscribedChannels.unsubscribe(channel, 'status', credentials);
 
       // Disable button
       this.$('.unfollow').toggleClass('disabled');

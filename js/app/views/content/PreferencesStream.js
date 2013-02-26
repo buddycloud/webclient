@@ -35,13 +35,12 @@ define(function(require) {
 
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
-      this.checkboxes = 
-        {
+      this.checkboxes = {
           'newFollowers': 'followMyChannel',
           'mentions': 'postMentionedMe',
           'ownChannel': 'postOnMyChannel',
           'followedChannels': 'postOnSubscribedChannel',
-          'threads': 'postAfterMe' 
+          'threads': 'postAfterMe'
         };
       this.model = new Preferences();
       this.model.bind('change', this.render, this);
@@ -84,21 +83,29 @@ define(function(require) {
     _savePreferences: function(email) {
       var self = this;
       _.each(_.keys(this.checkboxes), function(checkbox) {
-        self.model.set(self.checkboxes[checkbox], 
+        self.model.set(self.checkboxes[checkbox],
           self._isChecked(self.$('#' + checkbox)));
       });
       this.model.set('email', email);
       this.model.save({}, {
         credentials: this.options.user.credentials,
-        complete: this._enableSaveButton()
+        complete: this._saveComplete()
       });
       this._disableSaveButton();
+    },
+
+    _saveComplete: function() {
+      var self = this;
+      return function() {
+        self.$('.save').removeClass('disabled').addClass('completed').text('Saved');
+        setTimeout(self._enableSaveButton(), 7000);
+      }
     },
 
     _enableSaveButton: function() {
       var self = this;
       return function() {
-        self.$('.save').removeClass('disabled').text('Save');
+        self.$('.save').removeClass('completed').text('Save');
       }
     },
 

@@ -45,13 +45,19 @@ define(function(require) {
     isOwner: function(channel) {
       var postsNode = channel + '/posts';
       var affiliation = this.attributes[postsNode];
-      return affiliation === 'owner';      
+      return affiliation === 'owner';
     },
 
     isPostingAllowed: function(channel) {
       var postsNode = channel + '/posts';
       var affiliation = this.attributes[postsNode];
       return _.include(['owner', 'moderator', 'publisher'], affiliation);
+    },
+
+    addChannel: function(channel, node, role, extra) {
+      // Manually add
+      this.attributes[channel + '/' + node] = role;
+      this.trigger('subscriptionSync', 'subscribedChannel', channel, role, extra);
     },
 
     subscribe: function(channel, node, role, credentials, extra) {
@@ -69,7 +75,10 @@ define(function(require) {
       this.set(channelAndNode, 'none', {silent: true});
       this._saveChangedAttributes(credentials, function() {
         delete self.attributes[channelAndNode];
-        self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
+        // FIXME: workaround to trigger the event only once
+        if (node === 'posts') {
+          self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
+        }
         self.change();
       });
     },

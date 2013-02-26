@@ -16,11 +16,12 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var ModelBase = require('models/ModelBase');
   var UnreadCounter = require('models/UnreadCounter');
   var UnreadCountersData = require('models/db/UnreadCountersData');
   require('backbone-indexeddb');
 
-  var UnreadCounters = Backbone.Collection.extend({
+  var UnreadCountersIndexedDB = Backbone.Collection.extend({
   	model: UnreadCounter,
     database: UnreadCountersData,
     storeName: UnreadCountersData.id,
@@ -28,6 +29,7 @@ define(function(require) {
     initialize: function() {
       this._isReady = false;
       this.bind('reset', this._setReady(), this);
+      this.useIndexedDB = true;
     },
 
     _setReady: function() {
@@ -88,5 +90,39 @@ define(function(require) {
     }
   });
 
-  return UnreadCounters;
+  var UnreadCounters = ModelBase.extend({
+    initialize: function() {
+      this._unreadCounts = {};
+      this.useIndexedDB = false;
+    },
+
+    isReady: function() {
+      return true;
+    },
+
+    getCounter: function(channel) {
+      return this._unreadCounts[channel] || 0;
+    },
+
+    resetCounter: function(user, channel) {
+      this._unreadCounts[channel] = 0;
+    },
+
+    incrementCounter: function(user, channel) {
+      this.increaseCounter(user, channel, 1);
+    },
+
+    increaseCounter: function(user, channel, value) {
+      var prev = this._unreadCounts[channel] || 0;
+      this._unreadCounts[channel] = prev + value;
+    }
+  });
+
+  function supportsIndexedDB() {
+    window.indexedDB = window.indexedDB || window.mozIndexedDB ||
+                        window.webkitIndexedDB || window.msIndexedDB;
+    return window.indexedDB ? true : false;
+  }
+
+  return supportsIndexedDB() ? UnreadCountersIndexedDB : UnreadCounters;
 });

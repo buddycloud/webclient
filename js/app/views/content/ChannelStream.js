@@ -16,16 +16,20 @@
 
 define(function(require) {
   var $ = require('jquery');
+  var animations = require('util/animations');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelItems = require('models/ChannelItems');
+  var config = require('config');
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
+  var embedlify = require('util/embedlify');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
+  var linkify = require('util/linkify');
   var template = require('text!templates/content/stream.html');
   var privateTemplate = require('text!templates/content/private.html');
-  require('util/autoResize');
+  require(['jquery.embedly', 'util/autoResize']);
   var localTemplate;
 
   var ChannelStream = Backbone.View.extend({
@@ -41,7 +45,7 @@ define(function(require) {
 
       this.isLoading = true;
       this._postViews = [];
-      this.model.bind('addPost', this._prependNewPost, this);
+      this.model.bind('addPost', this._prependPost, this);
 
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
@@ -50,12 +54,15 @@ define(function(require) {
       _.bindAll(this, 'checkScroll', 'dndFileStart', 'dndFileLeave');
       
       // Scroll event
-      $('.content').scroll(this.checkScroll);
+      $('.content').scroll(this.checkScroll); 
+	  // global file drag and drop event
 
-      // global file drag and drop event
       $('.content').on('dragover', this.dndFileStart);
       $('.content').on('dragleave', this.dndFileLeave);
       $('.content').on('drop', function(e){e.preventDefault()}); //maybe something to put global if people get used to it.
+
+      // Bubble up post
+      Events.on('postBubble', this._bubble, this);
     },
 
     _initModel: function() {
@@ -72,11 +79,11 @@ define(function(require) {
     },
 
     _error: function(e, xhr) {
-      if (xhr.status === 401 || xhr.status === 403) {
+      if (xhr && xhr.status === 403) {
         this._renderPrivateChannel();
       } else {
         this.destroy();
-        Events.trigger('pageError', e);
+        Events.trigger('pageError', config.homeDomain, e);
       }
     },
 
@@ -210,7 +217,7 @@ define(function(require) {
       return view;
     },
 
-    _prependNewPost: function(post) {
+    _prependPost: function(post) {
       var view = this._viewForPost(post);
       this._postViews.unshift(view);
       view.render();
@@ -222,6 +229,7 @@ define(function(require) {
       this._prepareNewTopic();
       this._showPosts();
       this._postOnCtrlEnter();
+      this._previewEmbed();
       this._hideSpinner();
     },
 
@@ -260,6 +268,37 @@ define(function(require) {
       });
     },
 
+    _previewEmbed: function() {
+      var self = this;
+      this.previewTimeout = null;
+      this.$('.newTopic textarea').keydown(function(event) {
+        if (self.previewTimeout) {
+          clearTimeout(self.previewTimeout);
+        }
+        self.previewTimeout = setTimeout(function() { self._addPreview(); }, 500);
+      });
+    },
+
+    _addPreview: function() {
+      var preview = this.$('.newTopic + .preview');
+      var content = this.$('.newTopic textarea').val();
+      var urls = linkify.urls(content);
+      preview.empty();
+      if (urls) {
+        $.embedly(urls, embedlify(function(node, html) {
+          preview.append(html);
+        }));
+      }
+    },
+
+    _disablePreview: function() {
+      if (this.previewTimeout) {
+        clearTimeout(this.previewTimeout);
+        this.previewTimeout = null;
+      }
+      this.$('.newTopic + .preview').empty()
+    },
+
     _expandNewTopicArea: function(event) {
       event.stopPropagation();
       var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
@@ -288,6 +327,7 @@ define(function(require) {
 
     _post: function() {
       this._disableButton();
+      this._disablePreview();
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
       var self = this;
@@ -301,6 +341,12 @@ define(function(require) {
           self._enableButton();
         }
       });
+    },
+
+    _bubble: function(post) {
+      // FIXME: Primitive version from bubbling
+      this._prependPost(post);
+      $('.content').scrollTop(0);
     }
   });
 

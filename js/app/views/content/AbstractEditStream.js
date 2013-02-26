@@ -84,7 +84,7 @@ define(function(require) {
 
     _sendUploadFileResquest: function(formData, model) {
       var self = this;
-      $.ajax({
+      var options = {
         type: 'PUT',
         url: model.avatarUrl(),
         crossDomain: true,
@@ -101,7 +101,9 @@ define(function(require) {
             Events.trigger('avatarChanged', model.channel);
           }
         }
-      });
+      };
+
+      $.ajax(options);
     },
 
     _setTextFields: function(model) {

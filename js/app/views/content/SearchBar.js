@@ -33,10 +33,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(template, 
-          {
-            l: l10n.get
-          }));
+      this.$el.html(_.template(template, {l: l10n.get}));
     }
   });
 

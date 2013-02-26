@@ -52,7 +52,8 @@ define(function(require) {
 
     _avatarChanged: function(channel) {
       if (channel === this.model.username()) {
-        this.render();
+        var $imgEl = this.$el.find('img');
+        $imgEl.attr('src', this.metadata.avatarUrl(50) + '&' + new Date().getTime());
       }
     },
 

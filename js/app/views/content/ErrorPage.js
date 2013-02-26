@@ -27,7 +27,8 @@ define(function(require) {
 
     render: function() {
       $('.content').html(_.template(template, {
-        error: this.options.error,
+        domain: this.options.domain,
+        error: this.options.error
       }));
     },
 

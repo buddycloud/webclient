@@ -35,12 +35,22 @@ define(function(require) {
       this.metadatas = [];
       this._getChannelsMetadata();
       this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
+
+      // Avatar changed event
+      Events.on('avatarChanged', this._avatarChanged, this);
     },
 
     _initUnreadCounters: function() {
       this.unreadCounters = new UnreadCounters();
-      this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
-      this.unreadCounters.fetch({conditions: {'user': this.model.username()}});
+      if (this.unreadCounters.useIndexedDB) {
+        // Fetch and store counters
+        this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
+        this.unreadCounters.fetch({conditions: {'user': this.model.username()}});
+      } else {
+        // Render channels and listen for new posts
+        this.render();
+        this._listenForNewItems();
+      }
     },
 
     _syncUnreadCounters: function() {
@@ -133,6 +143,14 @@ define(function(require) {
       }
     },
 
+    _avatarChanged: function(channel) {
+      var index = this._channelSpot(channel);
+      if (index > -1) {
+        var $imgEl = this.$('.channel[data-href="' + channel + '"]').find('img');
+        $imgEl.attr('src', this.metadatas[index].avatarUrl(50) + '&' + new Date().getTime());
+      }
+    },
+
     render: function() {
       this._sortChannels();
       this.$el.html(_.template(template, {
@@ -148,9 +166,11 @@ define(function(require) {
       var unreadCounters = this.unreadCounters;
       this.metadatas.sort(
         function(a, b) {
+          var diff = 0;
           var aCount = unreadCounters.getCounter(a.channel);
           var bCount = unreadCounters.getCounter(b.channel);
-          var diff = bCount - aCount;
+          diff = bCount - aCount;
+
           if (diff === 0) {
             var aTitle = a.title() || a.channel;
             var bTitle = b.title() || b.channel;
@@ -226,9 +246,9 @@ define(function(require) {
     },
 
     _bubbleUpSpot: function(channel, oldSpot) {
+      var bubbleSpot = oldSpot;
       var counters = this.unreadCounters;
       var count = counters.getCounter(channel);
-      var bubbleSpot = oldSpot;
 
       for (var i = oldSpot; i - 1 >= 0; i--) {
         var prev = this.metadatas[i - 1].channel;
@@ -244,9 +264,9 @@ define(function(require) {
     },
 
     _bubbleDownSpot: function(channel, oldSpot) {
+      var bubbleSpot = oldSpot;
       var counters = this.unreadCounters;
       var count = counters.getCounter(channel);
-      var bubbleSpot = oldSpot;
 
       for (var i = oldSpot; i + 1 < this.metadatas.length; i++) {
         var next = this.metadatas[i + 1].channel;
@@ -385,10 +405,14 @@ define(function(require) {
       user.notifications.listen({credentials: user.credentials});
     },
 
+    _shouldBubble: function(prev, username, channel) {
+      return prev && prev !== username && prev !== channel;
+    },
+
     selectChannel: function(channel) {
       var prev = this.selected;
       var username = this.model.username();
-      if (prev && prev !== username && prev != channel) {
+      if (this._shouldBubble(prev, username, channel)) {
         // Previous channel should go to the right place
         this._bubbleDown(prev);
       }

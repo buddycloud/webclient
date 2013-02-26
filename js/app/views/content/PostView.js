@@ -18,9 +18,9 @@ define(function(require) {
   require(['jquery', 'timeago', 'jquery.embedly', 'util/autoResize']);
   var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
-  var config = require('config');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var embedlify = require('util/embedlify');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
@@ -40,7 +40,20 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.channelName = this.options.items.channel;
-      this.model.bind('addComment', this.render, this);
+      this.model.bind('addComment', this._addComment, this);
+    },
+
+    _addComment: function(item, post) {
+      if (this._needsBubbling()) {
+        this.remove();
+        Events.trigger('postBubble', post);
+      } else {
+        this.render();
+      }
+    },
+
+    _needsBubbling: function() {
+      return !this.$el.is(':first-child');
     },
 
     render: function() {
@@ -48,7 +61,7 @@ define(function(require) {
         post: this.model,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
-        linkify: linkify,
+        linkify: linkify.linkify,
         l: l10n.get
       }));
       avatarFallback(this.$('.avatar'), 'personal', 50);
@@ -57,6 +70,7 @@ define(function(require) {
       this._addNoCommentsClassIfNeeded();
       this._adjustCommentAreaVisibility();
       this._commentOnCtrlEnter();
+      this._previewEmbed();
       this.$('.expandingArea').autoResize();
     },
 
@@ -65,26 +79,9 @@ define(function(require) {
     },
 
     _embedly: function() {
-      this.$('p').embedly({
-        maxWidth: 400,
-        key: config.embedlyKey,
-        secure: config.embedlySecure,
-        success: function(oembed, dict) {
-          // If is not a link or if the link has an image
-          if (oembed.type !== 'link' || oembed.thumbnail_url) {
-            var html = _.template(embedTemplate, {
-              maxWidth: 400,
-              url: oembed.url || dict.url,
-              title: (oembed.type !== 'photo') ? (oembed.title || dict.url) : undefined,
-              img:   (oembed.type === 'photo') ? oembed.url : oembed.thumbnail_url,
-              width: (oembed.type === 'photo') ? oembed.width : oembed.thumbnail_width,
-              html: oembed.html,
-              description: oembed.description
-            });
-            dict.node.parent().after(html);
-          }
-        }
-      });
+      this.$('p').embedly(embedlify(function(node, html) {
+        node.parent().after(html);
+      }));
     },
 
     _roleTag: function() {
@@ -128,6 +125,37 @@ define(function(require) {
           self._comment(event);
         }
       });
+    },
+
+    _previewEmbed: function() {
+      var self = this;
+      this.previewTimeout = null;
+      this.$('.answer textarea').keydown(function(event) {
+        if (self.previewTimeout) {
+          clearTimeout(self.previewTimeout);
+        }
+        self.previewTimeout = setTimeout(function() { self._addPreview(); }, 500);
+      });
+    },
+
+    _addPreview: function() {
+      var preview = this.$('.preview');
+      var content = this.$('.answer textarea').val();
+      var urls = linkify.urls(content);
+      preview.empty();
+      if (urls) {
+        $.embedly(urls, embedlify(function(node, html) {
+          preview.append(html);
+        }));
+      }
+    },
+
+    _disablePreview: function() {
+      if (this.previewTimeout) {
+        clearTimeout(this.previewTimeout);
+        this.previewTimeout = null;
+      }
+      this.$('.preview').empty()
     },
 
     _expandAnswerArea: function(event) {
