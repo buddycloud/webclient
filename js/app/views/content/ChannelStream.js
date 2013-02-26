@@ -52,14 +52,22 @@ define(function(require) {
       }
 
       _.bindAll(this, 'checkScroll', 'dndFileStart', 'dndFileLeave');
-      
+
       // Scroll event
       $('.content').scroll(this.checkScroll); 
-	  // global file drag and drop event
 
-      $('body').on('dragover', this.dndFileStart);
-      $('body').on('dragleave', this.dndFileLeave);
-      $('body').on('drop', function(e){
+      this._dragAndDropEvent();
+
+      // Bubble up post
+      Events.on('postBubble', this._bubble, this);
+    },
+
+    _dragAndDropEvent: function() {
+      // Global file drag and drop event
+      var $body = $('body');
+      $body.on('dragover', this.dndFileStart);
+      $body.on('dragleave', this.dndFileLeave);
+      $body.on('drop', function(e){
         if (e.target.className == "filedrop") {
           var files = e.dataTransfer.files[0];
           var formData = this._buildFormData(file);
@@ -67,9 +75,6 @@ define(function(require) {
         }
         e.preventDefault()
       }); //maybe something to put global if people get used to it.
-
-      // Bubble up post
-      Events.on('postBubble', this._bubble, this);
     },
 
     _buildFormData: function(file) {
@@ -86,8 +91,8 @@ define(function(require) {
     _sendUploadFileRequest: function(formData, model) {
       var self = this;
       var options = {
-        type: 'PUT',
-        url: /*MEDIA UPLOAD MISSING*/,
+        type: 'POST',
+        url: api.url(this.model.channel, 'media'),
         crossDomain: true,
         data: formData,
         xhrFields: {withCredentials: true},
