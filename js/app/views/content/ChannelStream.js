@@ -57,12 +57,54 @@ define(function(require) {
       $('.content').scroll(this.checkScroll); 
 	  // global file drag and drop event
 
-      $('.content').on('dragover', this.dndFileStart);
-      $('.content').on('dragleave', this.dndFileLeave);
-      $('.content').on('drop', function(e){e.preventDefault()}); //maybe something to put global if people get used to it.
+      $('body').on('dragover', this.dndFileStart);
+      $('body').on('dragleave', this.dndFileLeave);
+      $('body').on('drop', function(e){
+        if (e.target.className == "filedrop") {
+          var files = e.dataTransfer.files[0];
+          var formData = this._buildFormData(file);
+          this._sendUploadFileRequest(formData, model);
+        }
+        e.preventDefault()
+      }); //maybe something to put global if people get used to it.
 
       // Bubble up post
       Events.on('postBubble', this._bubble, this);
+    },
+
+    _buildFormData: function(file) {
+      var formData = new FormData();
+      formData.append('data', file);
+      formData.append('content-type', file.type);
+      if (file.name) {
+        formData.append('filename', file.name);
+      }
+
+      return formData;
+    },
+
+    _sendUploadFileRequest: function(formData, model) {
+      var self = this;
+      var options = {
+        type: 'PUT',
+        url: /*MEDIA UPLOAD MISSING*/,
+        crossDomain: true,
+        data: formData,
+        xhrFields: {withCredentials: true},
+        contentType: false,
+        processData: false,
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization',
+            self.options.user.credentials.authorizationHeader());
+        },
+        statusCode: {
+          201: function() {
+            /*EVENT ON SUCCESS*/
+          }
+        }
+      };
+
+      $.ajax(options);
     },
 
     _initModel: function() {
