@@ -17,7 +17,7 @@
 define(function(require) {
   var _ = require('underscore');
   var api = require('util/api');
-  var ModelBase = require('models/ModelBase'); 
+  var ModelBase = require('models/ModelBase');
 
   var Item = ModelBase.extend({
     initialize: function() {

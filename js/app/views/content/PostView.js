@@ -17,6 +17,7 @@
 define(function(require) {
   require(['jquery', 'timeago', 'jquery.embedly', 'util/autoResize']);
   var _ = require('underscore');
+  var api = require('util/api');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
@@ -34,7 +35,9 @@ define(function(require) {
     events: {
       'click .answer': '_expandAnswerArea',
       'click .createComment': '_comment',
-      'click .avatar': '_redirect'
+      'click .avatar': '_redirect',
+      'click .action': '_popup',
+      'click .deletePost': '_deletePost'
     },
 
     initialize: function() {
@@ -209,6 +212,36 @@ define(function(require) {
           self._enableButton();
         }
       });
+    },
+
+    _popup: function(event) {
+      event.stopPropagation();
+      var $popup = this.$('.popup');
+
+      if($popup.hasClass('visible')){
+        // close popup
+        $popup.removeClass('visible');
+      } else {
+        // open popup
+        $popup.addClass('visible');
+        $('body, html').one('click', { popup: $popup }, this.hidePopup);
+      }
+    },
+
+    hidePopup: function(event) {
+      $(event.data.popup).removeClass('visible');
+    },
+
+    _deletePost: function() {
+      //FIXME: give feedback during request processing
+      var channel = this.options.items.channel;
+      var id = this.model.get('id');
+      var options = {
+        type: 'DELETE',
+        url: api.url(channel, 'content', id),
+        success: this.remove
+      };
+      $.ajax(options);
     }
   });
 

@@ -114,14 +114,11 @@ define(function(require) {
       $settingsPopup.css('left', settingsPopupLeft + 'px');
 
       // Hide settings clicking elsewhere
-      $('body, html').on('click', this.hideSettings);
+      $('body, html').one('click', this.hideSettings);
     },
 
     hideSettings: function() {
       this.$('.settings').removeClass('showSettings').addClass('noSelect');
-
-      // Remove click event
-      $('body, html').off('click', this.hideSettings);
     }
   });
 
