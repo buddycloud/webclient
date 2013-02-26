@@ -36,7 +36,7 @@ define(function(require) {
     className: 'stream clearfix',
     events: {
       'click .newTopic': '_expandNewTopicArea',
-      'click .createComment': '_post'
+      'click .createComment': '_post',
     },
 
     initialize: function() {
@@ -51,12 +51,65 @@ define(function(require) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
       }
 
+      _.bindAll(this, 'checkScroll', 'dndFileStart', 'dndFileLeave');
+
       // Scroll event
-      _.bindAll(this, 'checkScroll');
-      $('.content').scroll(this.checkScroll);
+      $('.content').scroll(this.checkScroll); 
+
+      this._dragAndDropEvent();
 
       // Bubble up post
       Events.on('postBubble', this._bubble, this);
+    },
+
+    _dragAndDropEvent: function() {
+      // Global file drag and drop event
+      var $body = $('body');
+      $body.on('dragover', this.dndFileStart);
+      $body.on('dragleave', this.dndFileLeave);
+      $body.on('drop', function(e){
+        if (e.target.className == "filedrop") {
+          var files = e.dataTransfer.files[0];
+          var formData = this._buildFormData(file);
+          this._sendUploadFileRequest(formData, model);
+        }
+        e.preventDefault()
+      }); //maybe something to put global if people get used to it.
+    },
+
+    _buildFormData: function(file) {
+      var formData = new FormData();
+      formData.append('data', file);
+      formData.append('content-type', file.type);
+      if (file.name) {
+        formData.append('filename', file.name);
+      }
+
+      return formData;
+    },
+
+    _sendUploadFileRequest: function(formData, model) {
+      var self = this;
+      var options = {
+        type: 'POST',
+        url: api.url(this.model.channel, 'media'),
+        crossDomain: true,
+        data: formData,
+        xhrFields: {withCredentials: true},
+        contentType: false,
+        processData: false,
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization',
+            self.options.user.credentials.authorizationHeader());
+        },
+        statusCode: {
+          201: function() {
+            /*EVENT ON SUCCESS*/
+          }
+        }
+      };
+
+      $.ajax(options);
     },
 
     _initModel: function() {
@@ -129,6 +182,25 @@ define(function(require) {
             }
           });
         }
+      }
+    },
+
+    dndFileStart: function(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      //evt.dataTransfer.dropEffect = 'copy'
+
+      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
+      if(!newTopicArea.hasClass('write')){
+        newTopicArea.addClass('write');
+      }
+    },
+
+    dndFileLeave: function() {
+      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
+      var textArea = newTopicArea.find('textarea');
+      if(newTopicArea.hasClass('write')){
+        newTopicArea.removeClass('write');
       }
     },
 
