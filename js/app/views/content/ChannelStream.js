@@ -126,8 +126,7 @@ define(function(require) {
     _postMedia: function() {
       var self = this;
       return function(data) {
-        var query = '?maxwidth=400';
-        var content = api.url(self.model.channel, 'media', data.id) + query;
+        var content = api.url(self.model.channel, 'media', data.id);
         self.model.create({content: content}, {
           credentials: self.options.user.credentials,
           wait: true,
