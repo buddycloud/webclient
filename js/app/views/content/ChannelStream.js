@@ -66,10 +66,9 @@ define(function(require) {
     _dragAndDropEvent: function() {
       // Global file drag and drop event
       var self = this;
-      var $body = $('body');
-      $body.on('dragover', this.dndFileStart);
-      $body.on('dragleave', this.dndFileLeave);
-      $body.on('drop', function(evt){
+      this.$el.on('dragover', this.dndFileStart);
+      this.$el.on('dragleave', this.dndFileLeave);
+      this.$el.on('drop', function(evt){
         evt.stopPropagation();
         evt.preventDefault();
         if (evt.target.className == "filedrop") {
