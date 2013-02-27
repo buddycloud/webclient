@@ -17,6 +17,7 @@
 define(function(require) {
   var $ = require('jquery');
   var animations = require('util/animations');
+  var api = require('util/api');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelItems = require('models/ChannelItems');
@@ -54,7 +55,7 @@ define(function(require) {
       _.bindAll(this, 'checkScroll', 'dndFileStart', 'dndFileLeave');
 
       // Scroll event
-      $('.content').scroll(this.checkScroll); 
+      $('.content').scroll(this.checkScroll);
 
       this._dragAndDropEvent();
 
@@ -64,17 +65,29 @@ define(function(require) {
 
     _dragAndDropEvent: function() {
       // Global file drag and drop event
+      var self = this;
       var $body = $('body');
       $body.on('dragover', this.dndFileStart);
       $body.on('dragleave', this.dndFileLeave);
-      $body.on('drop', function(e){
-        if (e.target.className == "filedrop") {
-          var files = e.dataTransfer.files[0];
-          var formData = this._buildFormData(file);
-          this._sendUploadFileRequest(formData, model);
+      $body.on('drop', function(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
+        if (evt.target.className == "filedrop") {
+          var file = evt.originalEvent.dataTransfer.files[0];
+          if (file) {
+            self._uploadFile(file);
+          }
         }
-        e.preventDefault()
       }); //maybe something to put global if people get used to it.
+    },
+
+    _uploadFile: function(file) {
+      // newTopic area feedback
+      this._disableButton();
+      this._disablePreview();
+
+      var formData = this._buildFormData(file);
+      this._sendUploadFileRequest(formData);
     },
 
     _buildFormData: function(file) {
@@ -88,7 +101,7 @@ define(function(require) {
       return formData;
     },
 
-    _sendUploadFileRequest: function(formData, model) {
+    _sendUploadFileRequest: function(formData) {
       var self = this;
       var options = {
         type: 'POST',
@@ -103,13 +116,26 @@ define(function(require) {
             self.options.user.credentials.authorizationHeader());
         },
         statusCode: {
-          201: function() {
-            /*EVENT ON SUCCESS*/
-          }
+          201: this._postMedia()
         }
       };
 
       $.ajax(options);
+    },
+
+    _postMedia: function() {
+      var self = this;
+      return function(data) {
+        var content = api.url(self.model.channel, 'media', data.id);
+        self.model.create({content: content}, {
+          credentials: self.options.user.credentials,
+          wait: true,
+          success: function() {
+            self._collapseNewTopicArea();
+            self._enableButton();
+          }
+        });
+      }
     },
 
     _initModel: function() {
