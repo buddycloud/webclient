@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  var api = require('util/api');
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
   var l10nBrowser = require('l10n-browser');
