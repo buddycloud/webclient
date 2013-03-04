@@ -15,8 +15,7 @@
  */
 
 define(function(require) {
-  var MostActiveDiscover = require('models/MostActiveDiscover');
-  var RecommendationsDiscover = require('models/RecommendationsDiscover');
+  var DiscoverCollection = require('models/DiscoverCollection');
   var Discover = require('models/Discover');
 
   describe('Discover', function() {
@@ -27,8 +26,8 @@ define(function(require) {
     });
 
     it('should initialize submodels correctly', function() {
-      expect(discover.mostActive instanceof MostActiveDiscover).toBeTruthy();
-      expect(discover.recommendations instanceof RecommendationsDiscover).toBeTruthy();
+      expect(discover.mostActive instanceof DiscoverCollection).toBeTruthy();
+      expect(discover.recommendations instanceof DiscoverCollection).toBeTruthy();
     });
 
     describe('doDiscover()', function() {
