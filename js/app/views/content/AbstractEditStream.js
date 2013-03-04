@@ -19,6 +19,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
   var Events = Backbone.Events;
+  var mediaServer = require('util/mediaServer');
 
   var AbstractEditStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -66,44 +67,17 @@ define(function(require) {
     _saveAvatar: function(model) {
       var file = this.$(':file')[0].files[0];
       if (file) {
-        var formData = this._buildFormData(file);
-        this._sendUploadFileResquest(formData, model);
+        var channel = this.model.channel;
+        var authHeader = this.options.user.credentials.authorizationHeader();
+        mediaServer.uploadAvatar(file, channel, { 201: this._triggerAvatarChanged() }, authHeader);
       }
     },
 
-    _buildFormData: function(file) {
-      var formData = new FormData();
-      formData.append('data', file);
-      formData.append('content-type', file.type);
-      if (file.name) {
-        formData.append('filename', file.name);
+    _triggerAvatarChanged: function() {
+      var channel = this.model.channel;
+      return function() {
+        Events.trigger('avatarChanged', channel);
       }
-
-      return formData;
-    },
-
-    _sendUploadFileResquest: function(formData, model) {
-      var self = this;
-      var options = {
-        type: 'PUT',
-        url: model.avatarUrl(),
-        crossDomain: true,
-        data: formData,
-        xhrFields: {withCredentials: true},
-        contentType: false,
-        processData: false,
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader('Authorization',
-            self.options.user.credentials.authorizationHeader());
-        },
-        statusCode: {
-          201: function() {
-            Events.trigger('avatarChanged', model.channel);
-          }
-        }
-      };
-
-      $.ajax(options);
     },
 
     _setTextFields: function(model) {

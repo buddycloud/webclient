@@ -29,6 +29,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
   var template = require('text!templates/content/stream.html');
+  var mediaServer = require('util/mediaServer');
   var privateTemplate = require('text!templates/content/private.html');
   require(['jquery.embedly', 'util/autoResize']);
   var localTemplate;
@@ -57,8 +58,6 @@ define(function(require) {
       // Scroll event
       $('.content').scroll(this.checkScroll);
 
-      this._dragAndDropEvent();
-
       // Bubble up post
       Events.on('postBubble', this._bubble, this);
     },
@@ -66,9 +65,9 @@ define(function(require) {
     _dragAndDropEvent: function() {
       // Global file drag and drop event
       var self = this;
-      this.$el.on('dragover', this.dndFileStart);
-      this.$el.on('dragleave', this.dndFileLeave);
-      this.$el.on('drop', function(evt){
+      this.$newTopic.on('dragover', this.dndFileStart);
+      this.$newTopic.on('dragleave', this.dndFileLeave);
+      this.$newTopic.on('drop', function(evt){
         evt.stopPropagation();
         evt.preventDefault();
         if (evt.target.className == "filedrop") {
@@ -85,47 +84,15 @@ define(function(require) {
       this._disableButton();
       this._disablePreview();
 
-      var formData = this._buildFormData(file);
-      this._sendUploadFileRequest(formData);
-    },
-
-    _buildFormData: function(file) {
-      var formData = new FormData();
-      formData.append('data', file);
-      formData.append('content-type', file.type);
-      if (file.name) {
-        formData.append('filename', file.name);
-      }
-
-      return formData;
-    },
-
-    _sendUploadFileRequest: function(formData) {
-      var self = this;
-      var options = {
-        type: 'POST',
-        url: api.url(this.model.channel, 'media'),
-        crossDomain: true,
-        data: formData,
-        xhrFields: {withCredentials: true},
-        contentType: false,
-        processData: false,
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader('Authorization',
-            self.options.user.credentials.authorizationHeader());
-        },
-        statusCode: {
-          201: this._postMedia()
-        }
-      };
-
-      $.ajax(options);
+      var channel = this.model.channel;
+      var authHeader = this.options.user.credentials.authorizationHeader();
+      mediaServer.uploadMedia(file, channel, { 201: this._postMedia() }, authHeader);
     },
 
     _postMedia: function() {
       var self = this;
       return function(data) {
-        var content = api.url(self.model.channel, 'media', data.id);
+        var content = api.mediaUrl(self.model.channel, data.id);
         self.model.create({content: content}, {
           credentials: self.options.user.credentials,
           wait: true,
@@ -213,19 +180,15 @@ define(function(require) {
     dndFileStart: function(evt) {
       evt.stopPropagation();
       evt.preventDefault();
-      //evt.dataTransfer.dropEffect = 'copy'
 
-      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
-      if(!newTopicArea.hasClass('write')){
-        newTopicArea.addClass('write');
+      if(!this.$newTopic.hasClass('write')){
+        this.$newTopic.addClass('write');
       }
     },
 
     dndFileLeave: function() {
-      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
-      var textArea = newTopicArea.find('textarea');
-      if(newTopicArea.hasClass('write')){
-        newTopicArea.removeClass('write');
+      if(this.$newTopic.hasClass('write')){
+        this.$newTopic.removeClass('write');
       }
     },
 
@@ -247,7 +210,7 @@ define(function(require) {
         }
       } else {
         // Unfollowed the channel
-        this.$newTopic = this.$('.newTopic').detach();
+        this.$newTopic.detach();
       }
 
       this._renderPosts();
@@ -303,14 +266,16 @@ define(function(require) {
       this._postOnCtrlEnter();
       this._previewEmbed();
       this._hideSpinner();
+      this._dragAndDropEvent();
     },
 
     _prepareNewTopic: function() {
       avatarFallback(this.$('.newTopic .avatar'), 'personal', 50);
       this.$('.newTopic .expandingArea').autoResize();
 
+      this.$newTopic = this.$('.newTopic');
       if (!this._userCanPost()) {
-        this.$newTopic = this.$('.newTopic').detach();
+        this.$newTopic.detach();
       }
     },
 
@@ -373,19 +338,17 @@ define(function(require) {
 
     _expandNewTopicArea: function(event) {
       event.stopPropagation();
-      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
       var collapseNewTopicArea = $.proxy(this._collapseNewTopicArea, this);
-      if(!newTopicArea.hasClass('write')){
-        newTopicArea.addClass('write');
+      if(!this.$newTopic.hasClass('write')){
+        this.$newTopic.addClass('write');
         $(document).one('click', collapseNewTopicArea);
       }
     },
 
     _collapseNewTopicArea: function(event) {
-      var newTopicArea = this.$newTopic || (this.$newTopic = this.$('.newTopic'));
-      var textArea = newTopicArea.find('textarea');
+      var textArea = this.$newTopic.find('textarea');
       if(textArea.val() === ""){
-        newTopicArea.removeClass('write');
+        this.$newTopic.removeClass('write');
       }
     },
 

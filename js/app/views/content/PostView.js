@@ -17,6 +17,7 @@
 define(function(require) {
   require(['jquery', 'timeago', 'jquery.embedly', 'util/autoResize']);
   var _ = require('underscore');
+  var $ = require('jquery');
   var api = require('util/api');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
@@ -25,6 +26,7 @@ define(function(require) {
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
+  var mediaServer = require('util/mediaServer');
   var template = require('text!templates/content/post.html');
   var embedTemplate = require('text!templates/content/embed.html');
   var localTemplate;
@@ -44,6 +46,69 @@ define(function(require) {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.channelName = this.options.items.channel;
       this.model.bind('addComment', this._addComment, this);
+    },
+
+    dndFileStart: function(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+
+      var area = $(this).find('.answer');
+      if (!area.hasClass('write')) {
+        area.addClass('write');
+      }
+    },
+
+    dndFileLeave: function() {
+      var area = $(this).find('.answer');
+      if (area.hasClass('write')) {
+        area.removeClass('write');
+      }
+    },
+
+    _dragAndDropEvent: function() {
+      // Global file drag and drop event
+      var self = this;
+      this.$el.on('dragover', this.dndFileStart);
+      this.$el.on('dragleave', this.dndFileLeave);
+      this.$el.on('drop', function(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
+
+        var file = evt.originalEvent.dataTransfer.files[0];
+        if (file) {
+          self._uploadFile(file);
+        }
+      }); //maybe something to put global if people get used to it.
+    },
+
+    _uploadFile: function(file) {
+      // newTopic area feedback
+      this._disableButton();
+      this._disablePreview();
+
+      var channel = this.options.items.channel;
+      var authHeader = this.options.user.credentials.authorizationHeader();
+      mediaServer.uploadMedia(file, channel, { 201: this._commentMedia() }, authHeader);
+    },
+
+    _commentMedia: function() {
+      var self = this;
+      var channel = this.options.items.channel;
+      return function(data) {
+        var content = api.url(channel, 'media', data.id);
+        self.options.items.create({
+          content: content,
+          replyTo: self.model.id
+        }, {
+          credentials: self.options.user.credentials,
+          wait: true,
+          success: function() {
+            textArea.val('');
+            self._collapseAnswerArea();
+            self._enableButton();
+          }
+        });
+      }
     },
 
     _addComment: function(item, post) {
@@ -76,12 +141,13 @@ define(function(require) {
       this._commentOnCtrlEnter();
       this._previewEmbed();
       this.$('.expandingArea').autoResize();
+      this._dragAndDropEvent();
     },
 
     _actionButton: function() {
-      var user = this.options.user;
+      var subscribedChannels = this.options.user.subscribedChannels;
       var channel = this.options.items.channel;
-      if (!user.subscribedChannels.isDeletingAllowed(channel)) {
+      if (subscribedChannels && !subscribedChannels.isDeletingAllowed(channel)) {
         this.$('.action').remove();
       }
     },

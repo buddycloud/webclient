@@ -28,17 +28,22 @@ define(function(require) {
     return url('');
   }
 
-  function avatarUrl(channel, size) {
-    var ret = url(channel, 'media', 'avatar');
-    if (size) {
-      ret += '?maxwidth=' + size + '&maxheight=' + size;
+  function mediaUrl(channel, id, height, width) {
+    var ret = id ? url(channel, 'media', id) : url(channel, 'media');
+    if (height && width) {
+      ret += '?maxheight=' + height + '&maxwidth=' + width;
     }
     return ret;
+  }
+
+  function avatarUrl(channel, size) {
+    return mediaUrl(channel, 'avatar', size, size);
   }
 
   return {
     url: url,
     rootUrl: rootUrl,
+    mediaUrl: mediaUrl,
     avatarUrl: avatarUrl
   };
 });
