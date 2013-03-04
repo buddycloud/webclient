@@ -94,8 +94,11 @@ define(function(require) {
     _commentMedia: function() {
       var self = this;
       var channel = this.options.items.channel;
+      var textArea = this.$('.answer textarea');
+      var text = textArea.val().trim();
+
       return function(data) {
-        var content = api.url(channel, 'media', data.id);
+        var content = text + ' ' + api.url(channel, 'media', data.id);
         self.options.items.create({
           content: content,
           replyTo: self.model.id

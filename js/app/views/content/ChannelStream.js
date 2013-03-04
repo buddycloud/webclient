@@ -91,12 +91,17 @@ define(function(require) {
 
     _postMedia: function() {
       var self = this;
+      var expandingArea = this.$('.newTopic .expandingArea');
+      var text = expandingArea.find('textarea').val().trim();
+
       return function(data) {
-        var content = api.mediaUrl(self.model.channel, data.id);
+        var content = text + ' ' + api.mediaUrl(self.model.channel, data.id);
         self.model.create({content: content}, {
           credentials: self.options.user.credentials,
           wait: true,
           success: function() {
+            expandingArea.find('textarea').val('').blur();
+            expandingArea.find('span').text('')
             self._collapseNewTopicArea();
             self._enableButton();
           }
