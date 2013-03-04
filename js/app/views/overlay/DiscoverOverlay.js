@@ -35,7 +35,7 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       if (!localFooter) localFooter = l10nBrowser.localiseHTML(footer, {});
-      this.model = new DiscoverCollection(api.url('mostActive'));
+      this.model = new DiscoverCollection(api.url('most_active'));
       this.model.doDiscover({max: 10});
       this.model.bind('sync', this.render, this);
     },
