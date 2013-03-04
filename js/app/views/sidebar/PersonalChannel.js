@@ -39,7 +39,7 @@ define(function(require) {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.metadata = new ChannelMetadata(this.model.username());
       this.metadata.bind('change', this.render, this);
-      this.metadata.fetch();
+      this.metadata.fetch({credentials: this.model.credentials});
 
       _.bindAll(this, 'showSettings', 'hideSettings');
 

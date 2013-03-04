@@ -20,7 +20,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
   var footer = require('text!templates/overlay/footer.html');
-  var MostActiveDiscover = require('models/MostActiveDiscover');
+  var DiscoverCollection = require('models/DiscoverCollection');
   var template = require('text!templates/overlay/discover.html');
   var localTemplate;
   var localFooter;
@@ -34,7 +34,7 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       if (!localFooter) localFooter = l10nBrowser.localiseHTML(footer, {});
-      this.model = new MostActiveDiscover();
+      this.model = new DiscoverCollection(api.url('mostActive'));
       this.model.doDiscover({max: 10});
       this.model.bind('sync', this.render, this);
     },

@@ -35,8 +35,9 @@ define(function(require) {
         return _.union(this.model.mostActive.models, this.model.recommendations.models);
       });
 
+      var user = this.options.user;
       this.model.bind('fetch', this.render, this);
-      this.model.doDiscover({user: this.options.user.username()});
+      this.model.doDiscover({user: user.username()}, user.credentials);
       spinner.replace(this.$el);
     },
 

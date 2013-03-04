@@ -17,20 +17,19 @@
 define(function(require) {
   var api = require('util/api');
   var ModelBase = require('models/ModelBase');
-  var MostActiveDiscover = require('models/MostActiveDiscover');
-  var RecommendationsDiscover = require('models/RecommendationsDiscover');
+  var DiscoverCollection = require('models/DiscoverCollection');
 
   var Discover = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
-      this.mostActive = new MostActiveDiscover();
-      this.recommendations = new RecommendationsDiscover();
+      this.mostActive = new DiscoverCollection(api.url('most_active'));
+      this.recommendations = new DiscoverCollection(api.url('recommendations'));
     },
 
-    doDiscover: function(params) {
+    doDiscover: function(query, credentials) {
       var callback = this._triggerDiscoverCallback();
-      this.mostActive.doDiscover(params, callback);
-      this.recommendations.doDiscover(params, callback);
+      this.mostActive.doDiscover(query, callback, credentials);
+      this.recommendations.doDiscover(query, callback, credentials);
     },
 
     _triggerDiscoverCallback: function() {

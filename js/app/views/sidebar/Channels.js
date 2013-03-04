@@ -134,7 +134,7 @@ define(function(require) {
     _fetchMetadata: function(channel, callback) {
       var metadata = new ChannelMetadata(channel);
       this.metadatas.unshift(metadata);
-      metadata.fetch({success: callback});
+      metadata.fetch({credentials: this.model.credentials, success: callback});
     },
 
     _renderCounters: function() {
