@@ -48,7 +48,7 @@ define(function(require) {
 
     getCounters: function(channel) {
       var unreadCount = this._getUnreadCount(channel);
-      return unreadCount ? unreadCount.get('counter') : 0;
+      return unreadCount ? unreadCount.get('counter') : this._buildCounter(0, 0);
     },
 
     resetCounters: function(user, channel) {
