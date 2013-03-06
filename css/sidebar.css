@@ -350,6 +350,9 @@
   box-shadow: 0 0 0 1px #cf771e,0 1px rgba(255,255,255,0.55) inset,0 1px 2px #000;
 }
 .counter.admin {
+  top: auto;
+  bottom: -5px;
+  right: 35px;
   background-color: #cd296b;
   box-shadow: 0 0 0 1px #ae235b,0 1px rgba(255,255,255,0.55) inset,0 1px 2px #000;
 }
