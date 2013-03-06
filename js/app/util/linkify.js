@@ -30,7 +30,7 @@ define(function(require) {
     ')',
     '(.*)$'
     ].join(''));
-  
+
   function linkify(content) {
     // convert urls and channel refs to hyperlinks.
     // html-escape the rest of the text.
@@ -79,8 +79,28 @@ define(function(require) {
         return null;
   }
 
+  function mentions(content) {
+    var mentions = [];
+    content.split('\n').forEach(function(line) {
+      var m;
+      while (line.length > 0) {
+        if (m = line.match(LINKS_REGEX, "i")) {
+          if (m[3]) mentions.push(m[3]);
+          line = m[4] || "";
+        } else {
+          line = "";
+        }
+      }
+    });
+    if (mentions.length > 0)
+        return mentions;
+    else
+        return null;
+  }
+
   return {
     linkify: linkify,
-    urls: urls
+    urls: urls,
+    mentions: mentions
   };
 });

@@ -46,18 +46,19 @@ define(function(require) {
       return temp.length > 0 ? temp[0] : null;
     },
 
-    getCounter: function(channel) {
+    getCounters: function(channel) {
       var unreadCount = this._getUnreadCount(channel);
       return unreadCount ? unreadCount.get('counter') : 0;
     },
 
-    resetCounter: function(user, channel) {
+    resetCounters: function(user, channel) {
       var unreadCount = this._getUnreadCount(channel);
       if (unreadCount) {
-        var prev = unreadCount.get('counter');
-        if (prev > 0) {
+        var counter = unreadCount.get('counter');
+        if (counter.totalCount > 0 || counter.mentionsCount > 0) {
           // Update
-          unreadCount.set({'counter': 0});
+          counter = this._buildCounter(0, 0);
+          unreadCount.set({'counter': counter});
           this.create(unreadCount);
         }
       } else {
@@ -67,23 +68,34 @@ define(function(require) {
       }
     },
 
-    _buildUnreadCounter: function(user, channel, counter) {
+    _buildCounter: function(mentionsCount, totalCount) {
+      return {'mentionsCount': mentionsCount, 'totalCount': totalCount};
+    },
+
+    _buildUnreadCounter: function(user, channel, mentionsCount, totalCount) {
+      var counter = this._buildCounter(mentionsCount, totalCount);
       return {'user': user, 'channel': channel, 'counter': counter};
     },
 
-    incrementCounter: function(user, channel) {
-      this.increaseCounter(user, channel, 1);
+    incrementCounters: function(user, channel) {
+      this.increaseCounters(user, channel, 1, 1);
     },
 
-    increaseCounter: function(user, channel, value) {
+    incrementTotalCount: function(user, channel) {
+      this.increaseCounters(user, channel, 1, 0);
+    },
+
+    increaseCounters: function(user, channel, mentionsValue, totalValue) {
       var unreadCount = this._getUnreadCount(channel);
       if (unreadCount) {
         // Update
-        var prev = unreadCount.get('counter');
-        unreadCount.set({'counter': prev + value});
+        var prevMentions = unreadCount.get('counter').mentionsCount;
+        var prevTotal = unreadCount.get('counter').totalCount;
+        var counter = this._buildCounter(prevMentions + mentionsValue, prevTotal + totalValue);
+        unreadCount.set({'counter': counter});
       } else {
         // Create
-        unreadCount = this._buildUnreadCounter(user, channel, value);
+        unreadCount = this._buildUnreadCounter(user, channel, mentionsValue, totalValue);
       }
 
       this.create(unreadCount);
@@ -100,21 +112,33 @@ define(function(require) {
       return true;
     },
 
-    getCounter: function(channel) {
+    _buildCounter: function(mentionsCount, totalCount) {
+      return {'mentionsCount': mentionsCount, 'totalCount': totalCount};
+    },
+
+    getCounters: function(channel) {
       return this._unreadCounts[channel] || 0;
     },
 
-    resetCounter: function(user, channel) {
-      this._unreadCounts[channel] = 0;
+    resetCounters: function(user, channel) {
+      var counter = this._buildCounter(0, 0);
+      this._unreadCounts[channel] = counter;
     },
 
-    incrementCounter: function(user, channel) {
-      this.increaseCounter(user, channel, 1);
+    incrementCounters: function(user, channel) {
+      this.increaseCounters(user, channel, 1, 1);
     },
 
-    increaseCounter: function(user, channel, value) {
-      var prev = this._unreadCounts[channel] || 0;
-      this._unreadCounts[channel] = prev + value;
+    incrementTotalCount: function(user, channel) {
+      this.increaseCounters(user, channel, 1, 0);
+    },
+
+    increaseCounters: function(user, channel, mentionsValue, totalValue) {
+      var counter = this._unreadCounts[channel] || {};
+      var prevMentions = counter.mentionsCount || 0;
+      var prevTotal = counter.totalCount || 0;
+      counter = this._buildCounter(prevMentions + mentionsValue, prevTotal + totalValue);
+      this._unreadCounts[channel] = counter;
     }
   });
 

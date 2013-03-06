@@ -46,8 +46,9 @@ define(function(require) {
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
 
-      // Unread counter event
-      Events.on('personalChannelCounter', this._renderCounter, this);
+      // Unread counters events
+      Events.on('personalChannelTotalCount', this._renderTotalCount, this);
+      Events.on('personalChannelMentionsCount', this._renderMentionsCount, this);
     },
 
     _avatarChanged: function(channel) {
@@ -57,8 +58,17 @@ define(function(require) {
       }
     },
 
-    _renderCounter: function(count) {
-      var countEl = this.$el.find('.counter');
+    _renderTotalCount: function(count) {
+      var countEl = this.$el.find('.channelpost');
+      this._showOrHideCount(countEl, count);
+    },
+
+    _renderMentionsCount: function(count) {
+      var countEl = this.$el.find('.admin');
+      this._showOrHideCount(countEl, count);
+    },
+
+    _showOrHideCount: function(countEl, count) {
       if (count > 0) {
         if (count > 50) {
           countEl.text('50+');

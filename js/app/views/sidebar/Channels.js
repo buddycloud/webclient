@@ -20,6 +20,7 @@ define(function(require) {
   var animations = require('util/animations');
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
+  var linkify = require('util/linkify');
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
@@ -71,12 +72,15 @@ define(function(require) {
       return function(model) {
         _.each(model.counters(), function(counter, channel) {
           if (self.selected !== channel) {
-            unreadCounters.increaseCounter(username, channel, counter);
+            var mentionsCount = counter.mentionsCount;
+            var totalCount = counter.totalCount;
+            unreadCounters.increaseCounters(username, channel, mentionsCount, totalCount);
             if (channel === username) {
-              Events.trigger('personalChannelCounter', unreadCounters.getCounter(channel));
+              Events.trigger('personalChannelTotalCount', unreadCounters.getCounters(channel).totalCount);
+              Events.trigger('personalChannelMentionsCount', unreadCounters.getCounters(channel).mentionsCount);
             }
           } else {
-            unreadCounters.resetCounter(username, channel);
+            unreadCounters.resetCounters(username, channel);
           }
         });
 
@@ -87,8 +91,18 @@ define(function(require) {
 
     _renderUnreadCount: function(channel) {
       var channelEl = this.$('.channel[data-href="' + channel + '"]');
-      var countEl = channelEl.find('.counter');
-      var count = this.unreadCounters.getCounter(channel);
+      var counters = this.unreadCounters.getCounters(channel);
+
+      var totalCountEl = channelEl.find('.channelpost');
+      var totalCount = counters.totalCount;
+      this._showOrHideCount(totalCountEl, totalCount);
+
+      var mentionsCountEl = channelEl.find('.admin');
+      var mentionsCount = counters.mentionsCount;
+      this._showOrHideCount(mentionsCountEl, mentionsCount);
+    },
+
+    _showOrHideCount: function(countEl, count) {
       if (count > 0) {
         if (count > 50) {
           countEl.text('50+');
@@ -166,15 +180,22 @@ define(function(require) {
       var unreadCounters = this.unreadCounters;
       this.metadatas.sort(
         function(a, b) {
-          var diff = 0;
-          var aCount = unreadCounters.getCounter(a.channel);
-          var bCount = unreadCounters.getCounter(b.channel);
-          diff = bCount - aCount;
+          var aCounters = unreadCounters.getCounters(a.channel);
+          var bCounters = unreadCounters.getCounters(b.channel);
 
+          var aMentionsCount = aCounters.mentionsCount;
+          var bMentionsCount = bCounters.mentionsCount;
+          var diff = bMentionsCount - aMentionsCount;
           if (diff === 0) {
-            var aTitle = a.title() || a.channel;
-            var bTitle = b.title() || b.channel;
-            return aTitle.localeCompare(bTitle);
+            var aTotalCount = aCounters.totalCount;
+            var bTotalCount = bCounters.totalCount;
+            diff = bTotalCount - aTotalCount;
+
+            if (diff === 0) {
+              var aTitle = a.title() || a.channel;
+              var bTitle = b.title() || b.channel;
+              return aTitle.localeCompare(bTitle);
+            }
           }
 
           return diff;
@@ -248,11 +269,13 @@ define(function(require) {
     _bubbleUpSpot: function(channel, oldSpot) {
       var bubbleSpot = oldSpot;
       var counters = this.unreadCounters;
-      var count = counters.getCounter(channel);
+      var totalCount = counters.getCounters(channel).totalCount;
+      var mentionsCount = counters.getCounters(channel).mentionsCount;
 
       for (var i = oldSpot; i - 1 >= 0; i--) {
         var prev = this.metadatas[i - 1].channel;
-        if (count > counters.getCounter(prev)) {
+        if (mentionsCount > counters.getCounters(prev).mentionsCount ||
+          totalCount > counters.getCounters(prev).totalCount) {
           var temp = this.metadatas[i-1];
           this.metadatas[i-1] = this.metadatas[i];
           this.metadatas[i] = temp;
@@ -266,11 +289,13 @@ define(function(require) {
     _bubbleDownSpot: function(channel, oldSpot) {
       var bubbleSpot = oldSpot;
       var counters = this.unreadCounters;
-      var count = counters.getCounter(channel);
+      var totalCount = counters.getCounters(channel).totalCount;
+      var mentionsCount = counters.getCounters(channel).mentionsCount;
 
       for (var i = oldSpot; i + 1 < this.metadatas.length; i++) {
         var next = this.metadatas[i + 1].channel;
-        if (count < counters.getCounter(next)) {
+        if (totalCount < counters.getCounters(next).totalCount ||
+          mentionsCount < counters.getCounters(next).mentionsCount) {
           var temp = this.metadatas[i+1];
           this.metadatas[i+1] = this.metadatas[i];
           this.metadatas[i] = temp;
@@ -393,9 +418,16 @@ define(function(require) {
       user.notifications.on('new', function(item) {
         var channel = item.source;
         if (channel !== self.selected) {
-          unreadCounters.incrementCounter(user.username(), channel);
+          var mentions = linkify.mentions(item.content) || [];
+          if (_.include(mentions, user.username())) {
+            unreadCounters.incrementCounters(user.username(), channel);
+          } else {
+            unreadCounters.incrementTotalCount(user.username(), channel);
+          }
+
           if (channel === user.username()) {
-            Events.trigger('personalChannelCounter', unreadCounters.getCounter(channel));
+            Events.trigger('personalChannelTotalCount', unreadCounters.getCounters(channel).totalCount);
+            Events.trigger('personalChannelMentionsCount', unreadCounters.getCounters(channel).mentionsCount);
           } else {
             self._renderUnreadCount(channel);
             self._bubbleUp(channel);
@@ -423,11 +455,12 @@ define(function(require) {
 
       var unreadCounters = this.unreadCounters;
       if (unreadCounters && unreadCounters.isReady()) {
-        if (unreadCounters.getCounter(channel) > 0) {
-          unreadCounters.resetCounter(username, channel);
+        if (unreadCounters.getCounters(channel).totalCount > 0) {
+          unreadCounters.resetCounters(username, channel);
 
           if (channel === username) {
-            Events.trigger('personalChannelCounter', 0);
+            Events.trigger('personalChannelTotalCount', 0);
+            Events.trigger('personalChannelMentionsCount', 0);
           } else {
             this._renderUnreadCount(channel);
           }
