@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var UnreadCounterData = {
+  var UnreadCounterDB = {
     id: 'unread-counters',
     migrations: [
       {
@@ -37,5 +37,5 @@ define(function(require) {
     ]
   };
 
-  return UnreadCounterData;
+  return UnreadCounterDB;
 });

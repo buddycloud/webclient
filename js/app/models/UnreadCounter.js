@@ -16,12 +16,12 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var UnreadCountersData = require('models/db/UnreadCountersData');
+  var UnreadCountersDB = require('models/db/UnreadCountersDB');
   require('backbone-indexeddb');
 
   var UnreadCounter = Backbone.Model.extend({
-    database: UnreadCountersData,
-    storeName: UnreadCountersData.id
+    database: UnreadCountersDB,
+    storeName: UnreadCountersDB.id
   });
 
   return UnreadCounter;

@@ -18,13 +18,13 @@ define(function(require) {
   var Backbone = require('backbone');
   var ModelBase = require('models/ModelBase');
   var UnreadCounter = require('models/UnreadCounter');
-  var UnreadCountersData = require('models/db/UnreadCountersData');
+  var UnreadCountersDB = require('models/db/UnreadCountersDB');
   require('backbone-indexeddb');
 
   var UnreadCountersIndexedDB = Backbone.Collection.extend({
   	model: UnreadCounter,
-    database: UnreadCountersData,
-    storeName: UnreadCountersData.id,
+    database: UnreadCountersDB,
+    storeName: UnreadCountersDB.id,
 
     initialize: function() {
       this._isReady = false;
