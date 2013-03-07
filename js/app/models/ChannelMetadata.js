@@ -16,12 +16,24 @@
 
 define(function(require) {
   var api = require('util/api');
-  var ModelBase = require('models/ModelBase')
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
+  var indexedDB = require('util/indexedDB');
+  var ModelBase = require('models/ModelBase');
+  var ChannelMetadataDB = require('models/db/ChannelMetadataDB');
+  require('backbone-indexeddb');
 
   var ChannelMetadata = ModelBase.extend({
+    database: ChannelMetadataDB,
+    storeName: ChannelMetadataDB.id,
+
     constructor: function(channel) {
       ModelBase.call(this);
       this.channel = channel;
+    },
+
+    initialize: function() {
+      this._useIndexedDB = this._syncWithServer = indexedDB.isSuppported();
     },
 
     url: function() {
@@ -56,15 +68,63 @@ define(function(require) {
       return this.get('default_affiliation');
     },
 
-    sync: function(method, model, options) {
+    _storeOnDB: function() {
+      var self = this;
+      return function() {
+        self._syncWithServer = false;
+        self.save({}, {silent: true, complete: function() {self._syncWithServer = true}});
+      }
+    },
+
+    _syncServerCallback: function(method, model, options) {
+      var self = this;
+      return function() {
+        self._syncServer(method, model, options);
+      }
+    },
+
+    _addCallback: function(options, triggerName, callback) {
+      var self = this;
+      var trigger = options[triggerName];
+      options[triggerName] = function() {
+        callback();
+        if (trigger) {
+          trigger.apply(this, arguments);
+        }
+      }
+    },
+
+    _syncIndexedDB: function(method, model, options) {
+      if (this._syncWithServer) {
+        var opt = _.extend({}, options);
+        if (method === 'read') {
+          Events.once('success', this._storeOnDB());
+        }
+        Events.once('success', this._syncServerCallback(), this);
+        Events.once('error', this._syncServerCallback(), this);
+      }
+
+      Backbone.sync.call(this, method, model, options);
+    },
+
+    _syncServer: function(method, model, options) {
       if (method === 'update') {
         // Always POST
         method = 'create';
       }
       var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
       sync.call(this, method, model, options);
+    },
+
+    sync: function(method, model, options) {
+      if (this._useIndexedDB) {
+        this._syncIndexedDB(method, model, options);
+      } else {
+        this._syncServer(method, model, options);
+      }
     }
   });
+
 
   return ChannelMetadata;
 });

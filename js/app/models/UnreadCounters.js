@@ -16,28 +16,31 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var ModelBase = require('models/ModelBase');
+  var indexedDB = require('util/indexedDB');
   var UnreadCounter = require('models/UnreadCounter');
   var UnreadCountersDB = require('models/db/UnreadCountersDB');
   require('backbone-indexeddb');
 
-  var UnreadCountersIndexedDB = Backbone.Collection.extend({
+  var UnreadCounters = Backbone.Collection.extend({
   	model: UnreadCounter,
     database: UnreadCountersDB,
     storeName: UnreadCountersDB.id,
 
     initialize: function() {
-      this._isReady = false;
-      this.bind('reset', this._setReady(), this);
-      this.useIndexedDB = true;
+      this.useIndexedDB = this._isLoading = indexedDB.isSuppported();
+      if (this.useIndexedDB) {
+        this.bind('reset', this._onReset, this);
+      } else {
+        this._unreadCounts = {};
+      }
     },
 
-    _setReady: function() {
-      this._isReady = true;
+    _onReset: function() {
+      this._isLoading = false;
     },
 
     isReady: function() {
-      return this._isReady;
+      return !this._isLoading;
     },
 
     _getUnreadCount: function(channel) {
@@ -47,33 +50,38 @@ define(function(require) {
     },
 
     getCounters: function(channel) {
-      var unreadCount = this._getUnreadCount(channel);
-      return unreadCount ? unreadCount.get('counter') : this._buildCounter(0, 0);
-    },
-
-    resetCounters: function(user, channel) {
-      var unreadCount = this._getUnreadCount(channel);
-      if (unreadCount) {
-        var counter = unreadCount.get('counter');
-        if (counter.totalCount > 0 || counter.mentionsCount > 0) {
-          // Update
-          counter = this._buildCounter(0, 0);
-          unreadCount.set({'counter': counter});
-          this.create(unreadCount);
-        }
+      if (this.useIndexedDB) {
+        var unreadCount = this._getUnreadCount(channel);
+        return unreadCount ? unreadCount.get('counter') : this._buildCounters(0, 0);
       } else {
-        // Create
-        unreadCount = this._buildUnreadCounter(user, channel, 0);
-        this.create(unreadCount);
+        return this._unreadCounts[channel] || this._buildCounters(0, 0);
       }
     },
 
-    _buildCounter: function(mentionsCount, totalCount) {
+    resetCounters: function(user, channel) {
+      if (this.useIndexedDB) {
+        var unreadCount = this._getUnreadCount(channel);
+        if (unreadCount) {
+          var counter = unreadCount.get('counter');
+          if (counter.totalCount > 0 || counter.mentionsCount > 0) {
+            // Update
+            counter = this._buildCounters(0, 0);
+            unreadCount.set({'counter': counter});
+            this.create(unreadCount);
+          }
+        }
+      } else {
+        var counter = this._buildCounters(0, 0);
+        this._unreadCounts[channel] = counter;
+      }
+    },
+
+    _buildCounters: function(mentionsCount, totalCount) {
       return {'mentionsCount': mentionsCount, 'totalCount': totalCount};
     },
 
     _buildUnreadCounter: function(user, channel, mentionsCount, totalCount) {
-      var counter = this._buildCounter(mentionsCount, totalCount);
+      var counter = this._buildCounters(mentionsCount, totalCount);
       return {'user': user, 'channel': channel, 'counter': counter};
     },
 
@@ -86,67 +94,29 @@ define(function(require) {
     },
 
     increaseCounters: function(user, channel, mentionsValue, totalValue) {
-      var unreadCount = this._getUnreadCount(channel);
-      if (unreadCount) {
-        // Update
-        var prevMentions = unreadCount.get('counter').mentionsCount;
-        var prevTotal = unreadCount.get('counter').totalCount;
-        var counter = this._buildCounter(prevMentions + mentionsValue, prevTotal + totalValue);
-        unreadCount.set({'counter': counter});
+      if (this.useIndexedDB) {
+        var unreadCount = this._getUnreadCount(channel);
+        if (unreadCount) {
+          // Update
+          var prevMentions = unreadCount.get('counter').mentionsCount;
+          var prevTotal = unreadCount.get('counter').totalCount;
+          var counter = this._buildCounters(prevMentions + mentionsValue, prevTotal + totalValue);
+          unreadCount.set({'counter': counter});
+        } else {
+          // Create
+          unreadCount = this._buildUnreadCounter(user, channel, mentionsValue, totalValue);
+        }
+
+        this.create(unreadCount);
       } else {
-        // Create
-        unreadCount = this._buildUnreadCounter(user, channel, mentionsValue, totalValue);
+        var counter = this._unreadCounts[channel] || {};
+        var prevMentions = counter.mentionsCount || 0;
+        var prevTotal = counter.totalCount || 0;
+        counter = this._buildCounters(prevMentions + mentionsValue, prevTotal + totalValue);
+        this._unreadCounts[channel] = counter;
       }
-
-      this.create(unreadCount);
     }
   });
 
-  var UnreadCounters = ModelBase.extend({
-    initialize: function() {
-      this._unreadCounts = {};
-      this.useIndexedDB = false;
-    },
-
-    isReady: function() {
-      return true;
-    },
-
-    _buildCounter: function(mentionsCount, totalCount) {
-      return {'mentionsCount': mentionsCount, 'totalCount': totalCount};
-    },
-
-    getCounters: function(channel) {
-      return this._unreadCounts[channel] || 0;
-    },
-
-    resetCounters: function(user, channel) {
-      var counter = this._buildCounter(0, 0);
-      this._unreadCounts[channel] = counter;
-    },
-
-    incrementCounters: function(user, channel) {
-      this.increaseCounters(user, channel, 1, 1);
-    },
-
-    incrementTotalCount: function(user, channel) {
-      this.increaseCounters(user, channel, 1, 0);
-    },
-
-    increaseCounters: function(user, channel, mentionsValue, totalValue) {
-      var counter = this._unreadCounts[channel] || {};
-      var prevMentions = counter.mentionsCount || 0;
-      var prevTotal = counter.totalCount || 0;
-      counter = this._buildCounter(prevMentions + mentionsValue, prevTotal + totalValue);
-      this._unreadCounts[channel] = counter;
-    }
-  });
-
-  function supportsIndexedDB() {
-    window.indexedDB = window.indexedDB || window.mozIndexedDB ||
-                        window.webkitIndexedDB || window.msIndexedDB;
-    return window.indexedDB ? true : false;
-  }
-
-  return supportsIndexedDB() ? UnreadCountersIndexedDB : UnreadCounters;
+  return UnreadCounters;
 });
