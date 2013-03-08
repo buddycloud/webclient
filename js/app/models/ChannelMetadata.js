@@ -17,7 +17,6 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
-  var Events = Backbone.Events;
   var indexedDB = require('util/indexedDB');
   var ModelBase = require('models/ModelBase');
   var ChannelMetadataDB = require('models/db/ChannelMetadataDB');
@@ -30,6 +29,7 @@ define(function(require) {
     constructor: function(channel) {
       ModelBase.call(this);
       this.channel = channel;
+      this.set({'channel': channel}, {silent: true});
     },
 
     initialize: function() {
@@ -42,6 +42,10 @@ define(function(require) {
 
     avatarUrl: function(size) {
       return api.avatarUrl(this.channel, size);
+    },
+
+    channel: function() {
+      return this.get('channel');
     },
 
     title: function() {
@@ -79,7 +83,7 @@ define(function(require) {
     _syncServerCallback: function(method, model, options) {
       var self = this;
       return function() {
-        self._syncServer(method, model, options);
+        self._syncServer(method, model, options)
       }
     },
 
@@ -98,10 +102,9 @@ define(function(require) {
       if (this._syncWithServer) {
         var opt = _.extend({}, options);
         if (method === 'read') {
-          Events.once('success', this._storeOnDB());
+          this.once('change', this._storeOnDB());
         }
-        Events.once('success', this._syncServerCallback(), this);
-        Events.once('error', this._syncServerCallback(), this);
+        this.once('error success', this._syncServerCallback(method, model, options));
       }
 
       Backbone.sync.call(this, method, model, options);
