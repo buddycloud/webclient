@@ -15,21 +15,21 @@
  */
 
 define(function(require) {
-  var UnreadCounterData = {
-    id: 'unread-counters',
+  var ChannelMetadataDB = {
+    id: 'channel-metadata',
     migrations: [
       {
         version: 1,
         migrate: function(transaction, next) {
           var store;
 
-          if (!transaction.db.objectStoreNames.contains('unread-counters')) {
-            store = transaction.db.createObjectStore('unread-counters');
+          if (!transaction.db.objectStoreNames.contains('channel-metadata')) {
+            store = transaction.db.createObjectStore('channel-metadata');
           } else {
-            store = transaction.objectStore('unread-counters');
+            store = transaction.objectStore('channel-metadata');
           }
 
-          store.createIndex('userIndex', 'user', { unique: false });
+          store.createIndex('channelIndex', 'channel', { unique: true });
 
           next();
         }
@@ -37,5 +37,5 @@ define(function(require) {
     ]
   };
 
-  return UnreadCounterData;
+  return ChannelMetadataDB;
 });
