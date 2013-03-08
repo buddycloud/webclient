@@ -132,7 +132,6 @@ define(function(require) {
     },
 
     _renderPrivateChannel: function() {
-      this.isPrivate = true;
       this.$el.html(_.template(privateTemplate));
     },
 
