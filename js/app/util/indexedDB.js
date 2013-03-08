@@ -15,14 +15,13 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
-  var UnreadCountersDB = require('models/db/UnreadCountersDB');
-  require('backbone-indexeddb');
+  function isSuppported() {
+    window.indexedDB = window.indexedDB || window.mozIndexedDB ||
+                        window.webkitIndexedDB || window.msIndexedDB;
+    return window.indexedDB ? true : false;
+  }
 
-  var UnreadCounter = Backbone.Model.extend({
-    database: UnreadCountersDB,
-    storeName: UnreadCountersDB.id
-  });
-
-  return UnreadCounter;
+  return {
+    isSuppported: isSuppported
+  };
 });
