@@ -37,7 +37,8 @@ define(function(require) {
   var ChannelStream = Backbone.View.extend({
     className: 'stream clearfix',
     events: {
-      'click .newTopic': '_expandNewTopicArea',
+      'focusin .newTopic': '_expandNewTopicArea',
+      'focusout .newTopic': '_collapseNewTopicArea',
       'click .createComment': '_post',
     },
 
@@ -343,11 +344,9 @@ define(function(require) {
     },
 
     _expandNewTopicArea: function(event) {
-      event.stopPropagation();
       var collapseNewTopicArea = $.proxy(this._collapseNewTopicArea, this);
       if(!this.$newTopic.hasClass('write')){
         this.$newTopic.addClass('write');
-        $(document).one('click', collapseNewTopicArea);
       }
     },
 

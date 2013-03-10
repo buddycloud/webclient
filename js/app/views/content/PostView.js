@@ -35,7 +35,8 @@ define(function(require) {
     tagName: 'article',
     className: 'post',
     events: {
-      'click .answer': '_expandAnswerArea',
+      'focusin .answer': '_expandAnswerArea',
+      'focusout .answer': '_collapseAnswerArea',
       'click .createComment': '_comment',
       'click .avatar': '_redirect',
       'click .action': '_popup',
@@ -240,12 +241,10 @@ define(function(require) {
     },
 
     _expandAnswerArea: function(event) {
-      event.stopPropagation();
       var area = this.$('.answer');
       var collapseAnswerArea = $.proxy(this._collapseAnswerArea, this);
       if (!area.hasClass('write')) {
         area.addClass('write');
-        $(document).one('click', collapseAnswerArea);
       }
     },
 
