@@ -249,6 +249,9 @@
 
 .expandingArea > textarea {
   width: 100%;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   /* This height is used when JS is disabled */
 }
 .expandingArea.active > textarea {
