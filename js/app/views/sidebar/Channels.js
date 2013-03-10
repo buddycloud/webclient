@@ -466,6 +466,7 @@ define(function(require) {
           }
         }
       }
+      document.redraw();
     },
 
     _rainbowAnimation: function($channel, channel, channelType, offset, animationClassName, selected) {

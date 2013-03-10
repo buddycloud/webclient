@@ -300,6 +300,7 @@ define(function(require) {
       _.each(this._postViews, function(view) {
         self.$('.posts').append(view.el);
       });
+      document.redraw();
     },
 
     _postOnCtrlEnter: function() {
