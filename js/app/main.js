@@ -38,7 +38,7 @@ define(function(require) {
   var Router = require('Router');
   var User = require('models/User');
   var config = require('config');
-  var lang;
+  var lang, initialized;
 
   function initialize() {
     var user = new User;
@@ -47,7 +47,6 @@ define(function(require) {
       route(user);
     });
     user.on('loginError', function() {
-      alert('Wrong username or password.');
       user.logout();
       route(user);
     });
@@ -55,8 +54,11 @@ define(function(require) {
   }
 
   function route(user) {
-    var router = new Router(user);
-    Backbone.history.start({pushState: config.release});
+    if (!initialized) {
+      new Router(user);
+      Backbone.history.start({pushState: config.release});
+      initialized = true;
+    }
   }
 
   if (typeof(navigator.browserLanguage) !== 'undefined') {

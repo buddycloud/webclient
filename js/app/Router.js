@@ -63,6 +63,7 @@ define(function(require) {
     _before: function(route) {
       if (this.user.isAnonymous() && this.sidebar) {
         this.sidebar.destroy();
+        this.sidebar = null;
       } else if (!this.user.isAnonymous() && !this.sidebar) {
         this.sidebar = new SidebarPage({model: this.user});
       }

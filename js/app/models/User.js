@@ -72,7 +72,7 @@ define(function(require) {
             if (!self._loginPermanent) {
               self._increaseLoginCount();
             }
-            self.lastSession = localStorage[self.credentials.username] || 
+            self.lastSession = localStorage[self.credentials.username] ||
               self._earliestTime(); // FIXME workaround to get last session
             self.trigger('loginSuccess');
           }

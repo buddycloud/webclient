@@ -21,6 +21,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
+  var Events = Backbone.Events;
   var localTemplate;
 
   var WelcomePage = Backbone.View.extend({
@@ -34,17 +35,43 @@ define(function(require) {
     initialize: function() {
       _.bindAll(this, 'login');
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
+      this._attachModelEvents();
       this.discover = new DiscoverOverlay();
       this.render();
     },
 
+    _attachModelEvents: function() {
+      // registration
+      this.model.on('registrationSuccess', this._successfullRegistration, this);
+      this.model.on('registrationError', this._invalidRegistration, this);
+      // login
+      this.model.on('loginSuccess', this._successfullLogin, this);
+      this.model.on('loginError', this._invalidLogin, this);
+    },
+
+    _invalidLogin: function() {
+      alert('Wrong username or password.');
+    },
+
+    _successfullLogin: function() {
+      Events.trigger('navigate', this.model.username());
+    },
+
+    _successfullRegistration: function() {
+      this.model.login({permanent: localStorage.loginPermanent === 'true'});
+    },
+
+    _invalidRegistration: function(message) {
+      alert(message);
+    },
+
     login: function(event) {
       event.preventDefault();
-      var username = $('#login_name').attr('value');
-      var password = $('#login_password').attr('value');
+      var username = this.$('#login_name').attr('value');
+      var password = this.$('#login_password').attr('value');
       localStorage.loginPermanent = $('#store_local').is(':checked')
       this.model.credentials.save({username: username, password: password});
-      location.reload();
+      this.model.login({permanent: localStorage.loginPermanent === 'true'});
     },
 
     register: function(event) {
@@ -52,15 +79,9 @@ define(function(require) {
       var username = this.$('#register_name').attr('value');
       var password = this.$('#register_password').attr('value');
       var email = this.$('#register_email').attr('value');
-      this.model.on('registrationSuccess', function() {
-        location.reload();
-      });
-      this.model.on('registrationError', function(message) {
-        alert(message)
-      });
-
       this.model.register(username, password, email);
     },
+
 
     render: function() {
       this.$el.html(_.template(localTemplate));
@@ -97,8 +118,12 @@ define(function(require) {
     },
 
     destroy: function() {
-      this.discover.remove();
       $('.content').removeClass('homepage');
+      this.model.off('registrationSuccess', this._successfullRegistration, this);
+      this.model.off('registrationError', this._invalidRegistration, this);
+      this.model.off('loginSuccess', this._successfullLogin, this);
+      this.model.off('loginError', this._invalidLogin, this);
+      this.discover.remove();
       this.remove();
     }
 
