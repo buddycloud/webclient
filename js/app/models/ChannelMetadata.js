@@ -16,11 +16,10 @@
 
 define(function(require) {
   var api = require('util/api');
-  var Backbone = require('backbone');
   var indexedDB = require('util/indexedDB');
   var ModelBase = require('models/ModelBase');
   var ChannelMetadataDB = require('models/db/ChannelMetadataDB');
-  require('backbone-indexeddb');
+  require(['backbone', 'backbone-indexeddb']);
 
   var ChannelMetadata = ModelBase.extend({
     database: ChannelMetadataDB,
