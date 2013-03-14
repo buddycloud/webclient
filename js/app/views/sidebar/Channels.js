@@ -455,7 +455,8 @@ define(function(require) {
 
       var unreadCounters = this.unreadCounters;
       if (unreadCounters && unreadCounters.isReady()) {
-        if (unreadCounters.getCounters(channel).totalCount > 0) {
+        if (unreadCounters.getCounters(channel).totalCount > 0 ||
+          unreadCounters.getCounters(channel).mentionsCount > 0) {
           unreadCounters.resetCounters(username, channel);
 
           if (channel === username) {
