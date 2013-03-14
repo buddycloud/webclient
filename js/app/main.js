@@ -37,7 +37,6 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var Router = require('Router');
   var User = require('models/User');
-  var config = require('config');
   var lang, initialized;
 
   function initialize() {
@@ -56,7 +55,7 @@ define(function(require) {
   function route(user) {
     if (!initialized) {
       new Router(user);
-      Backbone.history.start({pushState: config.release});
+      Backbone.history.start({pushState: true});
       initialized = true;
     }
   }
