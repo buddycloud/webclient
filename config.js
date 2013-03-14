@@ -16,7 +16,4 @@ define({
   // If you see "some content is unencrypted" messages while browsing, change 
   // embedlySecure to "true".
   embedlySecure: false,
-  
-  // ???
-  release: true
 });
