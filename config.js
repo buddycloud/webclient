@@ -1,13 +1,19 @@
 define({
-	// if you just want to develop, set these two to buddycloud.org
+  // Where to find your API server
+  // Note: it is not possible to use self signed certificates for AJAX requests
+  // (see https://buddycloud.org/wiki/Install#SSL_and_API_requests for details)
   baseUrl: 'https://api.EXAMPLE.COM',
+  
+  // Domain that you your users live on. 
+  // For example, if your users' IDs look like user@example.com, then you would 
+  // set the homeDomain to example.com.
   homeDomain: 'EXAMPLE.COM',
-  defaultChannel: 'lounge@topics.buddycloud.org',
-  // To enable Embedly, you must sign up on the http://embed.ly website.
-  // If you are not using Embedly, you may see "some content is unencrypted"
-  // messages while browsing, which can be solved by changing embedlySecure
-  // to "true".
+  
+  // To enable oEmbed support (link previews), sign up on http://embed.ly (they 
+  // have a free plan).
   embedlyKey: '',
-  embedlySecure: false,
-  release: true
+  
+  // If you see "some content is unencrypted" messages while browsing, change 
+  // embedlySecure to "true".
+  embedlySecure: true,
 });

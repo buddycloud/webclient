@@ -19,14 +19,14 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('gruntacular');
 
   // Tasks
-  grunt.registerTask('default', ['server', 'watch']);
+  grunt.registerTask('default', ['server']);
+  grunt.registerTask('server', ['_server', 'watch']);
   grunt.registerTask('test', ['testacular']);
 
-  // server
-  var express = require('express');
-  var fs = require('fs');
-  
-  grunt.registerTask('server', 'Start a custom static web server.', function() {
+  // Development Server
+  grunt.registerTask('_server', 'Start a custom static web server.', function() {
+    var express = require('express');
+    var fs = require('fs');
 
     var mdir = __dirname;
     var app = express();
@@ -48,6 +48,8 @@ module.exports = function(grunt) {
       });
     });
     app.listen(3000);
+
+    console.log('Listening on port 3000...');
   });
 
 }
