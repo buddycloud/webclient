@@ -90,7 +90,7 @@ define(function(require) {
     },
 
     incrementTotalCount: function(user, channel) {
-      this.increaseCounters(user, channel, 1, 0);
+      this.increaseCounters(user, channel, 0, 1);
     },
 
     increaseCounters: function(user, channel, mentionsValue, totalValue) {
