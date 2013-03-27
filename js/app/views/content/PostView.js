@@ -122,7 +122,7 @@ define(function(require) {
 
     _addComment: function(post) {
       if (this._needsBubbling()) {
-        this.remove();
+        this.destroy();
         Events.trigger('postBubble', post);
       } else {
         this.render();
