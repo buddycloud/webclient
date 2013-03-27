@@ -64,6 +64,32 @@ define(function(require) {
       Events.on('postBubble', this._bubble, this);
     },
 
+    destroy: function() {
+      // Scrolling event
+      $('.content').off('scroll', this.checkScroll);
+
+      // (Un)follow event
+      var user = this.options.user;
+      if (user.subscribedChannels) {
+        user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
+      }
+
+      // Bubble a post event
+      Events.unbind('postBubble', this._bubble, this);
+
+      // Destroy posts views
+      this._destroyPostsViews();
+
+      // Remove
+      this.remove();
+    },
+
+    _destroyPostsViews: function() {
+      _.each(this._postViews, function(view) {
+        view.destroy();
+      });
+    },
+
     _dragAndDropEvent: function() {
       // Global file drag and drop event
       var self = this;
@@ -146,23 +172,6 @@ define(function(require) {
         }
       });
       user.notifications.listen({credentials: user.credentials});
-    },
-
-    destroy: function() {
-      // Scrolling event
-      $('.content').off('scroll', this.checkScroll);
-
-      // (Un)follow event
-      var user = this.options.user;
-      if (user.subscribedChannels) {
-        user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
-      }
-
-      // Bubble a post event
-      Events.unbind('postBubble', this._bubble, this);
-
-      // Remove
-      this.remove();
     },
 
     // Thanks to Thomas Davis

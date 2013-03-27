@@ -35,6 +35,12 @@ define(function(require) {
       this.render();
     },
 
+    destroy: function() {
+      this.header.destroy();
+      this.stream.destroy();
+      this.remove();
+    },
+
     render: function() {
       this.$el.append(this.header.el);
       this.$el.append(this.stream.el);

@@ -37,6 +37,12 @@ define(function(require) {
       this.model.bind('sync', this.render, this);
     },
 
+    destroy: function() {
+      this.model.unbind('change', this.render, this);
+      this.model.unbind('sync', this.render, this);
+      this.remove();
+    },
+
     render: function() {
       this.$el.html(_.template(localTemplate, {
         metadata: this.model

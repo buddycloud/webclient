@@ -39,6 +39,11 @@ define(function(require) {
       spinner.replace(this.$el);
     },
 
+    destroy: function() {
+      this.model.unbind('fetch', this.render, this);
+      this.remove();
+    },
+
     render: function() {
       this.$el.html(_.template(localTemplate, {
         channels: this.channels,

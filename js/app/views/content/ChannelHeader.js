@@ -81,9 +81,18 @@ define(function(require) {
     },
 
     destroy: function() {
+      // (Un)follow event
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.unbind('subscriptionSync', this._switchButton, this);
       }
+
+      // Avatar changed event
+      Events.unbind('avatarChanged', this._avatarChanged, this);
+
+      // Created channel event
+      Events.unbind('channelCreated', this._channelCreated, this);
+
+      // Remove
       this.remove();
     },
 

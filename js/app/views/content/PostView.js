@@ -49,6 +49,11 @@ define(function(require) {
       this.model.bind('addComment', this._addComment, this);
     },
 
+    destroy: function() {
+      this.model.unbind('addComment', this._addComment, this);
+      this.remove();
+    },
+
     dndFileStart: function(evt) {
       evt.stopPropagation();
       evt.preventDefault();

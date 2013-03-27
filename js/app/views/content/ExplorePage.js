@@ -66,10 +66,10 @@ define(function(require) {
     destroy: function() {
       this.searchbar.remove();
       if (this.discoverView) {
-        this.discoverView.remove();
+        this.discoverView.destroy();
       }
       if (this.searchView) {
-        this.searchView.remove();
+        this.searchView.destroy();
       }
       this.remove();
     }

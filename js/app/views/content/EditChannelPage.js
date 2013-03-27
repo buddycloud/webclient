@@ -39,8 +39,9 @@ define(function(require) {
     },
 
     destroy: function() {
+      this.model.unbind('change', this.render, this);
+      this.view.destroy();
       this.remove();
-      this.view.remove();
     }
   });
 
