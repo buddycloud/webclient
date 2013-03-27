@@ -115,7 +115,7 @@ define(function(require) {
       }
     },
 
-    _addComment: function(item, post) {
+    _addComment: function(post) {
       if (this._needsBubbling()) {
         this.remove();
         Events.trigger('postBubble', post);

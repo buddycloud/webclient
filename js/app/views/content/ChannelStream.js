@@ -50,8 +50,9 @@ define(function(require) {
       this._postViews = [];
       this.model.bind('addPost', this._prependPost, this);
 
-      if (this.options.user.subscribedChannels) {
-        this.options.user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
+      var user = this.options.user;
+      if (user.subscribedChannels) {
+        user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
       }
 
       _.bindAll(this, 'checkScroll', 'dndFileStart', 'dndFileLeave');
@@ -148,10 +149,19 @@ define(function(require) {
     },
 
     destroy: function() {
+      // Scrolling event
       $('.content').off('scroll', this.checkScroll);
-      if (this.options.user.subscribedChannels) {
-        this.options.user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
+
+      // (Un)follow event
+      var user = this.options.user;
+      if (user.subscribedChannels) {
+        user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
       }
+
+      // Bubble a post event
+      Events.unbind('postBubble', this._bubble, this);
+
+      // Remove
       this.remove();
     },
 

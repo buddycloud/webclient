@@ -40,7 +40,7 @@ define(function(require) {
         var post = this.get(item.replyTo);
         if (post) {
           post.comments.push(item);
-          post.trigger('addComment', item, post);
+          post.trigger('addComment', post);
         }
       }
     },
