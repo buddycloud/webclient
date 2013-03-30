@@ -156,7 +156,8 @@ define(function(require) {
     _actionButton: function() {
       var subscribedChannels = this.options.user.subscribedChannels;
       var channel = this.options.items.channel;
-      if (subscribedChannels && !subscribedChannels.isDeletingAllowed(channel)) {
+      console.log(subscribedChannels);
+      if (!subscribedChannels || !subscribedChannels.isDeletingAllowed(channel)) {
         this.$('.action').remove();
       }
     },

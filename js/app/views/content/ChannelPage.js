@@ -51,7 +51,7 @@ define(function(require) {
       $center.html(this.view.el);
 
       $content.addClass('anonView');
-      $content.append(this.overlay.el);
+      $content.html(this.overlay.el);
       $content.append($center);
     },
 

@@ -4,6 +4,26 @@
 
 .anonView .channelView {
   width: auto;
+  height: 100%;
+}
+
+.anonView .channelHeader {
+  padding: 53px 21px 13px;
+}
+
+.anonView #poweredby {
+  top: 66px;
+  margin: 0;
+}
+
+.anonView .navigation {
+  position: absolute;
+  top: 0;
+}
+
+/* specific to the prototypes until we implement the share options */
+.anonView .share .popup {
+  left: -53px;
 }
 
 .navigation {

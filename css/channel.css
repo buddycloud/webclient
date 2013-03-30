@@ -40,6 +40,7 @@
   margin-right: 13px;
   padding: 0 0 13px 13px;
 }
+
 .channelHeader {
   width: 580px;
   padding: 13px 21px;
@@ -626,15 +627,9 @@
   cursor: pointer;
 }
 .post .postmeta .share .popup {
-  left: -13px;
+  right: -23px;
   top: 19px;
   display: none;
-}
-/* firefox hack necessary for the alignment */
-@-moz-document url-prefix() {
-  .post .postmeta .share .popup {
-    left: -15px;
-  }
 }
   .post .postmeta .popup.visible {
     display: -webkit-box;
