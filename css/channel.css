@@ -626,12 +626,22 @@
   cursor: pointer;
 }
 .post .postmeta .share .popup {
-  left: -53px;
+  left: -13px;
   top: 19px;
   display: none;
 }
+/* firefox hack necessary for the alignment */
+@-moz-document url-prefix() {
+  .post .postmeta .share .popup {
+    left: -15px;
+  }
+}
   .post .postmeta .popup.visible {
     display: -webkit-box;
+    display: -moz-box;
+    display: -ms-box;
+    display: -o-box;
+    display: box;
   }
 .post .postmeta button {
   padding: 0;

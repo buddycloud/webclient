@@ -38,7 +38,7 @@
     position: relative;
     width: 13px;
     height: 10px;
-    margin-bottom: -1px;
+    margin: 0 auto -1px;
     overflow: hidden;
   }
     .popup .arrow:before {
