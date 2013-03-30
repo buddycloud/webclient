@@ -171,6 +171,7 @@
   background: white;
 }
 .post {
+  width: 580px;
   background: #fff;
   position: relative;
   box-shadow: inset 0 -1px rgba(0,0,0,0.08);
