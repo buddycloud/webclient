@@ -19,6 +19,7 @@
 .anonView .navigation {
   position: absolute;
   top: 0;
+  z-index: 2;
 }
 
 /* specific to the prototypes until we implement the share options */
