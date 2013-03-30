@@ -145,7 +145,7 @@ define(function(require) {
         var comment = new Item({replyTo: '1'});
         spyOn(post, 'trigger').andCallThrough();
         items.add(comment);
-        expect(post.trigger).toHaveBeenCalledWith('addComment', comment, post);
+        expect(post.trigger).toHaveBeenCalledWith('addComment', post);
       });
     });
 
