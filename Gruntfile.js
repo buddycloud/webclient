@@ -1,3 +1,6 @@
+var requirejs = require('requirejs')
+var config    = requirejs('./config.js')
+
 module.exports = function(grunt) {
 
   grunt.initConfig({
@@ -47,9 +50,9 @@ module.exports = function(grunt) {
         res.send(file);
       });
     });
-    app.listen(3000);
-
-    console.log('Listening on port 3000...');
+    var port = config.port || 3000;
+    app.listen(port);
+    console.log('Listening on port ' + port + '...');
   });
 
 }
