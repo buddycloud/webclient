@@ -17,5 +17,8 @@
   },
   "engine": {
     "node": ">=0.8"
+  },
+  "dependencies": {
+    "requirejs": "~2.1.5"
   }
 }
