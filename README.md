@@ -17,8 +17,10 @@ All setup instructions are avaliable on the [buddycloud wiki](https://buddycloud
 
 Development
 ===========
-Install everything with `npm install` and then run the `dev-tools/server`.
-Set the `config.js` to a valid server, if you don't have one set up just use buddycloud.org.
+Install everything with `npm install`. Copy `config.js.example` to `config.js` and modify to match your server, 
+if you don't have one set up just use buddycloud.org. 
+
+To start the server run `grunt server` from the project root.
 
 Documentation
 =============
