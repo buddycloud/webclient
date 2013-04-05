@@ -41,7 +41,8 @@ define(function(require) {
 
   function initialize() {
     var user = new User;
-    user.credentials.fetch();
+    if((sessionStorage.username && localStorage.username) || localStorage.username)
+      user.credentials.fetch();
     user.on('loginSuccess', function() {
       route(user);
     });

@@ -41,7 +41,7 @@ define(function(require) {
     constructor: function(user) {
       Backbone.Router.call(this);
       this.user = user;
-      if (!this.user.isAnonymous()) {
+      if (!this.user.isAnonymous() && !this.user.credentials.isPermanent()) {
         this._endSessionOnUnload();
       }
     },
@@ -70,6 +70,9 @@ define(function(require) {
 
       if (this.currentPage) {
         this.currentPage.destroy();
+      }
+      if (!this.user.isAnonymous() && !this.user.credentials.isPermanent()) {
+        this._endSessionOnUnload();
       }
       spinner.replace($('.content'));
     },
