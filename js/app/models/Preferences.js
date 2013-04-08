@@ -23,8 +23,8 @@ define(function(require) {
       return attr ? attr === 'true' : false;
     },
 
-    email: function() {
-      return this.get('email') || '';
+    target: function() {
+      return this.get('target') || '';
     },
 
     newFollowers: function() {
@@ -49,7 +49,7 @@ define(function(require) {
     },
 
     url: function() {
-      return api.url('user_settings');
+      return api.url('notification_settings');
     },
 
     parse: function(resp, xhr) {
