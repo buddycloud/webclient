@@ -44,7 +44,7 @@ define(function(require) {
         };
       this.model = new Preferences();
       this.model.bind('change', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials});
+      this.model.fetch({credentials: this.options.user.credentials, data: {type: 'email'}});
     },
 
     render: function() {
