@@ -23,7 +23,7 @@ define(function(require) {
     beforeEach(function() {
       preferences = new Preferences();
       preferences.set({
-        'email': 'alice@example.com',
+        'target': 'alice@example.com',
         'postAfterMe': 'true',
         'postMentionedMe': 'false',
         'postOnMyChannel': 'false',
@@ -40,7 +40,7 @@ define(function(require) {
 
     describe('email()', function() {
       it('should return user email', function() {
-        var email = preferences.email();
+        var email = preferences.target();
         expect(email).toBe('alice@example.com');
       });
     });
