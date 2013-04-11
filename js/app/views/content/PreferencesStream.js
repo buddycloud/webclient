@@ -126,7 +126,6 @@ define(function(require) {
           return 'true';
         }
       }
-
       return 'false';
     }
   });
