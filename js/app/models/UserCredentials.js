@@ -49,6 +49,10 @@ define(function(require) {
       }
     },
 
+    isPermanent: function() {
+      return localStorage.loginPermanent === 'true' ? true : false;
+    },
+
     set: function() {
       Backbone.Model.prototype.set.apply(this, arguments);
       this.username = this.get('username');
