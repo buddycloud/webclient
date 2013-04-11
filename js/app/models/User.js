@@ -83,6 +83,7 @@ define(function(require) {
     logout: function() {
       this._saveLastSessionTime();
       this.credentials.save({username: null, password: null}, {permanent: true});
+      localStorage.loginCount = 0;
     },
 
     _saveLastSessionTime: function() {
@@ -107,12 +108,12 @@ define(function(require) {
     endSession: function() {
       if (!this.isAnonymous()) {
         this._saveLastSessionTime();
-        if (this._loginPermanent) {
+        if (this.credentials.isPermanent()) {
           this.credentials.save();
         } else {
           var newCount = this._decreaseLoginCount();
           if (newCount == 0) {
-            this.credentials.save({username: null, password: null});
+            this.credentials.save({username: null, password: null}, {permanent: true});
           }
         }
       }
