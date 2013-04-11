@@ -58,7 +58,8 @@ define(function(require) {
       var options = {
         data: {'since': this.model.lastSession, 'max': 51, counters: 'true'},
         credentials: this.model.credentials,
-        success: this._updateCounters()
+        success: this._updateCounters(),
+        fail: this.render()
       };
 
       this.sync = new Sync();
