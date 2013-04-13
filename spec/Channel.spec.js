@@ -45,10 +45,10 @@ define(function(require) {
 
       it('should trigger "fetch" if all submodels are fetched', function() {
         spyOn(channel.followers, 'fetch').andCallFake(function(options) {
-          options.success(channel.followers);
+          options.complete(channel.followers);
         });
         spyOn(channel.similarChannels, 'fetch').andCallFake(function(options) {
-          options.success(channel.similarChannels);
+          options.complete(channel.similarChannels);
         });
         spyOn(channel, 'trigger');
         channel.fetch();
