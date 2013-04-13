@@ -33,7 +33,7 @@ define(function(require) {
       this.model = new Channel(this.options.channel);
       this.model.bind('fetch', this.render, this);
       this.model.fetch({credentials: this.options.user.credentials});
-
+      this.render();
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._updateFollowersList, this);
       }
