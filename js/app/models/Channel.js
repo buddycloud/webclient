@@ -29,8 +29,7 @@ define(function(require) {
 
     fetch: function(options) {
       options = _.extend(options || {}, {
-        success: this._triggerFetchCallback(),
-        error: this._triggerErrorCallback()
+        complete: this._triggerFetchCallback(),
       });
       this.followers.fetch(options);
       this.similarChannels.fetch(options);
@@ -44,18 +43,6 @@ define(function(require) {
         if (_.include(fetched, self.followers) &&
             _.include(fetched, self.similarChannels)) {
           self.trigger('fetch');
-        }
-      }
-    },
-
-    _triggerErrorCallback: function() {
-      var self = this;
-      var error = [];
-      return function(model, xhr) {
-        error.push(model);
-        if (_.include(error, self.followers) &&
-            _.include(error, self.similarChannels)) {
-          self.trigger('error', {status: xhr.status, statusText: xhr.statusText});
         }
       }
     }
