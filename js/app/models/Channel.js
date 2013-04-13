@@ -34,7 +34,6 @@ define(function(require) {
       });
       this.followers.fetch(options);
       this.similarChannels.fetch(options);
-      this.trigger('fetch')
     },
 
     _triggerFetchCallback: function() {
