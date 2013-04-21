@@ -25,18 +25,27 @@ define(function(require) {
   var PostNotifications = ModelBase.extend({
     initialize: function() {
       this._request = new Pollymer.Request({maxTries: -1, rawResponse: true});
+      this._lastCursor = null;
       this.bind('change', this._triggerNewItem);
     },
 
     _request: null,
     
     _triggerNewItem: function() {
-      var item = new Item(this.attributes);
-      this.trigger('new', item);
+      for (var i = 0; i in this.attributes; ++i) {
+        var val = this.attributes[i];
+        var item = new Item(val);
+        this.trigger('new', item);
+      }
     },
 
     url: function() {
-      return api.url('notifications', 'posts');
+      var baseUrl = api.url('notifications', 'posts?since=');
+      if (this._lastCursor) {
+        return baseUrl + 'cursor:' + this._lastCursor;
+      } else {
+        return baseUrl;
+      }
     },
 
     fetch: function(options) {
@@ -65,7 +74,9 @@ define(function(require) {
 
       var dfd = $.Deferred();
       var promise = dfd.promise();
-      
+
+      var self = this;
+
       // This is where Pollymer makes things interesting.
       // We use Pollymer to repoll instead of ever reporting
       // an error.
@@ -95,7 +106,7 @@ define(function(require) {
         // the object just received from ajax.
         // On success it will return undefined,
         // and on failure, it will return false.
-        if (typeof options.success(obj, "success", promise) !== "undefined") {
+        if (typeof options.success(obj.items, "success", promise) !== "undefined") {
           this.retry();
           return;
         }
@@ -104,14 +115,16 @@ define(function(require) {
         if (options.complete) {
           options.complete(promise, "success");
         }
-        
+
+        self._lastCursor = obj.last_cursor;
+
         this.off('finished', onFinished);
         dfd.resolve();
         model.trigger('sync', model, obj, options);
       };
       this._request.on('finished', onFinished);
 
-      if ("withCredentials" in options.xhrFields) {
+      if (options.xhrFields && "withCredentials" in options.xhrFields) {
         this._request.withCredentials = options.xhrFields.withCredentials;
       } else {
         this._request.withCredentials = false;
@@ -126,19 +139,20 @@ define(function(require) {
     listen: function(options) {
       if (!this._listening) {
         this._listening = true;
+        if (!options.credentials.username) {
+          delete options["credentials"];
+        }
         this._doListen(options);
       }
     },
 
     _doListen: function(options) {
       options = options || {};
-      if (options.credentials && options.credentials.username) {
-        var self = this;
-        options.complete = function() {
-          setTimeout(self._doListen.bind(self, options), 0);
-        };
-        this.fetch(options);
-      }
+      var self = this;
+      options.complete = function() {
+        setTimeout(self._doListen.bind(self, options), 0);
+      };
+      this.fetch(options);
     }
   });
 
