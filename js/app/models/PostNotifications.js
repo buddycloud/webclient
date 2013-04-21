@@ -18,12 +18,18 @@ define(function(require) {
   var api = require('util/api');
   var Item = require('models/Item')
   var ModelBase = require('models/ModelBase')
+  var _ = require('underscore');
+  var Pollymer = require('pollymer');
+  var $ = require('jquery');
 
   var PostNotifications = ModelBase.extend({
     initialize: function() {
+      this._request = new Pollymer.Request({maxTries: -1, rawResponse: true});
       this.bind('change', this._triggerNewItem);
     },
 
+    _request: null,
+    
     _triggerNewItem: function() {
       var item = new Item(this.attributes);
       this.trigger('new', item);
@@ -40,6 +46,53 @@ define(function(require) {
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
       ModelBase.prototype.fetch.call(this, options);
+    },
+
+    sync: function(method, model, options) {
+      if (method != 'read') {
+        return ModelBase.prototype.sync.call(this, method, model, options);
+      }
+
+      var p = _.extend({}, options);
+      if (!p.url) {
+        p.url = _.result(model, 'url');
+      }
+      if (!p.url) {
+        throw new Error('A "url" property or function must be specified');
+      }
+
+      var dfd = $.Deferred();
+      var onFinished = function(code, result) {
+        if (code < 200 || code >= 300) {
+          this.retry();
+          return;
+        }
+        var obj;
+        try {
+          obj = JSON.parse(result);
+        } catch(e) {
+          this.retry();
+          return;
+        }
+        if (!options.success(obj)) {
+          this.retry();
+          return;
+        }
+        this.off('finished', onFinished);
+        dfd.resolve();
+        model.trigger('sync', model, obj, options);
+      };
+      this._request.on('finished', onFinished);
+
+      if ("withCredentials" in options.xhrFields) {
+        this._request.withCredentials = options.xhrFields.withCredentials;
+      } else {
+        this._request.withCredentials = false;
+      }
+
+      this._request.start('GET', p.url, p.headers);
+      model.trigger('request', model, null, options);
+      return dfd.promise();
     },
 
     listen: function(options) {
