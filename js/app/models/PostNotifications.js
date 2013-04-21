@@ -48,6 +48,8 @@ define(function(require) {
       ModelBase.prototype.fetch.call(this, options);
     },
 
+    // Implementation of Model.sync using Pollymer
+    // instead of jqXHR.
     sync: function(method, model, options) {
       if (method != 'read') {
         return ModelBase.prototype.sync.call(this, method, model, options);
@@ -62,11 +64,23 @@ define(function(require) {
       }
 
       var dfd = $.Deferred();
+      var promise = dfd.promise();
+      
+      // This is where Pollymer makes things interesting.
+      // We use Pollymer to repoll instead of ever reporting
+      // an error.
+      // The options hash contains success, error, and
+      // complete methods, but since we never error, we just
+      // call the success and complete methods.
       var onFinished = function(code, result) {
+        // If our return code was outside the 2xx range,
+        // retry.
         if (code < 200 || code >= 300) {
           this.retry();
           return;
         }
+        // If we can't parse the return object as JSON,
+        // retry.
         var obj;
         try {
           obj = JSON.parse(result);
@@ -74,10 +88,23 @@ define(function(require) {
           this.retry();
           return;
         }
-        if (!options.success(obj)) {
+
+        // Try running the options.success method.
+        // At this point, this method is provided by
+        // backbone.  It tries to update the model with
+        // the object just received from ajax.
+        // On success it will return undefined,
+        // and on failure, it will return false.
+        if (typeof options.success(obj, "success", promise) !== "undefined") {
           this.retry();
           return;
         }
+        
+        // Try running the options.complete method.
+        if (options.complete) {
+          options.complete(promise, "success");
+        }
+        
         this.off('finished', onFinished);
         dfd.resolve();
         model.trigger('sync', model, obj, options);
@@ -92,7 +119,8 @@ define(function(require) {
 
       this._request.start('GET', p.url, p.headers);
       model.trigger('request', model, null, options);
-      return dfd.promise();
+      
+      return promise;
     },
 
     listen: function(options) {
