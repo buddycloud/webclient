@@ -84,7 +84,6 @@ define(function(require) {
 
     redirectToChannel: function() {
       var self = this;
-      var subscribedChannels = self.options.user.subscribedChannels;
       return function() {
         Events.trigger('navigate', self.model.channel);
         Events.trigger('channelCreated');

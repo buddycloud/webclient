@@ -86,24 +86,14 @@ define(function(require) {
       }
     },
 
-    _addCallback: function(options, triggerName, callback) {
-      var self = this;
-      var trigger = options[triggerName];
-      options[triggerName] = function() {
-        callback();
-        if (trigger) {
-          trigger.apply(this, arguments);
-        }
-      }
-    },
-
     _syncIndexedDB: function(method, model, options) {
       if (this._syncWithServer) {
-        var opt = _.extend({}, options);
         if (method === 'read') {
           this.once('change', this._storeOnDB());
+          this.once('error success', this._syncServerCallback(method, model, options));
+        } else {
+          this.once('error sync', this._syncServerCallback(method, model, options));
         }
-        this.once('error success', this._syncServerCallback(method, model, options));
       }
 
       Backbone.sync.call(this, method, model, options);
