@@ -30,7 +30,8 @@ define(function(require) {
 
   var Router = Backbone.Router.extend({
     routes: {
-      '': 'default',
+      '': 'home',
+      'home': 'home',
       'explore': 'explore',
       'prefs': 'preferences',
       'new-channel': 'newChannel',
@@ -81,7 +82,7 @@ define(function(require) {
       this.navigate(path, {trigger: true});
     },
 
-    default: function() {
+    home: function() {
       this._before();
       if (this.user.isAnonymous()) {
         this.currentPage = new WelcomePage({model: this.user});
@@ -112,7 +113,6 @@ define(function(require) {
       if (this.sidebar) {
         this.sidebar.selectChannel(channel);
       }
-      this.currentPage = new ChannelPage({channel: channel, user: this.user});
     },
 
     channelEdit: function(channel) {

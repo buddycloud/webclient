@@ -54,7 +54,7 @@ define(function(require) {
     },
 
     _successfullLogin: function() {
-      Events.trigger('navigate', this.model.username());
+      Events.trigger('navigate', 'home');
     },
 
     _successfullRegistration: function() {
