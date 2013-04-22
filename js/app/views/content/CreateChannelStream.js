@@ -86,7 +86,7 @@ define(function(require) {
       var self = this;
       return function() {
         Events.trigger('navigate', self.model.channel);
-        Events.trigger('channelCreated');
+        Events.trigger('metadataChanged', self.model.channel);
       }
     },
 

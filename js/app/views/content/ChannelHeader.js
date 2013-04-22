@@ -54,7 +54,7 @@ define(function(require) {
       Events.on('avatarChanged', this._avatarChanged, this);
 
       // Created channel event
-      Events.on('channelCreated', this._channelCreated, this);
+      Events.on('metadataChanged', this._metadataChanged, this);
     },
 
     _avatarChanged: function(channel) {
@@ -64,8 +64,10 @@ define(function(require) {
       }
     },
 
-    _channelCreated: function() {
-      this._created = true;
+    _metadataChanged: function(channel) {
+      if (this.model.channel === channel) {
+        this._created = true;
+      }
     },
 
     _build: function() {
@@ -90,7 +92,7 @@ define(function(require) {
       Events.unbind('avatarChanged', this._avatarChanged, this);
 
       // Created channel event
-      Events.unbind('channelCreated', this._channelCreated, this);
+      Events.unbind('metadataChanged', this._metadataChanged, this);
 
       // Remove
       this.remove();

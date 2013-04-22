@@ -46,6 +46,9 @@ define(function(require) {
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
 
+      // Metadata changed event
+      Events.on('metadataChanged', this._metadataChanged, this);
+
       // Unread counters events
       Events.on('personalChannelTotalCount', this._renderTotalCount, this);
       Events.on('personalChannelMentionsCount', this._renderMentionsCount, this);
@@ -55,6 +58,12 @@ define(function(require) {
       if (channel === this.model.username()) {
         var $imgEl = this.$el.find('img');
         $imgEl.attr('src', this.metadata.avatarUrl(50) + '&' + new Date().getTime());
+      }
+    },
+
+    _metadataChanged: function(channel) {
+      if (this.metadata.channel === channel) {
+        this.metadata.fetch({credentials: this.model.credentials});
       }
     },
 

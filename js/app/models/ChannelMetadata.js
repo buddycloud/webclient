@@ -75,7 +75,8 @@ define(function(require) {
       var self = this;
       return function() {
         self._syncWithServer = false;
-        self.save({}, {silent: true, complete: function() {self._syncWithServer = true}});
+        self.once('error sync', function() {self._syncWithServer = true})
+        self.save({}, {silent: true});
       }
     },
 
@@ -89,8 +90,8 @@ define(function(require) {
     _syncIndexedDB: function(method, model, options) {
       if (this._syncWithServer) {
         if (method === 'read') {
-          this.once('change', this._storeOnDB());
           this.once('error success', this._syncServerCallback(method, model, options));
+          this.once('change', this._storeOnDB());
         } else {
           this.once('error sync', this._syncServerCallback(method, model, options));
         }

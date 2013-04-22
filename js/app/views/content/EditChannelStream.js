@@ -17,6 +17,8 @@
 define(function(require) {
   var AbstractEditStream = require('views/content/AbstractEditStream');
   var api = require('util/api');
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/editChannel.html');
   var localTemplate;
@@ -52,12 +54,16 @@ define(function(require) {
     },
 
     save: function() {
-      this._save(this.model, this._enableSaveButton);
+      this._save(this.model, this._redirectToChannel());
       this._disableSaveButton();
     },
 
-    _enableSaveButton: function() {
-      this.$('.save').removeClass('disabled').text('Save');
+    _redirectToChannel: function() {
+      var self = this;
+      return function() {
+        Events.trigger('navigate', self.model.channel);
+        Events.trigger('metadataChanged', self.model.channel);
+      }
     },
 
     _disableSaveButton: function() {
