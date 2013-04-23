@@ -55,11 +55,15 @@ define(function(require) {
     },
 
     _syncUnreadCounters: function() {
+      var self = this;
       var options = {
         data: {'since': this.model.lastSession, 'max': 51, counters: 'true'},
         credentials: this.model.credentials,
         success: this._updateCounters(),
-        fail: this.render()
+        fail: function() {
+          self.render();
+          self._listenForNewItems();
+        }
       };
 
       this.sync = new Sync();

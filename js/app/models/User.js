@@ -39,14 +39,14 @@ define(function(require) {
     },
 
     isAnonymous: function() {
-      return !this.credentials.username;
+      return !this.username();
     },
 
     avatarUrl: function(size) {
       if (this.isAnonymous()) {
         return "";
       } else {
-        return api.avatarUrl(this.credentials.username, size);
+        return api.avatarUrl(this.username(), size);
       }
     },
 
@@ -72,8 +72,7 @@ define(function(require) {
             if (!self._loginPermanent) {
               self._increaseLoginCount();
             }
-            self.lastSession = localStorage[self.credentials.username] ||
-              self._earliestTime(); // FIXME workaround to get last session
+            self.lastSession = localStorage[self.username()] || self._earliestTime(); // FIXME workaround to get last session
             self.trigger('loginSuccess');
           }
         });
@@ -87,11 +86,11 @@ define(function(require) {
     },
 
     _saveLastSessionTime: function() {
-      localStorage[this.credentials.username] = this._currentTime();
+      localStorage[this.username()] = this._currentTime();
     },
 
     _tryFetchingSubscribedChannels: function(options) {
-       this.subscribedChannels = new SubscribedChannels(this.username);
+       this.subscribedChannels = new SubscribedChannels();
        this.subscribedChannels.fetch({
          credentials: this.credentials,
          success: options.success,

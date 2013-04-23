@@ -42,9 +42,7 @@ define(function(require) {
     constructor: function(user) {
       Backbone.Router.call(this);
       this.user = user;
-      if (!this.user.isAnonymous() && !this.user.credentials.isPermanent()) {
-        this._endSessionOnUnload();
-      }
+      this._endSessionOnUnload();
     },
 
     initialize: function() {
@@ -72,9 +70,7 @@ define(function(require) {
       if (this.currentPage) {
         this.currentPage.destroy();
       }
-      if (!this.user.isAnonymous() && !this.user.credentials.isPermanent()) {
-        this._endSessionOnUnload();
-      }
+      this._endSessionOnUnload();
       spinner.replace($('.content'));
     },
 
