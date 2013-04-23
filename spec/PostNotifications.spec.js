@@ -31,11 +31,15 @@ define(function(require) {
 
     describe('fetch()', function() {
       it('should include "Accept: application/json" header', function() {
-        spyOn($, 'ajax').andCallFake(function(options) {
-          expect(options.headers['Accept']).toBe('application/json');
+        spyOn(notifications._request, 'on').andCallFake(function(e, f) {
+          expect(e).toBe('finished');
+        });
+        spyOn(notifications._request, 'start').andCallFake(function(method, url, headers) {
+          expect(method).toBe('GET');
+          expect(url).toBe('https://example.com/notifications/posts');
+          expect(headers['Accept']).toBe('application/json');
         });
         notifications.fetch();
-        expect($.ajax).toHaveBeenCalled();
       });
     });
   });
