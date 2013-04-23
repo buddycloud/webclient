@@ -110,7 +110,7 @@ define(function(require) {
           this.credentials.save();
         } else {
           var newCount = this._decreaseLoginCount();
-          if (newCount == 0) {
+          if (newCount === 0) {
             this.credentials.save({username: null, password: null}, {permanent: true});
           }
         }
