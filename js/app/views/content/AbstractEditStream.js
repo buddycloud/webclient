@@ -56,9 +56,9 @@ define(function(require) {
       var self = this;
       model.save({}, {
         credentials: this.options.user.credentials,
-        complete: function() {
+        complete: function(xhr, status) {
           if (callback) {
-            callback();
+            callback(xhr, status);
           }
         }
       });
@@ -69,14 +69,18 @@ define(function(require) {
       if (file) {
         var channel = this.model.channel;
         var authHeader = this.options.user.credentials.authorizationHeader();
-        mediaServer.uploadAvatar(file, channel, { 201: this._triggerAvatarChanged() }, authHeader);
+        mediaServer.uploadAvatar(file, channel, this._handleUploadResponse(), authHeader);
       }
     },
 
-    _triggerAvatarChanged: function() {
+    _handleUploadResponse: function() {
       var channel = this.model.channel;
-      return function() {
-        Events.trigger('avatarChanged', channel);
+      return function(jqXHR, status) {
+        if (jqXHR.status === 201) { // Created
+          Events.trigger('avatarChanged', channel);
+        } else {
+          Events.trigger('avatarUploadError', channel);
+        }
       }
     },
 

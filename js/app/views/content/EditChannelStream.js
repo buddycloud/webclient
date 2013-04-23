@@ -54,15 +54,25 @@ define(function(require) {
     },
 
     save: function() {
-      this._save(this.model, this._redirectToChannel());
+      // FIXME Workaround to not get events from disabled save button
+      if (this.$('.save').hasClass('disabled')) return;
       this._disableSaveButton();
+      this._save(this.model, this._responseCallback());
     },
 
-    _redirectToChannel: function() {
+    _responseCallback: function() {
       var self = this;
-      return function() {
-        Events.trigger('navigate', self.model.channel);
-        Events.trigger('metadataChanged', self.model.channel);
+      return function(jqXHR, status) {
+        var $saveButton = self.$('.save');
+        $saveButton.removeClass('disabled').addClass('completed');
+        if (jqXHR.status === 200) {
+          $saveButton.text('Saved');
+        } else {
+          $saveButton.text('Error');
+        }
+        setTimeout(function() {
+          Events.trigger('navigate', self.model.channel);
+        }, 7000);
       }
     },
 
