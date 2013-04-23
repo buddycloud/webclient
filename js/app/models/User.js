@@ -100,8 +100,7 @@ define(function(require) {
 
     _increaseLoginCount: function() {
       var count = localStorage.loginCount || 0;
-      count++;
-      localStorage.loginCount = count + '';
+      localStorage.loginCount = ++count + '';
     },
 
     endSession: function() {
