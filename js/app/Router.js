@@ -109,6 +109,7 @@ define(function(require) {
       if (this.sidebar) {
         this.sidebar.selectChannel(channel);
       }
+      this.currentPage = new ChannelPage({channel: channel, user: this.user});
     },
 
     channelEdit: function(channel) {

@@ -30,7 +30,7 @@ define(function(require) {
     },
 
     _request: null,
-    
+
     _triggerNewItem: function() {
       for (var i = 0; i in this.attributes; ++i) {
         var val = this.attributes[i];
@@ -40,12 +40,8 @@ define(function(require) {
     },
 
     url: function() {
-      var baseUrl = api.url('notifications', 'posts?since=');
-      if (this._lastCursor) {
-        return baseUrl + 'cursor:' + this._lastCursor;
-      } else {
-        return baseUrl;
-      }
+      var baseUrl = api.url('notifications', 'posts');
+      return this._lastCursor ? baseUrl + '?since=cursor:' + this._lastCursor : baseUrl;
     },
 
     fetch: function(options) {
@@ -110,7 +106,7 @@ define(function(require) {
           this.retry();
           return;
         }
-        
+
         // Try running the options.complete method.
         if (options.complete) {
           options.complete(promise, "success");
@@ -129,10 +125,9 @@ define(function(require) {
       } else {
         this._request.withCredentials = false;
       }
-
       this._request.start('GET', p.url, p.headers);
       model.trigger('request', model, null, options);
-      
+
       return promise;
     },
 
