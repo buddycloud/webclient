@@ -94,7 +94,7 @@ define(function(require) {
 
       var channel = this.options.items.channel;
       var authHeader = this.options.user.credentials.authorizationHeader();
-      mediaServer.uploadMedia(file, channel, { 201: this._commentMedia() }, authHeader);
+      mediaServer.uploadMedia(file, channel, authHeader, null, { 201: this._commentMedia() });
     },
 
     _commentMedia: function() {

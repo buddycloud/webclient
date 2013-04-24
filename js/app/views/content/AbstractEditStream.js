@@ -69,7 +69,7 @@ define(function(require) {
       if (file) {
         var channel = this.model.channel;
         var authHeader = this.options.user.credentials.authorizationHeader();
-        mediaServer.uploadAvatar(file, channel, this._handleUploadResponse(), authHeader);
+        mediaServer.uploadAvatar(file, channel, authHeader, this._handleUploadResponse());
       }
     },
 

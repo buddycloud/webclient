@@ -114,7 +114,7 @@ define(function(require) {
 
       var channel = this.model.channel;
       var authHeader = this.options.user.credentials.authorizationHeader();
-      mediaServer.uploadMedia(file, channel, { 201: this._postMedia() }, authHeader);
+      mediaServer.uploadMedia(file, channel, authHeader, null, { 201: this._postMedia() });
     },
 
     _postMedia: function() {
