@@ -16,20 +16,29 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var ChannelMetadata = require('models/ChannelMetadata')
+  var ChannelMetadata = require('models/ChannelMetadata');
   var EditChannelView = require('views/content/EditChannelView');
 
   var EditChannelPage = Backbone.View.extend({
     className: 'channelView',
 
     initialize: function() {
-      this.model = new ChannelMetadata(this.options.channel);
-      this.view = new EditChannelView({
-        model: this.model,
-        user: this.options.user
-      });
-      this.model.bind('change', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials});
+      if (this._isOwner()) {
+        this.model = new ChannelMetadata(this.options.channel);
+        this.view = new EditChannelView({
+          model: this.model,
+          user: this.options.user
+        });
+        this.model.bind('change', this.render, this);
+        this.model.fetch({credentials: this.options.user.credentials});
+      } else {
+        //TODO: this.renderForbiddenPage();
+      }
+    },
+
+    _isOwner: function() {
+      var channel = this.options.channel;
+      return this.options.user.subscribedChannels.isOwner(channel);
     },
 
     render: function() {
@@ -39,9 +48,11 @@ define(function(require) {
     },
 
     destroy: function() {
-      this.model.unbind('change', this.render, this);
-      this.view.destroy();
-      this.remove();
+      if (this.view && this.model) {
+        this.model.unbind('change', this.render, this);
+        this.view.destroy();
+        this.remove();
+      }
     }
   });
 

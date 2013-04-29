@@ -42,6 +42,12 @@ define(function(require) {
       return this.attributes[postsNode];
     },
 
+    isModerator: function(channel) {
+      var postsNode = channel + '/posts';
+      var affiliation = this.attributes[postsNode];
+      return affiliation === 'moderator';
+    },
+
     isOwner: function(channel) {
       var postsNode = channel + '/posts';
       var affiliation = this.attributes[postsNode];
