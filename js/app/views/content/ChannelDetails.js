@@ -20,7 +20,7 @@ define(function(require) {
   var ChannelList = require('views/content/ChannelList');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
-  var template = require('text!templates/content/channelDetails.html')
+  var template = require('text!templates/content/channelDetails.html');
   var l = l10n.get;
   var localTemplate;
 
@@ -77,9 +77,11 @@ define(function(require) {
       var $holder = this.$('.holder');
 
       this._populateChannelLists();
+      this.producerList.render();
       this.moderatorsList.render();
       this.followersList.render();
       this.similarList.render();
+      $holder.append(this.producerList.el);
       $holder.append(this.moderatorsList.el);
       $holder.append(this.followersList.el);
       $holder.append(this.similarList.el);
@@ -88,8 +90,10 @@ define(function(require) {
     _populateChannelLists: function() {
       // Followers
       var types = this.model.followers.byType();
-      var moderators = (types['owner'] || []).concat(types['moderator'] || []);
+      var producer = (types['owner'] || []);
+      var moderators = (types['moderator'] || []);
       var followers = (types['publisher'] || []).concat(types['member'] || []);
+      this.producerList.model = producer;
       this.moderatorsList.model = moderators;
       this.followersList.model = followers;
 
@@ -98,12 +102,13 @@ define(function(require) {
     },
 
     _isInitialized: function() {
-      return this.moderatorsList && this.followersList;
+      return this.producerList && this.moderatorsList && this.followersList;
     },
 
     _toggleInfo: function() {
       this.$el.toggleClass('hidden');
       if (!this._isInitialized()) {
+        this.producerList = new ChannelList({title: l('producerList', {}, 'producer'), role: l('producerCaps', {}, 'Producer')});
         this.moderatorsList = new ChannelList({title: l('moderatorsList', {}, 'moderators'), role: l('moderatorCaps', {}, 'Moderator')});
         this.followersList = new ChannelList({title: l('followersList', {}, 'followers'), role: l('followerCaps', {}, 'Follower')});
         this.similarList = new ChannelList({title: l('similarList', {}, 'similar'), role: l('similarCaps', {}, 'Similar')});
