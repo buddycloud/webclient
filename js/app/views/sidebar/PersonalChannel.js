@@ -17,7 +17,6 @@
 define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
-  var ChannelMetadata = require('models/ChannelMetadata');
   var template = require('text!templates/sidebar/personalChannel.html');
   var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
@@ -37,9 +36,13 @@ define(function(require) {
 
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
-      this.metadata = new ChannelMetadata(this.model.username());
+      this.metadata = this.model.metadata(this.model.username());
       this.metadata.bind('change', this.render, this);
-      this.metadata.fetch({credentials: this.model.credentials});
+      if (this.metadata.isNew()) {
+        this.metadata.fetch({credentials: this.model.credentials});
+      } else {
+        this.render();
+      }
 
       _.bindAll(this, 'showSettings', 'hideSettings');
 

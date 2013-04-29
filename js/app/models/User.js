@@ -17,16 +17,18 @@
 define(function(require) {
   var $ = require('jquery');
   var api = require('util/api');
-  var ModelBase = require('models/ModelBase')
-  var PostNotifications = require('models/PostNotifications')
-  var SubscribedChannels = require('models/SubscribedChannels')
-  var UserCredentials = require('models/UserCredentials')
+  var ChannelMetadata = require('models/ChannelMetadata');
+  var ModelBase = require('models/ModelBase');
+  var PostNotifications = require('models/PostNotifications');
+  var SubscribedChannels = require('models/SubscribedChannels');
+  var UserCredentials = require('models/UserCredentials');
 
   var User = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
       this.credentials = new UserCredentials;
       this.notifications = new PostNotifications;
+      this.channelsMetadata = {};
       this.subscribedChannels = null;
     },
 
@@ -48,6 +50,15 @@ define(function(require) {
       } else {
         return api.avatarUrl(this.username(), size);
       }
+    },
+
+    metadata: function(channel) {
+      var channelMetadata = this.channelsMetadata[channel];
+      if (!channelMetadata) {
+        channelMetadata = new ChannelMetadata(channel);
+        this.channelsMetadata[channel] = channelMetadata;
+      }
+      return channelMetadata;
     },
 
     username: function() {

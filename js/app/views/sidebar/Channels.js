@@ -15,11 +15,10 @@
  */
 
 define(function(require) {
-  var _ = require('underscore')
+  var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var animations = require('util/animations');
   var Backbone = require('backbone');
-  var ChannelMetadata = require('models/ChannelMetadata');
   var linkify = require('util/linkify');
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
@@ -151,9 +150,13 @@ define(function(require) {
     },
 
     _fetchMetadata: function(channel, callback) {
-      var metadata = new ChannelMetadata(channel);
+      var metadata = this.model.metadata(channel);
       this.metadatas.unshift(metadata);
-      metadata.fetch({credentials: this.model.credentials, success: callback});
+      if (metadata.isNew()) {
+        metadata.fetch({credentials: this.model.credentials, success: callback});
+      } else {
+        callback(metadata);
+      }
     },
 
     _renderCounters: function() {

@@ -17,7 +17,6 @@
 define(function(require) {
   var Backbone = require('backbone');
   var Events = Backbone.Events;
-  var ChannelMetadata = require('models/ChannelMetadata');
   var EditChannelView = require('views/content/EditChannelView');
 
   var EditChannelPage = Backbone.View.extend({
@@ -25,13 +24,17 @@ define(function(require) {
 
     initialize: function() {
       if (this._isOwner()) {
-        this.model = new ChannelMetadata(this.options.channel);
+        this.model = this.options.user.metadata(this.options.channel);
         this.view = new EditChannelView({
           model: this.model,
           user: this.options.user
         });
         this.model.bind('change', this.render, this);
-        this.model.fetch({credentials: this.options.user.credentials});
+        if (this.model.isNew()) {
+          this.model.fetch({credentials: this.options.user.credentials});
+        } else {
+          this.render();
+        }
       } else {
         Events.trigger('forbidden');
       }

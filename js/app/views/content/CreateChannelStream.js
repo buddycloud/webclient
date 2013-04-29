@@ -19,7 +19,6 @@ define(function(require) {
   var AbstractEditStream = require('views/content/AbstractEditStream');
   var api = require('util/api');
   var Backbone = require('backbone');
-  var ChannelMetadata = require('models/ChannelMetadata');
   var config = require('config');
   var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
@@ -54,7 +53,7 @@ define(function(require) {
       var self = this;
       if (channel) {
         channel += this._topicsDomain();
-        this.model = new ChannelMetadata(channel);
+        this.model = this.options.user.metadata(channel);
         var options = {
           type: 'POST',
           url: api.url(this.model.channel),

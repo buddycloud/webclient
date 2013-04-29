@@ -16,7 +16,6 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var ChannelMetadata = require('models/ChannelMetadata');
   var ChannelHeader = require('views/content/ChannelHeader');
   var PreferencesStream = require('views/content/PreferencesStream');
 
@@ -24,7 +23,8 @@ define(function(require) {
     className: 'channelView',
 
     initialize: function() {
-      this.metadata = new ChannelMetadata(this.options.user.username());
+      var channel = this.options.user.username();
+      this.metadata = this.options.user.metadata(channel);
       this.header = new ChannelHeader({
         model: this.metadata,
         user: this.options.user,

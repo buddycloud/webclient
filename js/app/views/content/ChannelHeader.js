@@ -19,7 +19,6 @@ define(function(require) {
   var $ = require('jquery');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
-  var ChannelMetadata = require('models/ChannelMetadata');
   var Events = Backbone.Events;
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
@@ -41,10 +40,15 @@ define(function(require) {
       this._created = false;
 
       if (!this.model) {
-        this.model = new ChannelMetadata(this.options.channel);
+        this.model = this.options.user.metadata(this.options.channel);
       }
       this.model.bind('change', this._build, this);
-      this.model.fetch({credentials: this.options.user.credentials});
+
+      if (this.model.isNew()) {
+        this.model.fetch({credentials: this.options.user.credentials});
+      } else {
+        this._build();
+      }
 
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
