@@ -23,6 +23,7 @@ define(function(require) {
   var ExplorePage = require('views/content/ExplorePage');
   var PreferencesPage = require('views/content/PreferencesPage');
   var ErrorPage = require('views/content/ErrorPage');
+  var ForbiddenPage = require('views/content/ForbiddenPage');
   var SidebarPage = require('views/sidebar/SidebarPage');
   var spinner = require('util/spinner');
   var WelcomePage = require('views/overlay/WelcomePage');
@@ -48,6 +49,7 @@ define(function(require) {
     initialize: function() {
       Events.on('navigate', this._navigate, this);
       Events.on('pageError', this._error, this);
+      Events.on('forbidden', this._forbidden, this);
     },
 
     _endSessionOnUnload: function() {
@@ -125,6 +127,11 @@ define(function(require) {
     _error: function(domain, error) {
       this._before();
       this.currentPage = new ErrorPage({'domain': domain, 'error': error});
+    },
+
+    _forbidden: function() {
+      this._before();
+      this.currentPage = new ForbiddenPage();
     }
   });
 

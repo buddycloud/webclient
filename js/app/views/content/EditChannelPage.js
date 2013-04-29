@@ -16,6 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var ChannelMetadata = require('models/ChannelMetadata');
   var EditChannelView = require('views/content/EditChannelView');
 
@@ -32,7 +33,7 @@ define(function(require) {
         this.model.bind('change', this.render, this);
         this.model.fetch({credentials: this.options.user.credentials});
       } else {
-        //TODO: this.renderForbiddenPage();
+        Events.trigger('forbidden');
       }
     },
 
