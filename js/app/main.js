@@ -28,6 +28,9 @@ requirejs.config({
   shim: {
     'modernizr': {
       exports: 'Modernizr'
+    },
+    'backbone-indexeddb': {
+      deps: ['backbone']
     }
   }
 });
