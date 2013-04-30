@@ -15,6 +15,8 @@
  */
 
 define(function(require) {
+  require(['jquery', 'timeago']);
+  var _ = require('underscore');
   var Backbone = require('backbone');
   var Channel = require('models/Channel');
   var ChannelList = require('views/content/ChannelList');
@@ -30,12 +32,26 @@ define(function(require) {
 
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
-      this.model = new Channel(this.options.channel);
-      this.model.bind('fetch', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials});
-      this.render();
+      this._fetchDetailsLists();
+      this._fetchMetadata();
       if (this.options.user.subscribedChannels) {
         this.options.user.subscribedChannels.bind('subscriptionSync', this._updateFollowersList, this);
+      }
+    },
+
+    _fetchDetailsLists: function() {
+      this.model = new Channel(this.options.channel);
+      this.model.bind('fetch', this.render, this);
+      this.model.fetch({credentials: this.options.user.credentials});     
+    },
+
+    _fetchMetadata: function() {
+      this.metadata = this.options.user.metadata(this.options.channel);
+      this.metadata.bind('change', this.render, this);
+      if (this.metadata.isNew()) {
+        this.metadata.fetch({credentials: this.options.user.credentials});
+      } else {
+        this.render();
       }
     },
 
@@ -49,13 +65,11 @@ define(function(require) {
     _updateFollowersList: function(action) {
       if (this._isInitialized()) {
         var username = this.options.user.username();
-
         if (action === 'subscribedChannel') {
           this._addFollower(username);
         } else {
           this._removeFollower(username);
         }
-
         this.followersList.render();
       }
     },
@@ -69,7 +83,8 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(localTemplate, {channel: this.options.channel}));
+      this.$el.html(_.template(localTemplate, 
+        {metadata: this.metadata}));
       return this;
     },
 

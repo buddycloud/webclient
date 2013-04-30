@@ -22,7 +22,7 @@ define(function(require) {
   var Events = Backbone.Events;
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
-  var template = require('text!templates/content/header.html')
+  var template = require('text!templates/content/header.html');
   var l = l10n.get;
   var localTemplate;
 

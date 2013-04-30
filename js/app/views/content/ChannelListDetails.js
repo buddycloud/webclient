@@ -18,7 +18,7 @@ define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
   var l10nBrowser = require('l10n-browser');
-  var template = require('text!templates/content/channelListDetails.html')
+  var template = require('text!templates/content/channelListDetails.html');
   var Events = Backbone.Events;
   var localTemplate;
 

@@ -29,7 +29,7 @@ define(function(require) {
 
     fetch: function(options) {
       options = _.extend(options || {}, {
-        complete: this._triggerFetchCallback(),
+        complete: this._triggerFetchCallback()
       });
       this.followers.fetch(options);
       this.similarChannels.fetch(options);
@@ -44,7 +44,7 @@ define(function(require) {
             _.include(fetched, self.similarChannels)) {
           self.trigger('fetch');
         }
-      }
+      };
     }
   });
 

@@ -77,14 +77,14 @@ define(function(require) {
         self._syncWithServer = false;
         self.once('error sync', function() {self._syncWithServer = true});
         self.save({}, {silent: true});
-      }
+      };
     },
 
     _syncServerCallback: function(method, model, options) {
       var self = this;
       return function() {
         self._syncServer(method, model, options);
-      }
+      };
     },
 
     _syncIndexedDB: function(method, model, options) {
