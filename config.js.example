@@ -2,7 +2,7 @@ define({
   // Where to find your API server
   // Note: it is not possible to use self signed certificates for AJAX requests
   // (see https://buddycloud.org/wiki/Install#SSL_and_API_requests for details)
-  baseUrl: 'https://api.EXAMPLE.COM',
+  baseUrl: 'https://EXAMPLE.COM/api/',
   
   // Domain that you your users live on. 
   // For example, if your users' IDs look like user@example.com, then you would 
