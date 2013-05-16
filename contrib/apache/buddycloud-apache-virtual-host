@@ -26,8 +26,12 @@
         RewriteCond %{REQUEST_URI} !^/locales/
         RewriteCond %{REQUEST_URI} !^/config\.js$
         RewriteCond %{REQUEST_URI} !^/favicon\.ico$
+        RewriteCond %{REQUEST_URI} !^/api/
         RewriteCond %{REQUEST_URI} !^(.*)\.html$
         RewriteRule ^(.*)$ /index.html
+
+        ProxyPass /api/ http://localhost:9123/
+        ProxyPassReverse /api/ http://localhost:9123/
  
         # Enable sensible caching
         FileETag                             None
