@@ -29,12 +29,7 @@ define(function(require) {
           model: this.model,
           user: this.options.user
         });
-        this.model.bind('change', this.render, this);
-        if (this.model.isNew()) {
-          this.model.fetch({credentials: this.options.user.credentials});
-        } else {
-          this.render();
-        }
+        this.render();
       } else {
         Events.trigger('forbidden');
       }
