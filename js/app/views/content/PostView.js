@@ -317,12 +317,19 @@ define(function(require) {
 
     _deletePost: function() {
       //FIXME: give feedback during request processing
+      var self = this;
       var channel = this.options.items.channel;
       var id = this.model.get('id');
+      var authHeader = this.options.user.credentials.authorizationHeader();
       var options = {
         type: 'DELETE',
-        url: api.url(channel, 'content', id),
-        success: this.remove
+        url: api.url(channel, 'content', 'posts', id),
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader('Authorization', authHeader);
+        },
+        success: function() {
+          self.destroy();
+        }
       };
       $.ajax(options);
     }
