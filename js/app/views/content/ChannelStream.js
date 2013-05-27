@@ -129,19 +129,19 @@ define(function(require) {
           wait: true,
           success: function() {
             expandingArea.find('textarea').val('').blur();
-            expandingArea.find('span').text('')
+            expandingArea.find('span').text('');
             self._collapseNewTopicArea();
             self._enableButton();
           }
         });
-      }
+      };
     },
 
     _initModel: function() {
       this.model = new ChannelItems(this.options.channel);
       this.model.bind('reset', this._begin, this);
       this.model.bind('error', this._error, this);
-      this.model.fetch({data: {max: 51}, credentials: this.options.user.credentials});
+      this.model.fetch({data: {max: 51}, credentials: this.options.user.credentials, reset: true});
     },
 
     _begin: function() {

@@ -29,7 +29,7 @@ define(function(require) {
     initialize: function() {
       this.useIndexedDB = this._isLoading = indexedDB.isSuppported();
       if (this.useIndexedDB) {
-        this.bind('reset', this._onReset, this);
+        this.bind('sync', this._onReset, this);
       } else {
         this._unreadCounts = {};
       }

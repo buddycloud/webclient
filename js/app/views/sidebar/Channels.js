@@ -45,7 +45,7 @@ define(function(require) {
       if (this.unreadCounters.useIndexedDB) {
         // Fetch and store counters
         this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
-        this.unreadCounters.fetch({conditions: {'user': this.model.username()}});
+        this.unreadCounters.fetch({conditions: {'user': this.model.username()}, reset: true});
       } else {
         // Render channels and listen for new posts
         this.render();
