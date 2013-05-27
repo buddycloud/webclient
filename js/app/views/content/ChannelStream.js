@@ -127,14 +127,28 @@ define(function(require) {
         self.model.create({content: content}, {
           credentials: self.options.user.credentials,
           wait: true,
-          success: function() {
+          complete: function() {
             expandingArea.find('textarea').val('').blur();
             expandingArea.find('span').text('');
+          },
+          success: function() {
             self._collapseNewTopicArea();
             self._enableButton();
+          },
+          error: function() {
+            self._enableButtonWithError();
           }
         });
       };
+    },
+
+    _enableButtonWithError: function() {
+      var self = this;
+      this.$('.createComment').removeClass('disabled').addClass('completed').text('Error');
+      setTimeout(function() {
+        self._enableSaveButton();
+        self._collapseNewTopicArea();
+      }, 3500);
     },
 
     _initModel: function() {
@@ -360,7 +374,7 @@ define(function(require) {
         clearTimeout(this.previewTimeout);
         this.previewTimeout = null;
       }
-      this.$('.newTopic + .preview').empty()
+      this.$('.newTopic + .preview').empty();
     },
 
     _expandNewTopicArea: function(event) {
@@ -378,7 +392,13 @@ define(function(require) {
     },
 
     _enableButton: function() {
-      this.$('.createComment').removeClass('disabled').text('Post');
+      var $button = this.$('.createComment');
+      if ($button.hasClass('disabled')) {
+        $button.removeClass('disabled');
+      } else {
+        $button.removeClass('completed');
+      }
+      $button.text('Post');
     },
 
     _disableButton: function() {
@@ -394,11 +414,16 @@ define(function(require) {
       this.model.create({content: content}, {
         credentials: this.options.user.credentials,
         wait: true,
-        success: function() {
+        complete: function() {
           expandingArea.find('textarea').val('').blur();
           expandingArea.find('span').text('');
+        },
+        success: function() {
           self._collapseNewTopicArea();
           self._enableButton();
+        },
+        error: function() {
+          self._enableButtonWithError();
         }
       });
     },
