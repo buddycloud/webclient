@@ -152,7 +152,7 @@ define(function(require) {
     _fetchMetadata: function(channel, callback) {
       var metadata = this.model.metadata(channel);
       this.metadatas.unshift(metadata);
-      if (metadata.isNew()) {
+      if (!metadata.hasEverChanged()) {
         metadata.fetch({credentials: this.model.credentials, success: callback});
       } else {
         callback(metadata);

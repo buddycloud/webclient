@@ -42,13 +42,13 @@ define(function(require) {
     _fetchDetailsLists: function() {
       this.model = new Channel(this.options.channel);
       this.model.bind('fetch', this.render, this);
-      this.model.fetch({credentials: this.options.user.credentials});     
+      this.model.fetch({credentials: this.options.user.credentials});
     },
 
     _fetchMetadata: function() {
       this.metadata = this.options.user.metadata(this.options.channel);
       this.metadata.bind('change', this.render, this);
-      if (this.metadata.isNew()) {
+      if (!this.metadata.hasEverChanged()) {
         this.metadata.fetch({credentials: this.options.user.credentials});
       } else {
         this.render();

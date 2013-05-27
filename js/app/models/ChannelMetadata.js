@@ -28,7 +28,17 @@ define(function(require) {
     constructor: function(channel) {
       ModelBase.call(this);
       this.channel = channel;
+      this.fetched = false;
       this.set({'channel': channel}, {silent: true});
+      this.bind('change', this._onChange, this);
+    },
+
+    _onChange: function() {
+      this.fetched = true;
+    },
+
+    hasEverChanged: function() {
+      return this.fetched;
     },
 
     initialize: function() {

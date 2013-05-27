@@ -35,7 +35,7 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this._initialize();
-      if (this.model.isNew()) {
+      if (!this.model.hasEverChanged()) {
         this.model.bind('change', this.render, this);
       } else {
         this.render();

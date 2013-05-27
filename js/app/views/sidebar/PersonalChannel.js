@@ -38,7 +38,7 @@ define(function(require) {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.metadata = this.model.metadata(this.model.username());
       this.metadata.bind('change', this.render, this);
-      if (this.metadata.isNew()) {
+      if (!this.metadata.hasEverChanged()) {
         this.metadata.fetch({credentials: this.model.credentials});
       } else {
         this.render();

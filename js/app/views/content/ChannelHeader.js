@@ -44,7 +44,7 @@ define(function(require) {
       }
       this.model.bind('change', this._build, this);
 
-      if (this.model.isNew()) {
+      if (!this.model.hasEverChanged()) {
         this.model.fetch({credentials: this.options.user.credentials});
       } else {
         this._build();
