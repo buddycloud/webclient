@@ -49,17 +49,18 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(localTemplate, {
-        preferences: this.model
+        email: this.model.get('target')
       }));
 
       this._renderCheckboxes();
     },
 
     _renderCheckboxes: function() {
-      var self = this;
-      _.each(_.keys(this.checkboxes), function(checkbox) {
-        self._check(self.$('#' + checkbox), self.model[checkbox]());
-      });
+      for (var key in this.checkboxes) {
+        var checkboxId = '#' + key;
+        var check = this.model.get(this.checkboxes[key]) === 'true' ? true : false;
+        this._check(this.$(checkboxId), check);
+      }
     },
 
     _renderConfirmButton: function() {
@@ -81,11 +82,12 @@ define(function(require) {
     },
 
     _savePreferences: function(email) {
-      var self = this;
-      _.each(_.keys(this.checkboxes), function(checkbox) {
-        self.model.set(self.checkboxes[checkbox],
-          self._isChecked(self.$('#' + checkbox)));
-      });
+      for (var key in this.checkboxes) {
+        var checkboxId = '#' + key;
+        var checked = this._isChecked(this.$(checkboxId));
+        this.model.set(this.checkboxes[key], checked, {silent: true});
+      }
+
       this.model.set('type', 'email', {silent: true});
       this.model.set('target', email, {silent: true});
       this.model.save({}, {
@@ -101,7 +103,7 @@ define(function(require) {
       return function() {
         self.$('.save').removeClass('disabled').addClass('completed').text('Saved');
         setTimeout(self._enableSaveButton(), 7000);
-      }
+      };
     },
 
     _saveError: function() {
@@ -109,14 +111,14 @@ define(function(require) {
       return function() {
         self.$('.save').removeClass('disabled').addClass('completed').text('Error');
         setTimeout(self._enableSaveButton(), 3500);
-      }
+      };
     },
 
     _enableSaveButton: function() {
       var self = this;
       return function() {
         self.$('.save').removeClass('completed').text('Save');
-      }
+      };
     },
 
     _disableSaveButton: function() {

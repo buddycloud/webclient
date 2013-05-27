@@ -19,41 +19,13 @@ define(function(require) {
   var ModelBase = require('models/ModelBase');
 
   var Preferences = ModelBase.extend({
-    _isTrue: function(attr) {
-      return attr ? attr === 'true' : false;
-    },
-
-    target: function() {
-      return this.get('target') || '';
-    },
-
-    newFollowers: function() {
-      return this._isTrue(this.get('followRequest')) ||
-             this._isTrue(this.get('followMyChannel'))
-    },
-
-    mentions: function() {
-      return this._isTrue(this.get('postMentionedMe'));
-    },
-
-    ownChannel: function() {
-      return this._isTrue(this.get('postOnMyChannel'));
-    },
-
-    followedChannels: function() {
-      return this._isTrue(this.get('postOnSubscribedChannel'));
-    },
-
-    threads: function() {
-      return this._isTrue(this.get('postAfterMe'));
-    },
 
     url: function() {
       return api.url('notification_settings');
     },
 
     parse: function(resp, xhr) {
-      if (!resp.email) {
+      if (!resp.target) {
         // Workaround for old accounts (without email)
         this.trigger('change');
       }
