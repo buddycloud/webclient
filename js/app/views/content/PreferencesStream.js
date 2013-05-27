@@ -86,7 +86,8 @@ define(function(require) {
         self.model.set(self.checkboxes[checkbox],
           self._isChecked(self.$('#' + checkbox)));
       });
-      this.model.set('target', email);
+      this.model.set('type', 'email', {silent: true});
+      this.model.set('target', email, {silent: true});
       this.model.save({}, {
         credentials: this.options.user.credentials,
         success: this._saveSuccess(),
