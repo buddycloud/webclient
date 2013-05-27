@@ -146,7 +146,7 @@ define(function(require) {
       var self = this;
       this.$('.createComment').removeClass('disabled').addClass('completed').text('Error');
       setTimeout(function() {
-        self._enableSaveButton();
+        self._enableButton();
         self._collapseNewTopicArea();
       }, 3500);
     },

@@ -109,15 +109,20 @@ define(function(require) {
           content: content,
           replyTo: self.model.id
         }, {
-          credentials: self.options.user.credentials,
-          wait: true,
-          success: function() {
-            textArea.val('');
-            self._collapseAnswerArea();
-            self._enableButton();
-          }
+            credentials: self.options.user.credentials,
+            wait: true,
+            complete: function() {
+              textArea.val('');
+            },
+            success: function() {
+              self._collapseAnswerArea();
+              self._enableButton();
+            },
+            error: function() {
+              self._enableButtonWithError();
+            }
         });
-      }
+      };
     },
 
     _addComment: function(post) {
@@ -243,7 +248,7 @@ define(function(require) {
         clearTimeout(this.previewTimeout);
         this.previewTimeout = null;
       }
-      this.$('.preview').empty()
+      this.$('.preview').empty();
     },
 
     _expandAnswerArea: function(event) {
@@ -267,8 +272,23 @@ define(function(require) {
       Events.trigger('navigate', jid);
     },
 
+    _enableButtonWithError: function() {
+      var self = this;
+      this.$('.createComment').removeClass('disabled').addClass('completed').text('Error');
+      setTimeout(function() {
+        self._enableButton();
+        self._collapseAnswerArea();
+      }, 3500);
+    },
+
     _enableButton: function() {
-      this.$('.createComment').removeClass('disabled').text('Post');
+      var $button = this.$('.createComment');
+      if ($button.hasClass('disabled')) {
+        $button.removeClass('disabled');
+      } else {
+        $button.removeClass('completed');
+      }
+      $button.text('Post');
     },
 
     _disableButton: function() {
@@ -289,10 +309,15 @@ define(function(require) {
       }, {
         credentials: this.options.user.credentials,
         wait: true,
-        success: function() {
+        complete: function() {
           textArea.val('');
+        },
+        success: function() {
           self._collapseAnswerArea();
           self._enableButton();
+        },
+        error: function() {
+          self._enableButtonWithError();
         }
       });
     },
