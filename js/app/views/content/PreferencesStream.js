@@ -89,16 +89,25 @@ define(function(require) {
       this.model.set('target', email);
       this.model.save({}, {
         credentials: this.options.user.credentials,
-        complete: this._saveComplete()
+        success: this._saveSuccess(),
+        error: this._saveError()
       });
       this._disableSaveButton();
     },
 
-    _saveComplete: function() {
+    _saveSuccess: function() {
       var self = this;
       return function() {
         self.$('.save').removeClass('disabled').addClass('completed').text('Saved');
         setTimeout(self._enableSaveButton(), 7000);
+      }
+    },
+
+    _saveError: function() {
+      var self = this;
+      return function() {
+        self.$('.save').removeClass('disabled').addClass('completed').text('Error');
+        setTimeout(self._enableSaveButton(), 3500);
       }
     },
 
