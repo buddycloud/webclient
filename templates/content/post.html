@@ -40,6 +40,27 @@
        </div>
        <div class="postmeta">
          <time class="timeago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%- comment.updated %>"></time>
+          <div class="share">
+            <span class="action">▼</span>
+            <div class="popup centered vertical">
+              <div class="arrow"></div>
+              <ul>
+                <!--<li class="permalink">Link to this Post
+                <li class="email"><a href="mailto:?body=$url">Share via Email</a>
+                <li>
+                  <div class="justify">
+                    <a class="social twitter" href="https://twitter.com/share?url=$url" title="Tweet about it">Tweet about it</a>
+                    <a class="social gplus" href="https://plus.google.com/share?url=$url" title="Plus it">Google+ it</a>
+                    <a class="social facebook" href="http://www.facebook.com/sharer.php?u=$url" title="Like it on Facebook">Like it on Facebook</a>
+                    <a class="social reddit" href="http://www.reddit.com/submit?url=$url" title="Share on Reddit">Share on Reddit</a>
+                    <a class="social tumblr" href="http://www.tumblr.com/share" title="Share on Tumblr">Share on Tumblr</a>
+                  </div>
+                </li>
+                <!-->
+                <li class="deletePost">Delete</a>
+              </ul>
+            </div>
+          </div>
        </div>
        <p><%= linkify(comment.content) %></p>
      </section>

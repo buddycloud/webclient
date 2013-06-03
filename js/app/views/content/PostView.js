@@ -39,7 +39,7 @@ define(function(require) {
       'focusout .answer': '_collapseAnswerArea',
       'click .createComment': '_comment',
       'click .avatar': '_redirect',
-      'click .action': '_popup',
+      'click .action': '_popupActions',
       'click .deletePost': '_deletePost'
     },
 
@@ -322,9 +322,10 @@ define(function(require) {
       });
     },
 
-    _popup: function(event) {
+    _popupActions: function(event) {
       event.stopPropagation();
-      var $popup = this.$('.popup');
+      var $target = this.$(event.target);
+      var $popup = $target.next();
 
       if($popup.hasClass('visible')){
         // close popup
@@ -341,7 +342,6 @@ define(function(require) {
     },
 
     _deletePost: function() {
-      //FIXME: give feedback during request processing
       var self = this;
       var channel = this.options.items.channel;
       var id = this.model.get('id');
