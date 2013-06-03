@@ -44,6 +44,7 @@ define(function(require) {
       });
       this._defineGetter('replyTo');
       this._defineGetter('published');
+      this._defineGetter('id');
     },
 
     _initializeComments: function() {
@@ -66,6 +67,14 @@ define(function(require) {
 
     isComment: function() {
       return !this.isPost();
+    },
+
+    deleteComment: function(id) {
+      for (var i in this.comments) {
+        if (this.comments[i].id === id) {
+          this.comments.splice(i, 1);
+        }
+      }
     },
 
     authorAvatarUrl: function(size) {

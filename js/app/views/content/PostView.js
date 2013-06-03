@@ -341,10 +341,11 @@ define(function(require) {
       $(event.data.popup).removeClass('visible');
     },
 
-    _deletePost: function() {
+    _deletePost: function(event) {
       var self = this;
       var channel = this.options.items.channel;
-      var id = this.model.get('id');
+      var id = event.target.id;
+      var model = this.model;
       var authHeader = this.options.user.credentials.authorizationHeader();
       var options = {
         type: 'DELETE',
@@ -353,7 +354,12 @@ define(function(require) {
           xhr.setRequestHeader('Authorization', authHeader);
         },
         success: function() {
-          self.destroy();
+          if (model.id === id) {
+            self.destroy();
+          } else {
+            model.deleteComment(id);
+            self.render();
+          }
         }
       };
       $.ajax(options);
