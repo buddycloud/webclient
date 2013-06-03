@@ -299,27 +299,29 @@ define(function(require) {
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
       var content = textArea.val();
-      var self = this;
+      if (content.trim()) {
+        var self = this;
 
-      this._disableButton();
+        this._disableButton();
 
-      var comment = this.options.items.create({
-        content: content,
-        replyTo: this.model.id
-      }, {
-        credentials: this.options.user.credentials,
-        wait: true,
-        complete: function() {
-          textArea.val('');
-        },
-        success: function() {
-          self._collapseAnswerArea();
-          self._enableButton();
-        },
-        error: function() {
-          self._enableButtonWithError();
-        }
-      });
+        var comment = this.options.items.create({
+          content: content,
+          replyTo: this.model.id
+        }, {
+          credentials: this.options.user.credentials,
+          wait: true,
+          complete: function() {
+            textArea.val('');
+          },
+          success: function() {
+            self._collapseAnswerArea();
+            self._enableButton();
+          },
+          error: function() {
+            self._enableButtonWithError();
+          }
+        });
+      }
     },
 
     _popupActions: function(event) {
@@ -343,10 +345,10 @@ define(function(require) {
 
     _deletePost: function(event) {
       var self = this;
+      var authHeader = this.options.user.credentials.authorizationHeader();
       var channel = this.options.items.channel;
       var id = event.target.id;
       var model = this.model;
-      var authHeader = this.options.user.credentials.authorizationHeader();
       var options = {
         type: 'DELETE',
         url: api.url(channel, 'content', 'posts', id),

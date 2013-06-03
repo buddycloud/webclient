@@ -406,26 +406,29 @@ define(function(require) {
     },
 
     _post: function() {
-      this._disableButton();
-      this._disablePreview();
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
-      var self = this;
-      this.model.create({content: content}, {
-        credentials: this.options.user.credentials,
-        wait: true,
-        complete: function() {
-          expandingArea.find('textarea').val('').blur();
-          expandingArea.find('span').text('');
-        },
-        success: function() {
-          self._collapseNewTopicArea();
-          self._enableButton();
-        },
-        error: function() {
-          self._enableButtonWithError();
-        }
-      });
+      if (content.trim()) {
+        this._disableButton();
+        this._disablePreview();
+
+        var self = this;
+        this.model.create({content: content}, {
+          credentials: this.options.user.credentials,
+          wait: true,
+          complete: function() {
+            expandingArea.find('textarea').val('').blur();
+            expandingArea.find('span').text('');
+          },
+          success: function() {
+            self._collapseNewTopicArea();
+            self._enableButton();
+          },
+          error: function() {
+            self._enableButtonWithError();
+          }
+        });
+      }
     },
 
     _bubble: function(post) {
