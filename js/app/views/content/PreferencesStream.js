@@ -49,7 +49,7 @@ define(function(require) {
 
     render: function() {
       this.$el.html(_.template(localTemplate, {
-        email: this.model.get('target')
+        preferences: this.model
       }));
 
       this._renderCheckboxes();

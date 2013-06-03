@@ -2,7 +2,7 @@
   <h2 class="pageName" data-l10n="preferences">Preferences</h2>
   <div class="email">
     <label for="email_address" data-l10n="email">Email</label>
-    <input type="text" id="email_address" value="<%- preferences.target() %>" />
+    <input type="text" id="email_address" value="<%- preferences.get('target') || '' %>" />
   </div>
   <div class="notify">
     <label data-l10n="notifications">Notifications</label>
