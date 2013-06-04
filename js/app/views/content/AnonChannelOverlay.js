@@ -19,7 +19,7 @@ define(function(require) {
   var animations = require('util/animations');
   var Backbone = require('backbone');
   var l10nBrowser = require('l10n-browser');
-  var template = require('text!templates/content/anonOverlay.html')
+  var template = require('text!templates/content/anonOverlay.html');
   var localTemplate;
 
   var AnonChannelOverlay = Backbone.View.extend({
@@ -30,23 +30,33 @@ define(function(require) {
 
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
+
+      this.model.on('loginSuccess', this._successfullLogin, this);
+      this.model.on('loginError', this._invalidLogin, this);
     },
 
     render: function() {
       this.$el.html(_.template(localTemplate));
     },
 
-    login: function(event) {
-      event.preventDefault();
-      var username = $('#auth_name').attr('value');
-      var password = $('#auth_pwd').attr('value');
-      localStorage.loginPermanent = $('#store_local').is(':checked')
-      this.model.credentials.save({username: username, password: password});
+    _invalidLogin: function() {
+      $('.error').show();
+    },
 
+    _successfullLogin: function() {
       // Remove overlay
       this._removeOverlay(function() {
         location.reload();
       });
+    },
+
+    login: function(event) {
+      event.preventDefault();
+      var username = $('#auth_name').attr('value');
+      var password = $('#auth_pwd').attr('value');
+      localStorage.loginPermanent = $('#store_local').is(':checked');
+      this.model.credentials.save({username: username, password: password});
+      this.model.login({permanent: localStorage.loginPermanent === 'true'});
     },
 
     _removeOverlay: function(callback) {

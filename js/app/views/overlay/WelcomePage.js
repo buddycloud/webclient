@@ -44,6 +44,7 @@ define(function(require) {
       // registration
       this.model.on('registrationSuccess', this._successfullRegistration, this);
       this.model.on('registrationError', this._invalidRegistration, this);
+
       // login
       this.model.on('loginSuccess', this._successfullLogin, this);
       this.model.on('loginError', this._invalidLogin, this);
@@ -69,7 +70,7 @@ define(function(require) {
       event.preventDefault();
       var username = this.$('#login_name').attr('value');
       var password = this.$('#login_password').attr('value');
-      localStorage.loginPermanent = $('#store_local').is(':checked')
+      localStorage.loginPermanent = $('#store_local').is(':checked');
       this.model.credentials.save({username: username, password: password});
       this.model.login({permanent: localStorage.loginPermanent === 'true'});
     },
