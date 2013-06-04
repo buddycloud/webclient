@@ -26,8 +26,8 @@ define(function(require) {
   var User = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
-      this.credentials = new UserCredentials;
-      this.notifications = new PostNotifications;
+      this.credentials = new UserCredentials();
+      this.notifications = new PostNotifications();
       this.channelsMetadata = {};
       this.subscribedChannels = null;
     },

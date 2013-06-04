@@ -15,12 +15,10 @@
     <label for="channel_description" data-l10n="channelDescription">Channel description</label>
     <textarea id="channel_description"><%- metadata.description() || '' %></textarea>
   </div>  
-  <!--
-    Not handled yet
   <div class="status">
     <label for="channel_mood">Status</label>
-    <input type="text" id="channel_status" placeholder="How are you doing?" value="<%- metadata.description() || '' %>"/>
-  </div> -->
+    <input type="text" id="channel_status" placeholder="How are you doing?" value="<%- metadata.status() || '' %>"/>
+  </div>
   <!--
     Location isn't currently handled 
     <div class="location">
