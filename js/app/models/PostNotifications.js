@@ -16,8 +16,8 @@
 
 define(function(require) {
   var api = require('util/api');
-  var Item = require('models/Item')
-  var ModelBase = require('models/ModelBase')
+  var Item = require('models/Item');
+  var ModelBase = require('models/ModelBase');
   var _ = require('underscore');
   var Pollymer = require('pollymer');
   var $ = require('jquery');

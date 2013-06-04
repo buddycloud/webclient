@@ -9,9 +9,13 @@
         return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
     }
 
+    var Backbone, _;
     if(typeof exports !== 'undefined'){
         _ = require('underscore');
         Backbone = require('backbone');
+    } else {
+        _ = window._;
+        Backbone = window.Backbone;
     }
 
 
@@ -40,8 +44,9 @@
         this.dbRequest      = indexedDB.open(this.schema.id,lastMigrationPathVersion); //schema version need to be an unsigned long
 
         this.launchMigrationPath = function(dbVersion) {
+            var transaction = this.dbRequest.transaction || versionRequest.result;
             var clonedMigrations = _.clone(schema.migrations);
-            this.migrate(clonedMigrations, dbVersion, {
+            this.migrate(transaction, clonedMigrations, dbVersion, {
                 success: function () {
                     this.ready();
                 }.bind(this),
@@ -127,14 +132,8 @@
         },
 
         // Performs all the migrations to reach the right version of the database.
-        migrate: function (migrations, version, options) {
-            if (!this.nolog) debugLog("Starting migrations from " + version);
-            this._migrate_next(migrations, version, options);
-        },
-
-        // Performs the next migrations. This method is private and should probably not be called.
-        _migrate_next: function (migrations, version, options) {
-            if (!this.nolog) debugLog("_migrate_next begin version from #" + version);
+        migrate: function (transaction, migrations, version, options) {
+            if (!this.nolog) debugLog("migrate begin version from #" + version);
             var that = this;
             var migration = migrations.shift();
             if (migration) {
@@ -151,22 +150,19 @@
                         };
                     }
                     // First, let's run the before script
-                    if (!this.nolog) debugLog("_migrate_next begin before version #" + migration.version);
+                    if (!this.nolog) debugLog("migrate begin before version #" + migration.version);
                     migration.before(function () {
-                        if (!this.nolog) debugLog("_migrate_next done before version #" + migration.version);
+                        if (!this.nolog) debugLog("migrate done before version #" + migration.version);
 
                         var continueMigration = function (e) {
-                            if (!this.nolog) debugLog("_migrate_next continueMigration version #" + migration.version);
-
-                            var transaction = this.dbRequest.transaction || versionRequest.result;
-                            if (!this.nolog) debugLog("_migrate_next begin migrate version #" + migration.version);
+                            if (!this.nolog) debugLog("migrate begin migrate version #" + migration.version);
 
                             migration.migrate(transaction, function () {
-                                if (!this.nolog) debugLog("_migrate_next done migrate version #" + migration.version);
+                                if (!this.nolog) debugLog("migrate done migrate version #" + migration.version);
                                 // Migration successfully appliedn let's go to the next one!
-                                if (!this.nolog) debugLog("_migrate_next begin after version #" + migration.version);
+                                if (!this.nolog) debugLog("migrate begin after version #" + migration.version);
                                 migration.after(function () {
-                                    if (!this.nolog) debugLog("_migrate_next done after version #" + migration.version);
+                                    if (!this.nolog) debugLog("migrate done after version #" + migration.version);
                                     if (!this.nolog) debugLog("Migrated to " + migration.version);
 
                                     //last modification occurred, need finish
@@ -177,9 +173,9 @@
                                             options.success();
                                         }
                                         else{*/
-                                            if (!this.nolog) debugLog("_migrate_next setting transaction.oncomplete to finish  version #" + migration.version);
+                                            if (!this.nolog) debugLog("migrate setting transaction.oncomplete to finish  version #" + migration.version);
                                             transaction.oncomplete = function() {
-                                                if (!that.nolog) debugLog("_migrate_next done transaction.oncomplete version #" + migration.version);
+                                                if (!that.nolog) debugLog("migrate done transaction.oncomplete version #" + migration.version);
 
                                                 if (!that.nolog) debugLog("Done migrating");
                                                 // No more migration
@@ -189,11 +185,8 @@
                                     }
                                     else
                                     {
-                                        if (!this.nolog) debugLog("_migrate_next setting transaction.oncomplete to recursive _migrate_next  version #" + migration.version);
-                                        transaction.oncomplete = function() {
-                                           if (!this.nolog) debugLog("_migrate_next end from version #" + version + " to " + migration.version);
-                                           that._migrate_next(migrations, version, options);
-                                       }
+                                        if (!this.nolog) debugLog("migrate end from version #" + version + " to " + migration.version);
+                                            that.migrate(transaction, migrations, version, options);
                                     }
 
                                 }.bind(this));
@@ -201,7 +194,7 @@
                         }.bind(this);
 
                         if(!this.supportOnUpgradeNeeded){
-                            if (!this.nolog) debugLog("_migrate_next begin setVersion version #" + migration.version);
+                            if (!this.nolog) debugLog("migrate begin setVersion version #" + migration.version);
                             var versionRequest = this.db.setVersion(migration.version);
                             versionRequest.onsuccess = continueMigration;
                             versionRequest.onerror = options.error;
@@ -214,7 +207,7 @@
                 } else {
                     // No need to apply this migration
                     if (!this.nolog) debugLog("Skipping migration " + migration.version);
-                    this._migrate_next(migrations, version, options);
+                    this.migrate(transaction, migrations, version, options);
                 }
             }
         },
@@ -257,20 +250,19 @@
             var json = object.toJSON();
             var writeRequest;
 
-            if (json.id === undefined) json.id = guid();
-            if (json.id === null) delete json.id;
+            if (json.id === undefined && !store.autoIncrement) json.id = guid();
 
-            if (!store.keyPath)
-              writeRequest = store.add(json, json.id);
-            else
-              writeRequest = store.add(json);
-
-            writeRequest.onerror = function (e) {
+            writeTransaction.onerror = function (e) {
                 options.error(e);
             };
-            writeRequest.onsuccess = function (e) {
+            writeTransaction.oncomplete = function (e) {
                 options.success(json);
             };
+
+            if (!store.keyPath)
+                writeRequest = store.add(json, json.id);
+            else
+                writeRequest = store.add(json);
         },
 
         // Writes the json to the storeName in db. It is an update operation, which means it will overwrite the value if the key already exist
@@ -292,7 +284,7 @@
             writeRequest.onerror = function (e) {
                 options.error(e);
             };
-            writeRequest.onsuccess = function (e) {
+            writeTransaction.oncomplete = function (e) {
                 options.success(json);
             };
         },
@@ -304,7 +296,6 @@
 
             var store = readTransaction.objectStore(storeName);
             var json = object.toJSON();
-
 
             var getRequest = null;
             if (json.id) {
@@ -343,7 +334,8 @@
             var json = object.toJSON();
 
             var deleteRequest = store.delete(json.id);
-            deleteRequest.onsuccess = function (event) {
+
+            deleteTransaction.oncomplete = function (event) {
                 options.success(null);
             };
             deleteRequest.onerror = function (event) {
@@ -541,6 +533,11 @@
             return;
         }
 
+        // If a model or a collection does not define a database, fall back on ajaxSync
+        if (typeof object.database === 'undefined' && typeof Backbone.ajaxSync === 'function'){
+            return Backbone.ajaxSync(method, object, options);
+        }
+
         var schema = object.database;
         if (Databases[schema.id]) {
             if(Databases[schema.id].version != _.last(schema.migrations).version){
@@ -552,7 +549,7 @@
         var promise;
         var noop = function() {};
 
-        if ($ && $.Deferred) {
+        if (typeof($) != 'undefined' && $.Deferred) {
             var dfd = $.Deferred();
             var resolve = dfd.resolve;
             var reject = dfd.reject;
@@ -566,19 +563,17 @@
         var success = options.success;
         options.success = function(resp) {
             resolve();
-            // Modified to fit Backbone version 0.9.9
-            // if (success) success(resp, object, options);
-            if (success) success(resp, object, options);
+            if (success) success(resp);
             object.trigger('sync', object, resp, options);
         };
 
         var error = options.error;
         options.error = function(resp) {
             reject();
-            if (error) error(object, resp, options);
+            if (error) error(resp);
             object.trigger('error', object, resp, options);
         };
-        
+
         var next = function(){
             Databases[schema.id].execute([method, object, options]);
         };
@@ -589,8 +584,8 @@
             next();
         }
 
-    	return promise;
-    };   
+        return promise;
+    };
 
     if(typeof exports == 'undefined'){
         Backbone.ajaxSync = Backbone.sync;
