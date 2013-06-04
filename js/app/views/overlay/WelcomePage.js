@@ -50,7 +50,7 @@ define(function(require) {
     },
 
     _invalidLogin: function() {
-      alert('Wrong username or password.');
+      $('.error').show();
     },
 
     _successfullLogin: function() {

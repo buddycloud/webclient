@@ -39,7 +39,7 @@ define(function(require) {
     events: {
       'focusin .newTopic': '_expandNewTopicArea',
       'focusout .newTopic': '_collapseNewTopicArea',
-      'click .createComment': '_post',
+      'click .createComment': '_post'
     },
 
     initialize: function() {

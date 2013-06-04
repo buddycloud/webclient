@@ -78,6 +78,10 @@ h5 {
 ul {
   list-style-type: none;
 }
+p.error {
+  color: #AC1D21;
+  display: none
+}
 a {
   color: hsl(81, 53%, 44%);
   text-decoration: none;
