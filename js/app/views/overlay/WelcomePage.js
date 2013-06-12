@@ -59,7 +59,7 @@ define(function(require) {
     },
 
     _successfullRegistration: function() {
-      this.model.login({permanent: localStorage.loginPermanent === 'true'});
+      this.model.login({permanent: true});
     },
 
     _invalidRegistration: function(message) {
@@ -70,9 +70,10 @@ define(function(require) {
       event.preventDefault();
       var username = this.$('#login_name').attr('value');
       var password = this.$('#login_password').attr('value');
-      localStorage.loginPermanent = $('#store_local').is(':checked');
-      this.model.credentials.save({username: username, password: password});
-      this.model.login({permanent: localStorage.loginPermanent === 'true'});
+      var permanent = $('#store_local').is(':checked');
+
+      var loginInfo = {'username': username, 'password': password};
+      this.model.login(loginInfo, {'permanent': permanent});
     },
 
     register: function(event) {

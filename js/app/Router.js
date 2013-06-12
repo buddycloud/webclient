@@ -43,7 +43,6 @@ define(function(require) {
     constructor: function(user) {
       Backbone.Router.call(this);
       this.user = user;
-      this._endSessionOnUnload();
     },
 
     initialize: function() {
@@ -72,7 +71,6 @@ define(function(require) {
       if (this.currentPage) {
         this.currentPage.destroy();
       }
-      this._endSessionOnUnload();
       spinner.replace($('.content'));
     },
 
