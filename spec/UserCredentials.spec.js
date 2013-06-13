@@ -19,100 +19,96 @@ define(function(require) {
 
   describe('UserCredentials', function() {
     var credentials;
+    var username = 'bob@example.com';
+    var password = 'bob';
+    var cred = btoa(username + ':' + password);
 
     beforeEach(function() {
       localStorage.clear();
-      sessionStorage.clear();
+
+      $.cookie.path = '/';
+      var cookies = $.cookie();
+      for (var c in cookies) {
+        $.removeCookie(c);
+      }
+
       credentials = new UserCredentials();
     });
 
     describe('set()', function() {
-      it('should set "username" and "password" attributes', function() {
-        credentials.set({username: 'bob@example.com', password: 'bob'});
-        expect(credentials.username).toBe('bob@example.com');
-        expect(credentials.password).toBe('bob');
-      });
-
-      it('should append the home domain to username if none is specified', function() {
-        credentials.set({username: 'bob'});
-        expect(credentials.username).toBe('bob@example.com');
+      it('should set "username" and "credentials" attributes', function() {
+        credentials.set({username: username, credentials: cred});
+        expect(credentials.username).toBe(username);
+        expect(credentials.credentials).toBe(cred);
       });
     });
 
     describe('fetch()', function() {
-      it('should get credentials from sessionStorage', function() {
-        sessionStorage.username = 'bob@example.com';
-        sessionStorage.password = 'bob';
+      it('should get credentials from cookies', function() {
+        localStorage.username = username;
+        $.cookie('credentials', cred);
         credentials.fetch();
-        expect(credentials.username).toBe('bob@example.com');
-        expect(credentials.password).toBe('bob');
+        expect(credentials.username).toBe(username);
+        expect(credentials.credentials).toBe(cred);
       });
 
-      it('should fall back to localStorage if required', function() {
+      it('should store credentials using cookies', function() {
+        localStorage.username = username;
+        $.cookie('credentials', cred);
+        credentials.fetch();
+        expect(credentials.username).toBe(username);
+        expect(credentials.credentials).toBe(cred);
+      });
+
+      it('should only store username and credentials if both are set', function() {
         localStorage.username = 'bob@example.com';
-        localStorage.password = 'bob';
         credentials.fetch();
-        expect(credentials.username).toBe('bob@example.com');
-        expect(credentials.password).toBe('bob');
-      });
-
-      it('should prefer sessionStorage over localStorage', function() {
-        sessionStorage.username = 'alice@example.com';
-        sessionStorage.password = 'alice';
-        localStorage.username = 'bob@example.com';
-        localStorage.password = 'bob';
-        credentials.fetch();
-        expect(credentials.username).toBe('alice@example.com');
-        expect(credentials.password).toBe('alice');
-      });
-
-      it('should store credentials in sessionStorage', function() {
-        localStorage.username = 'bob@example.com';
-        localStorage.password = 'bob';
-        credentials.fetch();
-        expect(sessionStorage.username).toBe('bob@example.com');
-        expect(sessionStorage.password).toBe('bob');
-      });
-
-      it('should store credentials in localStorage if it is empty', function() {
-        sessionStorage.username = 'bob@example.com';
-        sessionStorage.password = 'bob';
-        credentials.fetch();
-        expect(localStorage.username).toBe('bob@example.com');
-        expect(localStorage.password).toBe('bob');
-      });
-
-      it('should not change localStorage if it has credentials', function() {
-        localStorage.username = 'alice@example.com';
-        localStorage.password = 'alice';
-        sessionStorage.username = 'bob@example.com';
-        sessionStorage.password = 'bob';
-        credentials.fetch();
-        expect(localStorage.username).toBe('alice@example.com');
-        expect(localStorage.password).toBe('alice');
+        expect(credentials.username).toBeUndefined();
+        expect(credentials.credentials).toBeUndefined();
       });
 
       it('should call success callback if supplied', function() {
         var success = jasmine.createSpy('success');
-        sessionStorage.username = 'alice@example.com';
-        sessionStorage.password = 'alices_password';
+        localStorage.username = username;
+        $.cookie('credentials', cred);
         credentials.fetch({success: success});
         expect(success).toHaveBeenCalled();
       });
     });
 
     describe('save()', function() {
-      it('should store credentials into localStorage', function() {
-        credentials.save({username: 'bob@example.com', password: 'bob'});
+      it('should store credentials into cookie and username into localStorage', function() {
+        credentials.save({username: username, password: password});
         expect(localStorage.username).toBe('bob@example.com');
-        expect(localStorage.password).toBe('bob');
+        expect($.cookie('credentials')).toBe(cred);
       });
 
-      it('should delete storage if credentials are cleared', function() {
+      it('should store permanent login', function() {
+        credentials.save({username: username, password: password}, {permanent: true});
+        expect(localStorage.username).toBe('bob@example.com');
+        expect($.cookie('credentials')).toBe(cred);
+        expect(Boolean(localStorage.loginPermanent)).toBe(true);
+      });
+
+      it('should keep storage if save is called with null attributes', function() {
         credentials.save({username: 'bob@example.com', password: 'bob'});
         credentials.save({username: null, password: null});
+        expect(localStorage.username).toBe(username);
+        expect($.cookie('credentials')).toBe(cred);
+      });
+
+      it('should append the home domain to username if none is specified', function() {
+        credentials.save({username: 'bob', password: 'bob'});
+        expect(credentials.username).toBe('bob@example.com');
+      });
+    });
+
+    describe('clear()', function() {
+      it('should delete storage after clear', function() {
+        credentials.save({username: 'bob@example.com', password: 'bob'});
+        credentials.clear();
         expect(localStorage.username).toBeUndefined();
-        expect(localStorage.password).toBeUndefined();
+        expect($.cookie('credentials')).toBeUndefined();
       });
     });
 
@@ -124,8 +120,8 @@ define(function(require) {
       });
 
       it('should add HTTP Basic Authorization header to options', function() {
-        var auth = 'Basic ' + btoa('bob@example.com:bob');
-        credentials.set({username: 'bob@example.com', password: 'bob'});
+        var auth = 'Basic ' + cred;
+        credentials.set({username: 'bob@example.com', credentials: cred});
         var options = {};
         credentials.addAuthorizationToAjaxOptions(options);
         expect(options.headers['Authorization']).toBe(auth);

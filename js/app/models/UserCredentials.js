@@ -15,59 +15,93 @@
  */
 
 define(function(require) {
+  require(['jquery', 'jquery.cookie']);
   var $ = require('jquery');
   var api = require('util/api');
   var config = require('config');
   var Backbone = require('backbone');
-  var ModelBase = require('models/ModelBase')
+  var ModelBase = require('models/ModelBase');
 
   var UserCredentials = ModelBase.extend({
     fetch: function(options) {
-      this.set({
-        username: sessionStorage.username || localStorage.username,
-        password: sessionStorage.password || localStorage.password
-      });
-      this._saveToStorage(sessionStorage);
-      if (!localStorage.username) {
-        this._saveToStorage(localStorage);
+      var username = localStorage.username;
+      var credentials = $.cookie('credentials');
+
+      if (username && credentials) {
+        this.set({
+          'username': username,
+          'credentials': credentials
+        });
       }
+
       if (options && options.success) {
         options.success();
       }
     },
 
-    _saveToStorage: function(storage) {
-      this._setStorageKey(storage, 'username', this.username);
-      this._setStorageKey(storage, 'password', this.password);
+    updateCookie: function() {
+      if (this.isPermanent()) {
+        $.cookie('credentials', {expires: 7, path: '/'});
+      }
     },
 
-    _setStorageKey: function(storage, key, value) {
+    _persist: function(permanent) {
+      var opt = {path: '/'};
+      if (permanent) {
+        // FIXME: expire time from config file?
+        opt.expires = 7;
+      }
+
+      this._setStorageKey('loginPermanent', permanent);
+      this._setStorageKey('username', this.username);
+      this._setCookieKey('credentials', this.credentials, opt);
+    },
+
+    _setStorageKey: function(key, value) {
       if (value) {
-        storage[key] = value;
+        localStorage[key] = value;
       } else {
-        delete storage[key];
+        delete localStorage[key];
+      }
+    },
+
+    _setCookieKey: function(key, value, opt) {
+      if (value) {
+        $.cookie(key, value, opt);
+      } else {
+        $.removeCookie(key);
       }
     },
 
     isPermanent: function() {
-      return localStorage.loginPermanent === 'true' ? true : false;
+      return Boolean(localStorage.loginPermanent);
     },
 
     set: function() {
       Backbone.Model.prototype.set.apply(this, arguments);
       this.username = this.get('username');
-      this.password = this.get('password');
-      if (this.username && this.username.indexOf('@') == -1) {
-        this.username += '@' + config.homeDomain;
-      }
+      this.credentials = this.get('credentials');
+    },
+
+    clear: function(options) {
+      this.set({username: null, credentials: null});
+      this._persist();
     },
 
     save: function(attributes, options) {
-      this.set(attributes);
-      this._saveToStorage(localStorage);
+      var username = attributes.username;
+      var password = attributes.password;
 
-      if (options && options.permanent) {
-        this._saveToStorage(sessionStorage);
+      if (username && password) {
+        if (username.indexOf('@') == -1) {
+          username += '@' + config.homeDomain;
+        }
+
+        var credentials = btoa(username + ':' + password);
+        this.set({'username': username, 'credentials': credentials});
+
+        options = options || {};
+        this._persist(options.permanent);
       }
     },
 
@@ -82,7 +116,7 @@ define(function(require) {
 
     authorizationHeader: function() {
       if (this.username) {
-        return 'Basic ' + btoa(this.username + ':' + this.password);
+        return 'Basic ' + this.credentials;
       } else {
         return undefined;
       }

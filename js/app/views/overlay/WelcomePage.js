@@ -59,7 +59,7 @@ define(function(require) {
     },
 
     _successfullRegistration: function() {
-      this.model.login({permanent: localStorage.loginPermanent === 'true'});
+      this.model.login({permanent: true});
     },
 
     _invalidRegistration: function(message) {
@@ -70,9 +70,10 @@ define(function(require) {
       event.preventDefault();
       var username = this.$('#login_name').attr('value');
       var password = this.$('#login_password').attr('value');
-      localStorage.loginPermanent = $('#store_local').is(':checked');
-      this.model.credentials.save({username: username, password: password});
-      this.model.login({permanent: localStorage.loginPermanent === 'true'});
+      var permanent = $('#store_local').is(':checked');
+
+      var loginInfo = {'username': username, 'password': password};
+      this.model.login(loginInfo, {'permanent': permanent});
     },
 
     register: function(event) {
@@ -93,6 +94,11 @@ define(function(require) {
       $('nav a.login').click(function(event){ return toggleView(event, 'Login'); });
       $('nav a.register').click(function(event){ return toggleView(event, 'Register'); });
       formHolder.find('form').click(function(event){ event.stopPropagation(); });
+
+      var previousUsername = localStorage.username;
+      if (previousUsername) {
+        this.$('#login_name').val(previousUsername);
+      }
 
       function toggleView(event, form){
         event.stopPropagation();

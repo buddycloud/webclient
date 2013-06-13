@@ -19,30 +19,33 @@ define(function(require) {
 
   describe('User', function() {
     var user;
+    var username = 'bob@example.com';
+    var password = 'bob';
+    var cred = btoa(username + ':' + password);
 
     beforeEach(function() {
       localStorage.clear();
-      sessionStorage.clear();
-      user = new User;
+
+      $.cookie.path = '/';
+      var cookies = $.cookie();
+      for (var c in cookies) {
+        $.removeCookie(c);
+      }
+
+      user = new User();
     });
 
     describe('login()', function() {
       it('should send authorized request to URL /subscribed', function() {
         spyOn($, 'ajax').andCallFake(function(options) {
           expect(options.url).toBe('https://example.com/subscribed');
-          var auth = 'Basic ' + btoa('bob@example.com:bob');
+          var auth = 'Basic ' + cred;
           expect(options.headers['Authorization']).toBe(auth);
           expect(options.xhrFields.withCredentials).toBe(true);
         });
-        user.credentials.set({username: 'bob@example.com', password: 'bob'});
-        user.login();
-        expect($.ajax).toHaveBeenCalled();
-      });
 
-      it('should not send request if user is anonymous', function() {
-        spyOn($, 'ajax');
-        user.login();
-        expect($.ajax).not.toHaveBeenCalled();
+        user.login({username: username, password: password});
+        expect($.ajax).toHaveBeenCalled();
       });
 
       it('should trigger "loginSuccess" on success response', function() {
@@ -50,17 +53,11 @@ define(function(require) {
           options.success();
         });
         spyOn(user, 'trigger');
-        user.credentials.set({username: 'bob@example.com', password: 'bob'});
-        user.login();
+
+        user.login({username: username, password: password});
         expect(user.trigger).toHaveBeenCalledWith('loginSuccess');
       });
 
-      it('should trigger "loginSuccess" if user is anonymous', function() {
-        spyOn(user, 'trigger');
-        user.credentials.set({username: null, password: null});
-        user.login();
-        expect(user.trigger).toHaveBeenCalledWith('loginSuccess');
-      });
 
       it('should trigger "loginError" on error response', function() {
         spyOn($, 'ajax').andCallFake(function(options) {
@@ -68,81 +65,25 @@ define(function(require) {
         });
         spyOn(user, 'trigger');
 
-        user.credentials.set({username: 'bob@example.com', password: 'bob'});
-        user.login();
+
+        user.login({username: username, password: password});
         expect(user.trigger).toHaveBeenCalledWith('loginError');
-      });
-
-      it('should increase localStorage.loginCount on success', function() {
-        spyOn($, 'ajax').andCallFake(function(options) {
-          options.success();
-        });
-        user.credentials.set({username: 'bob@example.com', password: 'bob'});
-        localStorage.loginCount = '3';
-        user.login();
-        expect(localStorage.loginCount).toBe('4');
-      });
-
-      it('should not increase loginCount if {permanent: true} is passed', function() {
-        spyOn($, 'ajax').andCallFake(function(options) {
-          options.success();
-        });
-        user.credentials.set({username: 'bob@example.com', password: 'bob'});
-        localStorage.loginCount = '3';
-        user.login({permanent: true});
-        expect(localStorage.loginCount).toBe('3');
       });
     });
 
     describe('logout()', function() {
       beforeEach(function() {
-        user.credentials.set({username: 'bob@example.com', password: 'bob'});
         localStorage.username = 'bob@example.com';
-        localStorage.password = 'bob';
-      
-        sessionStorage.username = 'bob@example.com';
-        sessionStorage.password = 'bob';
+        $.cookie('credentials', cred);
       });
 
       it('should remove session information', function() {
         user.logout();
         expect(localStorage.username).toBeUndefined();
-        expect(localStorage.password).toBeUndefined();
+        expect($.cookie('credentials')).toBeUndefined();
 
         expect(sessionStorage.username).toBeUndefined();
-        expect(sessionStorage.password).toBeUndefined();
-      });
-    });
-
-    describe('endSession()', function() {
-      beforeEach(function() {
-        user.credentials.set({username: 'bob@example.com', password: 'bob'});
-      });
-
-      it('should decrease localStorage.loginCount', function() {
-        localStorage.loginCount = '2';
-        user.endSession();
-        expect(localStorage.loginCount).toBe('1');
-      });
-
-      it('should not decrease loginCount if user is anonymous', function() {
-        user.credentials.set({username: null, password: null});
-        localStorage.loginCount = '2';
-        user.endSession();
-        expect(localStorage.loginCount).toBe('2');
-      });
-
-      it('should not decrease loginCount if it is already 0', function() {
-        localStorage.loginCount = '0';
-        user.endSession();
-        expect(localStorage.loginCount).toBe('0');
-      });
-
-      it('should reset credentials if loginCount reaches 0', function() {
-        localStorage.loginCount = '1';
-        user.endSession();
-        expect(localStorage.username).toBeUndefined();
-        expect(user.password).toBeUndefined();
+        expect($.cookie('credentials')).toBeUndefined();
       });
     });
 
@@ -155,8 +96,8 @@ define(function(require) {
           expect(options.data).toBe(
             JSON.stringify(
               {
-                'username': 'bob@example.com', 
-                'password': 'bob',
+                'username': username,
+                'password': password,
                 'email': 'bob@example.com'
               }));
         });
