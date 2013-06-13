@@ -43,17 +43,15 @@ define(function(require) {
   var lang, initialized;
 
   function initialize() {
-    var user = new User;
-    if((sessionStorage.username && localStorage.username) || localStorage.username)
-      user.credentials.fetch();
+    var user = new User();
     user.on('loginSuccess', function() {
       route(user);
     });
-    user.on('loginError', function() {
+    /*user.on('loginError', function() {
       user.logout();
       route(user);
-    });
-    user.login({permanent: localStorage.loginPermanent === 'true'});
+    });*/
+    user.start();
   }
 
   function route(user) {

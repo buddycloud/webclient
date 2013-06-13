@@ -90,7 +90,7 @@ define(function(require) {
 
         self.render();
         self._listenForNewItems();
-      }
+      };
     },
 
     _renderUnreadCount: function(channel) {
@@ -153,7 +153,8 @@ define(function(require) {
       var metadata = this.model.metadata(channel);
       this.metadatas.unshift(metadata);
       if (!metadata.hasEverChanged()) {
-        metadata.fetch({credentials: this.model.credentials, success: callback});
+        metadata.fetch({credentials: this.model.credentials});
+        metadata.bind('fetch', callback, this);
       } else {
         callback(metadata);
       }

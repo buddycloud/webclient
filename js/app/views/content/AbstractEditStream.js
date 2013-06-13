@@ -30,7 +30,8 @@ define(function(require) {
           'channel_title': 'title',
           'channel_description': 'description',
           'channel_public_access': 'access_model',
-          'channel_default_role': 'default_affiliation'
+          'channel_default_role': 'default_affiliation',
+          'channel_status': 'status'
         };
     },
 
@@ -81,13 +82,13 @@ define(function(require) {
         } else {
           Events.trigger('avatarUploadError', channel);
         }
-      }
+      };
     },
 
     _setTextFields: function(model) {
       // FIXME not all fields are handled by HTTP API
       // var textFields = ['channel_title', 'channel_description', 'channel_status', 'channel_location'];
-      var textFields = ['channel_title', 'channel_description'];
+      var textFields = ['channel_title', 'channel_description', 'channel_status'];
       for (var i = 0; i < textFields.length; i++) {
         var content = this.$('#' + textFields[i]).val();
         model.set(this.fields[textFields[i]], content, {silent: true});

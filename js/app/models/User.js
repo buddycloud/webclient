@@ -26,8 +26,8 @@ define(function(require) {
   var User = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
-      this.credentials = new UserCredentials;
-      this.notifications = new PostNotifications;
+      this.credentials = new UserCredentials();
+      this.notifications = new PostNotifications();
       this.channelsMetadata = {};
       this.subscribedChannels = null;
     },
@@ -69,35 +69,46 @@ define(function(require) {
       return this.subscribedChannels ? this.subscribedChannels.channels() : null;
     },
 
-    login: function(options) {
+    start: function() {
+      this.credentials.fetch();
       if (this.isAnonymous()) {
         this.trigger('loginSuccess');
       } else {
-       var self = this;
+        var self = this;
         this._tryFetchingSubscribedChannels({
           error: function() {
             self.trigger('loginError');
           },
           success: function() {
-            self._loginPermanent = options ? options.permanent : false;
-            if (!self._loginPermanent) {
-              self._increaseLoginCount();
-            }
-            self.lastSession = localStorage[self.username()] || self._earliestTime(); // FIXME workaround to get last session
+            self.lastSession = localStorage[self.username() + '.lastSession'] || self._earliestTime(); // FIXME workaround to get last session
             self.trigger('loginSuccess');
           }
         });
       }
     },
 
+    login: function(loginInfo, options) {
+      this.credentials.save(loginInfo, options);
+      var self = this;
+      this._tryFetchingSubscribedChannels({
+        error: function() {
+          self.credentials.clear();
+          self.trigger('loginError');
+        },
+        success: function() {
+          self.lastSession = localStorage[self.username() + '.lastSession'] || self._earliestTime(); // FIXME workaround to get last session
+          self.trigger('loginSuccess');
+        }
+      });
+    },
+
     logout: function() {
       this._saveLastSessionTime();
-      this.credentials.save({username: null, password: null}, {permanent: true});
-      localStorage.loginCount = 0;
+      this.credentials.clear();
     },
 
     _saveLastSessionTime: function() {
-      localStorage[this.username()] = this._currentTime();
+      localStorage[this.username() + '.lastSession'] = this._currentTime();
     },
 
     _tryFetchingSubscribedChannels: function(options) {
@@ -109,30 +120,10 @@ define(function(require) {
       });
     },
 
-    _increaseLoginCount: function() {
-      var count = localStorage.loginCount || 0;
-      localStorage.loginCount = ++count + '';
-    },
-
     endSession: function() {
       if (!this.isAnonymous()) {
         this._saveLastSessionTime();
-        if (this.credentials.isPermanent()) {
-          this.credentials.save();
-        } else {
-          var newCount = this._decreaseLoginCount();
-          if (newCount === 0) {
-            this.credentials.save({username: null, password: null}, {permanent: true});
-          }
-        }
       }
-    },
-
-    _decreaseLoginCount: function() {
-      var count = localStorage.loginCount || 0;
-      count = Math.max(count - 1, 0);
-      localStorage.loginCount = count + '';
-      return count;
     },
 
     register: function(username, password, email) {
@@ -148,7 +139,7 @@ define(function(require) {
           self.trigger('registrationSuccess');
         };
         var errorCallback = function(res) {
-          var message = 'Registration error'
+          var message = 'Registration error';
           if (res.status === 503) {
             message = 'User "' + username + '" already exists';
           }
