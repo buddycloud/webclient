@@ -40,7 +40,7 @@ define(function(require) {
 
     updateCookie: function() {
       if (this.isPermanent()) {
-        $.cookie('credentials', this.credentials, { expires: 7 });
+        this._setCookieKey('credentials', this.credentials, true);
       }
     },
 
