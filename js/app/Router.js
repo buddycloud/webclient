@@ -49,6 +49,7 @@ define(function(require) {
       Events.on('navigate', this._navigate, this);
       Events.on('pageError', this._error, this);
       Events.on('forbidden', this._forbidden, this);
+      this._endSessionOnUnload();
     },
 
     _endSessionOnUnload: function() {
@@ -71,7 +72,14 @@ define(function(require) {
       if (this.currentPage) {
         this.currentPage.destroy();
       }
+
+      this._updateCookie();
       spinner.replace($('.content'));
+    },
+
+    _updateCookie: function() {
+      var credentials = this.user.credentials;
+      credentials.updateCookie();
     },
 
     _navigate: function(path) {

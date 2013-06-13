@@ -95,6 +95,11 @@ define(function(require) {
       $('nav a.register').click(function(event){ return toggleView(event, 'Register'); });
       formHolder.find('form').click(function(event){ event.stopPropagation(); });
 
+      var previousUsername = localStorage.username;
+      if (previousUsername) {
+        this.$('#login_name').val(previousUsername);
+      }
+
       function toggleView(event, form){
         event.stopPropagation();
         var className = 'show'+form;

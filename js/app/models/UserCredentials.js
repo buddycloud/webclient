@@ -24,16 +24,14 @@ define(function(require) {
 
   var UserCredentials = ModelBase.extend({
     fetch: function(options) {
-      var username = $.cookie('username') || localStorage.username;
-      var credentials = $.cookie('credentials') || localStorage.credentials;
+      var username = localStorage.username;
+      var credentials = $.cookie('credentials');
 
       if (username && credentials) {
         this.set({
           'username': username,
           'credentials': credentials
         });
-      } else {
-        this.clear();
       }
 
       if (options && options.success) {
@@ -41,21 +39,42 @@ define(function(require) {
       }
     },
 
-    _saveToStorage: function(storage) {
-      this._setStorageKey(storage, 'username', this.username);
-      this._setStorageKey(storage, 'credentials', this.credentials);
+    updateCookie: function() {
+      if (this.isPermanent()) {
+        $.cookie('credentials', {expires: 7, path: '/'});
+      }
     },
 
-    _setStorageKey: function(storage, key, value) {
+    _persist: function(permanent) {
+      var opt = {path: '/'};
+      if (permanent) {
+        // FIXME: expire time from config file?
+        opt.expires = 7;
+      }
+
+      this._setStorageKey('loginPermanent', permanent);
+      this._setStorageKey('username', this.username);
+      this._setCookieKey('credentials', this.credentials, opt);
+    },
+
+    _setStorageKey: function(key, value) {
       if (value) {
-        storage[key] = value;
+        localStorage[key] = value;
       } else {
-        delete storage[key];
+        delete localStorage[key];
+      }
+    },
+
+    _setCookieKey: function(key, value, opt) {
+      if (value) {
+        $.cookie(key, value, opt);
+      } else {
+        $.removeCookie(key);
       }
     },
 
     isPermanent: function() {
-      return localStorage.username && localStorage.password;
+      return Boolean(localStorage.loginPermanent);
     },
 
     set: function() {
@@ -66,28 +85,23 @@ define(function(require) {
 
     clear: function(options) {
       this.set({username: null, credentials: null});
-      this._saveToStorage(localStorage);
-      $.removeCookie('username');
-      $.removeCookie('credentials');
+      this._persist();
     },
 
     save: function(attributes, options) {
       var username = attributes.username;
       var password = attributes.password;
 
-      if (username && username.indexOf('@') == -1) {
-        username += '@' + config.homeDomain;
-      }
+      if (username && password) {
+        if (username.indexOf('@') == -1) {
+          username += '@' + config.homeDomain;
+        }
 
-      var credentials = btoa(username + ':' + password);
-      this.set({'username': username, 'credentials': credentials});
+        var credentials = btoa(username + ':' + password);
+        this.set({'username': username, 'credentials': credentials});
 
-      if (options && options.permanent) {
-        this._saveToStorage(localStorage);
-      } else {
-        // Save cookie
-        $.cookie('username', username, {path: '/'});
-        $.cookie('credentials', credentials, {path: '/'});
+        options = options || {};
+        this._persist(options.permanent);
       }
     },
 

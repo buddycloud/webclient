@@ -47,10 +47,10 @@ define(function(require) {
     user.on('loginSuccess', function() {
       route(user);
     });
-    user.on('loginError', function() {
+    /*user.on('loginError', function() {
       user.logout();
       route(user);
-    });
+    });*/
     user.start();
   }
 
