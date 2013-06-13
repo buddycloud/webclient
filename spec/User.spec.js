@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  require(['jquery', 'jquery.cookie']);
   var User = require('models/User');
 
   describe('User', function() {

@@ -15,6 +15,7 @@
  */
 
 define(function(require) {
+  require(['jquery', 'jquery.cookie']);
   var UserCredentials = require('models/UserCredentials');
 
   describe('UserCredentials', function() {
