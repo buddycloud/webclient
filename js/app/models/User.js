@@ -15,7 +15,6 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
   var api = require('util/api');
   var ChannelMetadata = require('models/ChannelMetadata');
   var ModelBase = require('models/ModelBase');

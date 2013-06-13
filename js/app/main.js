@@ -36,6 +36,7 @@ requirejs.config({
 });
 
 define(function(require) {
+  require('jquery.cookie');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var Router = require('Router');
@@ -77,6 +78,9 @@ define(function(require) {
       function(err) {
         console.log('Failed to load locale data');
       }
-      )
+  );
+
+  // Cookies
+  $.cookie.path = '/';
 });
 

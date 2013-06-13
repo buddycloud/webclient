@@ -15,8 +15,7 @@
  */
 
 define(function(require) {
-  require(['jquery', 'jquery.cookie']);
-  var $ = require('jquery');
+  require('jquery.cookie');
   var api = require('util/api');
   var config = require('config');
   var Backbone = require('backbone');
@@ -41,20 +40,14 @@ define(function(require) {
 
     updateCookie: function() {
       if (this.isPermanent()) {
-        $.cookie('credentials', {expires: 7, path: '/'});
+        $.cookie('credentials', this.credentials, { expires: 7 });
       }
     },
 
     _persist: function(permanent) {
-      var opt = {path: '/'};
-      if (permanent) {
-        // FIXME: expire time from config file?
-        opt.expires = 7;
-      }
-
       this._setStorageKey('loginPermanent', permanent);
       this._setStorageKey('username', this.username);
-      this._setCookieKey('credentials', this.credentials, opt);
+      this._setCookieKey('credentials', this.credentials, permanent);
     },
 
     _setStorageKey: function(key, value) {
@@ -65,9 +58,13 @@ define(function(require) {
       }
     },
 
-    _setCookieKey: function(key, value, opt) {
+    _setCookieKey: function(key, value, permanent) {
       if (value) {
-        $.cookie(key, value, opt);
+        if (permanent) {
+          $.cookie(key, value, { expires: 7 });
+        } else {
+          $.cookie(key, value);
+        }
       } else {
         $.removeCookie(key);
       }
