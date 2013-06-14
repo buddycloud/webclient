@@ -75,7 +75,7 @@ module.exports = function(grunt) {
 	  optimizeCss: 'standard'
 	}
 	requirejs.optimize(cssConfig, function(log) {
-	  console.log(("Application CSS optimisation complete").green);
+	  console.log(("\nApplication CSS optimisation complete").green);
 	  console.log((log).cyan);
 	}, function(error) {
 	  console.log(("Error optimizing CSS: " + error).red);
