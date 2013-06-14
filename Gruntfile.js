@@ -93,15 +93,11 @@ module.exports = function(grunt) {
 	var mainConfig = {
 	  baseUrl: './js/app',
 	  name: 'main',
+	  inlineText: true,
 	  out: './js/app.min.js',
 	  mainConfigFile: './js/app/main.js',
 	  optimizeAllPluginResources: true,
-	  paths: {
-	    'requireLib': 'empty:', 
-	  },
-	  include: [
-	    'requireLib'
-	  ]
+	  optimize: 'none',   // 'uglify'
 	}
 	
 	requirejs.optimize(mainConfig, function (log) {
