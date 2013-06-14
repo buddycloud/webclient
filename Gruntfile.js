@@ -43,8 +43,15 @@ module.exports = function(grunt) {
     app.use('/js', express.static(mdir + '/js'));
     app.use(function(req, res, next) {
     	if (false == debug) return next()
-    	if ('/css/style.min.css' != req.url) return next()
-    	res.redirect('/css/main.css')
+    	if ('/css/style.min.css' == req.url) {
+    		return res.redirect('/css/main.css')
+    	}
+    	if ('/js/app.min.js' == req.url) {
+    		console.log("Rewriting")
+    		return res.redirect('/js/app/main.js')
+    	}
+    	next()
+    	
     })
     app.use('/css', express.static(mdir + '/css'));
     app.use('/img', express.static(mdir + '/img'));
@@ -69,6 +76,7 @@ module.exports = function(grunt) {
   // Build server
   grunt.registerTask('build', 'Build the compressed javascript and CSS files', function() {
 	var requirejs = require('requirejs')
+	// Compress CSS
 	var cssConfig = {
 	  cssIn: './css/main.css',
       out: './css/style.min.css',
@@ -78,7 +86,29 @@ module.exports = function(grunt) {
 	  console.log(("\nApplication CSS optimisation complete").green);
 	  console.log((log).cyan);
 	}, function(error) {
-	  console.log(("Error optimizing CSS: " + error).red);
+	  console.log(("\nError optimizing CSS: " + error).red);
+	})
+	
+	// Compress JavaScript
+	var mainConfig = {
+	  baseUrl: './js/app',
+	  name: 'main',
+	  out: './js/app.min.js',
+	  mainConfigFile: './js/app/main.js',
+	  optimizeAllPluginResources: true,
+	  paths: {
+	    'requireLib': 'empty:', 
+	  },
+	  include: [
+	    'requireLib'
+	  ]
+	}
+	
+	requirejs.optimize(mainConfig, function (log) {
+		console.log("\nMain javascript optimisation complete".green);
+	    console.log((log).cyan);
+	}, function(error) {
+	    console.log(("\nError optimizing javascript: " + error).red);
 	})
   })
 }
