@@ -17,12 +17,23 @@
 requirejs.config({
   baseUrl: '/js/vendor',
   paths: {
+	'underscore': '../vendor/underscore',
+	'backbone': '../vendor/backbone',
     'config': '../../config',
     'templates': '../../templates',
     'models': '../app/models',
     'Router': '../app/Router',
     'util': '../app/util',
-    'views': '../app/views'
+    'views': '../app/views',
+    'jquery.cookie': '../vendor/jquery.cookie',
+    'modernizr': '../vendor/modernizr',
+    'jQuery': '../vendor/jquery',
+    'l10n': '../vendor/l10n',
+    'l10n-browser': '../vendor/l10n-browser',
+    'requireLib': '../vendor/require',
+    'text': '../vendor/text',
+    'backbone-indexeddb': '../vendor/backbone-indexeddb',
+    'pollymer': '../vendor/pollymer'
   },
 
   shim: {
@@ -31,11 +42,15 @@ requirejs.config({
     },
     'backbone-indexeddb': {
       deps: ['backbone']
-    }
+    },
+    'jquery.cookie': {
+    	deps: ['jQuery']
+    },
   }
-});
+})
 
 define(function(require) {
+  require('modernizr')
   require('jquery.cookie');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
