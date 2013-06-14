@@ -40,7 +40,8 @@ require.config({
       exports: 'Modernizr'
     },
     'backbone-indexeddb': {
-      deps: ['backbone', 'jquery']
+      deps: ['backbone'],
+      exports: 'Backbone'
     },
     'jquery.cookie': {
     	deps: ['jquery']
@@ -64,8 +65,8 @@ require.config({
   }
 })
 
-define(['jquery', 'underscore', 'backbone', 'l10n', 'l10n-browser', 'Router', 'models/User', 'modernizr', 'jquery.cookie', 'underscore'],
-    function($, _, Backbone, l10n, l10nBrowser, Router, User) {
+define(['l10n', 'l10n-browser', 'Router', 'models/User', 'modernizr', 'jquery.cookie', 'underscore'],
+    function(l10n, l10nBrowser, Router, User) {
 
   var lang, initialized
 

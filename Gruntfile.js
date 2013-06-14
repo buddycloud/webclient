@@ -97,14 +97,16 @@ module.exports = function(grunt) {
 	  out: './js/app.min.js',
 	  mainConfigFile: './js/app/main.js',
 	  optimizeAllPluginResources: true,
-	  optimize: 'none',   // 'uglify'
+	  optimize: 'uglify2',
+	  generateSourceMaps: true,
+	  preserveLicenseComments: false
 	}
 	
 	requirejs.optimize(mainConfig, function (log) {
-		console.log("\nMain javascript optimisation complete".green);
+		console.log("\nMain JavaScript optimisation complete".green);
 	    console.log((log).cyan);
 	}, function(error) {
-	    console.log(("\nError optimizing javascript: " + error).red);
+	    console.log(("\nError optimizing JavaScript: " + error).red);
 	})
   })
 }
