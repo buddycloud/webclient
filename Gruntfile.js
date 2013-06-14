@@ -43,15 +43,9 @@ module.exports = function(grunt) {
     app.use('/js', express.static(mdir + '/js'));
     app.use(function(req, res, next) {
     	if (false == debug) return next()
-    	if ('/css/style.min.css' == req.url) {
-    		return res.redirect('/css/main.css')
-    	}
-    	if ('/js/app.min.js' == req.url) {
-    		console.log("Rewriting")
-    		return res.redirect('/js/app/main.js')
-    	}
-    	next()
-    	
+    	if ('/css/style.min.css' == req.url) return res.redirect('/css/main.css')
+    	if ('/js/app.min.js' == req.url) return res.redirect('/js/app/main.js')
+    	next()	
     })
     app.use('/css', express.static(mdir + '/css'));
     app.use('/img', express.static(mdir + '/img'));
