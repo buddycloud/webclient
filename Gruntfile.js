@@ -1,6 +1,7 @@
 var requirejs = require('requirejs')
-var config    = requirejs('./config.js')
-var debug     = false
+  , config    = requirejs('./config.js')
+  , debug     = false
+  , color     = require('color')
 
 module.exports = function(grunt) {
 
@@ -15,7 +16,12 @@ module.exports = function(grunt) {
       }
     },
 
-    watch: {}
+    watch: {
+      src: {
+        files: ['js/app/*.js', 'css/**/*.css'],
+        tasks: ['build']
+      }
+    }
   });
 
   // Plug-ins
@@ -35,41 +41,43 @@ module.exports = function(grunt) {
   // Development Server
   grunt.registerTask('_server', 'Start a custom static web server.', function() {
     var express = require('express');
-    var fs = require('fs');
+    var fs = require('fs')
 
-    var mdir = __dirname;
-    var app = express();
+    var mdir = __dirname
+    var app = express()
 
-    app.use('/js', express.static(mdir + '/js'));
     app.use(function(req, res, next) {
-    	if (false == debug) return next()
-    	if ('/css/style.min.css' == req.url) return res.redirect('/css/main.css')
-    	if ('/js/app.min.js' == req.url) return res.redirect('/js/app/main.js')
-    	next()	
+      if (false == debug) return next()
+      if ('/css/style.min.css' == req.url) return res.redirect('/css/main.css')
+      if ('/js/app.min.js' == req.url) return res.redirect('/js/app/main.js')
+      next()	
     })
-    app.use('/css', express.static(mdir + '/css'));
-    app.use('/img', express.static(mdir + '/img'));
-    app.use('/locales', express.static(mdir + '/locales'));
-    app.use('/templates', express.static(mdir + '/templates'));
+    app.use('/js', express.static(mdir + '/js'))
+    app.use('/css', express.static(mdir + '/css'))
+    app.use('/img', express.static(mdir + '/img'))
+    app.use('/locales', express.static(mdir + '/locales'))
+    app.use('/templates', express.static(mdir + '/templates'))
     app.get('/config.js', function(req, res) {
     fs.readFile(mdir + '/config.js', 'utf8', function(error, file) {
-        res.contentType('application/javascript');
-        res.send(file);
+        res.contentType('application/javascript')
+        res.send(file)
       });
     });
     app.get('*', function(req, res) {
     fs.readFile(mdir + '/index.html', 'utf8', function(error, file) {
-        res.send(file);
-      });
+        res.send(file)
+      })
     });
-    var port = config.port || 3000;
-    app.listen(port);
-    console.log('Listening on port ' + port + '...');
+    var port = config.port || 3000
+    app.listen(port)
+    console.log('Listening on port ' + port + '...')
   });
 
   // Build server
   grunt.registerTask('build', 'Build the compressed javascript and CSS files', function() {
+	var done = this.async()
 	var requirejs = require('requirejs')
+	var tasks = ['css', 'javascript']
 	// Compress CSS
 	var cssConfig = {
 	  cssIn: './css/main.css',
@@ -77,10 +85,11 @@ module.exports = function(grunt) {
 	  optimizeCss: 'standard'
 	}
 	requirejs.optimize(cssConfig, function(log) {
-	  console.log(("\nApplication CSS optimisation complete").green);
-	  console.log((log).cyan);
+	  grunt.log.writeln(("Application CSS optimisation complete").green)
+	  tasks.pop()
+	  if (0 == tasks.length) return done()
 	}, function(error) {
-	  console.log(("\nError optimizing CSS: " + error).red);
+	  done(new Error("\nError optimizing CSS: " + error))
 	})
 	
 	// Compress JavaScript
@@ -97,10 +106,13 @@ module.exports = function(grunt) {
 	}
 	
 	requirejs.optimize(mainConfig, function (log) {
-		console.log("\nMain JavaScript optimisation complete".green);
-	    console.log((log).cyan);
+	  grunt.log.writeln(("Main JavaScript optimisation complete").green)
+	  tasks.pop()
+	  if (0 == tasks.length) return done()
 	}, function(error) {
-	    console.log(("\nError optimizing JavaScript: " + error).red);
+		grunt.log.writeln("\nError optimizing JavaScript: " + error)
+	    done(new Error("\nError optimizing JavaScript: " + error))
 	})
+
   })
 }

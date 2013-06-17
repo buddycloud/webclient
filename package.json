@@ -19,6 +19,7 @@
     "node": ">=0.8"
   },
   "dependencies": {
-    "requirejs": "~2.1.6"
+    "requirejs": "~2.1.6",
+    "color": "~0.4.4"
   }
 }
