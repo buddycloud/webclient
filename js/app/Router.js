@@ -73,6 +73,7 @@ define(function(require) {
         this.currentPage.destroy();
       }
 
+      this._endSessionOnUnload();
       this._updateCookie();
       spinner.replace($('.content'));
     },
