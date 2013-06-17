@@ -3,6 +3,8 @@
 *.swp
 locales/wti-config.wti
 .DS_Store
+css/style.min.css
+js/app.min.js*
 
 # https://github.com/github/gitignore/blob/master/Node.gitignore
 lib-cov
