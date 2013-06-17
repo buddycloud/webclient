@@ -32,7 +32,9 @@ require.config({
     'l10n-browser': '../vendor/l10n-browser',
     'text': '../vendor/text',
     'backbone-indexeddb': '../vendor/backbone-indexeddb',
-    'pollymer': '../vendor/pollymer'
+    'pollymer': '../vendor/pollymer',
+    'timeago': '../vendor/timeago',
+    'jquery.embedly': '../vendor/jquery.embedly'
   },
 
   shim: {
@@ -61,11 +63,14 @@ require.config({
     },
     'l10n': {
     	deps: ['backbone']
+    },
+    'jquery.embedly': {
+    	deps: ['jquery']
     }
   }
 })
 
-define(['l10n', 'l10n-browser', 'Router', 'models/User', 'modernizr', 'jquery.cookie', 'underscore'],
+require(['l10n', 'l10n-browser', 'Router', 'models/User', 'modernizr', 'jquery.cookie', 'jquery.embedly', 'timeago', 'util/autoResize'],
     function(l10n, l10nBrowser, Router, User) {
 
   var lang, initialized
