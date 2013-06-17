@@ -14,15 +14,27 @@
  * limitations under the License.
  */
 
-requirejs.config({
-  baseUrl: '/js/vendor',
+require.config({
+  baseUrl: '/js/app',
   paths: {
+    'backbone': '../vendor/backbone',
+	'underscore': '../vendor/underscore',
     'config': '../../config',
     'templates': '../../templates',
     'models': '../app/models',
     'Router': '../app/Router',
     'util': '../app/util',
-    'views': '../app/views'
+    'views': '../app/views',
+    'jquery.cookie': '../vendor/jquery.cookie',
+    'modernizr': '../vendor/modernizr',
+    'jquery': '../vendor/jquery',
+    'l10n': '../vendor/l10n',
+    'l10n-browser': '../vendor/l10n-browser',
+    'text': '../vendor/text',
+    'backbone-indexeddb': '../vendor/backbone-indexeddb',
+    'pollymer': '../vendor/pollymer',
+    'timeago': '../vendor/timeago',
+    'jquery.embedly': '../vendor/jquery.embedly'
   },
 
   shim: {
@@ -30,36 +42,56 @@ requirejs.config({
       exports: 'Modernizr'
     },
     'backbone-indexeddb': {
-      deps: ['backbone']
+      deps: ['backbone'],
+      exports: 'Backbone'
+    },
+    'jquery.cookie': {
+    	deps: ['jquery']
+    },
+    'underscore': {
+    	exports: '_'
+    },
+    'jquery': {
+    	exports: '$'
+    },
+    'backbone' : {
+    	deps: ['jquery', 'underscore'],
+    	exports: 'Backbone'
+    },
+    'Router': {
+    	deps: ['backbone']
+    },
+    'l10n': {
+    	deps: ['backbone']
+    },
+    'jquery.embedly': {
+    	deps: ['jquery']
     }
   }
-});
+})
 
-define(function(require) {
-  require('jquery.cookie');
-  var l10n = require('l10n');
-  var l10nBrowser = require('l10n-browser');
-  var Router = require('Router');
-  var User = require('models/User');
-  var lang, initialized;
+require(['l10n', 'l10n-browser', 'Router', 'models/User', 'modernizr', 'jquery.cookie', 'jquery.embedly', 'timeago', 'util/autoResize'],
+    function(l10n, l10nBrowser, Router, User) {
+
+  var lang, initialized
 
   function initialize() {
-    var user = new User();
+    var user = new User()
     user.on('loginSuccess', function() {
-      route(user);
+      route(user)
     });
     /*user.on('loginError', function() {
-      user.logout();
-      route(user);
+      user.logout()
+      route(user)
     });*/
-    user.start();
+    user.start()
   }
 
   function route(user) {
     if (!initialized) {
-      new Router(user);
-      Backbone.history.start({pushState: true});
-      initialized = true;
+      new Router(user)
+      Backbone.history.start({pushState: true})
+      initialized = true
     }
   }
 
@@ -82,5 +114,4 @@ define(function(require) {
 
   // Cookies
   $.cookie.path = '/';
-});
-
+})
