@@ -1,4 +1,5 @@
-(function () { /*global _: false, Backbone: false */
+define(['backbone'], function(Backbone) {
+
     // Generate four random hex digits.
     function S4() {
         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
@@ -597,4 +598,4 @@
     }
 
     //window.addEventListener("unload",function(){Backbone.sync("closeall")})
-})();
+})
