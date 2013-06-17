@@ -154,7 +154,7 @@ define(function(require) {
       this.metadatas.unshift(metadata);
       if (!metadata.hasEverChanged()) {
         metadata.fetch({credentials: this.model.credentials});
-        metadata.bind('fetch', callback, this);
+        metadata.bind('change', callback, this);
       } else {
         callback(metadata);
       }
@@ -244,7 +244,7 @@ define(function(require) {
           selected: false
         });
         self._rainbowAnimation($(channel), model.channel, model.channelType(), extra.offset, extra.animationClass, extra.selected);
-      }
+      };
     },
 
     _triggerInitUnreadCountersCallback: function() {
@@ -255,7 +255,7 @@ define(function(require) {
         if (fetched.length === self.metadatas.length) {
           self._initUnreadCounters();
         }
-      }
+      };
     },
 
     _setupAnimation: function() {

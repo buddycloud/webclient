@@ -37,6 +37,8 @@ define(function(require) {
       this._initialize();
       if (!this.model.hasEverChanged()) {
         this.model.bind('fetch', this.render, this);
+      } else {
+        this.render();
       }
 
       this.model.bind('sync', this.render, this);
