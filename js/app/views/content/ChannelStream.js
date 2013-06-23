@@ -49,6 +49,7 @@ define(function(require) {
       this.isLoading = true;
       this._postViews = [];
       this.model.bind('addPost', this._prependPost, this);
+      this.mediaToPost = [];
 
       var user = this.options.user;
       if (user.subscribedChannels) {
@@ -108,37 +109,15 @@ define(function(require) {
     },
 
     _uploadFile: function(file) {
-      // newTopic area feedback
-      this._disableButton();
-      this._disablePreview();
-
       var channel = this.model.channel;
       var authHeader = this.options.user.credentials.authorizationHeader();
-      mediaServer.uploadMedia(file, channel, authHeader, null, { 201: this._postMedia() });
+      mediaServer.uploadMedia(file, channel, authHeader).done(this._addMedia());
     },
 
-    _postMedia: function() {
+    _addMedia: function() {
       var self = this;
-      var expandingArea = this.$('.newTopic .expandingArea');
-      var text = expandingArea.find('textarea').val().trim();
-
       return function(data) {
-        var content = text + ' ' + api.mediaUrl(self.model.channel, data.id);
-        self.model.create({content: content}, {
-          credentials: self.options.user.credentials,
-          wait: true,
-          complete: function() {
-            expandingArea.find('textarea').val('').blur();
-            expandingArea.find('span').text('');
-          },
-          success: function() {
-            self._collapseNewTopicArea();
-            self._enableButton();
-          },
-          error: function() {
-            self._enableButtonWithError();
-          }
-        });
+        self.mediaToPost.push({id: data.id, channel: data.entityId});
       };
     },
 
@@ -408,17 +387,28 @@ define(function(require) {
     _post: function() {
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
-      if (content.trim()) {
+      if (content.trim() || this.mediaToPost.length > 0) {
         this._disableButton();
         this._disablePreview();
 
         var self = this;
-        this.model.create({content: content}, {
+        var item = {};
+
+        if (content) {
+          item.content = content;
+        }
+
+        if (this.mediaToPost.length > 0) {
+          item.media = this.mediaToPost;
+        }
+
+        this.model.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
           complete: function() {
             expandingArea.find('textarea').val('').blur();
             expandingArea.find('span').text('');
+            self.mediaToPost = [];
           },
           success: function() {
             self._collapseNewTopicArea();

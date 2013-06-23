@@ -47,6 +47,7 @@ define(function(require) {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.channelName = this.options.items.channel;
       this.model.bind('addComment', this._addComment, this);
+      this.media = [];
     },
 
     destroy: function() {
@@ -88,40 +89,15 @@ define(function(require) {
     },
 
     _uploadFile: function(file) {
-      // newTopic area feedback
-      this._disableButton();
-      this._disablePreview();
-
       var channel = this.options.items.channel;
       var authHeader = this.options.user.credentials.authorizationHeader();
-      mediaServer.uploadMedia(file, channel, authHeader, null, { 201: this._commentMedia() });
+      mediaServer.uploadMedia(file, channel, authHeader).done(this._addMedia());
     },
 
-    _commentMedia: function() {
+    _addMedia: function() {
       var self = this;
-      var channel = this.options.items.channel;
-      var textArea = this.$('.answer textarea');
-      var text = textArea.val().trim();
-
       return function(data) {
-        var content = text + ' ' + api.url(channel, 'media', data.id);
-        self.options.items.create({
-          content: content,
-          replyTo: self.model.id
-        }, {
-            credentials: self.options.user.credentials,
-            wait: true,
-            complete: function() {
-              textArea.val('');
-            },
-            success: function() {
-              self._collapseAnswerArea();
-              self._enableButton();
-            },
-            error: function() {
-              self._enableButtonWithError();
-            }
-        });
+        self.media.push({id: data.id, channel: data.entityId});
       };
     },
 
@@ -141,6 +117,7 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(localTemplate, {
         post: this.model,
+        api: api,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
         linkify: linkify.linkify,
@@ -299,19 +276,26 @@ define(function(require) {
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
       var content = textArea.val();
-      if (content.trim()) {
+      if (content.trim() || this.media.length > 0) {
         var self = this;
 
         this._disableButton();
+        var item = {replyTo: this.model.id};
 
-        var comment = this.options.items.create({
-          content: content,
-          replyTo: this.model.id
-        }, {
+        if (content) {
+          item.content = content;
+        }
+
+        if (this.media.length > 0) {
+          item.media = this.media;
+        }
+
+        var comment = this.options.items.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
           complete: function() {
             textArea.val('');
+            self.media = [];
           },
           success: function() {
             self._collapseAnswerArea();

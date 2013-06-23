@@ -70,19 +70,12 @@ define(function(require) {
       if (file) {
         var channel = this.model.channel;
         var authHeader = this.options.user.credentials.authorizationHeader();
-        mediaServer.uploadAvatar(file, channel, authHeader, this._handleUploadResponse());
-      }
-    },
-
-    _handleUploadResponse: function() {
-      var channel = this.model.channel;
-      return function(jqXHR, status) {
-        if (jqXHR.status === 201) { // Created
+        mediaServer.uploadAvatar(file, channel, authHeader).done(function() {
           Events.trigger('avatarChanged', channel);
-        } else {
+        }).fail(function() {
           Events.trigger('avatarUploadError', channel);
-        }
-      };
+        });
+      }
     },
 
     _setTextFields: function(model) {
