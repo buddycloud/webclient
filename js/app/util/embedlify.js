@@ -15,7 +15,7 @@
  */
 
 define(function(require) {
-  var _ = require('underscore')
+  var _ = require('underscore');
   var config = require('config');
   var template = require('text!templates/content/embed.html');
 

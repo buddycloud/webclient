@@ -39,6 +39,9 @@ define(function(require) {
       this._defineGetter('content', function() {
         return this.get('content') || '';
       });
+      this._defineGetter('media', function() {
+        return this.get('media') || '';
+      });
       this._defineGetter('updated', function() {
         return this.get('updated') || this.published;
       });
