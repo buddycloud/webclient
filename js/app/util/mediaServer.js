@@ -30,7 +30,7 @@ define(function(require) {
     return formData;
   }
 
-  function sendUploadFileRequest(formData, method, url, authHeader, completeCallback, statusCodeCallbacks) {
+  function sendUploadFileRequest(formData, method, url, authHeader) {
     var options = {
       type: method,
       url: url,
@@ -41,28 +41,22 @@ define(function(require) {
       processData: false,
       beforeSend: function(xhr) {
         xhr.setRequestHeader('Authorization', authHeader);
-      },
-      complete: function(jqXHR, status) {
-        if (completeCallback) {
-          completeCallback(jqXHR, status);
-        }
-      },
-      statusCode: statusCodeCallbacks || {}
+      }
     };
 
-    $.ajax(options);
+    return $.ajax(options);
   }
 
-  function uploadMedia(file, channel, authHeader, completeCallback, statusCodeCallbacks) {
+  function uploadMedia(file, channel, authHeader) {
     var formData = buildFormData(file);
     var url = api.mediaUrl(channel);
-    sendUploadFileRequest(formData, 'POST', url, authHeader, completeCallback, statusCodeCallbacks);
+    return sendUploadFileRequest(formData, 'POST', url, authHeader);
   }
 
-  function uploadAvatar(file, channel, authHeader, completeCallback, statusCodeCallbacks) {
+  function uploadAvatar(file, channel, authHeader) {
     var formData = buildFormData(file);
     var url = api.avatarUrl(channel);
-    sendUploadFileRequest(formData, 'PUT', url, authHeader, completeCallback, statusCodeCallbacks);
+    return sendUploadFileRequest(formData, 'PUT', url, authHeader);
   }
 
   return {
