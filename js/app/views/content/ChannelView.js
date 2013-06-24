@@ -64,7 +64,7 @@ define(function(require) {
       this.$el.append($centered);
 
       if (this.options.user.isAnonymous()) {
-        this.$el.addClass('centered vertical start')
+        this.$el.addClass('centered vertical start');
         this.$el.prepend(this.bar.el);
       }
     },

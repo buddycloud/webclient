@@ -17,8 +17,9 @@
 require.config({
   baseUrl: '/js/app',
   paths: {
+    'dropzone': '../vendor/dropzone',
     'backbone': '../vendor/backbone',
-	'underscore': '../vendor/underscore',
+    'underscore': '../vendor/underscore',
     'config': '../../config',
     'templates': '../../templates',
     'models': '../app/models',
@@ -46,52 +47,52 @@ require.config({
       exports: 'Backbone'
     },
     'jquery.cookie': {
-    	deps: ['jquery']
+      deps: ['jquery']
     },
     'underscore': {
-    	exports: '_'
+      exports: '_'
     },
     'jquery': {
-    	exports: '$'
+      exports: '$'
     },
     'backbone' : {
-    	deps: ['jquery', 'underscore'],
-    	exports: 'Backbone'
+      deps: ['jquery', 'underscore'],
+      exports: 'Backbone'
     },
     'Router': {
-    	deps: ['backbone']
+      deps: ['backbone']
     },
     'l10n': {
-    	deps: ['backbone']
+      deps: ['backbone']
     },
     'jquery.embedly': {
-    	deps: ['jquery']
+      deps: ['jquery']
     }
   }
-})
+});
 
 require(['l10n', 'l10n-browser', 'Router', 'models/User', 'modernizr', 'jquery.cookie', 'jquery.embedly', 'timeago', 'util/autoResize'],
     function(l10n, l10nBrowser, Router, User) {
 
-  var lang, initialized
+  var lang, initialized;
 
   function initialize() {
-    var user = new User()
+    var user = new User();
     user.on('loginSuccess', function() {
-      route(user)
+      route(user);
     });
     /*user.on('loginError', function() {
       user.logout()
       route(user)
     });*/
-    user.start()
+    user.start();
   }
 
   function route(user) {
     if (!initialized) {
-      new Router(user)
-      Backbone.history.start({pushState: true})
-      initialized = true
+      new Router(user);
+      Backbone.history.start({pushState: true});
+      initialized = true;
     }
   }
 
@@ -114,4 +115,4 @@ require(['l10n', 'l10n-browser', 'Router', 'models/User', 'modernizr', 'jquery.c
 
   // Cookies
   $.cookie.path = '/';
-})
+});
