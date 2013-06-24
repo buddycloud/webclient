@@ -55,28 +55,27 @@ define(function(require) {
     },
 
     _initializeDropzone: function() {
-      var mediaUrl = api.mediaUrl(this.channelName);
-      var authHeader = this.options.user.credentials.authorizationHeader();
+      if (!this.dropzone) {
+        var mediaUrl = api.mediaUrl(this.channelName);
+        var authHeader = this.options.user.credentials.authorizationHeader();
 
-      var dropzone = new Dropzone(this.el, {
-        previewsContainer: this.$('.dropzone-previews')[0],
-        url: mediaUrl,
-        clickable: false,
-        paramName: 'data',
-        sending: function(file, xhr, formData){
-          xhr.withCredentials = true;
-          xhr.setRequestHeader('Authorization', authHeader);
-        },
-        success: this._addMedia()
-      });
+        this.dropzone = new Dropzone(this.$el[0], {
+          previewsContainer: this.$('.dropzone-previews')[0],
+          url: mediaUrl,
+          clickable: false,
+          paramName: 'data',
+          sending: function(file, xhr, formData){
+            xhr.withCredentials = true;
+            xhr.setRequestHeader('Authorization', authHeader);
+          },
+          success: this._addMedia()
+        });
 
-      this._dragAndDropEvent(dropzone);
+        this._dragAndDropEvent();
+      }
     },
 
     _dndFileStart: function(evt) {
-      evt.stopPropagation();
-      evt.preventDefault();
-
       var area = $(this).find('.answer');
       if (!area.hasClass('write')) {
         area.addClass('write');
@@ -90,20 +89,16 @@ define(function(require) {
       }
     },
 
-    _dragAndDropEvent: function(dropzone) {
-      dropzone.on('dragover', this._dndFileStart);
-      dropzone.on('dragleave', this._dndFileLeave);
+    _dragAndDropEvent: function() {
+      this.$el.on('dragover', this._dndFileStart);
+      this.$el.on('dragleave', this._dndFileLeave);
     },
 
-    /*_uploadFile: function(file) {
-      var authHeader = this.options.user.credentials.authorizationHeader();
-      mediaServer.uploadMedia(file, this.channelName, authHeader).done(this._addMedia());
-    },
-*/
     _addMedia: function() {
       var self = this;
       return function(file, response) {
         self.media.push({id: response.id, channel: response.entityId});
+        return file.previewElement.classList.add('dz-success');
       };
     },
 
