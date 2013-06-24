@@ -60,7 +60,7 @@ define(function(require) {
         var authHeader = this.options.user.credentials.authorizationHeader();
 
         this.dropzone = new Dropzone(this.$el[0], {
-          previewsContainer: this.$('.dropzone-previews')[0],
+          previewsContainer: this.$el.find('.dropzone-previews')[0],
           url: mediaUrl,
           clickable: false,
           paramName: 'data',
