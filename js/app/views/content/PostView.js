@@ -25,6 +25,7 @@ define(function(require) {
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
+  var mediaFallback = require('util/mediaFallback');
   var mediaServer = require('util/mediaServer');
   var template = require('text!templates/content/post.html');
   var embedTemplate = require('text!templates/content/embed.html');
@@ -116,8 +117,9 @@ define(function(require) {
     },
 
     render: function() {
+      var post = this.model;
       this.$el.html(_.template(localTemplate, {
-        post: this.model,
+        post: post,
         api: api,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
@@ -134,6 +136,7 @@ define(function(require) {
       this._previewEmbed();
       this.$('.expandingArea').autoResize();
       this._initializeDropzone();
+      mediaFallback(this.$('.media').find('img'));
     },
 
     _actionButton: function() {
@@ -276,6 +279,7 @@ define(function(require) {
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
       var content = textArea.val();
+
       if (content.trim() || this.media.length > 0) {
         var self = this;
 
@@ -290,11 +294,13 @@ define(function(require) {
           item.media = this.media;
         }
 
+        var previewsContainer = this.$el.find('.dropzone-previews');
         var comment = this.options.items.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
           complete: function() {
             textArea.val('');
+            previewsContainer.empty();
             self.media = [];
           },
           success: function() {

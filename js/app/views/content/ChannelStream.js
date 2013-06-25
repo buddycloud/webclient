@@ -88,7 +88,7 @@ define(function(require) {
 
     _initializeDropzone: function() {
       if (!this.dropzone) {
-        var mediaUrl = api.mediaUrl(this.channelName);
+        var mediaUrl = api.mediaUrl(this.model.channel);
         var authHeader = this.options.user.credentials.authorizationHeader();
 
         this.dropzone = new Dropzone(this.$newTopic[0], {
@@ -392,6 +392,8 @@ define(function(require) {
     _post: function() {
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
+      var previewsContainer = this.$newTopic.find('.dropzone-previews');
+
       if (content.trim() || this.mediaToPost.length > 0) {
         this._disableButton();
         this._disablePreview();
@@ -413,6 +415,7 @@ define(function(require) {
           complete: function() {
             expandingArea.find('textarea').val('').blur();
             expandingArea.find('span').text('');
+            previewsContainer.empty();
             self.mediaToPost = [];
           },
           success: function() {

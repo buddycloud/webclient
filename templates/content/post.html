@@ -30,7 +30,10 @@
   </div>
   <p><%= linkify(post.content) %></p>
   <% _.each(post.media, function(media) { %>
-    <img src="<%= api.mediaUrl(media.channel, media.id, 400, 400) %>" />
+    <div class="media">
+      <p><br></p>
+      <a target="_blank" href="<%= api.mediaUrl(media.channel, media.id) %>"><img src="<%= api.mediaUrl(media.channel, media.id, 400, 400) %>" /></a>
+    </div>
   <% }) %>
 </section>
 <section class="comments">
@@ -67,7 +70,8 @@
        </div>
        <p><%= linkify(comment.content) %></p>
         <% _.each(comment.media, function(media) { %>
-          <img src="<%= api.mediaUrl(media.channel, media.id, 400, 400) %>" />
+          <p><br></p>
+          <a target="_blank" href="<%= api.mediaUrl(media.channel, media.id) %>"><img src="<%= api.mediaUrl(media.channel, media.id, 400, 400) %>" /></a>
         <% }) %>
      </section>
   <% }) %>
