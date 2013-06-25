@@ -16,16 +16,16 @@
 
 define(function(require) {
   require(['jquery', 'timeago', 'jquery.embedly', 'util/autoResize']);
-  var _ = require('underscore');
-  var $ = require('jquery');
   var api = require('util/api');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var Dropzone = require('dropzone');
   var Events = Backbone.Events;
   var embedlify = require('util/embedlify');
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
   var linkify = require('util/linkify');
+  var mediaFallback = require('util/mediaFallback');
   var mediaServer = require('util/mediaServer');
   var template = require('text!templates/content/post.html');
   var embedTemplate = require('text!templates/content/embed.html');
@@ -55,17 +55,35 @@ define(function(require) {
       this.remove();
     },
 
-    dndFileStart: function(evt) {
-      evt.stopPropagation();
-      evt.preventDefault();
+    _initializeDropzone: function() {
+      if (!this.dropzone) {
+        var mediaUrl = api.mediaUrl(this.channelName);
+        var authHeader = this.options.user.credentials.authorizationHeader();
 
+        this.dropzone = new Dropzone(this.$el[0], {
+          previewsContainer: this.$el.find('.dropzone-previews')[0],
+          url: mediaUrl,
+          clickable: false,
+          paramName: 'data',
+          sending: function(file, xhr, formData){
+            xhr.withCredentials = true;
+            xhr.setRequestHeader('Authorization', authHeader);
+          },
+          success: this._addMedia()
+        });
+
+        this._dragAndDropEvent();
+      }
+    },
+
+    _dndFileStart: function(evt) {
       var area = $(this).find('.answer');
       if (!area.hasClass('write')) {
         area.addClass('write');
       }
     },
 
-    dndFileLeave: function() {
+    _dndFileLeave: function() {
       var area = $(this).find('.answer');
       if (area.hasClass('write')) {
         area.removeClass('write');
@@ -73,31 +91,15 @@ define(function(require) {
     },
 
     _dragAndDropEvent: function() {
-      // Global file drag and drop event
-      var self = this;
-      this.$el.on('dragover', this.dndFileStart);
-      this.$el.on('dragleave', this.dndFileLeave);
-      this.$el.on('drop', function(evt){
-        evt.stopPropagation();
-        evt.preventDefault();
-
-        var file = evt.originalEvent.dataTransfer.files[0];
-        if (file) {
-          self._uploadFile(file);
-        }
-      }); //maybe something to put global if people get used to it.
-    },
-
-    _uploadFile: function(file) {
-      var channel = this.options.items.channel;
-      var authHeader = this.options.user.credentials.authorizationHeader();
-      mediaServer.uploadMedia(file, channel, authHeader).done(this._addMedia());
+      this.$el.on('dragover', this._dndFileStart);
+      this.$el.on('dragleave', this._dndFileLeave);
     },
 
     _addMedia: function() {
       var self = this;
-      return function(data) {
-        self.media.push({id: data.id, channel: data.entityId});
+      return function(file, response) {
+        self.media.push({id: response.id, channel: response.entityId});
+        return file.previewElement.classList.add('dz-success');
       };
     },
 
@@ -115,8 +117,9 @@ define(function(require) {
     },
 
     render: function() {
+      var post = this.model;
       this.$el.html(_.template(localTemplate, {
-        post: this.model,
+        post: post,
         api: api,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
@@ -132,14 +135,14 @@ define(function(require) {
       this._commentOnCtrlEnter();
       this._previewEmbed();
       this.$('.expandingArea').autoResize();
-      this._dragAndDropEvent();
+      this._initializeDropzone();
+      mediaFallback(this.$('.media').find('img'));
     },
 
     _actionButton: function() {
       var subscribedChannels = this.options.user.subscribedChannels;
-      var channel = this.options.items.channel;
 
-      if (!subscribedChannels || !subscribedChannels.isDeletingAllowed(channel)) {
+      if (!subscribedChannels || !subscribedChannels.isDeletingAllowed(this.channelName)) {
         this.$('.action').remove();
       }
     },
@@ -276,6 +279,7 @@ define(function(require) {
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
       var content = textArea.val();
+
       if (content.trim() || this.media.length > 0) {
         var self = this;
 
@@ -290,11 +294,13 @@ define(function(require) {
           item.media = this.media;
         }
 
+        var previewsContainer = this.$el.find('.dropzone-previews');
         var comment = this.options.items.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
           complete: function() {
             textArea.val('');
+            previewsContainer.empty();
             self.media = [];
           },
           success: function() {
@@ -330,12 +336,11 @@ define(function(require) {
     _deletePost: function(event) {
       var self = this;
       var authHeader = this.options.user.credentials.authorizationHeader();
-      var channel = this.options.items.channel;
       var id = event.target.id;
       var model = this.model;
       var options = {
         type: 'DELETE',
-        url: api.url(channel, 'content', 'posts', id),
+        url: api.url(this.channelName, 'content', 'posts', id),
         beforeSend: function(xhr) {
           xhr.setRequestHeader('Authorization', authHeader);
         },
