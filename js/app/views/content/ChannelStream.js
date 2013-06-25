@@ -22,6 +22,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var ChannelItems = require('models/ChannelItems');
   var config = require('config');
+  var Dropzone = require('dropzone');
   var Events = Backbone.Events;
   var PostView = require('views/content/PostView');
   var embedlify = require('util/embedlify');
@@ -56,7 +57,7 @@ define(function(require) {
         user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
       }
 
-      _.bindAll(this, 'checkScroll', 'dndFileStart', 'dndFileLeave');
+      _.bindAll(this, 'checkScroll', '_dndFileStart', '_dndFileLeave');
 
       // Scroll event
       $('.content').scroll(this.checkScroll);
@@ -85,6 +86,27 @@ define(function(require) {
       this.remove();
     },
 
+    _initializeDropzone: function() {
+      if (!this.dropzone) {
+        var mediaUrl = api.mediaUrl(this.model.channel);
+        var authHeader = this.options.user.credentials.authorizationHeader();
+
+        this.dropzone = new Dropzone(this.$newTopic[0], {
+          previewsContainer: this.$newTopic.find('.dropzone-previews')[0],
+          url: mediaUrl,
+          clickable: false,
+          paramName: 'data',
+          sending: function(file, xhr, formData){
+            xhr.withCredentials = true;
+            xhr.setRequestHeader('Authorization', authHeader);
+          },
+          success: this._addMedia()
+        });
+
+        this._dragAndDropEvent();
+      }
+    },
+
     _destroyPostsViews: function() {
       _.each(this._postViews, function(view) {
         view.destroy();
@@ -92,32 +114,15 @@ define(function(require) {
     },
 
     _dragAndDropEvent: function() {
-      // Global file drag and drop event
-      var self = this;
-      this.$newTopic.on('dragover', this.dndFileStart);
-      this.$newTopic.on('dragleave', this.dndFileLeave);
-      this.$newTopic.on('drop', function(evt){
-        evt.stopPropagation();
-        evt.preventDefault();
-        if (evt.target.className == "filedrop") {
-          var file = evt.originalEvent.dataTransfer.files[0];
-          if (file) {
-            self._uploadFile(file);
-          }
-        }
-      }); //maybe something to put global if people get used to it.
-    },
-
-    _uploadFile: function(file) {
-      var channel = this.model.channel;
-      var authHeader = this.options.user.credentials.authorizationHeader();
-      mediaServer.uploadMedia(file, channel, authHeader).done(this._addMedia());
+      this.$newTopic.on('dragover', this._dndFileStart);
+      this.$newTopic.on('dragleave', this._dndFileLeave);
     },
 
     _addMedia: function() {
       var self = this;
-      return function(data) {
+      return function(file, data) {
         self.mediaToPost.push({id: data.id, channel: data.entityId});
+        return file.previewElement.classList.add('dz-success');
       };
     },
 
@@ -196,7 +201,7 @@ define(function(require) {
       }
     },
 
-    dndFileStart: function(evt) {
+    _dndFileStart: function(evt) {
       evt.stopPropagation();
       evt.preventDefault();
 
@@ -205,7 +210,7 @@ define(function(require) {
       }
     },
 
-    dndFileLeave: function() {
+    _dndFileLeave: function() {
       if(this.$newTopic.hasClass('write')){
         this.$newTopic.removeClass('write');
       }
@@ -285,7 +290,7 @@ define(function(require) {
       this._postOnCtrlEnter();
       this._previewEmbed();
       this._hideSpinner();
-      this._dragAndDropEvent();
+      this._initializeDropzone();
     },
 
     _prepareNewTopic: function() {
@@ -387,6 +392,8 @@ define(function(require) {
     _post: function() {
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
+      var previewsContainer = this.$newTopic.find('.dropzone-previews');
+
       if (content.trim() || this.mediaToPost.length > 0) {
         this._disableButton();
         this._disablePreview();
@@ -408,6 +415,7 @@ define(function(require) {
           complete: function() {
             expandingArea.find('textarea').val('').blur();
             expandingArea.find('span').text('');
+            previewsContainer.empty();
             self.mediaToPost = [];
           },
           success: function() {
