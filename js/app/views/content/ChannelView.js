@@ -30,7 +30,8 @@ define(function(require) {
     initialize: function() {
       this.header = new ChannelHeader({
         channel: this.options.channel,
-        user: this.options.user
+        user: this.options.user,
+        created: this.options.created
       });
       this.stream = new ChannelStream({
         channel: this.options.channel,

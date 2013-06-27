@@ -18,6 +18,7 @@ define(function(require) {
   var _ = require('underscore');
   var api = require('util/api');
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var ModelBase = require('models/ModelBase');
 
   var SubscribedChannels = ModelBase.extend({
@@ -66,9 +67,15 @@ define(function(require) {
       return _.include(['owner', 'moderator'], affiliation);
     },
 
-    addChannel: function(channel, node, role, extra) {
+    addChannel: function(channel, role, callback) {
       // Manually add
-      this.attributes[channel + '/' + node] = role;
+      this.attributes[channel + '/posts'] = role;
+      if (callback) {
+        callback();
+      }
+    },
+
+    triggerSubscribedEvent: function(channel, role, extra) {
       this.trigger('subscriptionSync', 'subscribedChannel', channel, role, extra);
     },
 

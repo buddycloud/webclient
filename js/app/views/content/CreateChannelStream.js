@@ -65,10 +65,8 @@ define(function(require) {
             xhr.setRequestHeader('Authorization',
               self.options.user.credentials.authorizationHeader());
           },
-          statusCode: {
-            200: function() {
-              self.saveMetadata();
-            }
+          success: function() {
+            self.saveMetadata();
           }
         };
 
@@ -78,15 +76,17 @@ define(function(require) {
     },
 
     saveMetadata: function() {
-      this._save(this.model, this.redirectToChannel());
+      this._save(this.model, this._channelCreated());
     },
 
-    redirectToChannel: function() {
-      var self = this;
+    _channelCreated: function() {
+      var channel = this.model.channel;
+      var subscribedChannels = this.options.user.subscribedChannels;
       return function() {
-        Events.trigger('navigate', self.model.channel);
-        Events.trigger('metadataChanged', self.model.channel);
-      }
+        subscribedChannels.addChannel(channel, 'owner', function() {
+          Events.trigger('channelCreated', channel);
+        });
+      };
     },
 
     _disableCreateButton: function() {

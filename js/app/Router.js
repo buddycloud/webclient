@@ -49,7 +49,12 @@ define(function(require) {
       Events.on('navigate', this._navigate, this);
       Events.on('pageError', this._error, this);
       Events.on('forbidden', this._forbidden, this);
+      Events.on('channelCreated', this._channelCreated, this);
       this._endSessionOnUnload();
+    },
+
+    _channelCreated: function(channel) {
+      this.channel(channel, true);
     },
 
     _endSessionOnUnload: function() {
@@ -113,12 +118,12 @@ define(function(require) {
       this.currentPage = new PreferencesPage({user: this.user});
     },
 
-    channel: function(channel) {
+    channel: function(channel, created) {
       this._before();
       if (this.sidebar) {
         this.sidebar.selectChannel(channel);
       }
-      this.currentPage = new ChannelPage({channel: channel, user: this.user});
+      this.currentPage = new ChannelPage({channel: channel, user: this.user, created: created});
     },
 
     channelEdit: function(channel) {

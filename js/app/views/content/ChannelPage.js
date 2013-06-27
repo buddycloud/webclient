@@ -26,7 +26,8 @@ define(function(require) {
     initialize: function() {
       this.view = new ChannelView({
         channel: this.options.channel,
-        user: this.options.user
+        user: this.options.user,
+        created: this.options.created
       });
 
       this.render();

@@ -37,7 +37,7 @@ define(function(require) {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
 
       // Flag to handle created channels
-      this._created = false;
+      this._created = Boolean(this.options.created);
 
       if (!this.model) {
         this.model = this.options.user.metadata(this.options.channel);
@@ -56,9 +56,6 @@ define(function(require) {
 
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
-
-      // Created channel event
-      Events.on('metadataChanged', this._metadataChanged, this);
     },
 
     _avatarChanged: function(channel) {
@@ -68,7 +65,7 @@ define(function(require) {
       }
     },
 
-    _metadataChanged: function(channel) {
+    _newChannel: function(channel) {
       if (this.model.channel === channel) {
         this._created = true;
       }
@@ -80,8 +77,8 @@ define(function(require) {
       $.when(
         this.render()
       ).done(function() {
-        if (self._created === true) {
-          self._create(channel);
+        if (self._created) {
+          self._triggerAnimation(channel);
         }
       });
     },
@@ -96,7 +93,7 @@ define(function(require) {
       Events.unbind('avatarChanged', this._avatarChanged, this);
 
       // Created channel event
-      Events.unbind('metadataChanged', this._metadataChanged, this);
+      Events.unbind('channelCreated', this._newChannel, this);
 
       // Remove
       this.remove();
@@ -169,12 +166,12 @@ define(function(require) {
       return _.include(followedChannels, channel);
     },
 
-    _create: function(channel) {
+    _triggerAnimation: function(channel) {
       var animationClassName = 'channelHeader';
       var offset = this.$el.offset();
 
       var subscribedChannels = this.options.user.subscribedChannels;
-      subscribedChannels.addChannel(channel, 'posts', 'owner', {offset: offset, animationClass: animationClassName, selected: true});
+      subscribedChannels.triggerSubscribedEvent(channel, 'owner', {offset: offset, animationClass: animationClassName, selected: true});
     },
 
     _follow: function() {
