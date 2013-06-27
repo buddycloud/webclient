@@ -57,6 +57,7 @@ define(function(require) {
 
     _initializeDropzone: function() {
       if (!this.dropzone) {
+        var self = this;
         var mediaUrl = api.mediaUrl(this.channelName);
         var authHeader = this.options.user.credentials.authorizationHeader();
 
@@ -66,8 +67,12 @@ define(function(require) {
           clickable: false,
           paramName: 'data',
           sending: function(file, xhr, formData){
+            self._disableButton('Uploading...');
             xhr.withCredentials = true;
             xhr.setRequestHeader('Authorization', authHeader);
+          },
+          complete: function() {
+            self._enableButton();
           },
           success: this._addMedia()
         });
@@ -271,8 +276,8 @@ define(function(require) {
       $button.text('Post');
     },
 
-    _disableButton: function() {
-      this.$('.createComment').addClass('disabled').text('Posting...');
+    _disableButton: function(text) {
+      this.$('.createComment').addClass('disabled').text(text);
     },
 
     _comment: function(event) {
@@ -283,7 +288,7 @@ define(function(require) {
       if (content.trim() || this.media.length > 0) {
         var self = this;
 
-        this._disableButton();
+        this._disableButton('Posting...');
         var item = {replyTo: this.model.id};
 
         if (content) {
