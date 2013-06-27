@@ -868,6 +868,28 @@
   margin: -5px -5px 5px -5px;
   padding: 0px 5px;
 }
+.post .mediaFallback {
+  margin-top: 1em;
+}
+.mediaFallback {
+  background: #f4f4f4;
+  box-shadow: 1px 1px 3px rgba(0,0,0,.1);
+  border: 1px solid #e7e7e7;
+  border-radius: 5px;
+  padding: 5px;
+  display: inline-block;
+}
+.mediaFallback .title {
+  display: block;
+  background: #e7e7e7;
+  margin: -5px -5px 5px -5px;
+  padding: 0px 5px;
+}
+.mediaFallback .center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 .stream .dangerZone {
   box-shadow: 0 1px rgba(255,255,255,0.89),0 1px 0 rgba(0,0,0,0.21) inset,0 0 0 1px rgba(0,0,0,0.13) inset;
   background-color: #f00;
