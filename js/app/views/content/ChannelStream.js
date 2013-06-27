@@ -88,6 +88,7 @@ define(function(require) {
 
     _initializeDropzone: function() {
       if (!this.dropzone) {
+        var self = this;
         var mediaUrl = api.mediaUrl(this.model.channel);
         var authHeader = this.options.user.credentials.authorizationHeader();
 
@@ -97,8 +98,12 @@ define(function(require) {
           clickable: false,
           paramName: 'data',
           sending: function(file, xhr, formData){
+            self._disableButton('Uploading...');
             xhr.withCredentials = true;
             xhr.setRequestHeader('Authorization', authHeader);
+          },
+          complete: function() {
+            self._enableButton();
           },
           success: this._addMedia()
         });
@@ -385,8 +390,8 @@ define(function(require) {
       $button.text('Post');
     },
 
-    _disableButton: function() {
-      this.$('.createComment').addClass('disabled').text('Posting...');
+    _disableButton: function(text) {
+      this.$('.createComment').addClass('disabled').text(text);
     },
 
     _post: function() {
@@ -395,7 +400,7 @@ define(function(require) {
       var previewsContainer = this.$newTopic.find('.dropzone-previews');
 
       if (content.trim() || this.mediaToPost.length > 0) {
-        this._disableButton();
+        this._disableButton('Posting...');
         this._disablePreview();
 
         var self = this;
