@@ -139,14 +139,14 @@ define(function(require) {
     },
 
     _addChannel: function(channel, extra) {
-      if (!_containsChannel(channel)) {
+      if (!this._containsChannel(channel)) {
         var callback = this._triggerUpdateCallback(extra);
         this._fetchMetadata(channel, callback);
       }
     },
 
     _removeChannel: function(channel) {
-      if (_containsChannel(channel)) {
+      if (this._containsChannel(channel)) {
         this._removeMetadata(channel);
 
         // Update template
