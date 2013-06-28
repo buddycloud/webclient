@@ -128,25 +128,34 @@ define(function(require) {
       }
     },
 
-    _addChannel: function(channel, extra) {
+    _containsChannel: function(channel) {
       for (var i in this.metadatas) {
         if (this.metadatas[i].channel === channel) {
-          return;
+          return true;
         }
       }
-      var callback = this._triggerUpdateCallback(extra);
-      this._fetchMetadata(channel, callback);
+
+      return false;
+    },
+
+    _addChannel: function(channel, extra) {
+      if (!_containsChannel(channel)) {
+        var callback = this._triggerUpdateCallback(extra);
+        this._fetchMetadata(channel, callback);
+      }
     },
 
     _removeChannel: function(channel) {
-      this._removeMetadata(channel);
+      if (_containsChannel(channel)) {
+        this._removeMetadata(channel);
 
-      // Update template
-      var channelToRemove = this.$('.channel[data-href="' + channel + '"]');
-      channelToRemove.bind(animations.transitionsEndEvent(), {propertyName : 'height'}, this._removeOldSpot);
-      document.redraw();
-      channelToRemove.addClass('remove');
-      channelToRemove.css('height', 0);
+        // Update template
+        var channelToRemove = this.$('.channel[data-href="' + channel + '"]');
+        channelToRemove.bind(animations.transitionsEndEvent(), {propertyName : 'height'}, this._removeOldSpot);
+        document.redraw();
+        channelToRemove.addClass('remove');
+        channelToRemove.css('height', 0);
+      }
     },
 
     _removeMetadata: function(channel) {
