@@ -129,8 +129,13 @@ define(function(require) {
     },
 
     _addChannel: function(channel, extra) {
+      for (var i in this.metadatas) {
+        if (this.metadatas[i].channel === channel) {
+          return;
+        }
+      }
       var callback = this._triggerUpdateCallback(extra);
-      this._fetchMetadata(channel, callback, extra);
+      this._fetchMetadata(channel, callback);
     },
 
     _removeChannel: function(channel) {
@@ -243,7 +248,8 @@ define(function(require) {
           metadata: model,
           selected: false
         });
-        self._rainbowAnimation($(channel), model.channel, model.channelType(), extra.offset, extra.animationClass, extra.selected);
+        self._rainbowAnimation($(channel), model.channel,
+          model.channelType(), extra.offset, extra.animationClass, extra.selected);
       };
     },
 
@@ -484,7 +490,8 @@ define(function(require) {
 
       this._setupFlyingChannel($channel, channelType, offset);
       // trigger the fly-in animation
-      this._growDestinationArea($channel, 'bubbleHolder rainbowBubble', animationClassName, this._rainbowAnimationCallback($channel, channel, selected));
+      this._growDestinationArea($channel, 'bubbleHolder rainbowBubble', animationClassName,
+        this._rainbowAnimationCallback($channel, channel, selected));
     },
 
     _rainbowAnimationCallback: function($channel, channel, selected) {
@@ -496,7 +503,7 @@ define(function(require) {
           //$channel.addClass('selected').css({left: '', top: ''});
           self.selectChannel(channel);
         }
-      }
+      };
     },
 
     _setupFlyingChannel: function($channel, channelType, offset) {

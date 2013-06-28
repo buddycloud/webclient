@@ -83,9 +83,8 @@ define(function(require) {
       var channel = this.model.channel;
       var subscribedChannels = this.options.user.subscribedChannels;
       return function() {
-        subscribedChannels.addChannel(channel, 'owner', function() {
-          Events.trigger('channelCreated', channel);
-        });
+        subscribedChannels.set(channel + '/posts', 'owner', {silent: true});
+        Events.trigger('navigate', channel);
       };
     },
 

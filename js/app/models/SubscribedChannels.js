@@ -67,14 +67,6 @@ define(function(require) {
       return _.include(['owner', 'moderator'], affiliation);
     },
 
-    addChannel: function(channel, role, callback) {
-      // Manually add
-      this.attributes[channel + '/posts'] = role;
-      if (callback) {
-        callback();
-      }
-    },
-
     triggerSubscribedEvent: function(channel, role, extra) {
       this.trigger('subscriptionSync', 'subscribedChannel', channel, role, extra);
     },

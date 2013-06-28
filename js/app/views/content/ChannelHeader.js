@@ -36,18 +36,15 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
 
-      // Flag to handle created channels
-      this._created = Boolean(this.options.created);
-
       if (!this.model) {
         this.model = this.options.user.metadata(this.options.channel);
       }
-      this.model.bind('change', this._build, this);
+      this.model.bind('change', this.render, this);
 
       if (!this.model.hasEverChanged()) {
         this.model.fetch({credentials: this.options.user.credentials});
       } else {
-        this._build();
+        this.render();
       }
 
       if (this.options.user.subscribedChannels) {
@@ -65,24 +62,6 @@ define(function(require) {
       }
     },
 
-    _newChannel: function(channel) {
-      if (this.model.channel === channel) {
-        this._created = true;
-      }
-    },
-
-    _build: function() {
-      var self = this;
-      var channel = this.model.channel;
-      $.when(
-        this.render()
-      ).done(function() {
-        if (self._created) {
-          self._triggerAnimation(channel);
-        }
-      });
-    },
-
     destroy: function() {
       // (Un)follow event
       if (this.options.user.subscribedChannels) {
@@ -91,9 +70,6 @@ define(function(require) {
 
       // Avatar changed event
       Events.unbind('avatarChanged', this._avatarChanged, this);
-
-      // Created channel event
-      Events.unbind('channelCreated', this._newChannel, this);
 
       // Remove
       this.remove();
@@ -104,6 +80,7 @@ define(function(require) {
       this.$el.html(_.template(localTemplate, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
       this._renderButtons();
+      this._triggerAnimation(metadata.channel);
     },
 
     _switchButton: function(action) {
@@ -171,7 +148,8 @@ define(function(require) {
       var offset = this.$el.offset();
 
       var subscribedChannels = this.options.user.subscribedChannels;
-      subscribedChannels.triggerSubscribedEvent(channel, 'owner', {offset: offset, animationClass: animationClassName, selected: true});
+      subscribedChannels.triggerSubscribedEvent(channel, 'owner',
+        {offset: offset, animationClass: animationClassName, selected: true});
     },
 
     _follow: function() {
