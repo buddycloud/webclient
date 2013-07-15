@@ -17,6 +17,7 @@ define({
   // embedlySecure to "true".
   embedlySecure: true,
 
-  // Specify a port number to run the server on (defaults to 3000)
+  // If you are a buddycloud developer you can optionally specify a port number
+  // to run the server on (defaults to 3000). Safely ignored by everyone elese.
   // port: 3000,
 })
