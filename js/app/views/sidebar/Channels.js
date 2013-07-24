@@ -23,9 +23,6 @@ define(function(require) {
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
-  var Sync = require('models/Sync');
-  var UnreadCounter = require('models/UnreadCounter');
-  var UnreadCounters = require('models/UnreadCounters');
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
