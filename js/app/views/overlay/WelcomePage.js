@@ -97,7 +97,6 @@ define(function(require) {
       this.model.register(username, password, email);
     },
 
-
     render: function() {
       this.$el.html(_.template(localTemplate));
       this.$el.append(this.discover.el);
