@@ -32,22 +32,45 @@ define(function(require) {
     events: {'click .channel': '_navigateToChannel'},
 
     initialize: function() {
-      this.metadatas = [];
       this.unreadCounters = this.model.sync.unreadCounters;
       this.subscribedChannels = this.model.subscribedChannels;
-
       this.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
 
       this._begin();
-      
+
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
     },
 
     _begin: function() {
-      this.render();
-      this._listenForNewItems();
       this._getChannelsMetadata();
+    },
+
+    _getChannelsMetadata: function() {
+      var self = this;
+      this._initMetadataCache();
+
+      var callback = _.after(this.metadatas.length, function() {
+        self.render();
+        self._listenForNewItems();
+      });
+
+      this.metadatas.forEach(function(metadata) {
+        self._fetchMetadata(metadata, callback);
+      });
+    },
+
+    _initMetadataCache: function() {
+      var self = this;
+      var channels = this.model.subscribedChannels.channels();
+      this.metadatas = [];
+      
+      channels.forEach(function(channel) {
+        if (!self._itsMe(channel)) {
+          var metadata = self.model.metadata(channel);
+          self.metadatas.unshift(metadata);
+        }
+      });
     },
 
     _renderUnreadCount: function(channel) {
@@ -78,10 +101,12 @@ define(function(require) {
 
     _updateChannels: function(action, channel, role, extra) {
       // extra for rainbow animation
-      if (action === 'subscribedChannel') {
-        this._addChannel(channel, extra);
-      } else {
-        this._removeChannel(channel);
+      if (!this._itsMe(channel)) {
+        if (action === 'subscribedChannel') {
+          this._addChannel(channel, extra);
+        } else {
+          this._removeChannel(channel);
+        }
       }
     },
 
@@ -98,6 +123,8 @@ define(function(require) {
     _addChannel: function(channel, extra) {
       if (!this._containsChannel(channel)) {
         var callback = this._triggerUpdateCallback(extra);
+        var metadata = this.model.metadata(channel);
+        this.metadatas.unshift(metadata);
         this._fetchMetadata(channel, callback);
       }
     },
@@ -120,9 +147,7 @@ define(function(require) {
       this.metadatas.splice(spot, 1);
     },
 
-    _fetchMetadata: function(channel, callback) {
-      var metadata = this.model.metadata(channel);
-      this.metadatas.unshift(metadata);
+    _fetchMetadata: function(metadata, callback) {
       if (!metadata.hasEverChanged()) {
         metadata.fetch({credentials: this.model.credentials});
         metadata.bind('change', callback, this);
@@ -192,16 +217,6 @@ define(function(require) {
 
     _dispatchNavigationEvent: function(path) {
       Events.trigger('navigate', path);
-    },
-
-    _getChannelsMetadata: function() {
-      var self = this;
-
-      _.each(this.model.subscribedChannels.channels(), function(channel, index) {
-        if (!self._itsMe(channel)) {
-          self._fetchMetadata(channel);
-        }
-      });
     },
 
     _itsMe: function(channel) {
