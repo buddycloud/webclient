@@ -26,6 +26,7 @@ define(function(require) {
       ModelBase.call(this);
       this.username = username;
       this.unreadCounters = new UnreadCounters();
+      this.bind('change', this._updateUnreadCounters, this);
     },
 
     fetch: function(options) {
@@ -46,6 +47,13 @@ define(function(require) {
 
     url: function() {
       return api.url('sync');
+    },
+
+    _updateUnreadCounters: function() {
+      var self = this;
+      _.each(this.attributes, function(items, channel) {
+        self.parseCounters(channel, items);
+      });
     },
 
     parseCounters: function(channel, items) {
@@ -92,9 +100,6 @@ define(function(require) {
           items.reset(value);
 
           result[channel] = items;
-
-          // Parse counters
-          self.parseCounters(channel, items);
         });
 
         return result;
