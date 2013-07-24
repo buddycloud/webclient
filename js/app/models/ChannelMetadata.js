@@ -31,15 +31,15 @@ define(function(require) {
 
       this.fetched = false;
       this.set({'channel': channel}, {silent: true});
-      this.bind('change', this._onFetch, this);
-    },
-
-    _onFetch: function() {
-      this.fetched = true;
+      this.once('change', this._onFetch, this);
     },
 
     hasEverChanged: function() {
       return this.fetched;
+    },
+
+    _onFetch: function() {
+      this.fetched = true;
     },
 
     initialize: function() {

@@ -20,15 +20,17 @@ define(function(require) {
   var ModelBase = require('models/ModelBase');
   var PostNotifications = require('models/PostNotifications');
   var SubscribedChannels = require('models/SubscribedChannels');
+  var Sync = require('models/Sync');
   var UserCredentials = require('models/UserCredentials');
 
   var User = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
       this.credentials = new UserCredentials();
-      this.notifications = new PostNotifications();
       this.channelsMetadata = {};
+      this.notifications = new PostNotifications();
       this.subscribedChannels = null;
+      this.sync = null;
     },
 
     _earliestTime: function() {
@@ -74,12 +76,12 @@ define(function(require) {
         this.trigger('loginSuccess');
       } else {
         var self = this;
-        this._tryFetchingSubscribedChannels({
+        this._trySync({
           error: function() {
             self.trigger('loginError');
           },
           success: function() {
-            self.lastSession = localStorage[self.username() + '.lastSession'] || self._earliestTime(); // FIXME workaround to get last session
+            self.updateLastSession();
             self.trigger('loginSuccess');
           }
         });
@@ -89,16 +91,20 @@ define(function(require) {
     login: function(loginInfo, options) {
       this.credentials.save(loginInfo, options);
       var self = this;
-      this._tryFetchingSubscribedChannels({
+      this._trySync({
         error: function() {
           self.credentials.clear();
           self.trigger('loginError');
         },
         success: function() {
-          self.lastSession = localStorage[self.username() + '.lastSession'] || self._earliestTime(); // FIXME workaround to get last session
+          self.updateLastSession();
           self.trigger('loginSuccess');
         }
       });
+    },
+
+    updateLastSession: function() {
+      this.lastSession = this._currentTime();
     },
 
     logout: function() {
@@ -110,8 +116,29 @@ define(function(require) {
       localStorage[this.username() + '.lastSession'] = this._currentTime();
     },
 
+    _trySync: function(callbacks) {
+      this.sync = new Sync(this.credentials.username);
+      this.subscribedChannels = new SubscribedChannels();
+
+      // callbacks.success only called after 2 successful fetches
+      var afterCall = _.after(2, callbacks.success);
+
+      // Options
+      var options = {};
+      options.credentials = this.credentials;
+      options.error = callbacks.error;
+      options.success = afterCall;
+
+      var syncOptions = _.clone(options);
+      var since = localStorage[this.username() + '.lastSession'] || this._earliestTime();
+      syncOptions.data = {'since': since, max: 51};
+      
+      this.subscribedChannels.fetch(options);
+      this.sync.fetch(syncOptions);
+    },
+
     _tryFetchingSubscribedChannels: function(options) {
-       this.subscribedChannels = new SubscribedChannels();
+       
        this.subscribedChannels.fetch({
          credentials: this.credentials,
          success: options.success,

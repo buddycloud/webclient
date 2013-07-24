@@ -16,25 +16,64 @@
 
 define(function(require) {
   var api = require('util/api');
+  var linkify = require('util/linkify');
   var ModelBase = require('models/ModelBase');
-  var Item = require('models/Item');
+  var ChannelItems = require('models/ChannelItems');
+  var UnreadCounters = require('models/UnreadCounters');
 
   var Sync = ModelBase.extend({
-    constructor: function() {
+    constructor: function(username) {
       ModelBase.call(this);
+      this.username = username;
+      this.unreadCounters = new UnreadCounters();
+    },
+
+    fetch: function(options) {
+      if (this.unreadCounters.useIndexedDB && !this.unreadCounters.isReady()) {
+        this.unreadCounters.once('reset', this._fetch(options), this);
+        this.unreadCounters.fetch({conditions: {'user': this.username}, reset: true});
+      } else {
+        ModelBase.prototype.fetch.call(this, options);
+      }
+    },
+
+    _fetch: function(options) {
+      var self = this;
+      return function() {
+        ModelBase.prototype.fetch.call(self, options);
+      }
     },
 
     url: function() {
       return api.url('sync');
     },
 
-    counters: function() {
-      var result = {};
-      _.each(this.attributes, function(value, node) {
-        result[node.split('/')[2]] = value;
+    parseCounters: function(channel, items) {
+      var totalCount = items.length;
+      var mentionsCount = 0;
+      var username = this.username;
+
+      items.forEach(function(value) {
+        var content = value.content;
+        if (content) {
+          var mentions =  linkify.mentions(content) || [];
+          mentions.forEach(function(mention) {
+            if (mention === username) {
+              mentionsCount++;
+            }
+          });
+        }
       });
 
-      return result;
+      this.unreadCounters.increaseCounters(this.username, channel, mentionsCount, totalCount);
+    },
+
+    getChannelItems: function(channel) {
+      if (!this.get(channel)) {
+        this.set(channel, new ChannelItems(channel));
+      }
+
+      return this.get(channel);
     },
 
     parse: function(resp, xhr) {
@@ -45,9 +84,19 @@ define(function(require) {
         return {};
       } else if (typeof(resp) === 'object') {
         var result = {};
+
+        var self = this;
         _.each(resp, function(value, node) {
-          result[node] = value;
+          var channel = node.split('/')[2];
+          var items = new ChannelItems(channel);
+          items.reset(value);
+
+          result[channel] = items;
+
+          // Parse counters
+          self.parseCounters(channel, items);
         });
+
         return result;
       }
       return resp;
