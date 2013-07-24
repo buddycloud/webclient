@@ -25,6 +25,8 @@ define(function(require) {
     constructor: function(channel) {
       CollectionBase.call(this);
       this.channel = channel;
+      this.hasReset = false;
+      this.once('reset', this._onReset, this);
       this.bind('add', this._itemAdded, this);
     },
 
@@ -32,6 +34,14 @@ define(function(require) {
     comparator: function(item) {
       return -item.updated;
     },*/
+
+    hasEverReset: function() {
+      return this.hasReset;
+    },
+
+    _onReset: function() {
+      this.hasReset = true;
+    },
 
     _itemAdded: function(item) {
       if (item.isPost()) {

@@ -33,64 +33,21 @@ define(function(require) {
 
     initialize: function() {
       this.metadatas = [];
-      this._getChannelsMetadata();
-      this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
+      this.unreadCounters = this.model.sync.unreadCounters;
+      this.subscribedChannels = this.model.subscribedChannels;
 
+      this.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
+
+      this._begin();
+      
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
     },
 
-    _initUnreadCounters: function() {
-      this.unreadCounters = new UnreadCounters();
-      if (this.unreadCounters.useIndexedDB) {
-        // Fetch and store counters
-        this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
-        this.unreadCounters.fetch({conditions: {'user': this.model.username()}, reset: true});
-      } else {
-        // Render channels and listen for new posts
-        this.render();
-        this._listenForNewItems();
-      }
-    },
-
-    _syncUnreadCounters: function() {
-      var self = this;
-      var options = {
-        data: {'since': this.model.lastSession, 'max': 51, counters: 'true'},
-        credentials: this.model.credentials,
-        success: this._updateCounters(),
-        fail: function() {
-          self.render();
-          self._listenForNewItems();
-        }
-      };
-
-      this.sync = new Sync();
-      this.sync.fetch(options);
-    },
-
-    _updateCounters: function() {
-      var self = this;
-      var username = this.model.username();
-      var unreadCounters = this.unreadCounters;
-      return function(model) {
-        _.each(model.counters(), function(counter, channel) {
-          if (self.selected !== channel) {
-            var mentionsCount = counter.mentionsCount;
-            var totalCount = counter.totalCount;
-            unreadCounters.increaseCounters(username, channel, mentionsCount, totalCount);
-            if (channel === username) {
-              Events.trigger('personalChannelTotalCount', unreadCounters.getCounters(channel).totalCount);
-              Events.trigger('personalChannelMentionsCount', unreadCounters.getCounters(channel).mentionsCount);
-            }
-          } else {
-            unreadCounters.resetCounters(username, channel);
-          }
-        });
-
-        self.render();
-        self._listenForNewItems();
-      };
+    _begin: function() {
+      this.render();
+      this._listenForNewItems();
+      this._getChannelsMetadata();
     },
 
     _renderUnreadCount: function(channel) {
@@ -170,7 +127,9 @@ define(function(require) {
         metadata.fetch({credentials: this.model.credentials});
         metadata.bind('change', callback, this);
       } else {
-        callback(metadata);
+        if (callback) {
+          callback(metadata);
+        }
       }
     },
 
@@ -215,8 +174,8 @@ define(function(require) {
             diff = bTotalCount - aTotalCount;
 
             if (diff === 0) {
-              var aTitle = a.title() || a.channel;
-              var bTitle = b.title() || b.channel;
+              var aTitle = a.channel;
+              var bTitle = b.channel;
               return aTitle.localeCompare(bTitle);
             }
           }
@@ -237,11 +196,10 @@ define(function(require) {
 
     _getChannelsMetadata: function() {
       var self = this;
-      var callback = this._triggerInitUnreadCountersCallback();
 
       _.each(this.model.subscribedChannels.channels(), function(channel, index) {
         if (!self._itsMe(channel)) {
-          self._fetchMetadata(channel, callback);
+          self._fetchMetadata(channel);
         }
       });
     },
@@ -259,17 +217,6 @@ define(function(require) {
         });
         self._rainbowAnimation($(channel), model.channel,
           model.channelType(), extra.offset, extra.animationClass, extra.selected);
-      };
-    },
-
-    _triggerInitUnreadCountersCallback: function() {
-      var self = this;
-      var fetched = [];
-      return function(model) {
-        fetched.push(model);
-        if (fetched.length === self.metadatas.length) {
-          self._initUnreadCounters();
-        }
       };
     },
 
