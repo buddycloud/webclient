@@ -59,7 +59,7 @@ define(function(require) {
     },
 
     title: function() {
-      return this.get('title');
+      return this.get('title') || this.channel;
     },
 
     description: function() {
