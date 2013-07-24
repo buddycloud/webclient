@@ -52,6 +52,7 @@ define(function(require) {
 
     _invalidLogin: function() {
       $('.error').show();
+      this._enableButton('#login_submit');
     },
 
     _successfullLogin: function() {
@@ -64,10 +65,21 @@ define(function(require) {
 
     _invalidRegistration: function(message) {
       alert(message);
+      this._enableButton('#register_submit');
     },
 
+    _disableButton: function(selector) {
+      this.$(selector).attr('disabled', true);
+    },
+
+    _enableButton: function(selector) {
+      this.$(selector).attr('disabled', false);
+    },
+ 
     login: function(event) {
       event.preventDefault();
+      this._disableButton('#login_submit');
+      $('.error').hide();
       var username = this.$('#login_name').attr('value');
       var password = this.$('#login_password').attr('value');
       var permanent = $('#store_local').is(':checked');
@@ -78,6 +90,7 @@ define(function(require) {
 
     register: function(event) {
       event.preventDefault();
+      this._disableButton('#register_submit');
       var username = this.$('#register_name').attr('value');
       var password = this.$('#register_password').attr('value');
       var email = this.$('#register_email').attr('value');
