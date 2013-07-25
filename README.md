@@ -20,13 +20,14 @@ Building the compressed JavaScript and CSS files
 
 ```
 cd webclient
-npm i ,
+npm install
+npm install -g grunt-cli
 grunt build
 ```
 
 Development
 ===========
-Install everything with `npm install`. Copy `config.js.example` to `config.js` and modify to match your server, if you don't have one set up just use buddycloud.org. 
+Install everything with `npm install` and `npm install -g grunt-cli`. Copy `config.js.example` to `config.js` and modify to match your server, if you don't have one set up just use buddycloud.org. 
 
 To start the server run `grunt debug server` from the project root.
 To run the server using compressed JavaScript and CSS files simply run `grunt server`.
