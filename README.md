@@ -19,6 +19,7 @@ Building the compressed JavaScript and CSS files
 ================================================
 
 ```
+cd webclient
 npm i ,
 grunt build
 ```
