@@ -17,31 +17,37 @@
 define(function(require) {
   var api = require('util/api');
   var CollectionBase = require('models/CollectionBase');
+  var indexedDB = require('util/indexedDB');
   var Item = require('models/Item');
+  var PostsDB = require('models/db/PostsDB');
+  require('backbone-indexeddb');
 
   var ChannelItems = CollectionBase.extend({
     model: Item,
+    database: PostsDB,
+    storeName: PostsDB.id,
 
     constructor: function(channel) {
       CollectionBase.call(this);
       this.channel = channel;
-      this.hasReset = false;
-      this.once('reset', this._onReset, this);
+      this._hasEverReset = false;
+      this._useIndexedDB = indexedDB.isSuppported();
       this.bind('add', this._itemAdded, this);
+      this.once('reset', this._onReset, this);
+    },
+
+    hasEverReset: function() {
+      return this._hasEverReset;
+    },
+
+    _onReset: function() {
+      this._hasEverReset = true;
     },
 
     /* TODO: there is something wrong with items "updated" field
     comparator: function(item) {
       return -item.updated;
     },*/
-
-    hasEverReset: function() {
-      return this.hasReset;
-    },
-
-    _onReset: function() {
-      this.hasReset = true;
-    },
 
     _itemAdded: function(item) {
       if (item.isPost()) {
@@ -70,6 +76,11 @@ define(function(require) {
       options = options || {};
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
+      options.conditions = {channel: this.channel};
+      if (options.data && options.data.max) {
+        options.limit = options.data.max;
+      }
+
       CollectionBase.prototype.fetch.call(this, options);
     },
 
@@ -113,6 +124,45 @@ define(function(require) {
       });
 
       return completeThreads;
+    },
+
+    _storeOnDB: function() {
+      var self = this;
+      return function() {
+        self.once('error sync', function() {self._syncWithServer = true;});
+        self.save({}, {silent: true});
+      };
+    },
+
+    _syncServerCallback: function(method, model, options) {
+      var self = this;
+      return function() {
+        self._syncServer(method, model, options);
+      };
+    },
+
+    _syncIndexedDB: function(method, model, options) {
+      if (method === 'read') {
+        // If the content isn't on DB, it wasn't saved on sync
+        this.once('error', this._syncServerCallback(method, model, options));
+      } else {
+        this.once('error sync', this._syncServerCallback(method, model, options));
+      }
+
+      Backbone.sync.call(this, method, model, options);
+    },
+
+    _syncServer: function(method, model, options) {
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
+    },
+
+    sync: function(method, model, options) {
+      if (this._useIndexedDB) {
+        this._syncIndexedDB(method, model, options);
+      } else {
+        this._syncServer(method, model, options);
+      }
     }
   });
 

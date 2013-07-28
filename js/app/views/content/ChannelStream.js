@@ -147,7 +147,11 @@ define(function(require) {
       this.model.bind('addPost', this._prependPost, this);
 
       if (!this.model.hasEverReset()) {
-        this.model.fetch({data: {max: 51}, credentials: this.options.user.credentials, reset: true});
+        this.model.fetch({
+          data: {max: 51}, 
+          credentials: this.options.user.credentials,
+          reset: true
+        });
       } else {
         this._begin();
       }
