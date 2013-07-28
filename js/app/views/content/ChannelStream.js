@@ -20,6 +20,7 @@ define(function(require) {
   var api = require('util/api');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
+  var ChannelItems = require('models/ChannelItems');
   var config = require('config');
   var Dropzone = require('dropzone');
   var Events = Backbone.Events;
@@ -139,14 +140,13 @@ define(function(require) {
     },
 
     _initModel: function() {
-      var sync = this.options.user.sync;
-      this.model = sync.getChannelItems(this.options.channel);
+      this.model = new ChannelItems(this.options.channel);
 
       this.model.bind('error', this._error, this);
-      this.model.bind('reset', this._begin, this);
+      this.model.bind('fetch', this._begin, this);
       this.model.bind('addPost', this._prependPost, this);
 
-      if (!this.model.hasEverReset()) {
+      if (!this.model.isReady()) {
         this.model.fetch({
           data: {max: 51}, 
           credentials: this.options.user.credentials,

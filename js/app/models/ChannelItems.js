@@ -30,18 +30,18 @@ define(function(require) {
     constructor: function(channel) {
       CollectionBase.call(this);
       this.channel = channel;
-      this._hasEverReset = false;
+      this._fetched = false;
       this._useIndexedDB = indexedDB.isSuppported();
       this.bind('add', this._itemAdded, this);
-      this.once('reset', this._onReset, this);
+      this.once('fetch', this._onFetch, this);
     },
 
-    hasEverReset: function() {
-      return this._hasEverReset;
+    isReady: function() {
+      return this._fetched;
     },
 
-    _onReset: function() {
-      this._hasEverReset = true;
+    _onFetch: function() {
+      this._fetched = true;
     },
 
     /* TODO: there is something wrong with items "updated" field
@@ -126,14 +126,6 @@ define(function(require) {
       return completeThreads;
     },
 
-    _storeOnDB: function() {
-      var self = this;
-      return function() {
-        self.once('error sync', function() {self._syncWithServer = true;});
-        self.save({}, {silent: true});
-      };
-    },
-
     _syncServerCallback: function(method, model, options) {
       var self = this;
       return function() {
@@ -141,12 +133,39 @@ define(function(require) {
       };
     },
 
+    _triggerFetchCallback: function(options) {
+      var self = this;
+      options = options || {};
+      var callback = options.complete;
+      options.complete = function() {
+        self.trigger('fetch');
+        if (callback) {
+          callback();
+        }
+      };
+    },
+
+    _onReset: function(method, model, options) {
+      var self = this;
+      return function() {
+        if (_.isEmpty(self.models)) {
+          // If is empty, try to get posts from server
+          self._triggerFetchCallback(options);
+          self._syncServer(method, model, options);
+        } else {
+          self.trigger('fetch');
+        }
+      }
+    },
+
     _syncIndexedDB: function(method, model, options) {
+      var opt = _.clone(options);
       if (method === 'read') {
-        // If the content isn't on DB, it wasn't saved on sync
-        this.once('error', this._syncServerCallback(method, model, options));
+        this.once('reset', this._onReset(method, model, options), this);
       } else {
-        this.once('error sync', this._syncServerCallback(method, model, options));
+        _.extend(options, {
+          success: this._syncServerCallback(method, model, opt)
+        });
       }
 
       Backbone.sync.call(this, method, model, options);
