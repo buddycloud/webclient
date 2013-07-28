@@ -17,9 +17,16 @@
 define(function(require) {
   var _ = require('underscore');
   var api = require('util/api');
+  var Backbone = require('backbone');
+  var indexedDB = require('util/indexedDB');
   var ModelBase = require('models/ModelBase');
+  var PostsDB = require('models/db/PostsDB');
+  require('backbone-indexeddb');
 
   var Item = ModelBase.extend({
+    database: PostsDB,
+    storeName: PostsDB.id,
+
     initialize: function() {
       this._initializeComments();
       this._defineGetter('author', function() {
@@ -48,6 +55,7 @@ define(function(require) {
       this._defineGetter('replyTo');
       this._defineGetter('published');
       this._defineGetter('id');
+      this._useIndexedDB = indexedDB.isSuppported();
     },
 
     _initializeComments: function() {
@@ -82,6 +90,12 @@ define(function(require) {
 
     authorAvatarUrl: function(size) {
       return api.avatarUrl(this.author, size);
+    },
+
+    sync: function(method, model, options) {
+      if (this._useIndexedDB) {
+        Backbone.Model.prototype.sync.call(this, method, model, options);
+      }
     }
   });
 

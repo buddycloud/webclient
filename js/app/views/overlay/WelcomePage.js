@@ -21,6 +21,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
+  var loadingTemplate = require('text!templates/overlay/loading.html');
   var Events = Backbone.Events;
   var localTemplate;
 
@@ -55,7 +56,15 @@ define(function(require) {
       this._enableButton('#login_submit');
     },
 
-    _successfullLogin: function() {
+    _successfullLogin: function(jid) {
+      // sync
+      Events.on('syncSuccess', this._successfullSync, this);
+      
+      // loading template
+      this.$el.html(_.template(loadingTemplate, {jid: jid}));
+    },
+
+    _successfullSync: function() {
       Events.trigger('navigate', 'home');
     },
 

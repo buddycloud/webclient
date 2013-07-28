@@ -16,22 +16,54 @@
 
 define(function(require) {
   var api = require('util/api');
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
+  var Item = require('models/Item');
   var linkify = require('util/linkify');
   var ModelBase = require('models/ModelBase');
   var ChannelItems = require('models/ChannelItems');
   var UnreadCounters = require('models/UnreadCounters');
 
   var Sync = ModelBase.extend({
-    constructor: function(username) {
+    constructor: function() {
       ModelBase.call(this);
-      this.username = username;
+      this.channelItems = {};
       this.unreadCounters = new UnreadCounters();
+      this.on('change', this._saveItems, this);
+    },
+
+    _itemsSize: function(channels) {
+      var total = 0;
+      for (var i in channels) {
+        var items = this.get(channels[i]);
+        total += items.length;
+      }
+
+      return total;
+    },
+
+    _saveItems: function() {
+      var channels = _.keys(_.omit(this.attributes, 'username'));
+      var afterCallback = _.after(this._itemsSize(channels), this._triggerSyncCallback);
+
+      for (var i in channels) {
+        var items = this.get(channels[i]);
+        items.forEach(function(item) {
+          item = new Item(item);
+          item.once('sync', afterCallback);
+          item.save();
+        });
+      }
+    },
+
+    _triggerSyncCallback: function() {
+      Events.trigger('syncSuccess');
     },
 
     fetch: function(options) {
       // First, init the unread counters to avoid possible race conditions
       if (this.unreadCounters.useIndexedDB && !this.unreadCounters.isReady()) {
-        this.unreadCounters.once('reset', this._fetch(options), this);
+        this.unreadCounters.once('error reset', this._fetch(options), this);
         this.unreadCounters.fetch({conditions: {'user': this.username}, reset: true});
       } else {
         ModelBase.prototype.fetch.call(this, options);
@@ -52,7 +84,7 @@ define(function(require) {
     parseCounters: function(channel, items) {
       var totalCount = items.length;
       var mentionsCount = 0;
-      var username = this.username;
+      var username = this.get('username');
 
       items.forEach(function(value) {
         var content = value.content;
@@ -66,15 +98,23 @@ define(function(require) {
         }
       });
 
-      this.unreadCounters.increaseCounters(this.username, channel, mentionsCount, totalCount);
+      this.unreadCounters.increaseCounters(username, channel, mentionsCount, totalCount);
     },
 
     getChannelItems: function(channel) {
-      if (!this.get(channel)) {
-        this.set(channel, new ChannelItems(channel));
+      if (!this.channelItems[channel]) {
+        this.channelItems[channel] = new ChannelItems(channel);
       }
 
-      return this.get(channel);
+      return this.channelItems[channel];
+    },
+
+    _insertChannel: function(channel, items) {
+      items.forEach(function(item) {
+        item['channel'] = channel;
+      });
+
+      return items;
     },
 
     parse: function(resp, xhr) {
@@ -87,10 +127,9 @@ define(function(require) {
         var result = {};
 
         var self = this;
-        _.each(resp, function(value, node) {
+        _.each(resp, function(items, node) {
           var channel = node.split('/')[2];
-          var items = new ChannelItems(channel);
-          items.reset(value);
+          self._insertChannel(channel, items);
 
           result[channel] = items;
 
