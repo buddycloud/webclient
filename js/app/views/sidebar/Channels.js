@@ -122,7 +122,7 @@ define(function(require) {
         var callback = this._triggerUpdateCallback(extra);
         var metadata = this.model.metadata(channel);
         this.metadatas.unshift(metadata);
-        this._fetchMetadata(channel, callback);
+        this._fetchMetadata(metadata, callback);
       }
     },
 

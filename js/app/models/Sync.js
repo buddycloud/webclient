@@ -101,14 +101,6 @@ define(function(require) {
       this.unreadCounters.increaseCounters(username, channel, mentionsCount, totalCount);
     },
 
-    getChannelItems: function(channel) {
-      if (!this.channelItems[channel]) {
-        this.channelItems[channel] = new ChannelItems(channel);
-      }
-
-      return this.channelItems[channel];
-    },
-
     _insertChannel: function(channel, items) {
       items.forEach(function(item) {
         item['channel'] = channel;
