@@ -67,7 +67,7 @@ define(function(require) {
     },
 
     channels: function() {
-      return this.subscribedChannels ? this.subscribedChannels.channels() : null;
+      return this.subscribedChannels ? this.subscribedChannels.channels() : [];
     },
 
     start: function() {

@@ -44,7 +44,7 @@ define(function(require) {
         var channel = this.channel;
         this.models.forEach(function(item) {
           item.set('channel', channel, {silent: true});
-          item.save(null, {silent: true});
+          item.save(null, {silent: true, syncWithServer: false});
         });
       }
     },
@@ -183,9 +183,7 @@ define(function(require) {
       if (method === 'read') {
         this.once('sync', this._onSync(method, model, options), this);
       } else {
-        _.extend(options, {
-          success: this._syncServerCallback(method, model, opt)
-        });
+        this.once('sync', this._syncServerCallback(method, model, options), this);
       }
 
       Backbone.sync.call(this, method, model, options);

@@ -143,10 +143,10 @@ define(function(require) {
       this.model = new ChannelItems(this.options.channel);
 
       this.model.bind('error', this._error, this);
-      this.model.bind('fetch', this._begin, this);
       this.model.bind('addPost', this._prependPost, this);
 
       if (!this.model.isReady()) {
+        this.model.once('fetch', this._begin, this);
         this.model.fetch({
           data: {max: 51}, 
           credentials: this.options.user.credentials,
@@ -427,6 +427,7 @@ define(function(require) {
         this.model.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
+          syncWithServer: true,
           complete: function() {
             expandingArea.find('textarea').val('').blur();
             expandingArea.find('span').text('');
