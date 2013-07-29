@@ -29,13 +29,13 @@ define(function(require) {
     initialize: function() {
       this.useIndexedDB = this._isLoading = indexedDB.isSuppported();
       if (this.useIndexedDB) {
-        this.bind('reset', this._onReset, this);
+        this.bind('reset error', this._onInit, this);
       } else {
         this._unreadCounts = {};
       }
     },
 
-    _onReset: function() {
+    _onInit: function() {
       this._isLoading = false;
     },
 
