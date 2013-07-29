@@ -36,15 +36,18 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
 
+      // Flag to handle created channels
+      this._created = false;
+
       if (!this.model) {
         this.model = this.options.user.metadata(this.options.channel);
       }
-      this.model.bind('change', this.render, this);
+      this.model.bind('change', this._build, this);
 
       if (!this.model.hasEverChanged()) {
         this.model.fetch({credentials: this.options.user.credentials});
       } else {
-        this.render();
+        this._build();
       }
 
       if (this.options.user.subscribedChannels) {
@@ -53,6 +56,9 @@ define(function(require) {
 
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
+
+      // Created channel event
+      Events.on('metadataChanged', this._metadataChanged, this);
     },
 
     _avatarChanged: function(channel) {
@@ -60,6 +66,24 @@ define(function(require) {
         var $imgEl = this.$el.find('img');
         $imgEl.attr('src', this.model.avatarUrl(50) + '&' + new Date().getTime());
       }
+    },
+
+    _metadataChanged: function(channel) {
+      if (this.model.channel === channel) {
+        this._created = true;
+      }
+    },
+
+    _build: function() {
+      var self = this;
+      var channel = this.model.channel;
+      $.when(
+        this.render()
+      ).done(function() {
+        if (self._created === true) {
+          self._create(channel);
+        }
+      });
     },
 
     destroy: function() {
@@ -71,6 +95,9 @@ define(function(require) {
       // Avatar changed event
       Events.unbind('avatarChanged', this._avatarChanged, this);
 
+      // Created channel event
+      Events.unbind('metadataChanged', this._metadataChanged, this);
+
       // Remove
       this.remove();
     },
@@ -80,7 +107,6 @@ define(function(require) {
       this.$el.html(_.template(localTemplate, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
       this._renderButtons();
-      this._triggerAnimation(metadata.channel);
     },
 
     _switchButton: function(action) {
@@ -143,13 +169,12 @@ define(function(require) {
       return _.include(followedChannels, channel);
     },
 
-    _triggerAnimation: function(channel) {
+    _create: function(channel) {
       var animationClassName = 'channelHeader';
       var offset = this.$el.offset();
 
       var subscribedChannels = this.options.user.subscribedChannels;
-      subscribedChannels.triggerSubscribedEvent(channel, 'owner',
-        {offset: offset, animationClass: animationClassName, selected: true});
+      subscribedChannels.addChannel(channel, 'posts', 'owner', {offset: offset, animationClass: animationClassName, selected: true});
     },
 
     _follow: function() {

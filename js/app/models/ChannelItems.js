@@ -16,6 +16,8 @@
 
 define(function(require) {
   var api = require('util/api');
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var CollectionBase = require('models/CollectionBase');
   var indexedDB = require('util/indexedDB');
   var Item = require('models/Item');
@@ -34,6 +36,17 @@ define(function(require) {
       this._useIndexedDB = indexedDB.isSuppported();
       this.bind('add', this._itemAdded, this);
       this.once('fetch', this._onFetch, this);
+      Events.on('subscriptionSync', this._storeModels, this);
+    },
+
+    _storeModels: function(action) {
+      if (action == 'subscribedChannel') {
+        var channel = this.channel;
+        this.models.forEach(function(item) {
+          item.set('channel', channel, {silent: true});
+          item.save(null, {silent: true});
+        });
+      }
     },
 
     isReady: function() {
@@ -44,10 +57,9 @@ define(function(require) {
       this._fetched = true;
     },
 
-    /* TODO: there is something wrong with items "updated" field
     comparator: function(item) {
-      return -item.updated;
-    },*/
+      return -item.lastUpdated();
+    },
 
     _itemAdded: function(item) {
       if (item.isPost()) {
@@ -77,8 +89,16 @@ define(function(require) {
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
       options.conditions = {channel: this.channel};
-      if (options.data && options.data.max) {
-        options.limit = options.data.max;
+      
+      var data = options.data;
+      if (data) {
+        if (data.max) {
+          options.limit = data.max;
+        }
+
+        if (data.after) {
+          options.offset = this.models.length;
+        }
       }
 
       CollectionBase.prototype.fetch.call(this, options);
@@ -145,7 +165,7 @@ define(function(require) {
       };
     },
 
-    _onReset: function(method, model, options) {
+    _onSync: function(method, model, options) {
       var self = this;
       return function() {
         if (_.isEmpty(self.models)) {
@@ -161,7 +181,7 @@ define(function(require) {
     _syncIndexedDB: function(method, model, options) {
       var opt = _.clone(options);
       if (method === 'read') {
-        this.once('reset', this._onReset(method, model, options), this);
+        this.once('sync', this._onSync(method, model, options), this);
       } else {
         _.extend(options, {
           success: this._syncServerCallback(method, model, opt)
