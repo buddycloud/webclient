@@ -303,6 +303,7 @@ define(function(require) {
         var comment = this.options.items.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
+          syncWithServer: true,
           complete: function() {
             textArea.val('');
             previewsContainer.empty();

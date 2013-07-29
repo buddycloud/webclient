@@ -51,7 +51,7 @@ define(function(require) {
         items.forEach(function(item) {
           item = new Item(item);
           item.once('sync', afterCallback);
-          item.save();
+          item.save(null, {syncWithServer: false});
         });
       }
     },

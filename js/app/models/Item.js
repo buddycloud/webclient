@@ -104,9 +104,30 @@ define(function(require) {
       return api.avatarUrl(this.author, size);
     },
 
-    sync: function(method, model, options) {
+    _syncServer: function(method, model, options) {
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
+    },
+
+    _syncIndexedDB: function(method, model, options) {
       if (this._useIndexedDB) {
-        Backbone.Model.prototype.sync.call(this, method, model, options);
+        Backbone.sync.call(this, method, model, options);
+      }
+    },
+
+    _syncIndexedDBCallback: function(method, model, options) {
+      var self = this;
+      return function() {
+        self._syncIndexedDB(method, model, options);
+      }
+    },
+
+    sync: function(method, model, options) {
+      if (options.syncWithServer) {
+        this.once('sync', this._syncIndexedDBCallback(method, model, options), this);
+        this._syncServer(method, model, options);
+      } else {
+        this._syncIndexedDB(method, model, options);
       }
     }
   });
