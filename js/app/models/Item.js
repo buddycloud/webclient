@@ -32,7 +32,7 @@ define(function(require) {
       this._defineGetter('author', function() {
         var author = this.get('author');
         if (author) {
-          if (author.indexOf('acct:') != -1) {
+          if (author.indexOf('acct:') !== -1) {
             return author.slice('acct:'.length);
           } else {
             return author;
@@ -81,9 +81,14 @@ define(function(require) {
     },
 
     lastUpdated: function() {
-      var updated = new Date(this.updated);
+      var getMillis = function(time) {
+        // Workaround for posts without updated field
+        return time ? new Date(time).getTime() : new Date().getTime();
+      }
+
+      var updated = getMillis(this.updated);
       this.comments.forEach(function(comment) {
-        var updatedComment = new Date(comment.updated);
+        var updatedComment = getMillis(comment.updated);
         if (updatedComment > updated) {
           updated = updatedComment;
         }

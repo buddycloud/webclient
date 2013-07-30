@@ -24,6 +24,7 @@ define(function(require) {
   var config = require('config');
   var Dropzone = require('dropzone');
   var Events = Backbone.Events;
+  var Item = require('models/Item');
   var PostView = require('views/content/PostView');
   var embedlify = require('util/embedlify');
   var l10n = require('l10n');
@@ -196,24 +197,31 @@ define(function(require) {
       var offset = content.scrollTop() + content.prop('clientHeight') + triggerPoint;
 
       if(!this.isLoading && (offset > content.prop('scrollHeight'))) {
-        var self = this;
-
         // Last loaded post id
         var lastItem = this.model.lastItem();
 
         if (lastItem) {
           this._showSpinner();
+          this.model.once('fetch', this._appendPosts, this);
           this.model.fetch({
             data: {after: lastItem, max: 51},
             credentials: this.options.user.credentials,
             silent: true,
-            success: function() {
-              self._appendPosts();
-              self._hideSpinner();
-            }
+            remove: false
           });
         }
       }
+    },
+
+    _appendPosts: function(posts) {
+      var self = this;
+      _.each(posts, function(post) {
+        var view = self._viewForPost(new Item(post));
+        self._postViews.push(view);
+        view.render();
+        this.$('.posts').append(view.el);
+      });
+      this._hideSpinner();
     },
 
     _dndFileStart: function(evt) {
@@ -269,17 +277,6 @@ define(function(require) {
         self._postViews.push(view);
       });
       this._renderPosts();
-    },
-
-    _appendPosts: function() {
-      var posts = this.model.posts();
-      var self = this;
-      _.each(posts, function(post) {
-        var view = self._viewForPost(post);
-        self._postViews.push(view);
-        view.render();
-        this.$('.posts').append(view.el);
-      });
     },
 
     _viewForPost: function(post) {
@@ -404,6 +401,11 @@ define(function(require) {
       this.$('.createComment').addClass('disabled').text(text);
     },
 
+    _follows: function() {
+      var followedChannels = this.options.user.subscribedChannels.channels();
+      return _.include(followedChannels, this.options.channel);
+    },
+
     _post: function() {
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
@@ -424,10 +426,11 @@ define(function(require) {
           item.media = this.mediaToPost;
         }
 
+        item.channel = this.options.channel;
         this.model.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
-          syncWithServer: true,
+          syncWithServer: this._follows(),
           complete: function() {
             expandingArea.find('textarea').val('').blur();
             expandingArea.find('span').text('');

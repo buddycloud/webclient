@@ -36,6 +36,7 @@ define(function(require) {
       this._useIndexedDB = indexedDB.isSuppported();
       this.bind('add', this._itemAdded, this);
       this.once('fetch', this._onFetch, this);
+      this.bind('sort', this._onSort, this);
       Events.on('subscriptionSync', this._storeModels, this);
     },
 
@@ -78,8 +79,18 @@ define(function(require) {
     },
 
     lastItem: function() {
-      var lastItem = _.last(_.values(this.models));
-      return lastItem ? lastItem.id : null;
+      var oldest;
+      this.models.forEach(function(item) {
+        if (!oldest) {
+          oldest = item;
+        } else {
+          if (item.updated < oldest.updated) {
+            oldest = item;
+          }
+        }
+      });
+
+      return oldest ? oldest.id : null;
     },
 
     fetch: function(options) {
@@ -97,7 +108,7 @@ define(function(require) {
         }
 
         if (data.after) {
-          options.offset = this.models.length;
+          options.offset = this.length;
         }
       }
 
@@ -111,14 +122,24 @@ define(function(require) {
     },
 
     parse: function(response) {
+      var compareItems = function(a, b) {
+        if (a.updated > b.updated) return 1;
+        if (a.updated < b.updated) return -1;
+
+        return 0;
+      }
+
       var comments = {};
       _.each(response, function(item) {
         if (item.replyTo) {
           var postId = item.replyTo;
           comments[postId] = comments[postId] || [];
-          comments[postId].unshift(item);
+          comments[postId].push(item);
         } else {
-          item.comments = comments[item.id];
+          var commentsPosts = comments[item.id];
+          if (commentsPosts) {
+            item.comments = commentsPosts.sort(compareItems);  
+          }
         }
       });
       return response;
@@ -153,27 +174,18 @@ define(function(require) {
       };
     },
 
-    _triggerFetchCallback: function(options) {
-      var self = this;
-      options = options || {};
-      var callback = options.complete;
-      options.complete = function() {
-        self.trigger('fetch');
-        if (callback) {
-          callback();
-        }
-      };
+    _triggerFetchCallback: function(collection, resp) {
+      collection.trigger('fetch', resp);
     },
 
     _onSync: function(method, model, options) {
       var self = this;
-      return function() {
-        if (_.isEmpty(self.models)) {
-          // If is empty, try to get posts from server
-          self._triggerFetchCallback(options);
+      return function(collection, resp) {
+        if (_.isEmpty(resp)) {
+          self.once('sync', self._triggerFetchCallback);
           self._syncServer(method, model, options);
         } else {
-          self.trigger('fetch');
+          self.trigger('fetch', resp);
         }
       }
     },
