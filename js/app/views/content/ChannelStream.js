@@ -206,8 +206,7 @@ define(function(require) {
           this.model.fetch({
             data: {after: lastItem, max: 51},
             credentials: this.options.user.credentials,
-            silent: true,
-            remove: false
+            silent: true
           });
         }
       }

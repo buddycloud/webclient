@@ -178,20 +178,28 @@ define(function(require) {
       collection.trigger('fetch', resp);
     },
 
-    _onSync: function(method, model, options) {
+    _extendOptions: function(options) {
       var self = this;
+      options = options || {};
+      var success = options.success;
+      options.success = function(data) {
+        self.trigger('fetch', data);
+        if (success) success(data);
+      }
+    },
+
+    _onSync: function(method, model, options) {
       return function(collection, resp) {
         if (_.isEmpty(resp)) {
-          self.once('sync', self._triggerFetchCallback);
-          self._syncServer(method, model, options);
+          collection._extendOptions(options);
+          collection._syncServer(method, model, options);
         } else {
-          self.trigger('fetch', resp);
+          collection.trigger('fetch', resp);
         }
       }
     },
 
     _syncIndexedDB: function(method, model, options) {
-      var opt = _.clone(options);
       if (method === 'read') {
         this.once('sync', this._onSync(method, model, options), this);
       } else {
