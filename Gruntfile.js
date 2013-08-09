@@ -102,7 +102,8 @@ module.exports = function(grunt) {
 	  optimizeAllPluginResources: true,
 	  optimize: 'uglify2',
 	  generateSourceMaps: true,
-	  preserveLicenseComments: false
+	  preserveLicenseComments: false,
+          exclude: [ 'config' ]
 	}
 	
 	requirejs.optimize(mainConfig, function (log) {
