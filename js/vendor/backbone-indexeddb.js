@@ -438,7 +438,7 @@ define(['backbone'], function(Backbone) {
                     }
                     else {
                         // Cursor is not over yet.
-                        if (options.limit && processed >= options.limit) {
+                        if (options.limit && processed > options.limit) {
                             // Yet, we have processed enough elements. So, let's just skip.
                             if (bounds && options.conditions[index.keyPath]) {
                                 cursor.continue(options.conditions[index.keyPath][1] + 1); /* We need to 'terminate' the cursor cleany, by moving to the end */
