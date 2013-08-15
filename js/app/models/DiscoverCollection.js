@@ -30,12 +30,6 @@ define(function(require) {
       return this.discoverUrl;
     },
 
-    doDiscover: function(query, callback, credentials) {
-      query = _.extend({max: 5}, query);
-      // TODO Local discover
-      this.fetch({data: query, credentials: credentials, success: callback});
-    },
-
     parse: function(resp, xhr) {
       if (typeof(resp) === 'object' && resp.rsm && resp.items) {
         this.index = resp.rsm.index;

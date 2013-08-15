@@ -36,8 +36,8 @@ define(function(require) {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       if (!localFooter) localFooter = l10nBrowser.localiseHTML(footer, {});
       this.model = new DiscoverCollection(api.url('most_active'));
-      this.model.doDiscover({max: 10});
-      this.model.bind('sync', this.render, this);
+      this.model.fetch({data: {max:10}, reset: true});
+      this.model.bind('reset', this.render, this);
     },
 
     render: function() {
