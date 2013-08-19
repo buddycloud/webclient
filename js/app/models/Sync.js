@@ -101,9 +101,9 @@ define(function(require) {
       this.unreadCounters.increaseCounters(username, channel, mentionsCount, totalCount);
     },
 
-    _insertChannel: function(channel, items) {
+    _insertSource: function(channel, items) {
       items.forEach(function(item) {
-        item['channel'] = channel;
+        item['source'] = channel;
       });
 
       return items;
@@ -121,7 +121,7 @@ define(function(require) {
         var self = this;
         _.each(resp, function(items, node) {
           var channel = node.split('/')[2];
-          self._insertChannel(channel, items);
+          self._insertSource(channel, items);
 
           result[channel] = items;
 

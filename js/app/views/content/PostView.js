@@ -280,11 +280,6 @@ define(function(require) {
       this.$('.createComment').addClass('disabled').text(text);
     },
 
-    _follows: function() {
-      var followedChannels = this.options.user.subscribedChannels.channels();
-      return _.include(followedChannels, this.channelName);
-    },
-
     _comment: function(event) {
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
@@ -304,13 +299,11 @@ define(function(require) {
           item.media = this.media;
         }
 
-        item.channel = this.channelName;
-
         var previewsContainer = this.$el.find('.dropzone-previews');
         var comment = this.options.items.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
-          syncWithServer: this._follows(),
+          syncWithServer: true,
           complete: function() {
             textArea.val('');
             previewsContainer.empty();
