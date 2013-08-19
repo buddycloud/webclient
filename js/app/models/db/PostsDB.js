@@ -19,7 +19,14 @@ define(function(require) {
     id: 'posts',
     migrations: [
       {
-        version: '1',
+        version: '1.0',
+        migrate: function(transaction, next) {
+          var store = transaction.db.createObjectStore('posts');
+          next();
+        }
+      },
+      {
+        version: '1.1',
         migrate: function(transaction, next) {
           var store;
 
@@ -29,7 +36,7 @@ define(function(require) {
             store = transaction.objectStore('posts');
           }
 
-          store.createIndex('channelIndex', 'channel');
+          store.createIndex('sourceIndex', 'source');
 
           next();
         }

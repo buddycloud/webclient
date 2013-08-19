@@ -44,7 +44,7 @@ define(function(require) {
       if (action == 'subscribedChannel') {
         var channel = this.channel;
         this.models.forEach(function(item) {
-          item.set('channel', channel, {silent: true});
+          item.set('source', channel, {silent: true});
           item.save(null, {silent: true, syncWithServer: false});
         });
       }
@@ -99,7 +99,7 @@ define(function(require) {
       options = options || {};
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
-      options.conditions = {channel: this.channel};
+      options.conditions = {source: this.channel};
       
       var data = options.data;
       if (data) {

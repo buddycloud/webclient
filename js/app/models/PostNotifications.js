@@ -34,8 +34,22 @@ define(function(require) {
     _triggerNewItem: function() {
       for (var i = 0; i in this.attributes; ++i) {
         var val = this.attributes[i];
+        if (val.source) {
+          val.source = val.source.split('/')[0];
+        }
+
         var item = new Item(val);
-        this.trigger('new', item);
+
+        // XXX: workaround for posts without time
+        if (!item.updated && !item.published) {
+          item.published = item.updated = new Date().toISOString(); // Current Time
+        }
+
+        var self = this;
+        item.once('sync', function () {
+          self.trigger('new', item);
+        });
+        item.save(null, {syncWithServer: false});
       }
     },
 

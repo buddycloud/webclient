@@ -400,11 +400,6 @@ define(function(require) {
       this.$('.createComment').addClass('disabled').text(text);
     },
 
-    _follows: function() {
-      var followedChannels = this.options.user.subscribedChannels.channels();
-      return _.include(followedChannels, this.options.channel);
-    },
-
     _post: function() {
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
@@ -425,11 +420,10 @@ define(function(require) {
           item.media = this.mediaToPost;
         }
 
-        item.channel = this.options.channel;
         this.model.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
-          syncWithServer: this._follows(),
+          syncWithServer: true,
           complete: function() {
             expandingArea.find('textarea').val('').blur();
             expandingArea.find('span').text('');
