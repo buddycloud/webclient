@@ -178,20 +178,27 @@ define(function(require) {
       collection.trigger('fetch', resp);
     },
 
-    _extendOptions: function(options) {
-      var self = this;
+    _extendOptions: function(options, collection) {
       options = options || {};
+
       var success = options.success;
       options.success = function(data) {
-        self.trigger('fetch', data);
+        collection.trigger('fetch', data);
         if (success) success(data);
+      }
+
+      // If there was an error, trigger event anyway
+      var error = options.error;
+      options.error = function() {
+        collection.trigger('fetch', []);
+        if (error) error();
       }
     },
 
     _onSync: function(method, model, options) {
       return function(collection, resp) {
         if (_.isEmpty(resp)) {
-          collection._extendOptions(options);
+          collection._extendOptions(options, collection);
           collection._syncServer(method, model, options);
         } else {
           collection.trigger('fetch', resp);

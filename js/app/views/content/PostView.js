@@ -123,6 +123,7 @@ define(function(require) {
 
     render: function() {
       var post = this.model;
+      console.log(post)
       this.$el.html(_.template(localTemplate, {
         post: post,
         api: api,
