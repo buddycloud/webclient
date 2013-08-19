@@ -21,14 +21,6 @@ define(function(require) {
       {
         version: '1.0',
         migrate: function(transaction, next) {
-          var store = transaction.db.createObjectStore('channel-metadata');
-
-          next();
-        }
-      },
-      {
-        version: '1.1',
-        migrate: function(transaction, next) {
           var store;
 
           if (!transaction.db.objectStoreNames.contains('channel-metadata')) {
