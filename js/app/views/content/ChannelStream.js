@@ -420,17 +420,18 @@ define(function(require) {
           item.media = this.mediaToPost;
         }
 
+        item.source = this.model.channel;
         this.model.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
           syncWithServer: true,
           complete: function() {
-            expandingArea.find('textarea').val('').blur();
-            expandingArea.find('span').text('');
             previewsContainer.empty();
             self.mediaToPost = [];
           },
           success: function() {
+            expandingArea.find('textarea').val('').blur();
+            expandingArea.find('span').text('');
             self._collapseNewTopicArea();
             self._enableButton();
           },
