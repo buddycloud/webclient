@@ -34,9 +34,14 @@ define(function(require) {
       this.channel = channel;
       this._fetched = false;
       this._useIndexedDB = indexedDB.isSuppported();
-      this.bind('add', this._itemAdded, this);
-      this.once('fetch', this._onFetch, this);
-      this.bind('sort', this._onSort, this);
+      this.listenTo(this, 'add', this._itemAdded);
+      this.listenToOnce(this, 'fetch', this._onFetch);
+      this.listenTo(this, 'sort', this._onSort);
+
+      this.bind('all', function(e) {
+        console.log(e)
+      })
+
       Events.on('subscriptionSync', this._storeModels, this);
     },
 
@@ -142,6 +147,8 @@ define(function(require) {
           }
         }
       });
+
+      console.log("parse")
       return response;
     },
 
@@ -174,43 +181,35 @@ define(function(require) {
       };
     },
 
-    _triggerFetchCallback: function(collection, resp) {
-      collection.trigger('fetch', resp);
+    _handleEmptySync: function() {
+      var self = this;
+      this.listenToOnce(this, 'sync', function(model, resp) {
+        self.trigger('fetch', resp);
+      });
+
+      this.listenToOnce(this, 'error', function(model, resp) {
+        self.trigger('fetch', []);
+      });
     },
 
-    _extendOptions: function(options, collection) {
-      options = options || {};
-
-      var success = options.success;
-      options.success = function(data) {
-        collection.trigger('fetch', data);
-        if (success) success(data);
-      }
-
-      // If there was an error, trigger event anyway
-      var error = options.error;
-      options.error = function() {
-        collection.trigger('fetch', []);
-        if (error) error();
-      }
-    },
-
-    _onSync: function(method, model, options) {
+    _onIndexedDBSync: function(method, model, options) {
+      self = this;
       return function(collection, resp) {
+        // Check if there was data on DB, if not, sync with server
         if (_.isEmpty(resp)) {
-          collection._extendOptions(options, collection);
-          collection._syncServer(method, model, options);
+          self._handleEmptySync();
+          self._syncServer(method, model, options);
         } else {
-          collection.trigger('fetch', resp);
+          self.trigger('fetch', resp);
         }
       }
     },
 
     _syncIndexedDB: function(method, model, options) {
       if (method === 'read') {
-        this.once('sync', this._onSync(method, model, options), this);
+        this.listenToOnce(this, 'sync', this._onIndexedDBSync(method, model, options));
       } else {
-        this.once('sync', this._syncServerCallback(method, model, options), this);
+        this.listenToOnce(this, 'sync', this._syncServerCallback(method, model, options));
       }
 
       Backbone.sync.call(this, method, model, options);
