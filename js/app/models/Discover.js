@@ -20,16 +20,20 @@ define(function(require) {
   var DiscoverCollection = require('models/DiscoverCollection');
 
   var Discover = ModelBase.extend({
-    constructor: function() {
+    constructor: function(username) {
       ModelBase.call(this);
+      this.username = username;
       this.mostActive = new DiscoverCollection(api.url('most_active'));
       this.recommendations = new DiscoverCollection(api.url('recommendations'));
     },
 
     doDiscover: function(query, credentials) {
       var callback = this._triggerDiscoverCallback();
-      this.mostActive.doDiscover(query, callback, credentials);
-      this.recommendations.doDiscover(query, callback, credentials);
+      this.mostActive.bind('reset', callback);
+      this.mostActive.fetch({data: {max:5}, reset: true});
+      
+      this.recommendations.bind('reset', callback);
+      this.recommendations.fetch({data: {max:5, user: this.username}, reset: true});
     },
 
     _triggerDiscoverCallback: function() {

@@ -34,7 +34,7 @@ define(function(require) {
     },
 
     _initDiscover: function() {
-      this.discoverModel = new Discover();
+      this.discoverModel = new Discover(this.options.user.username());
       this.discoverView = new DiscoverView({model: this.discoverModel, user: this.options.user});
     },
 
