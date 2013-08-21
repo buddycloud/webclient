@@ -67,40 +67,45 @@ define(function(require) {
     },
 
     addChannel: function(channel, node, role, extra) {
-      // Manually add
-      this.attributes[channel + '/' + node] = role;
+      this.set(channel + '/' + node, role, {silent: true});
       this.trigger('subscriptionSync', 'subscribedChannel', channel, role, extra);
     },
 
-    subscribe: function(channel, node, role, credentials, extra) {
+    _triggerSubscribedEvent: function(channel, role, extra) {
       var self = this;
-      this.set(channel + '/' + node, role, {silent: true});
-      this._saveChangedAttributes(credentials, function() {
+      return function() {
         self.trigger('subscriptionSync', 'subscribedChannel', channel, role, extra);
-        self.change();
-      });
+      }
     },
 
-    unsubscribe: function(channel, node, credentials) {
+    subscribe: function(channel, nodes, role, credentials, extra) {
+      for (var i in nodes) {
+        this.set(channel + '/' + nodes[i], role, {silent: true});
+      }
+      this.bind('sync', this._triggerSubscribedEvent(channel, role, extra), this);
+      this.save(null, {'credentials': credentials});
+    },
+
+    _triggerUnsubscribedEvent: function(channel) {
       var self = this;
-      var channelAndNode = channel + '/' + node;
-      this.set(channelAndNode, 'none', {silent: true});
-      this._saveChangedAttributes(credentials, function() {
-        delete self.attributes[channelAndNode];
-        // FIXME: workaround to trigger the event only once
-        if (node === 'posts') {
-          self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
+      return function () {
+        for (var attr in self.attributes) {
+          if (channel === attr.split('/')[0]) {
+            self.unset(attr);
+          }
         }
-        self.change();
-      });
+        self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
+      }
     },
 
-    _saveChangedAttributes: function(credentials, callback) {
-      this.save({}, {
-        credentials: credentials,
-        silent: true,
-        success: callback
-      });
+    unsubscribe: function(channel, credentials) {
+      for (var attr in self.attributes) {
+        if (channel === attr.split('/')[0]) {
+           this.set(attr, 'none', {silent: true});
+        }
+      }
+      this.bind('sync', this._triggerUnsubscribedEvent(channel), this);
+      this.save(null, {'credentials': credentials});
     },
 
     parse: function(resp, xhr) {
