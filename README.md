@@ -19,7 +19,7 @@ Configure
 ==========
 Copy `config.js.example` to `config.js` and change it to point it to another buddycloud API server.
 * read-write: run a [HTTP API Server](https://github.com/buddycloud/buddycloud-http-api) on your domain
-* read-only/testing: use `demo.buddycloud.org/api`
+* read-only/testing: use `https://demo.buddycloud.org/api`
 
 
 Building the compressed JavaScript and CSS files
