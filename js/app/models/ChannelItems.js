@@ -38,10 +38,6 @@ define(function(require) {
       this.listenToOnce(this, 'fetch', this._onFetch);
       this.listenTo(this, 'sort', this._onSort);
 
-      this.bind('all', function(e) {
-        console.log(e)
-      })
-
       Events.on('subscriptionSync', this._storeModels, this);
     },
 
@@ -148,7 +144,6 @@ define(function(require) {
         }
       });
 
-      console.log("parse")
       return response;
     },
 
@@ -220,9 +215,22 @@ define(function(require) {
       sync.call(this, method, model, options);
     },
 
+    _isUserLogged: function(options) {
+      return options && options.credentials && options.credentials.username;
+    },
+
     sync: function(method, model, options) {
       if (this._useIndexedDB) {
-        this._syncIndexedDB(method, model, options);
+        // Only tries IndexedDB if it is a logged user
+        if (this._isUserLogged(options)) {
+          this._syncIndexedDB(method, model, options);
+        } else {
+          var self = this;
+          this.listenToOnce(this, 'sync', function(model, resp) {
+            self.trigger('fetch', resp);
+          });
+          this._syncServer(method, model, options);
+        }
       } else {
         this._syncServer(method, model, options);
       }

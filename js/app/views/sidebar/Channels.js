@@ -31,7 +31,8 @@ define(function(require) {
     initialize: function() {
       this.unreadCounters = this.model.sync.unreadCounters;
       this.subscribedChannels = this.model.subscribedChannels;
-      this.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
+
+      this.listenTo(this.subscribedChannels, 'subscriptionSync', this._updateChannels);
 
       this._begin();
 
@@ -147,7 +148,7 @@ define(function(require) {
     _fetchMetadata: function(metadata, callback) {
       if (!metadata.hasEverChanged()) {
         metadata.fetch({credentials: this.model.credentials});
-        metadata.bind('change', callback, this);
+        this.listenTo(metadata, 'change', callback);
       } else {
         if (callback) {
           callback(metadata);
@@ -397,8 +398,9 @@ define(function(require) {
     _listenForNewItems: function() {
       var user = this.model;
       var unreadCounters = this.unreadCounters;
+      
       var self = this;
-      user.notifications.on('new', function(item) {
+      this.listenTo(user.notifications, 'new', function(item) {
         var channel = item.source;
         if (channel !== self.selected) {
           var mentions = linkify.mentions(item.content) || [];
@@ -417,6 +419,7 @@ define(function(require) {
           }
         }
       });
+
       user.notifications.listen({credentials: user.credentials});
     },
 
