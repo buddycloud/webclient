@@ -80,12 +80,13 @@ define(function(require) {
       return !this.isPost();
     },
 
-    lastUpdated: function() {
-      var getMillis = function(time) {
-        // Workaround for posts without updated field
-        return time ? new Date(time).getTime() : new Date().getTime();
-      }
+    _getMillis: function(time) {
+      // Workaround for posts without updated field
+      return time ? new Date(time).getTime() : new Date().getTime();
+    },
 
+    lastUpdated: function() {
+      var getMillis = this._getMillis;
       var updated = getMillis(this.updated);
       this.comments.forEach(function(comment) {
         var updatedComment = getMillis(comment.updated);

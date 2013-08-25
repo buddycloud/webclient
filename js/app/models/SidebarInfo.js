@@ -16,13 +16,13 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var UnreadCountersDB = require('models/db/UnreadCountersDB');
+  var SidebarInfoDB = require('models/db/SidebarInfoDB');
   require('backbone-indexeddb');
 
-  var UnreadCounter = Backbone.Model.extend({
-    database: UnreadCountersDB,
-    storeName: UnreadCountersDB.id
+  var SidebarInfo = Backbone.Model.extend({
+    database: SidebarInfoDB,
+    storeName: SidebarInfoDB.id
   });
 
-  return UnreadCounter;
+  return SidebarInfo;
 });

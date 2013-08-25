@@ -19,7 +19,6 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var animations = require('util/animations');
   var Backbone = require('backbone');
-  var linkify = require('util/linkify');
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
@@ -29,7 +28,7 @@ define(function(require) {
     events: {'click .channel': '_navigateToChannel'},
 
     initialize: function() {
-      this.unreadCounters = this.model.sync.unreadCounters;
+      this.sidebarInfo = this.model.sync.sidebarInfo;
       this.subscribedChannels = this.model.subscribedChannels;
 
       this.listenTo(this.subscribedChannels, 'subscriptionSync', this._updateChannels);
@@ -73,14 +72,14 @@ define(function(require) {
 
     _renderUnreadCount: function(channel) {
       var channelEl = this.$('.channel[data-href="' + channel + '"]');
-      var counters = this.unreadCounters.getCounters(channel);
+      var info = this.sidebarInfo.getInfo(channel);
 
       var totalCountEl = channelEl.find('.channelpost');
-      var totalCount = counters.totalCount;
+      var totalCount = info.total;
       this._showOrHideCount(totalCountEl, totalCount);
 
       var mentionsCountEl = channelEl.find('.admin');
-      var mentionsCount = counters.mentionsCount;
+      var mentionsCount = info.mentions;
       this._showOrHideCount(mentionsCountEl, mentionsCount);
     },
 
@@ -182,24 +181,31 @@ define(function(require) {
     },
 
     _sortChannels: function() {
-      var unreadCounters = this.unreadCounters;
+      // 1 - mentions
+      // 2 - replies
+      // 3 - total unread
+      // 4 - last updated
+      var sidebarInfo = this.sidebarInfo;
       this.metadatas.sort(
         function(a, b) {
-          var aCounters = unreadCounters.getCounters(a.channel);
-          var bCounters = unreadCounters.getCounters(b.channel);
+          var aInfo = sidebarInfo.getInfo(a.channel);
+          var bInfo = sidebarInfo.getInfo(b.channel);
 
-          var aMentionsCount = aCounters.mentionsCount;
-          var bMentionsCount = bCounters.mentionsCount;
-          var diff = bMentionsCount - aMentionsCount;
+          var diff = bInfo.mentions - aInfo.mentions;
           if (diff === 0) {
-            var aTotalCount = aCounters.totalCount;
-            var bTotalCount = bCounters.totalCount;
-            diff = bTotalCount - aTotalCount;
+            diff = bInfo.replies - aInfo.replies;
 
             if (diff === 0) {
-              var aTitle = a.channel;
-              var bTitle = b.channel;
-              return aTitle.localeCompare(bTitle);
+              diff = bInfo.total - aInfo.total;
+
+              if (diff === 0) {
+                bUpdated = new Date(bInfo.updated).getTime();
+                aUpdated = new Date(aInfo.updated).getTime();
+                diff = bUpdated - aUpdated;
+                if (diff === 0) {
+                  return a.channel.localeCompare(b.channel);
+                }
+              }
             }
           }
 
@@ -250,7 +256,7 @@ define(function(require) {
       return -1;
     },
 
-    _bubbleUpSpot: function(channel, oldSpot) {
+    /*_bubbleUpSpot: function(channel, oldSpot) {
       var bubbleSpot = oldSpot;
       var counters = this.unreadCounters;
       var totalCount = counters.getCounters(channel).totalCount;
@@ -267,7 +273,6 @@ define(function(require) {
         }
       }
 
-      return bubbleSpot;
     },
 
     _bubbleDownSpot: function(channel, oldSpot) {
@@ -288,12 +293,25 @@ define(function(require) {
       }
 
       return bubbleSpot;
+    },*/
+
+    _bubbleSpot: function(channel, oldSpot) {
+      var bubbleSpot = oldSpot;
+      this._sortChannels();
+      for (var i = 0; i < this.metadatas.length; i++) {
+        if (this.metadatas[i].channel === channel) {
+          bubbleSpot = i;
+          break;
+        }
+      }
+
+      return bubbleSpot;
     },
 
     _bubbleUp: function(channel) {
       var currentSpot = this._channelSpot(channel);
       if (currentSpot > 0) {
-        var newSpot = this._bubbleUpSpot(channel, currentSpot);
+        var newSpot = this._bubbleSpot(channel, currentSpot);
         this._bubble(channel, newSpot, currentSpot);
       }
     },
@@ -301,7 +319,7 @@ define(function(require) {
     _bubbleDown: function(channel) {
       var currentSpot = this._channelSpot(channel);
       if (currentSpot != -1 && currentSpot < this.metadatas.length - 1) {
-        var newSpot = this._bubbleDownSpot(channel, currentSpot);
+        var newSpot = this._bubbleSpot(channel, currentSpot);
         this._bubble(channel, newSpot, currentSpot);
       }
     },
@@ -397,22 +415,17 @@ define(function(require) {
 
     _listenForNewItems: function() {
       var user = this.model;
-      var unreadCounters = this.unreadCounters;
+      var sidebarInfo = this.sidebarInfo;
       
       var self = this;
       this.listenTo(user.notifications, 'new', function(item) {
         var channel = item.source;
         if (channel !== self.selected) {
-          var mentions = linkify.mentions(item.content) || [];
-          if (_.include(mentions, user.username())) {
-            unreadCounters.incrementCounters(user.username(), channel);
-          } else {
-            unreadCounters.incrementTotalCount(user.username(), channel);
-          }
+          sidebarInfo.parseItems(user.username(), channel);
 
           if (channel === user.username()) {
-            Events.trigger('personalChannelTotalCount', unreadCounters.getCounters(channel).totalCount);
-            Events.trigger('personalChannelMentionsCount', unreadCounters.getCounters(channel).mentionsCount);
+            Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).total);
+            Events.trigger('personalChannelMentionsCount', sidebarInfo.getInfo(channel).mentions);
           } else {
             self._renderUnreadCount(channel);
             self._bubbleUp(channel);
@@ -439,10 +452,10 @@ define(function(require) {
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
-      if (this.unreadCounters && this.unreadCounters.isReady()) {
-        if (this.unreadCounters.getCounters(channel).totalCount > 0 ||
-          this.unreadCounters.getCounters(channel).mentionsCount > 0) {
-          this.unreadCounters.resetCounters(username, channel);
+      if (this.sidebarInfo.isReady()) {
+        var info = this.sidebarInfo.getInfo(channel);
+        if (info.total > 0 || info.mentions > 0 || info.replies > 0) {
+          this.sidebarInfo.resetCounters(username, channel);
 
           if (channel === username) {
             Events.trigger('personalChannelTotalCount', 0);

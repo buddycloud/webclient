@@ -22,14 +22,14 @@ define(function(require) {
   var linkify = require('util/linkify');
   var ModelBase = require('models/ModelBase');
   var ChannelItems = require('models/ChannelItems');
-  var UnreadCounters = require('models/UnreadCounters');
+  var SidebarInfoCollection = require('models/SidebarInfoCollection');
 
   var Sync = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
       this.channelItems = {};
-      this.unreadCounters = new UnreadCounters();
-      this.on('change', this._saveItems, this);
+      this.sidebarInfo = new SidebarInfoCollection();
+      this.listenTo(this, 'change', this._saveItems);
     },
 
     _itemsSize: function(channels) {
@@ -47,10 +47,11 @@ define(function(require) {
       var afterCallback = _.after(this._itemsSize(channels), this._triggerSyncCallback);
 
       for (var i in channels) {
+        var self = this;
         var items = this.get(channels[i]);
         items.forEach(function(item) {
           item = new Item(item);
-          item.once('sync', afterCallback);
+          self.listenToOnce(item, 'sync', afterCallback);
           item.save(null, {syncWithServer: false});
         });
       }
@@ -62,9 +63,9 @@ define(function(require) {
 
     fetch: function(options) {
       // First, init the unread counters to avoid possible race conditions
-      if (this.unreadCounters.useIndexedDB && !this.unreadCounters.isReady()) {
-        this.unreadCounters.once('error reset', this._fetch(options), this);
-        this.unreadCounters.fetch({conditions: {'user': this.username}, reset: true});
+      if (this.sidebarInfo.useIndexedDB && !this.sidebarInfo.isReady()) {
+        this.listenToOnce(this.sidebarInfo, 'error reset', this._fetch(options));
+        this.sidebarInfo.fetch({conditions: {'user': this.username}, reset: true});
       } else {
         ModelBase.prototype.fetch.call(this, options);
       }
@@ -81,24 +82,9 @@ define(function(require) {
       return api.url('sync');
     },
 
-    parseCounters: function(channel, items) {
-      var totalCount = items.length;
-      var mentionsCount = 0;
+    parseSidebarInfo: function(channel, items) {
       var username = this.get('username');
-
-      items.forEach(function(value) {
-        var content = value.content;
-        if (content) {
-          var mentions =  linkify.mentions(content) || [];
-          mentions.forEach(function(mention) {
-            if (mention === username) {
-              mentionsCount++;
-            }
-          });
-        }
-      });
-
-      this.unreadCounters.increaseCounters(username, channel, mentionsCount, totalCount);
+      this.sidebarInfo.parseItems(channel, username, items);
     },
 
     _insertSource: function(channel, items) {
@@ -126,7 +112,7 @@ define(function(require) {
           result[channel] = items;
 
           // Parse counters
-          self.parseCounters(channel, items);
+          self.parseSidebarInfo(channel, items);
         });
 
         return result;
