@@ -43,12 +43,12 @@ define(function(require) {
 
     _attachModelEvents: function() {
       // registration
-      this.model.on('registrationSuccess', this._successfullRegistration, this);
-      this.model.on('registrationError', this._invalidRegistration, this);
+      this.listenTo(this.model, 'registrationSuccess', this._successfullRegistration);
+      this.listenTo(this.model, 'registrationError', this._invalidRegistration);
 
       // login
-      this.model.on('loginSuccess', this._successfullLogin, this);
-      this.model.on('loginError', this._invalidLogin, this);
+      this.listenTo(this.model, 'loginSuccess', this._successfullLogin);
+      this.listenTo(this.model, 'loginError', this._invalidLogin);
     },
 
     _invalidLogin: function() {

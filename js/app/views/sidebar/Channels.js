@@ -253,45 +253,6 @@ define(function(require) {
       return -1;
     },
 
-    /*_bubbleUpSpot: function(channel, oldSpot) {
-      var bubbleSpot = oldSpot;
-      var counters = this.unreadCounters;
-      var totalCount = counters.getCounters(channel).totalCount;
-      var mentionsCount = counters.getCounters(channel).mentionsCount;
-
-      for (var i = oldSpot; i - 1 >= 0; i--) {
-        var prev = this.metadatas[i - 1].channel;
-        if (mentionsCount > counters.getCounters(prev).mentionsCount ||
-          totalCount > counters.getCounters(prev).totalCount) {
-          var temp = this.metadatas[i-1];
-          this.metadatas[i-1] = this.metadatas[i];
-          this.metadatas[i] = temp;
-          bubbleSpot = i - 1;
-        }
-      }
-
-    },
-
-    _bubbleDownSpot: function(channel, oldSpot) {
-      var bubbleSpot = oldSpot;
-      var counters = this.unreadCounters;
-      var totalCount = counters.getCounters(channel).totalCount;
-      var mentionsCount = counters.getCounters(channel).mentionsCount;
-
-      for (var i = oldSpot; i + 1 < this.metadatas.length; i++) {
-        var next = this.metadatas[i + 1].channel;
-        if (totalCount < counters.getCounters(next).totalCount ||
-          mentionsCount < counters.getCounters(next).mentionsCount) {
-          var temp = this.metadatas[i+1];
-          this.metadatas[i+1] = this.metadatas[i];
-          this.metadatas[i] = temp;
-          bubbleSpot = i + 1;
-        }
-      }
-
-      return bubbleSpot;
-    },*/
-
     _bubbleSpot: function(channel, oldSpot) {
       var bubbleSpot = oldSpot;
       this._sortChannels();

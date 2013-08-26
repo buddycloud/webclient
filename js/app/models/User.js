@@ -16,7 +16,9 @@
 
 define(function(require) {
   var api = require('util/api');
+  var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
+  var Events = Backbone.Events;
   var ModelBase = require('models/ModelBase');
   var PostNotifications = require('models/PostNotifications');
   var SubscribedChannels = require('models/SubscribedChannels');
@@ -73,7 +75,7 @@ define(function(require) {
     start: function() {
       this.credentials.fetch();
       if (this.isAnonymous()) {
-        this.trigger('loginSuccess');
+        Events.trigger('syncSuccess');
       } else {
         var self = this;
         this._tryFetchingSubscribedChannels({
@@ -118,7 +120,7 @@ define(function(require) {
       this.sync.set('username', this.credentials.username, {silent: true});
 
       var since = localStorage[this.username() + '.lastSession'] || this._earliestTime();
-      this.sync.once('syncSuccess', this.updateLastSession, this);      
+      this.listenToOnce(this.sync, 'syncSuccess', this.updateLastSession);
       this.sync.fetch({
         credentials: this.credentials,
         data: {since: since, max: 51}
@@ -127,7 +129,7 @@ define(function(require) {
 
     _tryFetchingSubscribedChannels: function(options) {
        this.subscribedChannels = new SubscribedChannels();
-       this.subscribedChannels.once('change', this._trySync, this);
+       this.listenToOnce(this.subscribedChannels, 'change', this._trySync);
        this.subscribedChannels.fetch({
          credentials: this.credentials,
          success: options.success,

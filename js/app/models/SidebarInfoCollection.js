@@ -36,7 +36,15 @@ define(function(require) {
       }
     },
 
-    parseItems: function(channel, username, items) {
+    _onInit: function() {
+      this._isLoading = false;
+    },
+
+    isReady: function() {
+      return !this._isLoading;
+    },
+
+    parseItems: function(username, channel, items) {
       var self = this;
       var totalCount = items.length;
       var mentionsCount = 0;
@@ -95,14 +103,6 @@ define(function(require) {
       });
 
       return repliesCount;
-    },
-
-    _onInit: function() {
-      this._isLoading = false;
-    },
-
-    isReady: function() {
-      return !this._isLoading;
     },
 
     _getSidebarInfo: function(channel) {

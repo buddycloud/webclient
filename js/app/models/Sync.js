@@ -28,7 +28,7 @@ define(function(require) {
       ModelBase.call(this);
       this.channelItems = {};
       this.sidebarInfo = new SidebarInfoCollection();
-      this.listenTo(this, 'change', this._saveItems);
+      this.listenTo(this, 'sync', this._saveItems);
     },
 
     _itemsSize: function(channels) {
@@ -45,15 +45,20 @@ define(function(require) {
       var channels = _.keys(_.omit(this.attributes, 'username'));
       var afterCallback = _.after(this._itemsSize(channels), this._triggerSyncCallback);
 
-      for (var i in channels) {
-        var self = this;
-        var items = this.get(channels[i]);
-        items.forEach(function(item) {
-          item = new Item(item);
-          self.listenToOnce(item, 'sync', afterCallback);
-          item.save(null, {syncWithServer: false});
-        });
+      if (_.isEmpty(channels)) {
+         this._triggerSyncCallback();
+      } else {
+        for (var i in channels) {
+          var self = this;
+          var items = this.get(channels[i]);
+          items.forEach(function(item) {
+            item = new Item(item);
+            self.listenToOnce(item, 'sync', afterCallback);
+            item.save(null, {syncWithServer: false});
+          });
+        }
       }
+
     },
 
     _triggerSyncCallback: function() {
@@ -83,7 +88,7 @@ define(function(require) {
 
     parseSidebarInfo: function(channel, items) {
       var username = this.get('username');
-      this.sidebarInfo.parseItems(channel, username, items);
+      this.sidebarInfo.parseItems(username, channel, items);
     },
 
     _insertSource: function(channel, items) {

@@ -78,13 +78,10 @@ require(['l10n', 'l10n-browser', 'Router', 'models/User', 'modernizr', 'jquery.c
 
   function initialize() {
     var user = new User();
-    user.on('loginSuccess', function() {
+    Backbone.Events.on('syncSuccess', function() {
       route(user);
     });
-    /*user.on('loginError', function() {
-      user.logout()
-      route(user)
-    });*/
+
     user.start();
   }
 
