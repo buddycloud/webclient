@@ -27,12 +27,12 @@ define(function(require) {
       this.recommendations = new DiscoverCollection(api.url('recommendations'));
     },
 
-    doDiscover: function(query, credentials) {
+    doDiscover: function() {
       var callback = this._triggerDiscoverCallback();
-      this.mostActive.bind('reset', callback);
+      this.listenTo(this.mostActive, 'reset', callback);
       this.mostActive.fetch({data: {max:5}, reset: true});
       
-      this.recommendations.bind('reset', callback);
+      this.listenTo(this.recommendations, 'reset', callback);
       this.recommendations.fetch({data: {max:5, user: this.username}, reset: true});
     },
 

@@ -15,7 +15,6 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var api = require('util/api');
   var Backbone = require('backbone');
   var indexedDB = require('util/indexedDB');

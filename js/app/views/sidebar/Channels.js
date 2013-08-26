@@ -33,14 +33,10 @@ define(function(require) {
 
       this.listenTo(this.subscribedChannels, 'subscriptionSync', this._updateChannels);
 
-      this._begin();
+      this._getChannelsMetadata();
 
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
-    },
-
-    _begin: function() {
-      this._getChannelsMetadata();
     },
 
     _getChannelsMetadata: function() {
@@ -185,6 +181,7 @@ define(function(require) {
       // 2 - replies
       // 3 - total unread
       // 4 - last updated
+      // 5 - still equal? Just compare the names then
       var sidebarInfo = this.sidebarInfo;
       this.metadatas.sort(
         function(a, b) {
@@ -421,7 +418,7 @@ define(function(require) {
       this.listenTo(user.notifications, 'new', function(item) {
         var channel = item.source;
         if (channel !== self.selected) {
-          sidebarInfo.parseItems(user.username(), channel);
+          sidebarInfo.parseItems(user.username(), channel, [item]);
 
           if (channel === user.username()) {
             Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).total);

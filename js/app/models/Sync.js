@@ -19,7 +19,6 @@ define(function(require) {
   var Backbone = require('backbone');
   var Events = Backbone.Events;
   var Item = require('models/Item');
-  var linkify = require('util/linkify');
   var ModelBase = require('models/ModelBase');
   var ChannelItems = require('models/ChannelItems');
   var SidebarInfoCollection = require('models/SidebarInfoCollection');
@@ -65,7 +64,7 @@ define(function(require) {
       // First, init the unread counters to avoid possible race conditions
       if (this.sidebarInfo.useIndexedDB && !this.sidebarInfo.isReady()) {
         this.listenToOnce(this.sidebarInfo, 'error reset', this._fetch(options));
-        this.sidebarInfo.fetch({conditions: {'user': this.username}, reset: true});
+        this.sidebarInfo.fetch({conditions: {'user': this.get('username')}, reset: true});
       } else {
         ModelBase.prototype.fetch.call(this, options);
       }
