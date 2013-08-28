@@ -16,23 +16,24 @@
 
 define(function(require) {
   var api = require('util/api');
+  var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
+  var Events = Backbone.Events;
+  var dateUtils = require('util/dateUtils');
   var ModelBase = require('models/ModelBase');
   var PostNotifications = require('models/PostNotifications');
   var SubscribedChannels = require('models/SubscribedChannels');
+  var Sync = require('models/Sync');
   var UserCredentials = require('models/UserCredentials');
 
   var User = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
       this.credentials = new UserCredentials();
-      this.notifications = new PostNotifications();
       this.channelsMetadata = {};
+      this.notifications = new PostNotifications();
       this.subscribedChannels = null;
-    },
-
-    _earliestTime: function() {
-      return new Date(1970, 0, 1).toISOString();
+      this.sync = new Sync();
     },
 
     _currentTime: function() {
@@ -65,13 +66,13 @@ define(function(require) {
     },
 
     channels: function() {
-      return this.subscribedChannels ? this.subscribedChannels.channels() : null;
+      return this.subscribedChannels ? this.subscribedChannels.channels() : [];
     },
 
     start: function() {
       this.credentials.fetch();
       if (this.isAnonymous()) {
-        this.trigger('loginSuccess');
+        Events.trigger('syncSuccess');
       } else {
         var self = this;
         this._tryFetchingSubscribedChannels({
@@ -79,8 +80,7 @@ define(function(require) {
             self.trigger('loginError');
           },
           success: function() {
-            self.lastSession = localStorage[self.username() + '.lastSession'] || self._earliestTime(); // FIXME workaround to get last session
-            self.trigger('loginSuccess');
+            self.trigger('loginSuccess', self.username());
           }
         });
       }
@@ -95,10 +95,13 @@ define(function(require) {
           self.trigger('loginError');
         },
         success: function() {
-          self.lastSession = localStorage[self.username() + '.lastSession'] || self._earliestTime(); // FIXME workaround to get last session
-          self.trigger('loginSuccess');
+          self.trigger('loginSuccess', self.username());
         }
       });
+    },
+
+    updateLastSession: function() {
+      this.lastSession = this._currentTime();
     },
 
     logout: function() {
@@ -110,8 +113,20 @@ define(function(require) {
       localStorage[this.username() + '.lastSession'] = this._currentTime();
     },
 
+    _trySync: function() {
+      this.sync.set('username', this.credentials.username, {silent: true});
+
+      var since = localStorage[this.username() + '.lastSession'] || dateUtils.earliestTime();
+      this.listenToOnce(this.sync, 'syncSuccess', this.updateLastSession);
+      this.sync.fetch({
+        credentials: this.credentials,
+        data: {since: since, max: 51}
+      });
+    },
+
     _tryFetchingSubscribedChannels: function(options) {
        this.subscribedChannels = new SubscribedChannels();
+       this.listenToOnce(this.subscribedChannels, 'change', this._trySync);
        this.subscribedChannels.fetch({
          credentials: this.credentials,
          success: options.success,

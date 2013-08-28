@@ -21,6 +21,7 @@ define(function(require) {
   var l10nBrowser = require('l10n-browser');
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');
   var template = require('text!templates/overlay/welcome.html');
+  var loadingTemplate = require('text!templates/overlay/loading.html');
   var Events = Backbone.Events;
   var localTemplate;
 
@@ -42,19 +43,28 @@ define(function(require) {
 
     _attachModelEvents: function() {
       // registration
-      this.model.on('registrationSuccess', this._successfullRegistration, this);
-      this.model.on('registrationError', this._invalidRegistration, this);
+      this.listenTo(this.model, 'registrationSuccess', this._successfullRegistration);
+      this.listenTo(this.model, 'registrationError', this._invalidRegistration);
 
       // login
-      this.model.on('loginSuccess', this._successfullLogin, this);
-      this.model.on('loginError', this._invalidLogin, this);
+      this.listenTo(this.model, 'loginSuccess', this._successfullLogin);
+      this.listenTo(this.model, 'loginError', this._invalidLogin);
     },
 
     _invalidLogin: function() {
       $('.error').show();
+      this._enableButton('#login_submit');
     },
 
-    _successfullLogin: function() {
+    _successfullLogin: function(jid) {
+      // sync
+      Events.on('syncSuccess', this._successfullSync, this);
+      
+      // loading template
+      this.$el.html(_.template(loadingTemplate, {jid: jid}));
+    },
+
+    _successfullSync: function() {
       Events.trigger('navigate', 'home');
     },
 
@@ -64,10 +74,21 @@ define(function(require) {
 
     _invalidRegistration: function(message) {
       alert(message);
+      this._enableButton('#register_submit');
     },
 
+    _disableButton: function(selector) {
+      this.$(selector).attr('disabled', true);
+    },
+
+    _enableButton: function(selector) {
+      this.$(selector).attr('disabled', false);
+    },
+ 
     login: function(event) {
       event.preventDefault();
+      this._disableButton('#login_submit');
+      $('.error').hide();
       var username = this.$('#login_name').attr('value');
       var password = this.$('#login_password').attr('value');
       var permanent = $('#store_local').is(':checked');
@@ -78,12 +99,12 @@ define(function(require) {
 
     register: function(event) {
       event.preventDefault();
+      this._disableButton('#register_submit');
       var username = this.$('#register_name').attr('value');
       var password = this.$('#register_password').attr('value');
       var email = this.$('#register_email').attr('value');
       this.model.register(username, password, email);
     },
-
 
     render: function() {
       this.$el.html(_.template(localTemplate));

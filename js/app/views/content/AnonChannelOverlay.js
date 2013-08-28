@@ -48,6 +48,7 @@ define(function(require) {
 
     _invalidLogin: function() {
       $('.error').show();
+      this._enableButton();
     },
 
     _successfullLogin: function() {
@@ -57,8 +58,17 @@ define(function(require) {
       });
     },
 
+    _disableButton: function() {
+      this.$('#auth_submit').attr('disabled', true);
+    },
+
+    _enableButton: function() {
+      this.$('#auth_submit').attr('disabled', false);
+    },
+
     login: function(event) {
       event.preventDefault();
+      this._disableButton();
       var username = $('#auth_name').attr('value');
       var password = $('#auth_pwd').attr('value');
       var permanent = $('#store_local').is(':checked');

@@ -15,18 +15,18 @@
  */
 
 define(function(require) {
-  var UnreadCounterDB = {
-    id: 'unread-counters',
+  var SidebarInfoDB = {
+    id: 'sidebar-info',
     migrations: [
       {
-        version: '1',
+        version: '1.0',
         migrate: function(transaction, next) {
           var store;
 
-          if (!transaction.db.objectStoreNames.contains('unread-counters')) {
-            store = transaction.db.createObjectStore('unread-counters');
+          if (!transaction.db.objectStoreNames.contains('sidebar-info')) {
+            store = transaction.db.createObjectStore('sidebar-info');
           } else {
-            store = transaction.objectStore('unread-counters');
+            store = transaction.objectStore('sidebar-info');
           }
 
           store.createIndex('userIndex', 'user', { unique: false });
@@ -37,5 +37,5 @@ define(function(require) {
     ]
   };
 
-  return UnreadCounterDB;
+  return SidebarInfoDB;
 });

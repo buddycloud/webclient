@@ -18,7 +18,6 @@ define(function(require) {
   var api = require('util/api');
   var Item = require('models/Item');
   var ModelBase = require('models/ModelBase');
-  var _ = require('underscore');
   var Pollymer = require('pollymer');
   var $ = require('jquery');
 
@@ -26,7 +25,7 @@ define(function(require) {
     initialize: function() {
       this._request = new Pollymer.Request({maxTries: -1, rawResponse: true});
       this._lastCursor = null;
-      this.bind('change', this._triggerNewItem);
+      this.listenTo(this, 'change', this._triggerNewItem);
     },
 
     _request: null,
@@ -34,8 +33,22 @@ define(function(require) {
     _triggerNewItem: function() {
       for (var i = 0; i in this.attributes; ++i) {
         var val = this.attributes[i];
+        if (val.source) {
+          val.source = val.source.split('/')[0];
+        }
+
         var item = new Item(val);
-        this.trigger('new', item);
+
+        // XXX: workaround for posts without time
+        if (!item.updated && !item.published) {
+          item.published = item.updated = new Date().toISOString(); // Current UTC Time
+        }
+
+        var self = this;
+        item.once('sync', function () {
+          self.trigger('new', item);
+        });
+        item.save(null, {syncWithServer: false});
       }
     },
 

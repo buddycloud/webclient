@@ -15,21 +15,22 @@
  */
 
 define(function(require) {
-  var ChannelMetadataDB = {
-    id: 'channel-items',
+  var PostsDB = {
+    id: 'posts',
     migrations: [
       {
-        version: '1',
+        version: '1.0',
         migrate: function(transaction, next) {
           var store;
 
-          if (!transaction.db.objectStoreNames.contains('channel-items')) {
-            store = transaction.db.createObjectStore('channel-items');
+          if (!transaction.db.objectStoreNames.contains('posts')) {
+            store = transaction.db.createObjectStore('posts');
           } else {
-            store = transaction.objectStore('channel-items');
+            store = transaction.objectStore('posts');
           }
 
-          store.createIndex('channelIndex', 'channel', { unique: true });
+          store.createIndex('sourceIndex', 'source');
+          store.createIndex('updatedIndex', 'updated');
 
           next();
         }
@@ -37,5 +38,5 @@ define(function(require) {
     ]
   };
 
-  return ChannelMetadataDB;
+  return PostsDB;
 });

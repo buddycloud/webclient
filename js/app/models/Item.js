@@ -15,17 +15,24 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var api = require('util/api');
+  var Backbone = require('backbone');
+  var dateUtils = require('util/dateUtils');
+  var indexedDB = require('util/indexedDB');
   var ModelBase = require('models/ModelBase');
+  var PostsDB = require('models/db/PostsDB');
+  require('backbone-indexeddb');
 
   var Item = ModelBase.extend({
+    database: PostsDB,
+    storeName: PostsDB.id,
+
     initialize: function() {
       this._initializeComments();
       this._defineGetter('author', function() {
         var author = this.get('author');
         if (author) {
-          if (author.indexOf('acct:') != -1) {
+          if (author.indexOf('acct:') !== -1) {
             return author.slice('acct:'.length);
           } else {
             return author;
@@ -48,6 +55,7 @@ define(function(require) {
       this._defineGetter('replyTo');
       this._defineGetter('published');
       this._defineGetter('id');
+      this._useIndexedDB = indexedDB.isSuppported();
     },
 
     _initializeComments: function() {
@@ -72,6 +80,18 @@ define(function(require) {
       return !this.isPost();
     },
 
+    lastUpdated: function() {
+      var updated = dateUtils.toMillis(this.updated);
+      this.comments.forEach(function(comment) {
+        var updatedComment = dateUtils.toMillis(comment.updated);
+        if (updatedComment > updated) {
+          updated = updatedComment;
+        }
+      });
+
+      return updated;
+    },
+
     deleteComment: function(id) {
       for (var i in this.comments) {
         if (this.comments[i].id === id) {
@@ -82,6 +102,33 @@ define(function(require) {
 
     authorAvatarUrl: function(size) {
       return api.avatarUrl(this.author, size);
+    },
+
+    _syncServer: function(method, model, options) {
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
+    },
+
+    _syncIndexedDB: function(method, model, options) {
+      if (this._useIndexedDB) {
+        Backbone.sync.call(this, method, model, options);
+      }
+    },
+
+    _syncIndexedDBCallback: function(method, model, options) {
+      var self = this;
+      return function() {
+        self._syncIndexedDB(method, model, options);
+      }
+    },
+
+    sync: function(method, model, options) {
+      if (options.syncWithServer) {
+        this.once('sync', this._syncIndexedDBCallback(method, model, options), this);
+        this._syncServer(method, model, options);
+      } else {
+        this._syncIndexedDB(method, model, options);
+      }
     }
   });
 

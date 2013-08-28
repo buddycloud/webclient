@@ -24,6 +24,7 @@ define(function(require) {
   var config = require('config');
   var Dropzone = require('dropzone');
   var Events = Backbone.Events;
+  var Item = require('models/Item');
   var PostView = require('views/content/PostView');
   var embedlify = require('util/embedlify');
   var l10n = require('l10n');
@@ -45,12 +46,11 @@ define(function(require) {
 
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
-      this._initModel();
-
       this.isLoading = true;
       this._postViews = [];
-      this.model.bind('addPost', this._prependPost, this);
       this.mediaToPost = [];
+      
+      this._initModel();
 
       var user = this.options.user;
       if (user.subscribedChannels) {
@@ -142,9 +142,20 @@ define(function(require) {
 
     _initModel: function() {
       this.model = new ChannelItems(this.options.channel);
-      this.model.bind('reset', this._begin, this);
+
       this.model.bind('error', this._error, this);
-      this.model.fetch({data: {max: 51}, credentials: this.options.user.credentials, reset: true});
+      this.model.bind('addPost', this._prependPost, this);
+
+      if (!this.model.isReady()) {
+        this.model.once('fetch', this._begin, this);
+        this.model.fetch({
+          data: {max: 51}, 
+          credentials: this.options.user.credentials,
+          reset: true
+        });
+      } else {
+        this._begin();
+      }
     },
 
     _begin: function() {
@@ -186,24 +197,30 @@ define(function(require) {
       var offset = content.scrollTop() + content.prop('clientHeight') + triggerPoint;
 
       if(!this.isLoading && (offset > content.prop('scrollHeight'))) {
-        var self = this;
-
         // Last loaded post id
         var lastItem = this.model.lastItem();
 
         if (lastItem) {
           this._showSpinner();
+          this.model.once('fetch', this._appendPosts, this);
           this.model.fetch({
             data: {after: lastItem, max: 51},
             credentials: this.options.user.credentials,
-            silent: true,
-            success: function() {
-              self._appendPosts();
-              self._hideSpinner();
-            }
+            silent: true
           });
         }
       }
+    },
+
+    _appendPosts: function(posts) {
+      var self = this;
+      _.each(posts, function(post) {
+        var view = self._viewForPost(new Item(post));
+        self._postViews.push(view);
+        view.render();
+        this.$('.posts').append(view.el);
+      });
+      this._hideSpinner();
     },
 
     _dndFileStart: function(evt) {
@@ -259,17 +276,6 @@ define(function(require) {
         self._postViews.push(view);
       });
       this._renderPosts();
-    },
-
-    _appendPosts: function() {
-      var posts = this.model.posts();
-      var self = this;
-      _.each(posts, function(post) {
-        var view = self._viewForPost(post);
-        self._postViews.push(view);
-        view.render();
-        this.$('.posts').append(view.el);
-      });
     },
 
     _viewForPost: function(post) {
@@ -414,16 +420,18 @@ define(function(require) {
           item.media = this.mediaToPost;
         }
 
+        item.source = this.model.channel;
         this.model.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
+          syncWithServer: true,
           complete: function() {
-            expandingArea.find('textarea').val('').blur();
-            expandingArea.find('span').text('');
             previewsContainer.empty();
             self.mediaToPost = [];
           },
           success: function() {
+            expandingArea.find('textarea').val('').blur();
+            expandingArea.find('span').text('');
             self._collapseNewTopicArea();
             self._enableButton();
           },

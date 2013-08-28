@@ -56,7 +56,7 @@ define(function(require) {
         spyOn(user, 'trigger');
 
         user.login({username: username, password: password});
-        expect(user.trigger).toHaveBeenCalledWith('loginSuccess');
+        expect(user.trigger).toHaveBeenCalledWith('loginSuccess', username);
       });
 
 

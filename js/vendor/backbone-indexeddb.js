@@ -440,7 +440,7 @@ define(['backbone'], function(Backbone) {
                         // Cursor is not over yet.
                         if (options.limit && processed >= options.limit) {
                             // Yet, we have processed enough elements. So, let's just skip.
-                            if (bounds && options.conditions[index.keyPath]) {
+                            if (bounds && options.conditions[index.keyPath] instanceof Array) {
                                 cursor.continue(options.conditions[index.keyPath][1] + 1); /* We need to 'terminate' the cursor cleany, by moving to the end */
                             } else {
                                 cursor.continue(); /* We need to 'terminate' the cursor cleany, by moving to the end */
@@ -565,14 +565,14 @@ define(['backbone'], function(Backbone) {
         options.success = function(resp) {
             resolve();
             if (success) success(resp);
-            object.trigger('sync', object, resp, options);
+            //object.trigger('sync', object, resp, options);
         };
 
         var error = options.error;
         options.error = function(resp) {
             reject();
             if (error) error(resp);
-            object.trigger('error', object, resp, options);
+            //object.trigger('error', object, resp, options);
         };
 
         var next = function(){

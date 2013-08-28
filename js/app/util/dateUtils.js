@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 buddycloud
+ * Copyright 2013 buddycloud
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,27 @@
  */
 
 define(function(require) {
-  var Backbone = require('backbone');
-  var UnreadCountersDB = require('models/db/UnreadCountersDB');
-  require('backbone-indexeddb');
+  function toUTC(date) {
+  	var utcDate = new Date(date.getUTCFullYear(), 
+  		date.getUTCMonth(), date.getUTCDate(),  
+  		date.getUTCHours(), date.getUTCMinutes(), 
+  		date.getUTCSeconds());
 
-  var UnreadCounter = Backbone.Model.extend({
-    database: UnreadCountersDB,
-    storeName: UnreadCountersDB.id
-  });
+  	return utcDate;
+  }
 
-  return UnreadCounter;
+  function toMillis(isoDate) {
+  	var utcDate = toUTC(new Date(isoDate));
+  	return utcDate.getTime();
+  }
+
+  function earliestTime() {
+  	return new Date(1970, 0, 1).toISOString();
+  }
+
+  return {
+    toUTC: toUTC,
+    toMillis: toMillis,
+    earliestTime: earliestTime
+  };
 });

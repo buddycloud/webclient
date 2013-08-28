@@ -22,7 +22,7 @@ define(function(require) {
     var discover;
 
     beforeEach(function() {
-      discover = new Discover();
+      discover = new Discover('alice@example.com');
     });
 
     it('should initialize submodels correctly', function() {
@@ -31,24 +31,12 @@ define(function(require) {
     });
 
     describe('doDiscover()', function() {
-      it('should call doDiscover() on each submodel', function() {
-        spyOn(discover.mostActive, 'doDiscover');
-        spyOn(discover.recommendations, 'doDiscover');
-        discover.doDiscover({user: 'alice@example.com'});
-        expect(discover.mostActive.doDiscover).toHaveBeenCalled();
-        expect(discover.recommendations.doDiscover).toHaveBeenCalled();
-      });
-
-      it('should trigger "fetch" if all submodels are fetched', function() {
-        spyOn(discover.mostActive, 'fetch').andCallFake(function(options) {
-          options.success(discover.mostActive);
-        });
-        spyOn(discover.recommendations, 'fetch').andCallFake(function(options) {
-          options.success(discover.recommendations);
-        });
-        spyOn(discover, 'trigger');
-        discover.doDiscover({user: 'alice@example.com'});
-        expect(discover.trigger).toHaveBeenCalledWith('fetch');
+      it('should call fetch() on each submodel', function() {
+        spyOn(discover.mostActive, 'fetch');
+        spyOn(discover.recommendations, 'fetch');
+        discover.doDiscover();
+        expect(discover.mostActive.fetch).toHaveBeenCalled();
+        expect(discover.recommendations.fetch).toHaveBeenCalled();
       });
     });
   });
