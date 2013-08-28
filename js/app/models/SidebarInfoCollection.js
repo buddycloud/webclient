@@ -51,11 +51,16 @@ define(function(require) {
       var mentionsCount = 0;
       var userPosts = [];
       var replies = {};
-      var mostRecent = dateUtils.toMillis(dateUtils.earliestTime());
+      var mostRecent;
+
+      var sidebarInfo = this._getSidebarInfo(channel);
+      if (sidebarInfo) {
+        mostRecent = dateUtils.toMillis(sidebarInfo.get('info').updated);
+      }
 
       items.forEach(function(item) {
         var updated = dateUtils.toMillis(item.updated);
-        if (updated > mostRecent) {
+        if (!mostRecent || updated > mostRecent) {
           mostRecent = updated;
         }
 
