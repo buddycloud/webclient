@@ -46,17 +46,14 @@ define(function(require) {
     },
 
     parseItems: function(username, channel, items) {
+      if (_.isEmpty(items)) return;
+
       var self = this;
       var totalCount = items.length;
       var mentionsCount = 0;
       var userPosts = [];
       var replies = {};
-      var mostRecent;
-
-      var sidebarInfo = this._getSidebarInfo(channel);
-      if (sidebarInfo) {
-        mostRecent = dateUtils.toMillis(sidebarInfo.get('info').updated);
-      }
+      var mostRecent = dateUtils.toMillis(dateUtils.earliestTime());
 
       items.forEach(function(item) {
         var updated = dateUtils.toMillis(item.updated);
@@ -166,7 +163,6 @@ define(function(require) {
         var sidebarInfo = this._getSidebarInfo(channel);
         if (sidebarInfo) {
           var oldInfo = sidebarInfo.get('info');
-
           var newInfo = this._buildInfo(
             oldInfo.mentions + info.mentions,
             oldInfo.total + info.total,
