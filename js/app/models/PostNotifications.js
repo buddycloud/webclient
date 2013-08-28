@@ -25,7 +25,7 @@ define(function(require) {
     initialize: function() {
       this._request = new Pollymer.Request({maxTries: -1, rawResponse: true});
       this._lastCursor = null;
-      this.bind('change', this._triggerNewItem);
+      this.listenTo(this, 'change', this._triggerNewItem);
     },
 
     _request: null,
@@ -41,7 +41,7 @@ define(function(require) {
 
         // XXX: workaround for posts without time
         if (!item.updated && !item.published) {
-          item.published = item.updated = new Date().toISOString(); // Current Time
+          item.published = item.updated = new Date().toISOString(); // Current UTC Time
         }
 
         var self = this;

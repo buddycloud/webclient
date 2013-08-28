@@ -17,6 +17,7 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
+  var dateUtils = require('util/dateUtils');
   var indexedDB = require('util/indexedDB');
   var ModelBase = require('models/ModelBase');
   var PostsDB = require('models/db/PostsDB');
@@ -79,16 +80,10 @@ define(function(require) {
       return !this.isPost();
     },
 
-    _getMillis: function(time) {
-      // Workaround for posts without updated field
-      return time ? new Date(time).getTime() : new Date().getTime();
-    },
-
     lastUpdated: function() {
-      var getMillis = this._getMillis;
-      var updated = getMillis(this.updated);
+      var updated = dateUtils.toMillis(this.updated);
       this.comments.forEach(function(comment) {
-        var updatedComment = getMillis(comment.updated);
+        var updatedComment = dateUtils.toMillis(comment.updated);
         if (updatedComment > updated) {
           updated = updatedComment;
         }

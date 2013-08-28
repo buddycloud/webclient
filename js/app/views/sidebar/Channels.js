@@ -19,6 +19,7 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var animations = require('util/animations');
   var Backbone = require('backbone');
+  var dateUtils = require('util/dateUtils');
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
@@ -196,8 +197,8 @@ define(function(require) {
               diff = bInfo.total - aInfo.total;
 
               if (diff === 0) {
-                bUpdated = new Date(bInfo.updated).getTime();
-                aUpdated = new Date(aInfo.updated).getTime();
+                bUpdated = dateUtils.toMillis(bInfo.updated);
+                aUpdated = dateUtils.toMillis(aInfo.updated);
                 diff = bUpdated - aUpdated;
                 if (diff === 0) {
                   return a.channel.localeCompare(b.channel);

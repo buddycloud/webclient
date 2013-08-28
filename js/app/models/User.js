@@ -19,6 +19,7 @@ define(function(require) {
   var Backbone = require('backbone');
   var ChannelMetadata = require('models/ChannelMetadata');
   var Events = Backbone.Events;
+  var dateUtils = require('util/dateUtils');
   var ModelBase = require('models/ModelBase');
   var PostNotifications = require('models/PostNotifications');
   var SubscribedChannels = require('models/SubscribedChannels');
@@ -33,10 +34,6 @@ define(function(require) {
       this.notifications = new PostNotifications();
       this.subscribedChannels = null;
       this.sync = new Sync();
-    },
-
-    _earliestTime: function() {
-      return new Date(1970, 0, 1).toISOString();
     },
 
     _currentTime: function() {
@@ -119,7 +116,7 @@ define(function(require) {
     _trySync: function() {
       this.sync.set('username', this.credentials.username, {silent: true});
 
-      var since = localStorage[this.username() + '.lastSession'] || this._earliestTime();
+      var since = localStorage[this.username() + '.lastSession'] || dateUtils.earliestTime();
       this.listenToOnce(this.sync, 'syncSuccess', this.updateLastSession);
       this.sync.fetch({
         credentials: this.credentials,

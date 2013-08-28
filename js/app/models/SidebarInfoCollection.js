@@ -16,6 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
+  var dateUtils = require('util/dateUtils');
   var indexedDB = require('util/indexedDB');
   var linkify = require('util/linkify');
   var SidebarInfo = require('models/SidebarInfo');
@@ -50,21 +51,22 @@ define(function(require) {
       var mentionsCount = 0;
       var userPosts = [];
       var replies = {};
-      var mostRecent;
+      var mostRecent = dateUtils.toMillis(dateUtils.earliestTime());
 
-      items.forEach(function(value) {
-        var updated = value.updated;
-        if (!mostRecent || updated > mostRecent) {
+      items.forEach(function(item) {
+        var updated = dateUtils.toMillis(item.updated);
+        if (updated > mostRecent) {
           mostRecent = updated;
         }
 
-        self._checkAuthor(value, username, userPosts, replies);
-        mentionsCount = self._checkMention(value, username, mentionsCount);
+        self._checkAuthor(item, username, userPosts, replies);
+        mentionsCount = self._checkMention(item, username, mentionsCount);
       });
       var repliesCount = this._countReplies(userPosts, replies);
-
+      var updated = new Date(mostRecent).toISOString();
+      
       this._setInfo(username, channel, this._buildInfo(mentionsCount, totalCount, 
-        repliesCount, mostRecent));
+        repliesCount, updated));
     },
 
     _checkAuthor: function(item, username, userPosts, replies) {
