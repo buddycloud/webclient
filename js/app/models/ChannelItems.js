@@ -18,6 +18,7 @@ define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
+  var dateUtils = require('util/dateUtils');
   var CollectionBase = require('models/CollectionBase');
   var indexedDB = require('util/indexedDB');
   var Item = require('models/Item');
@@ -124,10 +125,10 @@ define(function(require) {
 
     parse: function(response) {
       var compareItems = function(a, b) {
-        if (a.updated > b.updated) return 1;
-        if (a.updated < b.updated) return -1;
-
-        return 0;
+        var aUpdated = dateUtils.toMillis(a.updated);
+        var bUpdated = dateUtils.toMillis(b.updated);
+        
+        return aUpdated - bUpdated;
       }
 
       var comments = {};
