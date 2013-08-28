@@ -299,16 +299,18 @@ define(function(require) {
           item.media = this.media;
         }
 
+        item.source = this.options.items.channel;
         var previewsContainer = this.$el.find('.dropzone-previews');
         var comment = this.options.items.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
+          syncWithServer: true,
           complete: function() {
-            textArea.val('');
-            previewsContainer.empty();
             self.media = [];
           },
           success: function() {
+            textArea.val('');
+            previewsContainer.empty();
             self._collapseAnswerArea();
             self._enableButton();
           },

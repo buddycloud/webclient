@@ -19,7 +19,7 @@ define(function(require) {
     id: 'channel-metadata',
     migrations: [
       {
-        version: '1',
+        version: '1.0',
         migrate: function(transaction, next) {
           var store;
 

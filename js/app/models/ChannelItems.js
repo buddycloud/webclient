@@ -16,22 +16,52 @@
 
 define(function(require) {
   var api = require('util/api');
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var CollectionBase = require('models/CollectionBase');
+  var indexedDB = require('util/indexedDB');
   var Item = require('models/Item');
+  var PostsDB = require('models/db/PostsDB');
+  require('backbone-indexeddb');
 
   var ChannelItems = CollectionBase.extend({
     model: Item,
+    database: PostsDB,
+    storeName: PostsDB.id,
 
     constructor: function(channel) {
       CollectionBase.call(this);
       this.channel = channel;
-      this.bind('add', this._itemAdded, this);
+      this._fetched = false;
+      this._useIndexedDB = indexedDB.isSuppported();
+      this.listenTo(this, 'add', this._itemAdded);
+      this.listenToOnce(this, 'fetch', this._onFetch);
+      this.listenTo(this, 'sort', this._onSort);
+
+      Events.on('subscriptionSync', this._storeModels, this);
     },
 
-    /* TODO: there is something wrong with items "updated" field
+    _storeModels: function(action) {
+      if (action == 'subscribedChannel') {
+        var channel = this.channel;
+        this.models.forEach(function(item) {
+          item.set('source', channel, {silent: true});
+          item.save(null, {silent: true, syncWithServer: false});
+        });
+      }
+    },
+
+    isReady: function() {
+      return this._fetched;
+    },
+
+    _onFetch: function() {
+      this._fetched = true;
+    },
+
     comparator: function(item) {
-      return -item.updated;
-    },*/
+      return -item.lastUpdated();
+    },
 
     _itemAdded: function(item) {
       if (item.isPost()) {
@@ -50,8 +80,18 @@ define(function(require) {
     },
 
     lastItem: function() {
-      var lastItem = _.last(_.values(this.models));
-      return lastItem ? lastItem.id : null;
+      var oldest;
+      this.models.forEach(function(item) {
+        if (!oldest) {
+          oldest = item;
+        } else {
+          if (item.updated < oldest.updated) {
+            oldest = item;
+          }
+        }
+      });
+
+      return oldest ? oldest.id : null;
     },
 
     fetch: function(options) {
@@ -60,6 +100,19 @@ define(function(require) {
       options = options || {};
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
+      options.conditions = {source: this.channel};
+      
+      var data = options.data;
+      if (data) {
+        if (data.max) {
+          options.limit = data.max;
+        }
+
+        if (data.after) {
+          options.offset = this.length;
+        }
+      }
+
       CollectionBase.prototype.fetch.call(this, options);
     },
 
@@ -70,16 +123,27 @@ define(function(require) {
     },
 
     parse: function(response) {
+      var compareItems = function(a, b) {
+        if (a.updated > b.updated) return 1;
+        if (a.updated < b.updated) return -1;
+
+        return 0;
+      }
+
       var comments = {};
       _.each(response, function(item) {
         if (item.replyTo) {
           var postId = item.replyTo;
           comments[postId] = comments[postId] || [];
-          comments[postId].unshift(item);
+          comments[postId].push(item);
         } else {
-          item.comments = comments[item.id];
+          var commentsPosts = comments[item.id];
+          if (commentsPosts) {
+            item.comments = commentsPosts.sort(compareItems);  
+          }
         }
       });
+
       return response;
     },
 
@@ -103,6 +167,73 @@ define(function(require) {
       });
 
       return completeThreads;
+    },
+
+    _syncServerCallback: function(method, model, options) {
+      var self = this;
+      return function() {
+        self._syncServer(method, model, options);
+      };
+    },
+
+    _handleEmptySync: function() {
+      var self = this;
+      this.listenToOnce(this, 'sync', function(model, resp) {
+        self.trigger('fetch', resp);
+      });
+
+      this.listenToOnce(this, 'error', function(model, resp) {
+        self.trigger('fetch', []);
+      });
+    },
+
+    _onIndexedDBSync: function(method, model, options) {
+      self = this;
+      return function(collection, resp) {
+        // Check if there was data on DB, if not, sync with server
+        if (_.isEmpty(resp)) {
+          self._handleEmptySync();
+          self._syncServer(method, model, options);
+        } else {
+          self.trigger('fetch', resp);
+        }
+      }
+    },
+
+    _syncIndexedDB: function(method, model, options) {
+      if (method === 'read') {
+        this.listenToOnce(this, 'sync', this._onIndexedDBSync(method, model, options));
+      } else {
+        this.listenToOnce(this, 'sync', this._syncServerCallback(method, model, options));
+      }
+
+      Backbone.sync.call(this, method, model, options);
+    },
+
+    _syncServer: function(method, model, options) {
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
+    },
+
+    _isUserLogged: function(options) {
+      return options && options.credentials && options.credentials.username;
+    },
+
+    sync: function(method, model, options) {
+      if (this._useIndexedDB) {
+        // Only tries IndexedDB if it is a logged user
+        if (this._isUserLogged(options)) {
+          this._syncIndexedDB(method, model, options);
+        } else {
+          var self = this;
+          this.listenToOnce(this, 'sync', function(model, resp) {
+            self.trigger('fetch', resp);
+          });
+          this._syncServer(method, model, options);
+        }
+      } else {
+        this._syncServer(method, model, options);
+      }
     }
   });
 

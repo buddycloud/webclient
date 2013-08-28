@@ -15,8 +15,6 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
-
   var LINKS_REGEX = new RegExp([
     '^(.*?)',
     '(?:',

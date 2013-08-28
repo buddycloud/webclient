@@ -16,25 +16,87 @@
 
 define(function(require) {
   var api = require('util/api');
-  var ModelBase = require('models/ModelBase');
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var Item = require('models/Item');
+  var ModelBase = require('models/ModelBase');
+  var ChannelItems = require('models/ChannelItems');
+  var SidebarInfoCollection = require('models/SidebarInfoCollection');
 
   var Sync = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
+      this.channelItems = {};
+      this.sidebarInfo = new SidebarInfoCollection();
+      this.listenTo(this, 'sync', this._saveItems);
+    },
+
+    _itemsSize: function(channels) {
+      var total = 0;
+      for (var i in channels) {
+        var items = this.get(channels[i]);
+        total += items.length;
+      }
+
+      return total;
+    },
+
+    _saveItems: function() {
+      var channels = _.keys(_.omit(this.attributes, 'username'));
+      var afterCallback = _.after(this._itemsSize(channels), this._triggerSyncCallback);
+
+      if (_.isEmpty(channels)) {
+         this._triggerSyncCallback();
+      } else {
+        for (var i in channels) {
+          var self = this;
+          var items = this.get(channels[i]);
+          items.forEach(function(item) {
+            item = new Item(item);
+            self.listenToOnce(item, 'sync', afterCallback);
+            item.save(null, {syncWithServer: false});
+          });
+        }
+      }
+
+    },
+
+    _triggerSyncCallback: function() {
+      Events.trigger('syncSuccess');
+    },
+
+    fetch: function(options) {
+      // First, init the unread counters to avoid possible race conditions
+      if (this.sidebarInfo.useIndexedDB && !this.sidebarInfo.isReady()) {
+        this.listenToOnce(this.sidebarInfo, 'error reset', this._fetch(options));
+        this.sidebarInfo.fetch({conditions: {'user': this.get('username')}, reset: true});
+      } else {
+        ModelBase.prototype.fetch.call(this, options);
+      }
+    },
+
+    _fetch: function(options) {
+      var self = this;
+      return function() {
+        ModelBase.prototype.fetch.call(self, options);
+      }
     },
 
     url: function() {
       return api.url('sync');
     },
 
-    counters: function() {
-      var result = {};
-      _.each(this.attributes, function(value, node) {
-        result[node.split('/')[2]] = value;
+    parseSidebarInfo: function(channel, items) {
+      var username = this.get('username');
+      this.sidebarInfo.parseItems(username, channel, items);
+    },
+
+    _insertSource: function(channel, items) {
+      items.forEach(function(item) {
+        item['source'] = channel;
       });
 
-      return result;
+      return items;
     },
 
     parse: function(resp, xhr) {
@@ -45,9 +107,18 @@ define(function(require) {
         return {};
       } else if (typeof(resp) === 'object') {
         var result = {};
-        _.each(resp, function(value, node) {
-          result[node] = value;
+
+        var self = this;
+        _.each(resp, function(items, node) {
+          var channel = node.split('/')[2];
+          self._insertSource(channel, items);
+
+          result[channel] = items;
+
+          // Parse counters
+          self.parseSidebarInfo(channel, items);
         });
+
         return result;
       }
       return resp;

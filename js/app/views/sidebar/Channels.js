@@ -19,90 +19,64 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var animations = require('util/animations');
   var Backbone = require('backbone');
-  var linkify = require('util/linkify');
+  var dateUtils = require('util/dateUtils');
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
-  var Sync = require('models/Sync');
-  var UnreadCounter = require('models/UnreadCounter');
-  var UnreadCounters = require('models/UnreadCounters');
 
   var Channels = Backbone.View.extend({
     className: 'channels antiscroll-wrap',
     events: {'click .channel': '_navigateToChannel'},
 
     initialize: function() {
-      this.metadatas = [];
+      this.sidebarInfo = this.model.sync.sidebarInfo;
+      this.subscribedChannels = this.model.subscribedChannels;
+
+      this.listenTo(this.subscribedChannels, 'subscriptionSync', this._updateChannels);
+
       this._getChannelsMetadata();
-      this.model.subscribedChannels.bind('subscriptionSync', this._updateChannels, this);
 
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
     },
 
-    _initUnreadCounters: function() {
-      this.unreadCounters = new UnreadCounters();
-      if (this.unreadCounters.useIndexedDB) {
-        // Fetch and store counters
-        this.unreadCounters.bind('reset', this._syncUnreadCounters, this);
-        this.unreadCounters.fetch({conditions: {'user': this.model.username()}, reset: true});
-      } else {
-        // Render channels and listen for new posts
-        this.render();
-        this._listenForNewItems();
-      }
-    },
-
-    _syncUnreadCounters: function() {
+    _getChannelsMetadata: function() {
       var self = this;
-      var options = {
-        data: {'since': this.model.lastSession, 'max': 51, counters: 'true'},
-        credentials: this.model.credentials,
-        success: this._updateCounters(),
-        fail: function() {
-          self.render();
-          self._listenForNewItems();
-        }
-      };
+      this._initMetadataCache();
 
-      this.sync = new Sync();
-      this.sync.fetch(options);
-    },
-
-    _updateCounters: function() {
-      var self = this;
-      var username = this.model.username();
-      var unreadCounters = this.unreadCounters;
-      return function(model) {
-        _.each(model.counters(), function(counter, channel) {
-          if (self.selected !== channel) {
-            var mentionsCount = counter.mentionsCount;
-            var totalCount = counter.totalCount;
-            unreadCounters.increaseCounters(username, channel, mentionsCount, totalCount);
-            if (channel === username) {
-              Events.trigger('personalChannelTotalCount', unreadCounters.getCounters(channel).totalCount);
-              Events.trigger('personalChannelMentionsCount', unreadCounters.getCounters(channel).mentionsCount);
-            }
-          } else {
-            unreadCounters.resetCounters(username, channel);
-          }
-        });
-
+      var callback = _.after(this.metadatas.length, function() {
         self.render();
         self._listenForNewItems();
-      };
+      });
+
+      this.metadatas.forEach(function(metadata) {
+        self._fetchMetadata(metadata, callback);
+      });
+    },
+
+    _initMetadataCache: function() {
+      var self = this;
+      var channels = this.model.subscribedChannels.channels();
+      this.metadatas = [];
+      
+      channels.forEach(function(channel) {
+        if (!self._itsMe(channel)) {
+          var metadata = self.model.metadata(channel);
+          self.metadatas.unshift(metadata);
+        }
+      });
     },
 
     _renderUnreadCount: function(channel) {
       var channelEl = this.$('.channel[data-href="' + channel + '"]');
-      var counters = this.unreadCounters.getCounters(channel);
+      var info = this.sidebarInfo.getInfo(channel);
 
       var totalCountEl = channelEl.find('.channelpost');
-      var totalCount = counters.totalCount;
+      var totalCount = info.total;
       this._showOrHideCount(totalCountEl, totalCount);
 
       var mentionsCountEl = channelEl.find('.admin');
-      var mentionsCount = counters.mentionsCount;
+      var mentionsCount = info.mentions;
       this._showOrHideCount(mentionsCountEl, mentionsCount);
     },
 
@@ -121,10 +95,12 @@ define(function(require) {
 
     _updateChannels: function(action, channel, role, extra) {
       // extra for rainbow animation
-      if (action === 'subscribedChannel') {
-        this._addChannel(channel, extra);
-      } else {
-        this._removeChannel(channel);
+      if (!this._itsMe(channel)) {
+        if (action === 'subscribedChannel') {
+          this._addChannel(channel, extra);
+        } else {
+          this._removeChannel(channel);
+        }
       }
     },
 
@@ -141,7 +117,9 @@ define(function(require) {
     _addChannel: function(channel, extra) {
       if (!this._containsChannel(channel)) {
         var callback = this._triggerUpdateCallback(extra);
-        this._fetchMetadata(channel, callback);
+        var metadata = this.model.metadata(channel);
+        this.metadatas.unshift(metadata);
+        this._fetchMetadata(metadata, callback);
       }
     },
 
@@ -163,14 +141,14 @@ define(function(require) {
       this.metadatas.splice(spot, 1);
     },
 
-    _fetchMetadata: function(channel, callback) {
-      var metadata = this.model.metadata(channel);
-      this.metadatas.unshift(metadata);
+    _fetchMetadata: function(metadata, callback) {
       if (!metadata.hasEverChanged()) {
         metadata.fetch({credentials: this.model.credentials});
-        metadata.bind('change', callback, this);
+        this.listenTo(metadata, 'change', callback);
       } else {
-        callback(metadata);
+        if (callback) {
+          callback(metadata);
+        }
       }
     },
 
@@ -200,24 +178,32 @@ define(function(require) {
     },
 
     _sortChannels: function() {
-      var unreadCounters = this.unreadCounters;
+      // 1 - mentions
+      // 2 - replies
+      // 3 - total unread
+      // 4 - last updated
+      // 5 - still equal? Just compare the names then
+      var sidebarInfo = this.sidebarInfo;
       this.metadatas.sort(
         function(a, b) {
-          var aCounters = unreadCounters.getCounters(a.channel);
-          var bCounters = unreadCounters.getCounters(b.channel);
+          var aInfo = sidebarInfo.getInfo(a.channel);
+          var bInfo = sidebarInfo.getInfo(b.channel);
 
-          var aMentionsCount = aCounters.mentionsCount;
-          var bMentionsCount = bCounters.mentionsCount;
-          var diff = bMentionsCount - aMentionsCount;
+          var diff = bInfo.mentions - aInfo.mentions;
           if (diff === 0) {
-            var aTotalCount = aCounters.totalCount;
-            var bTotalCount = bCounters.totalCount;
-            diff = bTotalCount - aTotalCount;
+            diff = bInfo.replies - aInfo.replies;
 
             if (diff === 0) {
-              var aTitle = a.title() || a.channel;
-              var bTitle = b.title() || b.channel;
-              return aTitle.localeCompare(bTitle);
+              diff = bInfo.total - aInfo.total;
+
+              if (diff === 0) {
+                bUpdated = dateUtils.toMillis(bInfo.updated);
+                aUpdated = dateUtils.toMillis(aInfo.updated);
+                diff = bUpdated - aUpdated;
+                if (diff === 0) {
+                  return a.channel.localeCompare(b.channel);
+                }
+              }
             }
           }
 
@@ -235,17 +221,6 @@ define(function(require) {
       Events.trigger('navigate', path);
     },
 
-    _getChannelsMetadata: function() {
-      var self = this;
-      var callback = this._triggerInitUnreadCountersCallback();
-
-      _.each(this.model.subscribedChannels.channels(), function(channel, index) {
-        if (!self._itsMe(channel)) {
-          self._fetchMetadata(channel, callback);
-        }
-      });
-    },
-
     _itsMe: function(channel) {
       return this.model.username().indexOf(channel) != -1;
     },
@@ -259,17 +234,6 @@ define(function(require) {
         });
         self._rainbowAnimation($(channel), model.channel,
           model.channelType(), extra.offset, extra.animationClass, extra.selected);
-      };
-    },
-
-    _triggerInitUnreadCountersCallback: function() {
-      var self = this;
-      var fetched = [];
-      return function(model) {
-        fetched.push(model);
-        if (fetched.length === self.metadatas.length) {
-          self._initUnreadCounters();
-        }
       };
     },
 
@@ -290,40 +254,13 @@ define(function(require) {
       return -1;
     },
 
-    _bubbleUpSpot: function(channel, oldSpot) {
+    _bubbleSpot: function(channel, oldSpot) {
       var bubbleSpot = oldSpot;
-      var counters = this.unreadCounters;
-      var totalCount = counters.getCounters(channel).totalCount;
-      var mentionsCount = counters.getCounters(channel).mentionsCount;
-
-      for (var i = oldSpot; i - 1 >= 0; i--) {
-        var prev = this.metadatas[i - 1].channel;
-        if (mentionsCount > counters.getCounters(prev).mentionsCount ||
-          totalCount > counters.getCounters(prev).totalCount) {
-          var temp = this.metadatas[i-1];
-          this.metadatas[i-1] = this.metadatas[i];
-          this.metadatas[i] = temp;
-          bubbleSpot = i - 1;
-        }
-      }
-
-      return bubbleSpot;
-    },
-
-    _bubbleDownSpot: function(channel, oldSpot) {
-      var bubbleSpot = oldSpot;
-      var counters = this.unreadCounters;
-      var totalCount = counters.getCounters(channel).totalCount;
-      var mentionsCount = counters.getCounters(channel).mentionsCount;
-
-      for (var i = oldSpot; i + 1 < this.metadatas.length; i++) {
-        var next = this.metadatas[i + 1].channel;
-        if (totalCount < counters.getCounters(next).totalCount ||
-          mentionsCount < counters.getCounters(next).mentionsCount) {
-          var temp = this.metadatas[i+1];
-          this.metadatas[i+1] = this.metadatas[i];
-          this.metadatas[i] = temp;
-          bubbleSpot = i + 1;
+      this._sortChannels();
+      for (var i = 0; i < this.metadatas.length; i++) {
+        if (this.metadatas[i].channel === channel) {
+          bubbleSpot = i;
+          break;
         }
       }
 
@@ -333,7 +270,7 @@ define(function(require) {
     _bubbleUp: function(channel) {
       var currentSpot = this._channelSpot(channel);
       if (currentSpot > 0) {
-        var newSpot = this._bubbleUpSpot(channel, currentSpot);
+        var newSpot = this._bubbleSpot(channel, currentSpot);
         this._bubble(channel, newSpot, currentSpot);
       }
     },
@@ -341,7 +278,7 @@ define(function(require) {
     _bubbleDown: function(channel) {
       var currentSpot = this._channelSpot(channel);
       if (currentSpot != -1 && currentSpot < this.metadatas.length - 1) {
-        var newSpot = this._bubbleDownSpot(channel, currentSpot);
+        var newSpot = this._bubbleSpot(channel, currentSpot);
         this._bubble(channel, newSpot, currentSpot);
       }
     },
@@ -437,27 +374,24 @@ define(function(require) {
 
     _listenForNewItems: function() {
       var user = this.model;
-      var unreadCounters = this.unreadCounters;
+      var sidebarInfo = this.sidebarInfo;
+      
       var self = this;
-      user.notifications.on('new', function(item) {
+      this.listenTo(user.notifications, 'new', function(item) {
         var channel = item.source;
         if (channel !== self.selected) {
-          var mentions = linkify.mentions(item.content) || [];
-          if (_.include(mentions, user.username())) {
-            unreadCounters.incrementCounters(user.username(), channel);
-          } else {
-            unreadCounters.incrementTotalCount(user.username(), channel);
-          }
+          sidebarInfo.parseItems(user.username(), channel, [item]);
 
           if (channel === user.username()) {
-            Events.trigger('personalChannelTotalCount', unreadCounters.getCounters(channel).totalCount);
-            Events.trigger('personalChannelMentionsCount', unreadCounters.getCounters(channel).mentionsCount);
+            Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).total);
+            Events.trigger('personalChannelMentionsCount', sidebarInfo.getInfo(channel).mentions);
           } else {
             self._renderUnreadCount(channel);
             self._bubbleUp(channel);
           }
         }
       });
+
       user.notifications.listen({credentials: user.credentials});
     },
 
@@ -477,11 +411,10 @@ define(function(require) {
       this.$('.selected').removeClass('selected');
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
-      var unreadCounters = this.unreadCounters;
-      if (unreadCounters && unreadCounters.isReady()) {
-        if (unreadCounters.getCounters(channel).totalCount > 0 ||
-          unreadCounters.getCounters(channel).mentionsCount > 0) {
-          unreadCounters.resetCounters(username, channel);
+      if (this.sidebarInfo.isReady()) {
+        var info = this.sidebarInfo.getInfo(channel);
+        if (info.total > 0 || info.mentions > 0 || info.replies > 0) {
+          this.sidebarInfo.resetCounters(username, channel);
 
           if (channel === username) {
             Events.trigger('personalChannelTotalCount', 0);

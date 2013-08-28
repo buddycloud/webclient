@@ -101,9 +101,9 @@ define(function(require) {
         expect(posts[2].isPost()).toBeTruthy();
       });
 
-      it('should return posts sorted from newest to oldest', function() {
+      it("should return posts sorted from newest to oldest (based on it's comments)", function() {
         expect(posts[0].id > posts[1].id).toBeTruthy();
-        expect(posts[1].id > posts[2].id).toBeTruthy();
+        expect(posts[1].id < posts[2].id).toBeTruthy();
       });
     });
 
@@ -112,14 +112,14 @@ define(function(require) {
         var posts = items.posts();
         expect(posts[0].comments).toEqual([]);
         expect(posts[1].comments[0].replyTo).toBe(posts[1].id);
+        expect(posts[1].comments[1].replyTo).toBe(posts[1].id);
         expect(posts[2].comments[0].replyTo).toBe(posts[2].id);
-        expect(posts[2].comments[1].replyTo).toBe(posts[2].id);
       });
 
       it('should sort comments from oldest to newest', function() {
         var posts = items.posts();
-        var comments2 = posts[2].comments;
-        expect(comments2[0].id < comments2[1].id).toBeTruthy();
+        var comments1 = posts[1].comments;
+        expect(comments1[0].id < comments1[1].id).toBeTruthy();
       });
     });
 
