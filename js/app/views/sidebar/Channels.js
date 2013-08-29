@@ -197,9 +197,12 @@ define(function(require) {
               diff = bInfo.total - aInfo.total;
 
               if (diff === 0) {
-                bUpdated = dateUtils.toMillis(bInfo.updated);
-                aUpdated = dateUtils.toMillis(aInfo.updated);
-                diff = aUpdated - bUpdated;
+                aUpdated = dateUtils.utcDate(aInfo.updated);
+                bUpdated = dateUtils.utcDate(bInfo.updated);
+
+                if (aUpdated > bUpdated) diff = -1;
+                if (aUpdated < bUpdated) diff = 1;
+
                 if (diff === 0) {
                   return a.channel.localeCompare(b.channel);
                 }

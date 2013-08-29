@@ -53,11 +53,11 @@ define(function(require) {
       var mentionsCount = 0;
       var userPosts = [];
       var replies = {};
-      var mostRecent = dateUtils.toMillis(dateUtils.earliestTime());
+      var mostRecent = dateUtils.utcDate(dateUtils.earliestTime());
 
       items.forEach(function(item) {
-        var updated = dateUtils.toMillis(item.updated);
-        if (!mostRecent || updated > mostRecent) {
+        var updated = dateUtils.utcDate(item.updated);
+        if (updated > mostRecent) {
           mostRecent = updated;
         }
 

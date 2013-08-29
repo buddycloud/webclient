@@ -16,17 +16,18 @@
 
 define(function(require) {
   function toUTC(date) {
-  	var utcDate = new Date(date.getUTCFullYear(), 
-  		date.getUTCMonth(), date.getUTCDate(),  
-  		date.getUTCHours(), date.getUTCMinutes(), 
-  		date.getUTCSeconds());
+    var utc = new Date(date.getUTCFullYear(), 
+      date.getUTCMonth(), 
+      date.getUTCDate(), 
+      date.getUTCHours(), 
+      date.getUTCMinutes(), 
+      date.getUTCSeconds());
 
-  	return utcDate;
+  	return utc;
   }
 
-  function toMillis(isoDate) {
-  	var utcDate = toUTC(new Date(isoDate));
-  	return utcDate.getTime();
+  function utcDate(isoDate) {
+  	return toUTC(new Date(isoDate));
   }
 
   function earliestTime() {
@@ -35,7 +36,7 @@ define(function(require) {
 
   return {
     toUTC: toUTC,
-    toMillis: toMillis,
+    utcDate: utcDate,
     earliestTime: earliestTime
   };
 });

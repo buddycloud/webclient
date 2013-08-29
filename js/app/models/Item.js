@@ -81,9 +81,9 @@ define(function(require) {
     },
 
     lastUpdated: function() {
-      var updated = dateUtils.toMillis(this.updated);
+      var updated = dateUtils.utcDate(this.updated);
       this.comments.forEach(function(comment) {
-        var updatedComment = dateUtils.toMillis(comment.updated);
+        var updatedComment = dateUtils.utcDate(comment.updated);
         if (updatedComment > updated) {
           updated = updatedComment;
         }

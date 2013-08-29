@@ -86,8 +86,8 @@ define(function(require) {
         if (!oldest) {
           oldest = item;
         } else {
-          if (dateUtils.toMillis(item.updated) < 
-            dateUtils.toMillis(oldest.updated)) {
+          if (dateUtils.utcDate(item.updated) < 
+            dateUtils.utcDate(oldest.updated)) {
             oldest = item;
           }
         }
@@ -126,22 +126,31 @@ define(function(require) {
 
     parse: function(response) {
       var compareItems = function(a, b) {
-        var aUpdated = dateUtils.toMillis(a.updated);
-        var bUpdated = dateUtils.toMillis(b.updated);
-        
-        return aUpdated - bUpdated;
+        aUpdated = dateUtils.utcDate(a.updated);
+        bUpdated = dateUtils.utcDate(b.updated);
+
+        if (aUpdated > bUpdated) return 1;
+        if (aUpdated < bUpdated) return -1;
+        return 0;
       }
 
+      // Cluster all comments by poster id
       var comments = {};
-      _.each(response, function(item) {
+      response.forEach(function(item) {
         if (item.replyTo) {
           var postId = item.replyTo;
           comments[postId] = comments[postId] || [];
           comments[postId].push(item);
-        } else {
-          var commentsPosts = comments[item.id];
-          if (commentsPosts) {
-            item.comments = commentsPosts.sort(compareItems);  
+        }
+      });
+
+      // Add comments to posts
+      response.forEach(function(item) {
+        if (!item.replyTo) {
+          var itemComments = comments[item.id];
+          if (itemComments) {
+            itemComments.sort(compareItems);
+            item.comments = itemComments;
           }
         }
       });
