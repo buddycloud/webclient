@@ -199,7 +199,7 @@ define(function(require) {
               if (diff === 0) {
                 bUpdated = dateUtils.toMillis(bInfo.updated);
                 aUpdated = dateUtils.toMillis(aInfo.updated);
-                diff = bUpdated - aUpdated;
+                diff = aUpdated - bUpdated;
                 if (diff === 0) {
                   return a.channel.localeCompare(b.channel);
                 }
