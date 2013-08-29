@@ -86,7 +86,8 @@ define(function(require) {
         if (!oldest) {
           oldest = item;
         } else {
-          if (item.updated < oldest.updated) {
+          if (dateUtils.toMillis(item.updated) < 
+            dateUtils.toMillis(oldest.updated)) {
             oldest = item;
           }
         }
