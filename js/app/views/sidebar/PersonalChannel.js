@@ -37,7 +37,7 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.metadata = this.model.metadata(this.model.username());
-      this.metadata.bind('change', this.render, this);
+      this.listenTo(this.metadata, 'change', this.render);
       if (!this.metadata.hasEverChanged()) {
         this.metadata.fetch({credentials: this.model.credentials});
       } else {
