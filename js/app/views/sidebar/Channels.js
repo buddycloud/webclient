@@ -271,21 +271,10 @@ define(function(require) {
     },
 
     _bubbleDown: function(channel) {
-      console.log("BEFORE")
-      for (var i = 0; i < this.metadatas.length; i++) {
-        console.log(this.metadatas[i].channel)
-      }
-
       var currentSpot = this._channelSpot(channel);
       if (currentSpot != -1 && currentSpot < this.metadatas.length - 1) {
         var newSpot = this._bubbleSpot(channel, currentSpot);
         this._bubble(channel, newSpot, currentSpot);
-      }
-
-      console.log()
-      console.log("AFTER")
-      for (var i = 0; i < this.metadatas.length; i++) {
-        console.log(this.metadatas[i].channel)
       }
     },
 
