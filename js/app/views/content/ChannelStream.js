@@ -54,7 +54,7 @@ define(function(require) {
 
       var user = this.options.user;
       if (user.subscribedChannels) {
-        user.subscribedChannels.bind('subscriptionSync', this._subscribeAction, this);
+        this.listenTo( this.options.user.subscribedChannels, 'subscriptionSync', this._subscribeAction);
       }
 
       _.bindAll(this, 'checkScroll', '_dndFileStart', '_dndFileLeave');
@@ -69,12 +69,6 @@ define(function(require) {
     destroy: function() {
       // Scrolling event
       $('.content').off('scroll', this.checkScroll);
-
-      // (Un)follow event
-      var user = this.options.user;
-      if (user.subscribedChannels) {
-        user.subscribedChannels.unbind('subscriptionSync', this._subscribeAction, this);
-      }
 
       // Bubble a post event
       Events.unbind('postBubble', this._bubble, this);

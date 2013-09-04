@@ -34,13 +34,11 @@ define(function(require) {
       this._defineGetter('channels', function() {
         return this.model.channels.models;
       });
-
-      this.model.bind('fetch', this.render, this);
+      this.listenTo(this.model, 'fetch', this.render).
       spinner.replace(this.$el);
     },
 
     destroy: function() {
-      this.model.unbind('fetch', this.render, this);
       this.remove();
     },
 

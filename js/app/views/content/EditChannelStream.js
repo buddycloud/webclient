@@ -36,17 +36,15 @@ define(function(require) {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this._initialize();
       if (!this.model.hasEverChanged()) {
-        this.model.bind('fetch', this.render, this);
+        this.listenTo(this.model, 'fetch', this.render);
       } else {
         this.render();
       }
 
-      this.model.bind('sync', this.render, this);
+      this.listenTo(this.model, 'sync', this.render);
     },
 
     destroy: function() {
-      this.model.unbind('fetch', this.render, this);
-      this.model.unbind('sync', this.render, this);
       this.remove();
     },
 

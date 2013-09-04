@@ -35,19 +35,19 @@ define(function(require) {
       this._fetchDetailsLists();
       this._fetchMetadata();
       if (this.options.user.subscribedChannels) {
-        this.options.user.subscribedChannels.bind('subscriptionSync', this._updateFollowersList, this);
+        this.listenTo( this.options.user.subscribedChannels, 'subscriptionSync', this._updateFollowersList);
       }
     },
 
     _fetchDetailsLists: function() {
       this.model = new Channel(this.options.channel);
-      this.model.bind('fetch', this.render, this);
+      this.listenTo(this.model, 'fetch', this.render);
       this.model.fetch({credentials: this.options.user.credentials});
     },
 
     _fetchMetadata: function() {
       this.metadata = this.options.user.metadata(this.options.channel);
-      this.metadata.bind('change', this.render, this);
+      this.listenTo(this.metadata, 'change', this.render);
       if (!this.metadata.hasEverChanged()) {
         this.metadata.fetch({credentials: this.options.user.credentials});
       } else {
@@ -56,9 +56,6 @@ define(function(require) {
     },
 
     destroy: function() {
-      if (this.options.user.subscribedChannels) {
-        this.options.user.subscribedChannels.unbind('subscriptionSync', this._updateFollowersList, this);
-      }
       this.remove();
     },
 

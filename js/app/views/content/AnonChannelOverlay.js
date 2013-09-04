@@ -31,14 +31,11 @@ define(function(require) {
 
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
-
-      this.model.on('loginSuccess', this._successfullLogin, this);
-      this.model.on('loginError', this._invalidLogin, this);
+      this.listenTo(this.model, 'loginSuccess', this._successfullLogin);
+      this.listenTo(this.model, 'loginError', this._invalidLogin);
     },
 
     destroy: function() {
-      this.model.off('loginSuccess', this._successfullLogin, this);
-      this.model.off('loginError', this._invalidLogin, this);
       this.remove();
     },
 

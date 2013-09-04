@@ -43,7 +43,7 @@ define(function(require) {
           'threads': 'postAfterMe'
         };
       this.model = new Preferences();
-      this.model.bind('change', this.render, this);
+      this.listenTo(this.model, 'change', this.render);
       this.model.fetch({credentials: this.options.user.credentials, data: {type: 'email'}});
     },
 

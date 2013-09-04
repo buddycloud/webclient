@@ -46,7 +46,7 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.channelName = this.options.items.channel;
-      this.model.bind('addComment', this._addComment, this);
+      this.listenTo(this.model, 'addComment', this._addComment);
       this.media = [];
     },
 

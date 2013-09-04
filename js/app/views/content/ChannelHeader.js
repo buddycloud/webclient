@@ -42,7 +42,7 @@ define(function(require) {
       if (!this.model) {
         this.model = this.options.user.metadata(this.options.channel);
       }
-      this.model.bind('change', this._build, this);
+      this.listenTo(this.model, 'change', this._build);
 
       if (!this.model.hasEverChanged()) {
         this.model.fetch({credentials: this.options.user.credentials});
@@ -51,7 +51,7 @@ define(function(require) {
       }
 
       if (this.options.user.subscribedChannels) {
-        this.options.user.subscribedChannels.bind('subscriptionSync', this._switchButton, this);
+        this.listenTo( this.options.user.subscribedChannels, 'subscriptionSync', this._switchButton);
       }
 
       // Avatar changed event
@@ -87,11 +87,6 @@ define(function(require) {
     },
 
     destroy: function() {
-      // (Un)follow event
-      if (this.options.user.subscribedChannels) {
-        this.options.user.subscribedChannels.unbind('subscriptionSync', this._switchButton, this);
-      }
-
       // Avatar changed event
       Events.unbind('avatarChanged', this._avatarChanged, this);
 
