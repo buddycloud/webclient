@@ -49,7 +49,7 @@ define(function(require) {
       if (_.isEmpty(items)) return;
 
       var self = this;
-      var totalCount = items.length;
+      var totalCount = 0;
       var mentionsCount = 0;
       var userPosts = [];
       var replies = {};
@@ -59,6 +59,10 @@ define(function(require) {
         var updated = dateUtils.utcDate(item.updated);
         if (updated > mostRecent) {
           mostRecent = updated;
+        }
+
+        if (item.author !== username) {
+          totalCount++;
         }
 
         self._checkAuthor(item, username, userPosts, replies);
@@ -88,7 +92,7 @@ define(function(require) {
 
     _checkMention: function(item, username, mentionsCount) {
       var content = item.content;
-      if (content) {
+      if (content && item.author !== username) {
         var mentions =  linkify.mentions(content) || [];
         mentions.forEach(function(mention) {
           if (mention === username) {
