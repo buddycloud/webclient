@@ -100,6 +100,15 @@ define(function(require) {
       }
     },
 
+    // Override default method to always use lower case
+    navigate: function(fragment, options) {
+      if (fragment) {
+        fragment.toLowerCase();
+      }
+
+      Backbone.Router.prototype.navigate.call(this, fragment, options);
+    },
+
     explore: function() {
       this._before();
       if (this.sidebar) {
@@ -115,6 +124,7 @@ define(function(require) {
 
     channel: function(channel) {
       this._before();
+      channel = channel.toLowerCase();
       if (this.sidebar) {
         this.sidebar.selectChannel(channel);
       }

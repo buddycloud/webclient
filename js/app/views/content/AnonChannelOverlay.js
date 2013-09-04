@@ -69,7 +69,7 @@ define(function(require) {
     login: function(event) {
       event.preventDefault();
       this._disableButton();
-      var username = $('#auth_name').attr('value');
+      var username = $('#auth_name').attr('value').toLowerCase(); // Ensure lower case
       var password = $('#auth_pwd').attr('value');
       var permanent = $('#store_local').is(':checked');
 
