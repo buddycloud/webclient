@@ -34,7 +34,7 @@ define(function(require) {
       this._defineGetter('channels', function() {
         return this.model.channels.models;
       });
-      this.listenTo(this.model, 'fetch', this.render).
+      this.listenTo(this.model, 'fetch', this.render);
       spinner.replace(this.$el);
     },
 
