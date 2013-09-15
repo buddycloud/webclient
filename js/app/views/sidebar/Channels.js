@@ -177,42 +177,42 @@ define(function(require) {
       this._setupAnimation();
     },
 
-    _sortChannels: function() {
-      // 1 - mentions
-      // 2 - replies
-      // 3 - total unread
-      // 4 - last updated
-      // 5 - still equal? Just compare the names then
-      var sidebarInfo = this.sidebarInfo;
-      this.metadatas.sort(
-        function(a, b) {
-          var aInfo = sidebarInfo.getInfo(a.channel);
-          var bInfo = sidebarInfo.getInfo(b.channel);
+    // 1 - mentions
+    // 2 - replies
+    // 3 - total unread
+    // 4 - last updated
+    // 5 - still equal? Just compare the names then
+    _comparePosts: function(a, b) {
+      var aInfo = this.sidebarInfo.getInfo(a.channel);
+      var bInfo = this.sidebarInfo.getInfo(b.channel);
 
-          var diff = bInfo.mentions - aInfo.mentions;
+      var diff = bInfo.mentions - aInfo.mentions;
+      if (diff === 0) {
+        diff = bInfo.replies - aInfo.replies;
+
+        if (diff === 0) {
+          diff = bInfo.total - aInfo.total;
+
           if (diff === 0) {
-            diff = bInfo.replies - aInfo.replies;
+            aUpdated = dateUtils.utcDate(aInfo.updated);
+            bUpdated = dateUtils.utcDate(bInfo.updated);
+
+            if (aUpdated > bUpdated) diff = -1;
+            if (aUpdated < bUpdated) diff = 1;
 
             if (diff === 0) {
-              diff = bInfo.total - aInfo.total;
-
-              if (diff === 0) {
-                aUpdated = dateUtils.utcDate(aInfo.updated);
-                bUpdated = dateUtils.utcDate(bInfo.updated);
-
-                if (aUpdated > bUpdated) diff = -1;
-                if (aUpdated < bUpdated) diff = 1;
-
-                if (diff === 0) {
-                  return a.channel.localeCompare(b.channel);
-                }
-              }
+              return a.channel.localeCompare(b.channel);
             }
           }
-
-          return diff;
         }
-      );
+      }
+
+      return diff;
+    },
+
+    _sortChannels: function() {
+      var self = this;
+      this.metadatas.sort(function(a, b) {self._comparePosts(a, b)});
     },
 
     _navigateToChannel: function(event) {
@@ -258,8 +258,26 @@ define(function(require) {
     },
 
     _bubbleSpot: function(channel, oldSpot) {
-      this._sortChannels();
-      return this._channelSpot(channel);
+      var currentSpot = oldSpot;
+      var next = currentSpot - 1;
+
+      while (next >= 0) {
+        var compare = this._comparePosts(this.metadatas[currentSpot], this.metadatas[next]);
+        if (compare >= 0) {
+          break;
+        }
+        this._swap(currentSpot, next);
+        currentSpot = next;
+        next = currentSpot - 1;
+      }
+
+      return currentSpot;
+    },
+
+    _swap: function(i, j) {
+      var temp = this.metadatas[i];
+      this.metadatas[i] = this.metadatas[j];
+      this.metadatas[j] = temp;
     },
 
     _bubbleUp: function(channel) {
@@ -272,8 +290,12 @@ define(function(require) {
 
     _bubbleDown: function(channel) {
       var currentSpot = this._channelSpot(channel);
-      if (currentSpot != -1 && currentSpot < this.metadatas.length - 1) {
-        var newSpot = this._bubbleSpot(channel, currentSpot);
+      var size = this.metadatas.length;
+      if (currentSpot !== -1 && currentSpot !== size - 1) {
+        for (var i = currentSpot + 1; i < size; i++) {
+          this._swap(i, i - 1);
+        }
+        var newSpot = this._bubbleSpot(channel, size - 1);
         this._bubble(channel, newSpot, currentSpot);
       }
     },
