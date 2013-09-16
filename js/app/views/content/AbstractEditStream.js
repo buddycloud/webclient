@@ -47,22 +47,14 @@ define(function(require) {
       this._setDefaultRole(model);
     },
 
-    _save: function(model, callback) {
+    _save: function(model) {
       // Set fields
       this._setFields(model);
 
       // Save
       this._saveAvatar(model);
 
-      var self = this;
-      model.save({}, {
-        credentials: this.options.user.credentials,
-        complete: function(xhr, status) {
-          if (callback) {
-            callback(xhr, status);
-          }
-        }
-      });
+      model.save(null, {credentials: this.options.user.credentials});
     },
 
     _saveAvatar: function(model) {

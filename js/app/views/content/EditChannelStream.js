@@ -60,19 +60,16 @@ define(function(require) {
       // FIXME Workaround to not get events from disabled save button
       if (this.$('.save').hasClass('disabled')) return;
       this._disableSaveButton();
+      this.listenTo(this.model, 'sync', this._responseCallback());
       this._save(this.model, this._responseCallback());
     },
 
     _responseCallback: function() {
       var self = this;
-      return function(jqXHR, status) {
+      return function(status) {
         var $saveButton = self.$('.save');
         $saveButton.removeClass('disabled').addClass('completed');
-        if (jqXHR.status === 200) {
-          $saveButton.text('Saved');
-        } else {
-          $saveButton.text('Error');
-        }
+        $saveButton.text('Saved');
         setTimeout(function() {
           Events.trigger('navigate', self.model.channel);
         }, 7000);

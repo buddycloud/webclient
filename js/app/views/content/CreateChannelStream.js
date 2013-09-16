@@ -76,7 +76,8 @@ define(function(require) {
     },
 
     saveMetadata: function() {
-      this._save(this.model, this._channelCreated());
+      this.listenTo(this.model, 'sync', this._channelCreated());
+      this._save(this.model);
     },
 
     _channelCreated: function() {
@@ -84,6 +85,11 @@ define(function(require) {
       var subscribedChannels = this.options.user.subscribedChannels;
       return function() {
         subscribedChannels.set(channel + '/posts', 'owner', {silent: true});
+        Events.once('navigate', function(destiny) {
+          if (channel === destiny) {
+            Events.trigger('channelCreated', channel);
+          }
+        });
         Events.trigger('navigate', channel);
       };
     },

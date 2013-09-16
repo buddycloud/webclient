@@ -38,6 +38,9 @@ define(function(require) {
 
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
+
+      // Channel created event
+      Events.on('channelCreated', this._channelCreated, this);
     },
 
     _getChannelsMetadata: function() {
@@ -112,6 +115,21 @@ define(function(require) {
       }
 
       return false;
+    },
+
+    _channelCreated: function(channel) {
+      var metadataModel = this.model.metadata(channel);
+      this.metadatas.unshift(metadataModel);
+      var channelEl = _.template(channelTemplate,{
+        metadata: metadataModel,
+        selected: true
+      });
+
+      var $channel = $(channelEl);
+      this._$innerHolder.prepend($channel);
+      avatarFallback($channel.find('img'), metadataModel.channelType(), 50);
+
+      this._growDestinationArea($channel, 'bubbleHolder', 'bubbling');
     },
 
     _addChannel: function(channel, extra) {
