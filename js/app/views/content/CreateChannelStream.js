@@ -93,7 +93,7 @@ define(function(require) {
     },
 
     _getChannel: function() {
-      return this.$('#channel_jid').val();
+      return this.$('#channel_title').val();
     },
 
     _check: function(element, value) {
