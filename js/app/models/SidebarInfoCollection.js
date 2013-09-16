@@ -153,12 +153,13 @@ define(function(require) {
       if (this.useIndexedDB) {
         var sidebarInfo = this._getSidebarInfo(channel);
         if (sidebarInfo) {
-          sidebarInfo.set({'info': this._emptyInfo()});
+          var oldInfo = sidebarInfo.get('info');
+          sidebarInfo.set({'info': this._buildInfo(0, 0, 0, oldInfo.updated)});
           this.create(sidebarInfo);
         }
       } else {
-        var counter = this._emptyInfo();
-        this._info[channel] = counter;
+        var oldInfo = this._info[channel] || this._emptyInfo();
+        this._info[channel] = this._buildInfo(0, 0, 0, oldInfo.updated);
       }
     },
 

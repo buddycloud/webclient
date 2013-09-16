@@ -69,8 +69,13 @@ define(function(require) {
     },
 
     _createDateField: function() {
-      var updated = this.updated || new Date().toISOString();
-      this.set('updatedDate', new Date(updated));
+      if (!this.updatedDate) {
+        var updated = this.updated || new Date().toISOString();
+        this.set('updatedDate', new Date(updated));
+      }
+      this._defineGetter('updatedDate', function() {
+        return this.get('updatedDate');
+      });
     },
 
     _defineGetter: function(name, getter) {
