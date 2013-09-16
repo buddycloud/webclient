@@ -212,7 +212,11 @@ define(function(require) {
 
     _sortChannels: function() {
       var self = this;
-      this.metadatas.sort(function(a, b) {self._comparePosts(a, b)});
+      this.metadatas.sort(
+        function(a, b) {
+          return self._comparePosts(a, b);
+        }
+      );
     },
 
     _navigateToChannel: function(event) {
