@@ -81,7 +81,7 @@ define(function(require) {
       for (var i in nodes) {
         this.set(channel + '/' + nodes[i], role, {silent: true});
       }
-      this.bind('sync', this._triggerSubscribedEvent(channel, role, extra), this);
+      this.listenTo(this, 'sync', this._triggerSubscribedEvent(channel, role, extra));
       this.save(null, {'credentials': credentials});
     },
 
@@ -103,7 +103,7 @@ define(function(require) {
            this.set(attr, 'none', {silent: true});
         }
       }
-      this.bind('sync', this._triggerUnsubscribedEvent(channel), this);
+      this.listenTo(this, 'sync', this._triggerUnsubscribedEvent(channel));
       this.save(null, {'credentials': credentials});
     },
 

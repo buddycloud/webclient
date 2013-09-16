@@ -135,7 +135,7 @@ define(function(require) {
 
     sync: function(method, model, options) {
       if (options.syncWithServer) {
-        this.once('sync', this._syncIndexedDBCallback(method, model, options), this);
+        this.listenToOnce(this, 'sync', this._syncIndexedDBCallback(method, model, options));
         this._syncServer(method, model, options);
       } else {
         this._syncIndexedDB(method, model, options);

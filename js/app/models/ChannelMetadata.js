@@ -31,7 +31,7 @@ define(function(require) {
 
       this.fetched = false;
       this.set({'channel': channel}, {silent: true});
-      this.once('change', this._onFetch, this);
+      this.listenToOnce(this, 'change', this._onFetch);
     },
 
     hasEverChanged: function() {
@@ -86,7 +86,7 @@ define(function(require) {
       var self = this;
       return function() {
         self._syncWithServer = false;
-        self.once('error sync', function() {self._syncWithServer = true;});
+        self.listenToOnce(this, 'error sync', function() {self._syncWithServer = true;});
         self.save({}, {silent: true});
       };
     },
@@ -101,10 +101,10 @@ define(function(require) {
     _syncIndexedDB: function(method, model, options) {
       if (this._syncWithServer) {
         if (method === 'read') {
-          this.once('error success', this._syncServerCallback(method, model, options));
-          this.once('change', this._storeOnDB());
+          this.listenToOnce(this, 'error success', this._syncServerCallback(method, model, options));
+          this.listenToOnce(this, 'change', this._storeOnDB());
         } else {
-          this.once('error sync', this._syncServerCallback(method, model, options));
+          this.listenToOnce(this, 'error sync', this._syncServerCallback(method, model, options));
         }
       }
 

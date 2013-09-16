@@ -19,9 +19,6 @@ define(function(require) {
 
   var ModelBase = Backbone.Model.extend({
     fetch: function(options) {
-      this.fetched = false;
-      this.once('change', this._onFetch, this);
-
       if (options && options.credentials) {
         options.credentials.addAuthorizationToAjaxOptions(options);
       }

@@ -45,9 +45,10 @@ define(function(require) {
         }
 
         var self = this;
-        item.once('sync', function () {
+        this.listenToOnce(item, 'sync', function () {
           self.trigger('new', item);
         });
+
         item.save(null, {syncWithServer: false});
       }
     },

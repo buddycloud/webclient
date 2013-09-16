@@ -136,12 +136,11 @@ define(function(require) {
 
     _initModel: function() {
       this.model = new ChannelItems(this.options.channel);
-
-      this.model.bind('error', this._error, this);
-      this.model.bind('addPost', this._prependPost, this);
+      this.listenTo(this.model, 'error', this._error);
+      this.listenTo(this.model, 'addPost', this._prependPost);
 
       if (!this.model.isReady()) {
-        this.model.once('fetch', this._begin, this);
+        this.listenToOnce(this.model, 'fetch', this._begin);
         this.model.fetch({
           data: {max: 51}, 
           credentials: this.options.user.credentials,
@@ -196,7 +195,7 @@ define(function(require) {
 
         if (lastItem) {
           this._showSpinner();
-          this.model.once('fetch', this._appendPosts, this);
+          this.listenToOnce(this.model, 'fetch', this._appendPosts);
           this.model.fetch({
             data: {after: lastItem, max: 51},
             credentials: this.options.user.credentials,

@@ -25,7 +25,7 @@ define(function(require) {
     constructor: function(channel) {
       ModelBase.call(this);
       this.channel = channel;
-      this.bind('sync', this._onSync, this);
+      this.listenTo(this, 'sync', this._onSync);
     },
 
     _onSync: function() {
