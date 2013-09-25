@@ -98,7 +98,7 @@ define(function(require) {
     },
 
     unsubscribe: function(channel, credentials) {
-      for (var attr in self.attributes) {
+      for (var attr in this.attributes) {
         if (channel === attr.split('/')[0]) {
            this.set(attr, 'none', {silent: true});
         }
