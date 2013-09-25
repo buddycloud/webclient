@@ -22,6 +22,7 @@ define(function(require) {
   var Events = Backbone.Events;
   var l10n = require('l10n');
   var l10nBrowser = require('l10n-browser');
+  var mediaServer = require('util/mediaServer');
   var template = require('text!templates/content/header.html');
   var l = l10n.get;
   var localTemplate;
@@ -36,18 +37,15 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
 
-      // Flag to handle created channels
-      this._created = false;
-
       if (!this.model) {
         this.model = this.options.user.metadata(this.options.channel);
       }
-      this.listenTo(this.model, 'change', this._build);
+      this.listenTo(this.model, 'change', this.render);
 
       if (!this.model.hasEverChanged()) {
         this.model.fetch({credentials: this.options.user.credentials});
       } else {
-        this._build();
+        this.render();
       }
 
       if (this.options.user.subscribedChannels) {
@@ -56,9 +54,6 @@ define(function(require) {
 
       // Avatar changed event
       Events.on('avatarChanged', this._avatarChanged, this);
-
-      // Created channel event
-      Events.on('metadataChanged', this._metadataChanged, this);
     },
 
     _avatarChanged: function(channel) {
@@ -68,30 +63,9 @@ define(function(require) {
       }
     },
 
-    _metadataChanged: function(channel) {
-      if (this.model.channel === channel) {
-        this._created = true;
-      }
-    },
-
-    _build: function() {
-      var self = this;
-      var channel = this.model.channel;
-      $.when(
-        this.render()
-      ).done(function() {
-        if (self._created === true) {
-          self._create(channel);
-        }
-      });
-    },
-
     destroy: function() {
       // Avatar changed event
       Events.unbind('avatarChanged', this._avatarChanged, this);
-
-      // Created channel event
-      Events.unbind('metadataChanged', this._metadataChanged, this);
 
       // Remove
       this.remove();
@@ -102,6 +76,9 @@ define(function(require) {
       this.$el.html(_.template(localTemplate, {metadata: metadata}));
       avatarFallback(this.$('.avatar'), metadata.channelType(), 75);
       this._renderButtons();
+      if (this._isOwner() && this.options.edit) {
+        this._avatarHover();
+      }
     },
 
     _switchButton: function(action) {
@@ -136,6 +113,40 @@ define(function(require) {
       }
     },
 
+    _avatarHover: function() {
+      var $avatar = this.$('.avatar');
+      $avatar.attr({'title': 'Change avatar'});
+
+      var self = this;
+      $avatar.click(function(e) {
+        e.preventDefault();
+        $('#avatar').change(self._saveAvatar());
+        $('#avatar').trigger('click');
+      });
+
+      $avatar.hover(function() {
+        $avatar.css({'opacity': 0.5});
+      }, function() {
+        $avatar.css({'opacity': ''});
+      });
+    },
+
+    _saveAvatar: function() {
+      var channel = this.model.channel;
+      var authHeader = this.options.user.credentials.authorizationHeader();
+
+      return function() {
+        var file = $(':file')[0].files[0];
+        if (file) {
+          mediaServer.uploadAvatar(file, channel, authHeader).done(function() {
+            Events.trigger('avatarChanged', channel);
+          }).fail(function() {
+            Events.trigger('avatarUploadError', channel);
+          });
+        }
+      }
+    },
+
     _edit: function() {
       Events.trigger('navigate', this.model.channel + '/edit');
     },
@@ -162,14 +173,6 @@ define(function(require) {
       var followedChannels = this.options.user.subscribedChannels.channels();
       var channel = this.model.channel;
       return _.include(followedChannels, channel);
-    },
-
-    _create: function(channel) {
-      var animationClassName = 'channelHeader';
-      var offset = this.$el.offset();
-
-      var subscribedChannels = this.options.user.subscribedChannels;
-      subscribedChannels.addChannel(channel, 'posts', 'owner', {offset: offset, animationClass: animationClassName, selected: true});
     },
 
     _follow: function() {

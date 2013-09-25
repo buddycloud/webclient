@@ -10,11 +10,19 @@
   background: url("/img/poweredby.png") no-repeat;
   position: absolute;
 }
+
 .avatar {
   border-radius: 3px;
   cursor: pointer;
   vertical-align: bottom;
 }
+
+.upload {
+  width: 0px;
+  height: 0px;
+  overflow: hidden;
+}
+
 .content {
   top: 0;
   right: 0;
