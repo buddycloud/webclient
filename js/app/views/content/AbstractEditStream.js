@@ -19,7 +19,6 @@ define(function(require) {
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
   var Events = Backbone.Events;
-  var mediaServer = require('util/mediaServer');
 
   var AbstractEditStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -51,23 +50,7 @@ define(function(require) {
       // Set fields
       this._setFields(model);
 
-      // Save
-      this._saveAvatar(model);
-
       model.save(null, {credentials: this.options.user.credentials});
-    },
-
-    _saveAvatar: function(model) {
-      var file = this.$(':file')[0].files[0];
-      if (file) {
-        var channel = this.model.channel;
-        var authHeader = this.options.user.credentials.authorizationHeader();
-        mediaServer.uploadAvatar(file, channel, authHeader).done(function() {
-          Events.trigger('avatarChanged', channel);
-        }).fail(function() {
-          Events.trigger('avatarUploadError', channel);
-        });
-      }
     },
 
     _setTextFields: function(model) {

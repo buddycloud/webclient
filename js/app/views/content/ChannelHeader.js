@@ -15,8 +15,6 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
-  var $ = require('jquery');
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
