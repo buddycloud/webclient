@@ -81,19 +81,7 @@ define(function(require) {
     },
 
     lastItem: function() {
-      var oldest;
-      this.models.forEach(function(item) {
-        if (!oldest) {
-          oldest = item;
-        } else {
-          if (dateUtils.utcDate(item.updated) < 
-            dateUtils.utcDate(oldest.updated)) {
-            oldest = item;
-          }
-        }
-      });
-
-      return oldest ? oldest.id : null;
+      return _.last(this.models);
     },
 
     fetch: function(options) {
@@ -104,7 +92,7 @@ define(function(require) {
       options.headers['Accept'] = 'application/json';
       options.conditions = {source: this.channel};
       
-      var data = options.data;
+      /*var data = options.data;
       if (data) {
         if (data.max) {
           options.limit = data.max;
@@ -113,7 +101,7 @@ define(function(require) {
         if (data.after) {
           options.offset = this.length;
         }
-      }
+      }*/
 
       CollectionBase.prototype.fetch.call(this, options);
     },
@@ -124,15 +112,46 @@ define(function(require) {
       });
     },
 
-    parse: function(response) {
-      var compareItems = function(a, b) {
-        aUpdated = dateUtils.utcDate(a.updated);
-        bUpdated = dateUtils.utcDate(b.updated);
+    _compareItems: function(a, b) {
+      aUpdated = dateUtils.utcDate(a.updated);
+      bUpdated = dateUtils.utcDate(b.updated);
 
-        if (aUpdated > bUpdated) return 1;
-        if (aUpdated < bUpdated) return -1;
-        return 0;
+      if (aUpdated > bUpdated) return 1;
+      if (aUpdated < bUpdated) return -1;
+      return 0;      
+    },
+
+    _filter: function(response, options) {
+      response.sort(this._compareItems).reverse();
+
+      var data = options.data;
+      if (data) {
+        if (data.after) {
+          var index = -1;
+          for (var i = 0; i < response.length; i++) {
+            var item = response[i];
+            if (item.id === data.after.get('id')) {
+              index = i;
+              break;
+            }
+          }
+
+          if (index !== -1) {
+            response = _.rest(response, index + 1);
+          }
+        }
+
+        if (data.max) {
+          response = _.first(response, data.max);
+        }
       }
+
+      return response;
+    },
+
+    parse: function(response, options) {
+      // Handle IndexedDB queries
+      response = this._filter(response, options);
 
       // Cluster all comments by poster id
       var comments = {};
@@ -149,7 +168,7 @@ define(function(require) {
         if (!item.replyTo) {
           var itemComments = comments[item.id];
           if (itemComments) {
-            itemComments.sort(compareItems);
+            itemComments.sort(this._compareItems);
             item.comments = itemComments;
           }
         }
@@ -202,7 +221,7 @@ define(function(require) {
       self = this;
       return function(collection, resp) {
         // Check if there was data on DB, if not, sync with server
-        if (_.isEmpty(resp)) {
+        if (_.isEmpty(self._filter(resp, options))) {
           self._handleEmptySync();
           self._syncServer(method, model, options);
         } else {

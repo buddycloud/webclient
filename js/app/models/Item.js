@@ -55,7 +55,6 @@ define(function(require) {
       this._defineGetter('replyTo');
       this._defineGetter('published');
       this._defineGetter('id');
-      this._createDateField();
       this._useIndexedDB = indexedDB.isSuppported();
     },
 
@@ -66,16 +65,6 @@ define(function(require) {
       });
       this.comments = comments;
       delete this.attributes.comments;
-    },
-
-    _createDateField: function() {
-      if (!this.updatedDate) {
-        var updated = this.updated || new Date().toISOString();
-        this.set('updatedDate', new Date(updated));
-      }
-      this._defineGetter('updatedDate', function() {
-        return this.get('updatedDate');
-      });
     },
 
     _defineGetter: function(name, getter) {
