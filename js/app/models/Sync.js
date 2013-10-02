@@ -17,6 +17,7 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
+  var dateUtils = require('util/dateUtils');
   var Events = Backbone.Events;
   var Item = require('models/Item');
   var ModelBase = require('models/ModelBase');
@@ -51,14 +52,21 @@ define(function(require) {
         for (var i in channels) {
           var self = this;
           var items = this.get(channels[i]);
+          var mostRecent;
           items.forEach(function(item) {
             item = new Item(item);
+            var updated = dateUtils.utcDate(item.updated || item.published);
+            if (updated > mostRecent) {
+              mostRecent = updated;
+            }
             self.listenToOnce(item, 'sync', afterCallback);
             item.save(null, {syncWithServer: false});
           });
         }
+        if (mostRecent) {
+          Events.trigger('updateLastSession', mostRecent);
+        }
       }
-
     },
 
     _triggerSyncCallback: function() {

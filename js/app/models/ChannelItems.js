@@ -81,19 +81,8 @@ define(function(require) {
     },
 
     lastItem: function() {
-      var oldest;
-      this.models.forEach(function(item) {
-        if (!oldest) {
-          oldest = item;
-        } else {
-          if (dateUtils.utcDate(item.updated) < 
-            dateUtils.utcDate(oldest.updated)) {
-            oldest = item;
-          }
-        }
-      });
-
-      return oldest ? oldest.id : null;
+      var last = _.last(this.models);
+      return last ? last.id : null;
     },
 
     fetch: function(options) {
@@ -115,6 +104,8 @@ define(function(require) {
         }
       }
 
+      options.customSort = this._compareItems;
+
       CollectionBase.prototype.fetch.call(this, options);
     },
 
@@ -124,16 +115,16 @@ define(function(require) {
       });
     },
 
-    parse: function(response) {
-      var compareItems = function(a, b) {
-        aUpdated = dateUtils.utcDate(a.updated);
-        bUpdated = dateUtils.utcDate(b.updated);
+    _compareItems: function(a, b) {
+      aUpdated = dateUtils.utcDate(a.updated);
+      bUpdated = dateUtils.utcDate(b.updated);
 
-        if (aUpdated > bUpdated) return 1;
-        if (aUpdated < bUpdated) return -1;
-        return 0;
-      }
+      if (aUpdated > bUpdated) return 1;
+      if (aUpdated < bUpdated) return -1;
+      return 0;      
+    },
 
+    parse: function(response, options) {
       // Cluster all comments by poster id
       var comments = {};
       response.forEach(function(item) {
@@ -149,7 +140,7 @@ define(function(require) {
         if (!item.replyTo) {
           var itemComments = comments[item.id];
           if (itemComments) {
-            itemComments.sort(compareItems);
+            itemComments.sort(this._compareItems);
             item.comments = itemComments;
           }
         }
@@ -202,7 +193,7 @@ define(function(require) {
       self = this;
       return function(collection, resp) {
         // Check if there was data on DB, if not, sync with server
-        if (_.isEmpty(resp)) {
+        if (_.isEmpty(resp, options)) {
           self._handleEmptySync();
           self._syncServer(method, model, options);
         } else {

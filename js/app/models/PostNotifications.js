@@ -16,10 +16,12 @@
 
 define(function(require) {
   var api = require('util/api');
+  var dateUtils = require('util/dateUtils');
   var Item = require('models/Item');
   var ModelBase = require('models/ModelBase');
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var Pollymer = require('pollymer');
-  var $ = require('jquery');
 
   var PostNotifications = ModelBase.extend({
     initialize: function() {
@@ -31,6 +33,8 @@ define(function(require) {
     _request: null,
 
     _triggerNewItem: function() {
+      var mostRecent;
+
       for (var i = 0; i in this.attributes; ++i) {
         var val = this.attributes[i];
         if (val.source) {
@@ -39,9 +43,9 @@ define(function(require) {
 
         var item = new Item(val);
 
-        // XXX: workaround for posts without time
-        if (!item.updated && !item.published) {
-          item.published = item.updated = new Date().toISOString(); // Current UTC Time
+        var updated = dateUtils.utcDate(item.updated || item.published);
+        if (updated > mostRecent) {
+          mostRecent = updated;
         }
 
         var self = this;
@@ -50,6 +54,10 @@ define(function(require) {
         });
 
         item.save(null, {syncWithServer: false});
+      }
+
+      if (mostRecent) {
+        Events.trigger('updateLastSession', mostRecent);
       }
     },
 

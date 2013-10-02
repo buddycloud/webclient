@@ -51,7 +51,6 @@ define(function(require) {
     },
 
     destroy: function() {
-      this.model.unbind('addComment', this._addComment, this);
       this.remove();
     },
 
