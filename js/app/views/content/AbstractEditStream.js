@@ -49,7 +49,7 @@ define(function(require) {
     _save: function(model) {
       // Set fields
       this._setFields(model);
-
+      // Save
       model.save(null, {credentials: this.options.user.credentials});
     },
 

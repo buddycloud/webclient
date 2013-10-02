@@ -34,9 +34,14 @@ define(function(require) {
   	return new Date(1970, 0, 1).toISOString();
   }
 
+  function now() {
+    return new Date();
+  }
+
   return {
     toUTC: toUTC,
     utcDate: utcDate,
-    earliestTime: earliestTime
+    earliestTime: earliestTime,
+    now: now
   };
 });

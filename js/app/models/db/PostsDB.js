@@ -30,7 +30,6 @@ define(function(require) {
           }
 
           store.createIndex('sourceIndex', 'source');
-          store.createIndex('updatedIndex', 'updatedDate');
 
           next();
         }
