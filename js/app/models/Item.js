@@ -111,6 +111,13 @@ define(function(require) {
 
     _syncIndexedDB: function(method, model, options) {
       if (this._useIndexedDB) {
+        // XXX: workaround for posts without time
+        if (!model.updated && !model.published) {
+          var now = dateUtils.now().toISOString();
+          model.set('updated', now, {silent: true});
+          model.set('published', now, {silent: true});
+        }
+
         Backbone.sync.call(this, method, model, options);
       }
     },

@@ -34,6 +34,7 @@ define(function(require) {
       this.notifications = new PostNotifications();
       this.subscribedChannels = null;
       this.sync = new Sync();
+      Events.on('updateLastSession', this.updateLastSession);
     },
 
     _currentTime: function() {
@@ -100,8 +101,8 @@ define(function(require) {
       });
     },
 
-    updateLastSession: function() {
-      this.lastSession = this._currentTime();
+    updateLastSession: function(time) {
+      this.lastSession = time;
     },
 
     logout: function() {
@@ -117,7 +118,6 @@ define(function(require) {
       this.sync.set('username', this.credentials.username, {silent: true});
 
       var since = localStorage[this.username() + '.lastSession'] || dateUtils.earliestTime();
-      this.listenToOnce(this.sync, 'syncSuccess', this.updateLastSession);
       this.sync.fetch({
         credentials: this.credentials,
         data: {since: since, max: 51}

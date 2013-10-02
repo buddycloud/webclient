@@ -89,8 +89,8 @@ define(function(require) {
       event.preventDefault();
       this._disableButton('#login_submit');
       $('.error').hide();
-      var username = this.$('#login_name').attr('value').toLowerCase(); // Ensure lower case
-      var password = this.$('#login_password').attr('value');
+      var username = this.$('#login_name').val().toLowerCase(); // Ensure lower case
+      var password = this.$('#login_password').val();
       var permanent = $('#store_local').is(':checked');
 
       var loginInfo = {'username': username, 'password': password};
@@ -100,9 +100,9 @@ define(function(require) {
     register: function(event) {
       event.preventDefault();
       this._disableButton('#register_submit');
-      var username = this.$('#register_name').attr('value');
-      var password = this.$('#register_password').attr('value');
-      var email = this.$('#register_email').attr('value');
+      var username = this.$('#register_name').val();
+      var password = this.$('#register_password').val();
+      var email = this.$('#register_email').val();
       this.model.register(username, password, email);
     },
 

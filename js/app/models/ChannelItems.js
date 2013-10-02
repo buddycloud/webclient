@@ -81,7 +81,8 @@ define(function(require) {
     },
 
     lastItem: function() {
-      return _.last(this.models);
+      var last = _.last(this.models);
+      return last ? last.id : null;
     },
 
     fetch: function(options) {
@@ -92,7 +93,7 @@ define(function(require) {
       options.headers['Accept'] = 'application/json';
       options.conditions = {source: this.channel};
       
-      /*var data = options.data;
+      var data = options.data;
       if (data) {
         if (data.max) {
           options.limit = data.max;
@@ -101,7 +102,9 @@ define(function(require) {
         if (data.after) {
           options.offset = this.length;
         }
-      }*/
+      }
+
+      options.customSort = this._compareItems;
 
       CollectionBase.prototype.fetch.call(this, options);
     },
@@ -121,38 +124,7 @@ define(function(require) {
       return 0;      
     },
 
-    _filter: function(response, options) {
-      response.sort(this._compareItems).reverse();
-
-      var data = options.data;
-      if (data) {
-        if (data.after) {
-          var index = -1;
-          for (var i = 0; i < response.length; i++) {
-            var item = response[i];
-            if (item.id === data.after.get('id')) {
-              index = i;
-              break;
-            }
-          }
-
-          if (index !== -1) {
-            response = _.rest(response, index + 1);
-          }
-        }
-
-        if (data.max) {
-          response = _.first(response, data.max);
-        }
-      }
-
-      return response;
-    },
-
     parse: function(response, options) {
-      // Handle IndexedDB queries
-      response = this._filter(response, options);
-
       // Cluster all comments by poster id
       var comments = {};
       response.forEach(function(item) {
@@ -221,7 +193,7 @@ define(function(require) {
       self = this;
       return function(collection, resp) {
         // Check if there was data on DB, if not, sync with server
-        if (_.isEmpty(self._filter(resp, options))) {
+        if (_.isEmpty(resp, options)) {
           self._handleEmptySync();
           self._syncServer(method, model, options);
         } else {

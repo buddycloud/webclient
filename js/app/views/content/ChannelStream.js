@@ -414,6 +414,7 @@ define(function(require) {
         }
 
         item.source = this.model.channel;
+
         this.model.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
