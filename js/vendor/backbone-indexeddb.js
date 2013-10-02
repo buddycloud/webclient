@@ -428,45 +428,74 @@ define(['backbone'], function(Backbone) {
                 readCursor.onsuccess = function (e) {
                     var cursor = e.target.result;
                     if (!cursor) {
-                        if (options.addIndividually || options.clear) {
-                            // nothing!
-                            // We need to indicate that we're done. But, how?
-                            collection.trigger("reset");
+                        // FIXME: Workaround for items with date fields and no such index
+                        // Use a custom function to sort the data
+                        if (options.customSort) {
+                            elements.sort(options.customSort);
+                            if (options.offset) {
+                                elements = _.rest(elements, options.offset + 1);
+                            }
+
+                            if (options.limit) {
+                                elements = _.first(elements, options.limit);
+                            }
+
+                            if (options.clear) {
+                                elements.forEach(function(element) {
+                                    store.delete(element.id);
+                                });
+                                
+                                collection.trigger("reset");
+                            } else {
+                                options.success(elements);
+                            }
+
                         } else {
-                            options.success(elements); // We're done. No more elements.
+                            if (options.addIndividually || options.clear) {
+                                // nothing!
+                                // We need to indicate that we're done. But, how?
+                                collection.trigger("reset");
+                            } else {
+                                options.success(elements); // We're done. No more elements.
+                            }
                         }
                     }
                     else {
-                        // Cursor is not over yet.
-                        if (options.limit && processed >= options.limit) {
-                            // Yet, we have processed enough elements. So, let's just skip.
-                            if (bounds && options.conditions[index.keyPath] instanceof Array) {
-                                cursor.continue(options.conditions[index.keyPath][1] + 1); /* We need to 'terminate' the cursor cleany, by moving to the end */
-                            } else {
-                                cursor.continue(); /* We need to 'terminate' the cursor cleany, by moving to the end */
-                            }
-                        }
-                        else if (options.offset && options.offset > skipped) {
-                            skipped++;
-                            cursor.continue(); /* We need to Moving the cursor forward */
-                        } else {
-                            // This time, it looks like it's good!
-                            if (options.addIndividually) {
-                                collection.add(cursor.value);
-                            } else if (options.clear) {
-                                var deleteRequest = store.delete(cursor.value.id);
-                                deleteRequest.onsuccess = function (event) {
-                                    elements.push(cursor.value);
-                                };
-                                deleteRequest.onerror = function (event) {
-                                    elements.push(cursor.value);
-                                };
-
-                            } else {
-                                elements.push(cursor.value);
-                            }
-                            processed++;
+                        if (options.customSort) {
+                            elements.push(cursor.value);
                             cursor.continue();
+                        } else {
+                            // Cursor is not over yet.
+                            if (options.limit && processed >= options.limit) {
+                                // Yet, we have processed enough elements. So, let's just skip.
+                                if (bounds && options.conditions[index.keyPath] instanceof Array) {
+                                    cursor.continue(options.conditions[index.keyPath][1] + 1); /* We need to 'terminate' the cursor cleany, by moving to the end */
+                                } else {
+                                    cursor.continue(); /* We need to 'terminate' the cursor cleany, by moving to the end */
+                                }
+                            }
+                            else if (options.offset && options.offset > skipped) {
+                                skipped++;
+                                cursor.continue(); /* We need to Moving the cursor forward */
+                            } else {
+                                // This time, it looks like it's good!
+                                if (options.addIndividually) {
+                                    collection.add(cursor.value);
+                                } else if (options.clear) {
+                                    var deleteRequest = store.delete(cursor.value.id);
+                                    deleteRequest.onsuccess = function (event) {
+                                        elements.push(cursor.value);
+                                    };
+                                    deleteRequest.onerror = function (event) {
+                                        elements.push(cursor.value);
+                                    };
+
+                                } else {
+                                    elements.push(cursor.value);
+                                }
+                                processed++;
+                                cursor.continue();
+                            }
                         }
                     }
                 };
