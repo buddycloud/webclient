@@ -49,14 +49,6 @@ define(function(require) {
       Events.on('navigate', this._navigate, this);
       Events.on('pageError', this._error, this);
       Events.on('forbidden', this._forbidden, this);
-      this._endSessionOnUnload();
-    },
-
-    _endSessionOnUnload: function() {
-      var user = this.user;
-      window.onbeforeunload = function() {
-        user.endSession();
-      };
     },
 
     // It would be nice if we could wrap its route function
@@ -73,7 +65,6 @@ define(function(require) {
         this.currentPage.destroy();
       }
 
-      this._endSessionOnUnload();
       this._updateCookie();
       spinner.replace($('.content'));
     },

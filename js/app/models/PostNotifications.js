@@ -44,7 +44,7 @@ define(function(require) {
         var item = new Item(val);
 
         var updated = dateUtils.utcDate(item.updated || item.published);
-        if (updated > mostRecent) {
+        if (!mostRecent || updated > mostRecent) {
           mostRecent = updated;
         }
 
@@ -57,7 +57,7 @@ define(function(require) {
       }
 
       if (mostRecent) {
-        Events.trigger('updateLastSession', mostRecent);
+        Events.trigger('updateLastSession', mostRecent.toISOString());
       }
     },
 
