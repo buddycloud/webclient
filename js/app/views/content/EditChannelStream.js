@@ -40,6 +40,7 @@ define(function(require) {
       } else {
         this.render();
       }
+      this.isPersonalChannel = this.options.user.username() === this.model.channel;
 
       this.listenTo(this.model, 'sync', this.render);
     },
@@ -98,26 +99,38 @@ define(function(require) {
       this.$('.twoStepConfirmation').toggleClass('confirmed');
     },
 
+    _disableSaveButton: function() {
+      this.$('.save').addClass('disabled').text('Saving...');
+    },
+
+    _disableConfirmButton: function() {
+      this.$('.stepTwo').addClass('disabled').text('Deleting...');
+    },
+
     _delete: function() {
-      var self = this;
+      var channel = this.model.channel;
+      var url = this.isPersonalChannel ? api.url('account') : api.url(channel);
+      var credentials = this.options.user.credentials;
       var options = {
         type: 'DELETE',
-        url: api.url(this.model.channel),
+        url: url,
         crossDomain: true,
         xhrFields: {withCredentials: true},
         contentType: false,
         processData: false,
         beforeSend: function(xhr) {
           xhr.setRequestHeader('Authorization',
-            self.options.user.credentials.authorizationHeader());
+            credentials.authorizationHeader());
         },
         statusCode: {
           200: function() {
-            Events.trigger('navigate', '/');
+            Events.trigger('channelDeleted', channel)
+            Events.trigger('navigate', 'home');
           }
         }
       };
 
+      this._disableConfirmButton();
       $.ajax(options);
     }
   });
