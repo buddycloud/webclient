@@ -135,12 +135,13 @@ define(function(require) {
         }
       });
 
+      var self = this;
       // Add comments to posts
       response.forEach(function(item) {
         if (!item.replyTo) {
           var itemComments = comments[item.id];
           if (itemComments) {
-            itemComments.sort(this._compareItems);
+            itemComments.sort(self._compareItems);
             item.comments = itemComments;
           }
         }

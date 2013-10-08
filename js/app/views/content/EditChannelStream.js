@@ -122,11 +122,9 @@ define(function(require) {
           xhr.setRequestHeader('Authorization',
             credentials.authorizationHeader());
         },
-        statusCode: {
-          200: function() {
-            Events.trigger('channelDeleted', channel)
-            Events.trigger('navigate', 'home');
-          }
+        success: function() {
+          Events.trigger('channelDeleted', channel)
+          Events.trigger('navigate', 'home');
         }
       };
 
