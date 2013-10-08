@@ -41,6 +41,9 @@ define(function(require) {
 
       // Channel created event
       Events.on('channelCreated', this._channelCreated, this);
+
+      // Channel deleted event
+      Events.on('channelDeleted', this._removeChannel, this);
     },
 
     _getChannelsMetadata: function() {

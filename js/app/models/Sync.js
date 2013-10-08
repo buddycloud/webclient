@@ -49,14 +49,14 @@ define(function(require) {
       if (_.isEmpty(channels)) {
          this._triggerSyncCallback();
       } else {
+        var mostRecent;
         for (var i in channels) {
           var self = this;
           var items = this.get(channels[i]);
-          var mostRecent;
           items.forEach(function(item) {
             item = new Item(item);
             var updated = dateUtils.utcDate(item.updated || item.published);
-            if (updated > mostRecent) {
+            if (!mostRecent || updated > mostRecent) {
               mostRecent = updated;
             }
             self.listenToOnce(item, 'sync', afterCallback);
@@ -64,7 +64,7 @@ define(function(require) {
           });
         }
         if (mostRecent) {
-          Events.trigger('updateLastSession', mostRecent);
+          Events.trigger('updateLastSession', mostRecent.toISOString());
         }
       }
     },

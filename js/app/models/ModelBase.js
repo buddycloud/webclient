@@ -18,6 +18,13 @@ define(function(require) {
   var Backbone = require('backbone');
 
   var ModelBase = Backbone.Model.extend({
+    destroy: function(options) {
+      if (options && options.credentials) {
+        options.credentials.addAuthorizationToAjaxOptions(options);
+      }
+      Backbone.Model.prototype.destroy.call(this, options);
+    },
+
     fetch: function(options) {
       if (options && options.credentials) {
         options.credentials.addAuthorizationToAjaxOptions(options);
