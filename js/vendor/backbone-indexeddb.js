@@ -437,7 +437,7 @@ define(['backbone'], function(Backbone) {
                             }
 
                             if (options.limit) {
-                                elements = _.first(elements, options.limit);
+                                elements = _.last(elements, options.limit);
                             }
 
                             if (options.clear) {
