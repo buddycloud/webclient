@@ -34,11 +34,7 @@ define(function(require) {
       this.notifications = new PostNotifications();
       this.subscribedChannels = null;
       this.sync = new Sync();
-      Events.on('updateLastSession', this.updateLastSession);
-    },
-
-    _currentTime: function() {
-      return new Date().toISOString();
+      Events.on('updateLastSession', this.updateLastSession, this);
     },
 
     isAnonymous: function() {
@@ -102,16 +98,11 @@ define(function(require) {
     },
 
     updateLastSession: function(time) {
-      this.lastSession = time;
+      localStorage[this.username() + '.lastSession'] = time;
     },
 
     logout: function() {
-      this._saveLastSessionTime();
       this.credentials.clear();
-    },
-
-    _saveLastSessionTime: function() {
-      localStorage[this.username() + '.lastSession'] = this._currentTime();
     },
 
     _trySync: function() {
@@ -132,12 +123,6 @@ define(function(require) {
          success: options.success,
          error: options.error
       });
-    },
-
-    endSession: function() {
-      if (!this.isAnonymous()) {
-        this._saveLastSessionTime();
-      }
     },
 
     register: function(username, password, email) {

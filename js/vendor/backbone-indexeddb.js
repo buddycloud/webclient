@@ -441,10 +441,6 @@ define(['backbone'], function(Backbone) {
                             }
 
                             if (options.clear) {
-                                elements.forEach(function(element) {
-                                    store.delete(element.id);
-                                });
-                                
                                 collection.trigger("reset");
                             } else {
                                 options.success(elements);
@@ -462,7 +458,17 @@ define(['backbone'], function(Backbone) {
                     }
                     else {
                         if (options.customSort) {
-                            elements.push(cursor.value);
+                            if (options.clear) {
+                                var deleteRequest = store.delete(cursor.value.id);
+                                deleteRequest.onsuccess = function (event) {
+                                    elements.push(cursor.value);
+                                };
+                                deleteRequest.onerror = function (event) {
+                                    elements.push(cursor.value);
+                                };
+                            } else {
+                                elements.push(cursor.value);
+                            }
                             cursor.continue();
                         } else {
                             // Cursor is not over yet.
