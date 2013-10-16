@@ -128,6 +128,7 @@ define(function(require) {
       var post = this.model;
       this.$el.html(_.template(localTemplate, {
         post: post,
+        answer: this.answer,
         api: api,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
