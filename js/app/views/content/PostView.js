@@ -108,13 +108,19 @@ define(function(require) {
       };
     },
 
-    _addComment: function(post) {
-      var textArea = this.$('.answer textarea');
+    _addComment: function(post, options) {
+      var answer = '';
+
+      if (options && options.isNotification) {
+        var textArea = this.$('.answer textarea');
+        answer = textArea.val();
+      }
+
       if (this._needsBubbling()) {
         this.destroy();
-        Events.trigger('postBubble', post, textArea.val());
+        Events.trigger('postBubble', post, answer);
       } else {
-        this.answer = textArea.val();
+        this.answer = answer;
         this.render();
       }
     },
@@ -312,7 +318,8 @@ define(function(require) {
             self.media = [];
           },
           success: function() {
-            self._emptyTextArea();
+            self.answer = '';
+            textArea.val('');
             previewsContainer.empty();
             self._collapseAnswerArea();
             self._enableButton();
@@ -322,12 +329,6 @@ define(function(require) {
           }
         });
       }
-    },
-
-    _emptyTextArea: function() {
-      var textArea = this.$('.answer textarea');
-      textArea.val('');
-      this.answer = '';
     },
 
     _popupActions: function(event) {

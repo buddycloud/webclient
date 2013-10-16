@@ -64,14 +64,14 @@ define(function(require) {
       return -item.lastUpdated();
     },
 
-    _itemAdded: function(item) {
+    _itemAdded: function(item, options) {
       if (item.isPost()) {
-        this.trigger('addPost', item);
+        this.trigger('addPost', item, options);
       } else {
         var post = this.get(item.replyTo);
         if (post) {
           post.comments.push(item);
-          post.trigger('addComment', post);
+          post.trigger('addComment', post, options);
         }
       }
     },

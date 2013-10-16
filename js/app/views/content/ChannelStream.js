@@ -175,7 +175,7 @@ define(function(require) {
       var items = this.model;
       user.notifications.on('new', function(item) {
         if (item.source === items.channel) {
-          items.add(item);
+          items.add(item, {isNotification: true});
         }
       });
       user.notifications.listen({credentials: user.credentials});
