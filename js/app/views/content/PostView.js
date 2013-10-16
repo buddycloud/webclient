@@ -294,7 +294,7 @@ define(function(require) {
         this._disableButton('Posting...');
         var item = {replyTo: this.model.id};
 
-        if (content) {
+        if (this.answer) {
           item.content = this.answer;
         }
 
