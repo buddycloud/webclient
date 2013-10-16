@@ -84,7 +84,7 @@
         <% if (!answer || answer === '') { %>
           <textarea placeholder="<%- l('commentHint', {}, 'comment') %>"></textarea>
         <% } else { %>
-          <textarea placeholder="<%- l('commentHint', {}, 'comment') %>">"<%= answer %>"</textarea>
+          <textarea placeholder="<%- l('commentHint', {}, 'comment') %>"><%= answer %></textarea>
         <% } %>
       </div>
       <div class="controls clearfix">

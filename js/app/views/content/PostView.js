@@ -312,7 +312,7 @@ define(function(require) {
             self.media = [];
           },
           success: function() {
-            textArea.val('');
+            self._emptyTextArea();
             previewsContainer.empty();
             self._collapseAnswerArea();
             self._enableButton();
@@ -322,6 +322,12 @@ define(function(require) {
           }
         });
       }
+    },
+
+    _emptyTextArea: function() {
+      var textArea = this.$('.answer textarea');
+      textArea.val('');
+      this.answer = '';
     },
 
     _popupActions: function(event) {
