@@ -64,7 +64,7 @@ define(function(require) {
       return -item.lastUpdated();
     },
 
-    _itemAdded: function(item, options) {
+    _itemAdded: function(item, collection, options) {
       if (item.isPost()) {
         this.trigger('addPost', item, options);
       } else {
