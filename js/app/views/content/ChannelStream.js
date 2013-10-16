@@ -280,8 +280,12 @@ define(function(require) {
       return view;
     },
 
-    _prependPost: function(post) {
+    _prependPost: function(post, answer) {
       var view = this._viewForPost(post);
+      if (answer) {
+        view.answer = answer;
+      }
+
       this._postViews.unshift(view);
       view.render();
       this.$('.posts').prepend(view.el);
@@ -436,9 +440,9 @@ define(function(require) {
       }
     },
 
-    _bubble: function(post) {
+    _bubble: function(post, answer) {
       // FIXME: Primitive version from bubbling
-      this._prependPost(post);
+      this._prependPost(post, answer);
       $('.content').scrollTop(0);
     }
   });

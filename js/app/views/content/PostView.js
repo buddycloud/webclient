@@ -112,8 +112,7 @@ define(function(require) {
       var textArea = this.$('.answer textarea');
       if (this._needsBubbling()) {
         this.destroy();
-        post.answer = textArea.val();
-        Events.trigger('postBubble', post);
+        Events.trigger('postBubble', post, textArea.val());
       } else {
         this.answer = textArea.val();
         this.render();
