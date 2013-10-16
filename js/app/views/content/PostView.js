@@ -48,6 +48,7 @@ define(function(require) {
       this.channelName = this.options.items.channel;
       this.listenTo(this.model, 'addComment', this._addComment);
       this.media = [];
+      this.answer = '';
     },
 
     destroy: function() {
@@ -108,10 +109,13 @@ define(function(require) {
     },
 
     _addComment: function(post) {
+      var textArea = this.$('.answer textarea');
       if (this._needsBubbling()) {
         this.destroy();
+        post.answer = textArea.val();
         Events.trigger('postBubble', post);
       } else {
+        this.answer = textarea.val();
         this.render();
       }
     },
@@ -282,16 +286,16 @@ define(function(require) {
     _comment: function(event) {
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
-      var content = textArea.val();
+      this.answer = textArea.val();
 
-      if (content.trim() || this.media.length > 0) {
+      if (this.answer.trim() || this.media.length > 0) {
         var self = this;
 
         this._disableButton('Posting...');
         var item = {replyTo: this.model.id};
 
         if (content) {
-          item.content = content;
+          item.content = this.answer;
         }
 
         if (this.media.length > 0) {
