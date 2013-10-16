@@ -49,6 +49,8 @@ define(function(require) {
     },
 
     _successfullLogin: function() {
+      $('.content').removeClass('anonView');
+      
       // Remove overlay
       this._removeOverlay(function() {
         Events.trigger('navigate', 'home');
