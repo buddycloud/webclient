@@ -81,7 +81,11 @@
         <pre><span></span><br></pre>
         <div class="dropzone-previews">
         </div>
-        <textarea placeholder="<%- l('commentHint', {}, 'comment') %>">answer</textarea>
+        <% if (!answer || answer === '') { %>
+          <textarea placeholder="<%- l('commentHint', {}, 'comment') %>"></textarea>
+        <% } else { %>
+          <textarea placeholder="<%- l('commentHint', {}, 'comment') %>">"<%= answer %>"</textarea>
+        <% } %>
       </div>
       <div class="controls clearfix">
         <div class="hint" data-l10n="postHint">ctrl + enter to post or drop a file here</div>
