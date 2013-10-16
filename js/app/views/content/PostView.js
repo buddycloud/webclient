@@ -115,7 +115,7 @@ define(function(require) {
         post.answer = textArea.val();
         Events.trigger('postBubble', post);
       } else {
-        this.answer = textarea.val();
+        this.answer = textArea.val();
         this.render();
       }
     },
