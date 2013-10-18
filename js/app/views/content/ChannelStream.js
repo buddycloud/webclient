@@ -244,6 +244,8 @@ define(function(require) {
     _subscribeAction: function(action) {
       if (action === 'subscribedChannel') {
         // Followed the channel
+        this.model.storeModels();
+
         if (this._userCanPost()) {
           this.$el.prepend(this.$newTopic);
         }

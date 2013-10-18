@@ -17,7 +17,6 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
-  var Events = Backbone.Events;
   var dateUtils = require('util/dateUtils');
   var CollectionBase = require('models/CollectionBase');
   var indexedDB = require('util/indexedDB');
@@ -38,18 +37,14 @@ define(function(require) {
       this.listenTo(this, 'add', this._itemAdded);
       this.listenToOnce(this, 'fetch', this._onFetch);
       this.listenTo(this, 'sort', this._onSort);
-
-      Events.on('subscriptionSync', this._storeModels, this);
     },
 
-    _storeModels: function(action) {
-      if (action == 'subscribedChannel') {
-        var channel = this.channel;
-        this.models.forEach(function(item) {
-          item.set('source', channel, {silent: true});
-          item.save(null, {silent: true, syncWithServer: false});
-        });
-      }
+    storeModels: function(action) {
+      var channel = this.channel;
+      this.models.forEach(function(item) {
+        item.set('source', channel, {silent: true});
+        item.save(null, {silent: true, syncWithServer: false});
+      });
     },
 
     isReady: function() {
@@ -66,7 +61,7 @@ define(function(require) {
 
     _itemAdded: function(item, collection, options) {
       if (item.isPost()) {
-        this.trigger('addPost', item, options);
+        this.trigger('addPost', item);
       } else {
         var post = this.get(item.replyTo);
         if (post) {
