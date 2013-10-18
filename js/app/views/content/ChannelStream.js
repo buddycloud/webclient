@@ -152,9 +152,11 @@ define(function(require) {
     },
 
     _begin: function() {
-      this._getAndRenderPosts();
-      this.render();
-      this._listenForNewPosts();
+      if (!this.hidden) {
+        this._getAndRenderPosts();
+        this.render();
+        this._listenForNewPosts();
+      }
     },
 
     _error: function(e, xhr) {
@@ -167,6 +169,7 @@ define(function(require) {
     },
 
     _renderPrivateChannel: function() {
+      this.hidden = true;
       this.$el.html(_.template(privateTemplate));
     },
 
@@ -244,7 +247,17 @@ define(function(require) {
     _subscribeAction: function(action) {
       if (action === 'subscribedChannel') {
         // Followed the channel
-        this.model.storeModels();
+        if (this.hidden) {
+          this.hidden = false;
+          this.listenToOnce(this.model, 'fetch', this._begin);
+          this.model.fetch({
+            data: {max: 51}, 
+            credentials: this.options.user.credentials,
+            reset: true
+          });
+        } else {
+          this.model.storeModels();
+        }
 
         if (this._userCanPost()) {
           this.$el.prepend(this.$newTopic);

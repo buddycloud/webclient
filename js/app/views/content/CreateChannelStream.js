@@ -56,7 +56,7 @@ define(function(require) {
         this.model = this.options.user.metadata(channel);
         var options = {
           type: 'POST',
-          url: api.url(this.model.channel),
+          url: api.url(channel),
           crossDomain: true,
           xhrFields: {withCredentials: true},
           contentType: false,
@@ -99,7 +99,7 @@ define(function(require) {
     },
 
     _getChannel: function() {
-      return this.$('#channel_title').val();
+      return this.$('#channel_jid').val();
     },
 
     _check: function(element, value) {
