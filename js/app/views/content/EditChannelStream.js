@@ -29,7 +29,15 @@ define(function(require) {
       'click .save': 'save',
       'click .discard': 'render',
       'click .twoStepConfirmation .stepOne': '_renderConfirmButton',
-      'click .twoStepConfirmation .stepTwo': '_delete'
+      'click .twoStepConfirmation .stepTwo': '_delete',
+      'change #channel_default_role': '_toggleHint'
+    },
+
+    _toggleHint: function() {
+      var $defaultRole = this.$('#channel_default_role');
+      var value = $defaultRole.val();
+      var $hint = $defaultRole.next('.hint');
+      $hint.removeClass('followerSelected followerPlusSelected').addClass(value + 'Selected');
     },
 
     initialize: function() {
@@ -90,9 +98,10 @@ define(function(require) {
     },
 
     _selectDefaultRole: function() {
-      if (this.model.defaultAffiliation() === 'publisher') {
-        this.$('#channel_default_role').val('followerPlus');
-      }
+      var $defaultRole = this.$('#channel_default_role');
+      var value = this.model.defaultAffiliation() === 'publisher' ? 'followerPlus' : 'follower';
+      $defaultRole.val(value);
+      $defaultRole.next('.hint').addClass(value + 'Selected');
     },
 
     _renderConfirmButton: function() {
