@@ -29,7 +29,15 @@ define(function(require) {
 
     events: {
       'click .save': 'create',
-      'click .discard': 'render'
+      'click .discard': 'render',
+      'change #channel_default_role': '_toggleHint'
+    },
+
+    _toggleHint: function() {
+      var $defaultRole = this.$('#channel_default_role');
+      var value = $defaultRole.val();
+      var $hint = $defaultRole.next('.hint');
+      $hint.removeClass('followerSelected followerPlusSelected').addClass(value + 'Selected');
     },
 
     initialize: function() {
