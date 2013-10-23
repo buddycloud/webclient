@@ -164,7 +164,7 @@ define(function(require) {
 
     _fetchMetadata: function(metadata, callback) {
       if (!metadata.hasEverChanged()) {
-        this.listenToOnce(metadata, 'change', callback);
+        this.listenToOnce(metadata, 'error change', callback);
         metadata.fetch({credentials: this.model.credentials});
       } else {
         if (callback) {
