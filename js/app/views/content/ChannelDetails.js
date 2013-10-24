@@ -80,7 +80,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(localTemplate, 
+      this.$el.html(_.template(localTemplate,
         {metadata: this.metadata}));
       return this;
     },
@@ -120,10 +120,22 @@ define(function(require) {
     _toggleInfo: function() {
       this.$el.toggleClass('hidden');
       if (!this._isInitialized()) {
-        this.producerList = new ChannelList({title: l('producerList', {}, 'producer'), role: l('producerCaps', {}, 'Producer')});
-        this.moderatorsList = new ChannelList({title: l('moderatorsList', {}, 'moderators'), role: l('moderatorCaps', {}, 'Moderator')});
-        this.followersList = new ChannelList({title: l('followersList', {}, 'followers'), role: l('followerCaps', {}, 'Follower')});
-        this.similarList = new ChannelList({title: l('similarList', {}, 'similar'), role: l('similarCaps', {}, 'Similar')});
+        this.producerList = new ChannelList({
+          title: l('producerList', {}, 'producer'),
+          role: l('producerCaps', {}, 'Producer')});
+        this.moderatorsList = new ChannelList({
+          title: l('moderatorsList', {}, 'moderators'),
+          role: l('moderatorCaps', {}, 'Moderator'),
+          user: this.options.user,
+          channel: this.options.channel});
+        this.followersList = new ChannelList({
+          title: l('followersList', {}, 'followers'),
+          role: l('followerCaps', {}, 'Follower'),
+          user: this.options.user,
+          channel: this.options.channel});
+        this.similarList = new ChannelList({
+          title: l('similarList', {}, 'similar'),
+          role: l('similarCaps', {}, 'Similar')});
 
         this._renderChannelLists();
       }

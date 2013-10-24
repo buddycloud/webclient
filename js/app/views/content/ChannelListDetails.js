@@ -24,8 +24,14 @@ define(function(require) {
 
   var ChannelListDetails = Backbone.View.extend({
     className: 'adminAction',
-    events: {'click h4': '_navigateToChannel'},
     positions: ['first', 'second', 'third', 'fourth'],
+    events: {
+      'click h4': '_navigateToChannel',
+      'click .changeRoleButton': '_changeRole',
+      'click .banUserButton': '_banUser',
+      'click .cancelButton': '_cancelAction',
+      'change #selectRights': '_selectRights'
+    },
 
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
@@ -38,10 +44,76 @@ define(function(require) {
         channel: this.options.channel,
         role: this.options.role
       }));
+
+      var affiliation = this.options.affiliation;
+      if (affiliation && affiliation === 'owner' || affiliation === 'moderator') {
+        this.$('.action').show();
+        this.$('.actionRow.choose').show();
+
+        if (affiliation === 'moderator') {
+          // Moderators can't set moderators
+          this.$('#selectRights').each(function() {
+            if ($(this).val() === 'moderator') {
+              $(this).remove();
+            }
+          });
+        }
+
+        this._selectRights();
+      }
     },
 
     _navigateToChannel: function() {
       Events.trigger('navigate', this.options.channel);
+    },
+
+    _selectRights: function() {
+      var value = this.$('#selectRights').val();
+      switch (value) {
+        case 'moderator':
+          this.$('.follower').hide();
+          this.$('.followerPlus').hide();
+          this.$('.moderator').show();
+          break;
+        case 'follower':
+          this.$('.followerPlus').hide();
+          this.$('.moderator').hide();
+          this.$('.follower').show();
+          break;
+        case 'followerPlus':
+          this.$('.follower').hide();
+          this.$('.moderator').hide();
+          this.$('.followerPlus').show();
+          break;
+      }
+    },
+
+    _showConfirm: function() {
+      this.$('.actionRow.choose').hide();
+      this.$('.actionRow.confirm').show();
+    },
+
+    _banUser: function() {
+      this._showConfirm();
+      this._onClickOK(function() {
+        console.log("BAN!!!")
+      });
+    },
+
+    _changeRole: function() {
+      this._showConfirm();
+      this._onClickOK(function() {
+        console.log("change role")
+      });
+    },
+
+    _cancelAction: function() {
+      this.$('.actionRow.choose').show();
+      this.$('.actionRow.confirm').hide();
+    },
+
+    _onClickOK: function(action) {
+      this.$('.okButton').one('click', action);
     }
   });
 

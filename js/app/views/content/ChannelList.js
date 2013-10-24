@@ -71,6 +71,13 @@ define(function(require) {
       this.$('.showAll').remove();
     },
 
+    _userAffiliation: function() {
+      var user = this.options.user;
+      var channel = this.options.channel;
+
+      return user && channel ? user.subscribedChannels.role(channel) : null;
+    },
+
     _showDetails: function(event) {
       var channelPosition = this.model.indexOf(event.target.title);
       var inlinePosition = channelPosition % 4; // 4 = n. channels per line
@@ -86,6 +93,8 @@ define(function(require) {
       this._selectedTarget = event.target;
       this._openedDetailsView = new ChannelListDetails({
         channel: event.target.title,
+        affiliation: this._userAffiliation(),
+        user: this.options.user,
         role: this.options.role,
         position: inlinePosition
       });
