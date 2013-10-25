@@ -74,7 +74,7 @@ define(function(require) {
       var self = this;
       return function() {
         self.trigger('subscriptionSync', 'subscribedChannel', channel, role, extra);
-      }
+      };
     },
 
     subscribe: function(channel, nodes, role, credentials, extra) {
@@ -94,7 +94,7 @@ define(function(require) {
           }
         }
         self.trigger('subscriptionSync', 'unsubscribedChannel', channel);
-      }
+      };
     },
 
     unsubscribe: function(channel, credentials) {

@@ -17,6 +17,7 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
+  var ChannelFollowers = require('models/ChannelFollowers');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/channelListDetails.html');
   var Events = Backbone.Events;
@@ -25,6 +26,16 @@ define(function(require) {
   var ChannelListDetails = Backbone.View.extend({
     className: 'adminAction',
     positions: ['first', 'second', 'third', 'fourth'],
+    classToRoles: {
+      'moderator': 'moderator',
+      'follower': 'member',
+      'followerPlus': 'publisher',
+    },
+    rolesToClass: {
+      'moderator': 'moderator',
+      'member': 'follower',
+      'publisher': 'followerPlus'
+    },
     events: {
       'click h4': '_navigateToChannel',
       'click .changeRoleButton': '_changeRole',
@@ -39,32 +50,51 @@ define(function(require) {
       this.render();
     },
 
+    _loggedUserAffiliation: function() {
+      var user = this.options.user;
+      var channel = this.model.channel;
+
+      return user.subscribedChannels.role(channel);
+    },
+
     render: function() {
       this.$el.html(_.template(localTemplate, {
-        channel: this.options.channel,
+        channel: this.options.title,
         role: this.options.role
       }));
 
-      var affiliation = this.options.affiliation;
-      if (affiliation && affiliation === 'owner' || affiliation === 'moderator') {
-        this.$('.action').show();
-        this.$('.actionRow.choose').show();
+      if (this.model && this.options.user) {
+        var affiliation = this._loggedUserAffiliation();
+        // Only producers and moderators can change roles
+        if (affiliation === 'owner' || affiliation === 'moderator') {
+          this.$('.action').show();
+          this.$('.actionRow.choose').show();
 
-        if (affiliation === 'moderator') {
-          // Moderators can't set moderators
-          this.$('#selectRights').each(function() {
-            if ($(this).val() === 'moderator') {
-              $(this).remove();
-            }
-          });
+          var role = this.model.userRole(this.options.title);
+          if (role === 'outcast') {
+            this.$('.banUser').hide();
+            this.$('.banUserButton').hide();
+          } else {
+            var roleClass = this.rolesToClass[role];
+            this.$('#selectRights > option').each(function() {
+              var value = $(this).val();
+              if (value === roleClass) {
+                $(this).remove();
+              } else if (affiliation === 'moderator' && value === 'moderator') {
+              // Moderators can't set moderators
+                $(this).remove();
+              }
+            });
+          }
+
+
+          this._selectRights();
         }
-
-        this._selectRights();
       }
     },
 
     _navigateToChannel: function() {
-      Events.trigger('navigate', this.options.channel);
+      Events.trigger('navigate', this.options.title);
     },
 
     _selectRights: function() {
@@ -95,16 +125,13 @@ define(function(require) {
 
     _banUser: function() {
       this._showConfirm();
-      this._onClickOK(function() {
-        console.log("BAN!!!")
-      });
+      this._onClickOK('outcast');
     },
 
     _changeRole: function() {
       this._showConfirm();
-      this._onClickOK(function() {
-        console.log("change role")
-      });
+      var value = this.$('#selectRights').val();
+      this._onClickOK(this.classToRoles[value]);
     },
 
     _cancelAction: function() {
@@ -112,8 +139,40 @@ define(function(require) {
       this.$('.actionRow.confirm').hide();
     },
 
-    _onClickOK: function(action) {
-      this.$('.okButton').one('click', action);
+    _onClickOK: function(newRole) {
+      this.$('.okButton').one('click', this._changeRoleRequest(newRole));
+    },
+
+    _changeRoleRequest: function(newRole) {
+      var self = this;
+      var channel = this.options.title;
+      var credentials = this.options.user.credentials;
+
+      return function() {
+        self.listenToOnce(self.model, 'error', self._requestError);
+        self.listenToOnce(self.model, 'sync', self._updateRole(channel, newRole));
+
+        self.$('.actionRow.choose').show();
+        self.$('.actionRow.choose').prop('disabled', true);
+        self.$('.actionRow.confirm').hide();
+
+        self.model.changeRole(channel, newRole, credentials);
+      };
+    },
+
+    _requestError: function() {
+      // FIXME: better error handling
+      this.$('.actionRow.choose').removeProp('disabled');
+      alert('Something went wrong =(');
+    },
+
+    _updateRole: function(channel, newRole) {
+      var self = this;
+      return function() {
+        Events.trigger('roleChanged', channel, newRole);
+        self.render();
+        self.$('.actionRow.choose').removeProp('disabled');
+      };
     }
   });
 

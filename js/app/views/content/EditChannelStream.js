@@ -132,7 +132,7 @@ define(function(require) {
             credentials.authorizationHeader());
         },
         success: function() {
-          Events.trigger('channelDeleted', channel)
+          Events.trigger('channelDeleted', channel);
           Events.trigger('navigate', 'home');
         }
       };

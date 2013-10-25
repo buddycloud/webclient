@@ -36,33 +36,35 @@ define(function(require) {
     },
 
     render: function() {
-      if (this.model.length > 0) {
+      if (this.channels.length > 0) {
+        this.$el.css('display', '');
         this.$el.html(_.template(localTemplate, {
           title: this.options.title,
-          channels: this.model,
+          channels: this.channels,
           avatarUrl: api.avatarUrl
         }));
         avatarFallback(this.$('img'), 'personal', 50);
+      } else {
+        this.$el.hide();
       }
     },
 
     addItem: function(toAdd) {
-      if (this.model) {
-        this.model.push(toAdd);
+      if (this.channels) {
+        this.channels.push(toAdd);
       }
     },
 
     removeItem: function(toRemove) {
-      if (this.model) {
+      if (this.channels) {
         var self = this;
-        _.each(this.model, function(item, index) {
-          if (item === toRemove) {
-            self.model.splice(index, 1);
-
+        for (var index in this.channels) {
+          if (this.channels[index] === toRemove) {
+            this.channels.splice(index, 1);
             // Should not have repeated channels
             return;
           }
-        });
+        }
       }
     },
 
@@ -71,15 +73,8 @@ define(function(require) {
       this.$('.showAll').remove();
     },
 
-    _userAffiliation: function() {
-      var user = this.options.user;
-      var channel = this.options.channel;
-
-      return user && channel ? user.subscribedChannels.role(channel) : null;
-    },
-
     _showDetails: function(event) {
-      var channelPosition = this.model.indexOf(event.target.title);
+      var channelPosition = this.channels.indexOf(event.target.title);
       var inlinePosition = channelPosition % 4; // 4 = n. channels per line
       var appendPosition = channelPosition + (3 - inlinePosition); // 3 because it starts with 0
 
@@ -92,9 +87,9 @@ define(function(require) {
 
       this._selectedTarget = event.target;
       this._openedDetailsView = new ChannelListDetails({
-        channel: event.target.title,
-        affiliation: this._userAffiliation(),
+        model: this.model,
         user: this.options.user,
+        title: event.target.title,
         role: this.options.role,
         position: inlinePosition
       });
@@ -103,7 +98,7 @@ define(function(require) {
     },
 
     _appendDetails: function(position) {
-      if (this.model.length <= position) {
+      if (this.channels.length <= position) {
         this.$el.append(this._openedDetailsView.el);
       } else {
         this.$('img:eq(' + position + ')').after(this._openedDetailsView.el);
