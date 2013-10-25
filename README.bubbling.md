@@ -32,10 +32,10 @@ count)
 -   1st: channels with user@mentions (where am I mentioned?)
 -   2nd: channels with replies (replies to my posts)
 -   3rd: channels with private messages (did someone try to contact me?)
--   4th: channels with recent posts (users check back regularly for new
+-   4th: channels with recent channel posts (users check back regularly for new
     posts - make this easy)
 -   5th: activity (which channels did you most recently read/who did you
-    message most recently?)
+    message most recently?) eg: if you read a channel, it drops down to the bottom of the list of unread channels.
 
 Note: an account that was read and no longer has unread posts, @replies
 or personal messages stays in the previous list order until the user
