@@ -24,7 +24,7 @@ define(function(require) {
   require('backbone-indexeddb');
 
   var SidebarInfoCollection = Backbone.Collection.extend({
-  	model: SidebarInfo,
+    model: SidebarInfo,
     database: SidebarInfoDB,
     storeName: SidebarInfoDB.id,
 
@@ -45,20 +45,33 @@ define(function(require) {
       return !this._isLoading;
     },
 
+    _lastWeekDate: function() {
+      var dayInMillis = 24*60*(60*1000);
+      var now = dateUtils.toUTCDate(dateUtils.now());
+
+      return now - 7*dayInMillis;
+    },
+
+    // Based at: 
+    // https://github.com/buddycloud/webclient/blob/dev-candy/README.bubbling.md#buddycloud-sorts-the-most-interesting-information-for-you
+
     parseItems: function(username, channel, items) {
       if (_.isEmpty(items)) return;
 
       var self = this;
-      var totalCount = 0;
-      var mentionsCount = 0;
+      var mentionsCount = 0; // new mentions
       var userPosts = [];
       var replies = {};
-      var mostRecent = dateUtils.utcDate(dateUtils.earliestTime());
+      var totalCount = 0; // new messages
+      var postsLastWeek = []; // posts within a week
+
+      
+      var lastWeek =  this._lastWeekDate();
 
       items.forEach(function(item) {
         var updated = dateUtils.utcDate(item.updated);
-        if (updated > mostRecent) {
-          mostRecent = updated;
+        if (updated > lastWeek) {
+          postsLastWeek.push(updated);
         }
 
         if (item.author !== username) {
@@ -69,16 +82,15 @@ define(function(require) {
         mentionsCount = self._checkMention(item, username, mentionsCount);
       });
       var repliesCount = this._countReplies(userPosts, replies);
-      var updated = new Date(mostRecent).toISOString();
       
-      this._setInfo(username, channel, this._buildInfo(mentionsCount, totalCount, 
-        repliesCount, updated));
+      this._setInfo(username, channel, this._buildInfo(mentionsCount, totalCount,
+        repliesCount, postsLastWeek, []));
     },
 
     _checkAuthor: function(item, username, userPosts, replies) {
       if (item.replyTo) {
         if (replies[item.replyTo]) {
-          replies[item.replyTo] += 1;
+          replies[item.replyTo] = replies[item.replyTo] + 1;
         } else {
           replies[item.replyTo] = 1;
         }
@@ -88,6 +100,8 @@ define(function(require) {
           userPosts.push(item.id);
         }
       }
+
+      return userPosts;
     },
 
     _checkMention: function(item, username, mentionsCount) {
@@ -128,16 +142,17 @@ define(function(require) {
       }
     },
 
-    _emptyInfo: function() {
-      return this._buildInfo(0, 0, 0, new Date(1970, 0, 1).toISOString());
+    _emptyInfo: function(postsLastWeek, hitsLastWeek) {
+      return this._buildInfo(0, 0, 0, postsLastWeek || [], hitsLastWeek || []);
     },
 
-    _buildInfo: function(mentions, total, replies, updated) {
+    _buildInfo: function(mentions, total, replies, postsLastWeek, hitsLastWeek) {
       return {
         'mentions': mentions,
         'total': total,
         'replies': replies,
-        'updated': updated
+        'postsLastWeek': postsLastWeek,
+        'hitsLastWeek': hitsLastWeek
       };
     },
 
@@ -149,17 +164,40 @@ define(function(require) {
       };
     },
 
+    _filterLastWeek: function(toFilter) {
+      var lastWeek =  this._lastWeekDate();
+      var idx = 0;
+      while (toFilter[idx] < lastWeek) {
+        toFilter.splice(idx, 1);
+        idx++;
+      }
+
+      return toFilter;
+    },
+
     resetCounters: function(user, channel) {
       if (this.useIndexedDB) {
         var sidebarInfo = this._getSidebarInfo(channel);
         if (sidebarInfo) {
           var oldInfo = sidebarInfo.get('info');
-          sidebarInfo.set({'info': this._buildInfo(0, 0, 0, oldInfo.updated)});
+          oldInfo.hitsLastWeek.push(dateUtils.toUTCDate(dateUtils.now()));
+
+          sidebarInfo.set({
+            'info': this._buildInfo(
+              0, 0, 0,
+              this._filterLastWeek(oldInfo.postsLastWeek),
+              this._filterLastWeek(oldInfo.hitsLastWeek)
+            )
+          });
           this.create(sidebarInfo);
         }
       } else {
         var oldInfo = this._info[channel] || this._emptyInfo();
-        this._info[channel] = this._buildInfo(0, 0, 0, oldInfo.updated);
+        this._info[channel] = this._buildInfo(
+          0, 0, 0,
+          this._filterLastWeek(oldInfo.postsLastWeek),
+          this._filterLastWeek(oldInfo.hitsLastWeek)
+        );
       }
     },
 
@@ -168,11 +206,14 @@ define(function(require) {
         var sidebarInfo = this._getSidebarInfo(channel);
         if (sidebarInfo) {
           var oldInfo = sidebarInfo.get('info');
+          oldInfo.postsLastWeek.concat(info.postsLastWeek);
+
           var newInfo = this._buildInfo(
             oldInfo.mentions + info.mentions,
             oldInfo.total + info.total,
             oldInfo.replies + info.replies,
-            info.updated
+            this._filterLastWeek(oldInfo.postsLastWeek),
+            this._filterLastWeek(oldInfo.hitsLastWeek)
           );
           sidebarInfo.set({'info': newInfo});
         } else {
@@ -181,11 +222,14 @@ define(function(require) {
         this.create(sidebarInfo);
       } else {
         var oldInfo = this._info[channel] || this._emptyInfo();
+        oldInfo.postsLastWeek.concat(info.postsLastWeek);
+
         var newInfo = this._buildInfo(
           oldInfo.mentions + info.mentions,
           oldInfo.total + info.total,
           oldInfo.replies + info.replies,
-          info.updated
+          this._filterLastWeek(oldInfo.postsLastWeek),
+          this._filterLastWeek(oldInfo.hitsLastWeek)
         );
         this._info[channel] = newInfo;
       }
