@@ -413,6 +413,9 @@ define(function(require) {
     },
 
     _post: function() {
+      // Checks if there is an active request
+      if (this.$('.createComment').hasClass('disabled')) return;
+
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
       var previewsContainer = this.$newTopic.find('.dropzone-previews');

@@ -290,6 +290,9 @@ define(function(require) {
     },
 
     _comment: function(event) {
+      // Checks if there is an active request
+      if (this.$('.createComment').hasClass('disabled')) return;
+
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
       this.answer = textArea.val();
