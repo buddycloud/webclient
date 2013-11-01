@@ -43,8 +43,8 @@ define(function(require) {
       this.$el.html(_.template(localTemplate));
     },
 
-    _invalidLogin: function() {
-      $('.error').show();
+    _invalidLogin: function(message) {
+      $('.error').text(message).show();
       this._enableButton();
     },
 
