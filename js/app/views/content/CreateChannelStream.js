@@ -75,6 +75,9 @@ define(function(require) {
           },
           success: function() {
             self.saveMetadata();
+          },
+          error: function() {
+            
           }
         };
 
