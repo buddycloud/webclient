@@ -77,17 +77,17 @@ define(function(require) {
             self.saveMetadata();
           },
           error: function() {
-            
+            self._createErrorCallback();
           }
         };
 
-        $.ajax(options);
         this._disableCreateButton();
+        $.ajax(options);
       }
     },
 
     saveMetadata: function() {
-      this.listenTo(this.model, 'sync', this._channelCreated());
+      this.listenToOnce(this.model, 'sync', this._channelCreated());
       this._save(this.model);
     },
 
@@ -107,6 +107,16 @@ define(function(require) {
 
     _disableCreateButton: function() {
       this.$('.save').addClass('disabled').text('Creating...');
+    },
+
+    _createErrorCallback: function() {
+      var $createButton = this.$('.save');
+      $createButton.removeClass('disabled').addClass('completed');
+      $createButton.text('Error');
+      setTimeout(function() {
+        $createButton.removeClass('completed');
+        $createButton.text('Create');
+      }, 7000);
     },
 
     _getChannel: function() {

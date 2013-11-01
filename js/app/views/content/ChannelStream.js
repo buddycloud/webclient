@@ -142,7 +142,7 @@ define(function(require) {
       if (!this.model.isReady()) {
         this.listenToOnce(this.model, 'fetch', this._begin);
         this.model.fetch({
-          data: {max: 51}, 
+          data: {max: 51},
           credentials: this.options.user.credentials,
           reset: true
         });

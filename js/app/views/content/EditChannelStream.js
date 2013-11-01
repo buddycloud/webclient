@@ -131,11 +131,11 @@ define(function(require) {
 
     _deleteErrorCallback: function() {
       var $confirmButton = this.$('.stepTwo');
-      $stepTwo.removeClass('disabled').addClass('completed');
-      $stepTwo.text('Error');
+      $confirmButton.removeClass('disabled').addClass('completed');
+      $confirmButton.text('Error');
       setTimeout(function() {
-        $stepTwo.removeClass('completed');
-        $stepTwo.text('Confirm');
+        $confirmButton.removeClass('completed');
+        $confirmButton.text('Confirm');
       }, 7000);
     },
 
