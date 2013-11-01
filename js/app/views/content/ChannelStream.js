@@ -414,7 +414,8 @@ define(function(require) {
 
     _post: function() {
       // Checks if there is an active request
-      if (this.$('.createComment').hasClass('disabled')) return;
+      var $createComment = this.$('.createComment');
+      if ($createComment.hasClass('disabled') || $createComment.hasClass('completed')) return;
 
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();

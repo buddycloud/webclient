@@ -291,7 +291,8 @@ define(function(require) {
 
     _comment: function(event) {
       // Checks if there is an active request
-      if (this.$('.createComment').hasClass('disabled')) return;
+      var $createComment = this.$('.createComment');
+      if ($createComment.hasClass('disabled') || $createComment.hasClass('completed')) return;
 
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
@@ -371,6 +372,9 @@ define(function(require) {
             model.deleteComment(id);
             self.render();
           }
+        },
+        error: function() {
+          self._enableButtonWithError();
         }
       };
       $.ajax(options);
