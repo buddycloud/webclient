@@ -139,8 +139,16 @@ define(function(require) {
         };
         var errorCallback = function(res) {
           var message = 'Registration error';
-          if (res.status === 503) {
-            message = 'User "' + username + '" already exists';
+          switch (res.status) {
+            case 500:
+              message = 'Server down';
+              break;
+            case 503:
+              message = 'User "' + username + '" already exists';
+              break;
+            default:
+              message = 'Registration error!';
+              break;
           }
           self.trigger('registrationError', message);
         };
