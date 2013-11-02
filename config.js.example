@@ -1,13 +1,13 @@
 define({
-  // Where to find your API server
-  // Note: it is not possible to use self signed certificates for AJAX requests
-  // (see https://buddycloud.org/wiki/Install#SSL_and_API_requests for details)
-  baseUrl: 'https://EXAMPLE.COM/api/',
+  // Where to find your API server (defaults to the buddycloud dev server - set
+  // to your own server.
+  // Note: Browsers do not permit using self signed certificates for AJAX requests
+  baseUrl: 'https://demo.buddycloud.org/api/',
   
-  // Domain that you your users live on. 
+  // Domain that you your users live on.
   // For example, if your users' IDs look like user@example.com, then you would 
   // set the homeDomain to example.com.
-  homeDomain: 'EXAMPLE.COM',
+  homeDomain: 'buddycloud.org',
   
   // To enable oEmbed support (link previews), sign up on http://embed.ly (they 
   // have a free plan).
