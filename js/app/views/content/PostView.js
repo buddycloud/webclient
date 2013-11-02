@@ -48,6 +48,7 @@ define(function(require) {
       this.channelName = this.options.items.channel;
       this.listenTo(this.model, 'addComment', this._addComment);
       this.media = [];
+      this.answer = '';
     },
 
     destroy: function() {
@@ -107,11 +108,19 @@ define(function(require) {
       };
     },
 
-    _addComment: function(post) {
+    _addComment: function(post, options) {
+      var answer = '';
+
+      if (options && options.isNotification) {
+        var textArea = this.$('.answer textarea');
+        answer = textArea.val();
+      }
+
       if (this._needsBubbling()) {
         this.destroy();
-        Events.trigger('postBubble', post);
+        Events.trigger('postBubble', post, answer);
       } else {
+        this.answer = answer;
         this.render();
       }
     },
@@ -124,6 +133,7 @@ define(function(require) {
       var post = this.model;
       this.$el.html(_.template(localTemplate, {
         post: post,
+        answer: this.answer,
         api: api,
         user: this.options.user,
         roleTag: this._roleTag.bind(this),
@@ -280,18 +290,22 @@ define(function(require) {
     },
 
     _comment: function(event) {
+      // Checks if there is an active request
+      var $createComment = this.$('.createComment');
+      if ($createComment.hasClass('disabled') || $createComment.hasClass('completed')) return;
+
       event.stopPropagation();
       var textArea = this.$('.answer textarea');
-      var content = textArea.val();
+      this.answer = textArea.val();
 
-      if (content.trim() || this.media.length > 0) {
+      if (this.answer.trim() || this.media.length > 0) {
         var self = this;
 
         this._disableButton('Posting...');
         var item = {replyTo: this.model.id};
 
-        if (content) {
-          item.content = content;
+        if (this.answer) {
+          item.content = this.answer;
         }
 
         if (this.media.length > 0) {
@@ -308,6 +322,7 @@ define(function(require) {
             self.media = [];
           },
           success: function() {
+            self.answer = '';
             textArea.val('');
             previewsContainer.empty();
             self._collapseAnswerArea();
@@ -357,6 +372,9 @@ define(function(require) {
             model.deleteComment(id);
             self.render();
           }
+        },
+        error: function() {
+          self._enableButtonWithError();
         }
       };
       $.ajax(options);

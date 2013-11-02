@@ -142,7 +142,7 @@ define(function(require) {
       if (!this.model.isReady()) {
         this.listenToOnce(this.model, 'fetch', this._begin);
         this.model.fetch({
-          data: {max: 51}, 
+          data: {max: 51},
           credentials: this.options.user.credentials,
           reset: true
         });
@@ -152,9 +152,11 @@ define(function(require) {
     },
 
     _begin: function() {
-      this._getAndRenderPosts();
-      this.render();
-      this._listenForNewPosts();
+      if (!this.hidden) {
+        this._getAndRenderPosts();
+        this.render();
+        this._listenForNewPosts();
+      }
     },
 
     _error: function(e, xhr) {
@@ -167,6 +169,7 @@ define(function(require) {
     },
 
     _renderPrivateChannel: function() {
+      this.hidden = true;
       this.$el.html(_.template(privateTemplate));
     },
 
@@ -175,7 +178,7 @@ define(function(require) {
       var items = this.model;
       user.notifications.on('new', function(item) {
         if (item.source === items.channel) {
-          items.add(item);
+          items.add(item, {isNotification: true});
         }
       });
       user.notifications.listen({credentials: user.credentials});
@@ -244,6 +247,18 @@ define(function(require) {
     _subscribeAction: function(action) {
       if (action === 'subscribedChannel') {
         // Followed the channel
+        if (this.hidden) {
+          this.hidden = false;
+          this.listenToOnce(this.model, 'fetch', this._begin);
+          this.model.fetch({
+            data: {max: 51}, 
+            credentials: this.options.user.credentials,
+            reset: true
+          });
+        } else {
+          this.model.storeModels();
+        }
+
         if (this._userCanPost()) {
           this.$el.prepend(this.$newTopic);
         }
@@ -280,8 +295,12 @@ define(function(require) {
       return view;
     },
 
-    _prependPost: function(post) {
+    _prependPost: function(post, answer) {
       var view = this._viewForPost(post);
+      if (answer) {
+        view.answer = answer;
+      }
+
       this._postViews.unshift(view);
       view.render();
       this.$('.posts').prepend(view.el);
@@ -394,6 +413,10 @@ define(function(require) {
     },
 
     _post: function() {
+      // Checks if there is an active request
+      var $createComment = this.$('.createComment');
+      if ($createComment.hasClass('disabled') || $createComment.hasClass('completed')) return;
+
       var expandingArea = this.$('.newTopic .expandingArea');
       var content = expandingArea.find('textarea').val();
       var previewsContainer = this.$newTopic.find('.dropzone-previews');
@@ -436,9 +459,9 @@ define(function(require) {
       }
     },
 
-    _bubble: function(post) {
+    _bubble: function(post, answer) {
       // FIXME: Primitive version from bubbling
-      this._prependPost(post);
+      this._prependPost(post, answer);
       $('.content').scrollTop(0);
     }
   });

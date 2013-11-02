@@ -71,7 +71,14 @@ define(function(require) {
     },
 
     channelType: function() {
-      return this.get('channel_type');
+      var type = this.get('channel_type');
+      if (!type) {
+        // Workaround for unsuccesful requests
+        // Will work only until topics channels have 'topic' on their ids
+        type = this.channel.indexOf('topics') > -1 ? 'topic' : 'personal';
+      }
+
+      return type;
     },
 
     accessModel: function() {

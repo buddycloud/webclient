@@ -32,6 +32,15 @@ define(function(require) {
       return _.keys(this.attributes);
     },
 
+    userRole: function(username) {
+      return this.get(username);
+    },
+
+    changeRole: function(username, role, credentials) {
+      this.set(username, role, {silent: true});
+      this.save(null, {'credentials': credentials});
+    },
+
     byType: function() {
       var roles = this.attributes;
       return _.groupBy(this.usernames(), function(username) {
@@ -51,6 +60,10 @@ define(function(require) {
 
     // These are workarounds resultant by server issues
     parse: function(resp, xhr) {
+      if (typeof(resp) === 'string') {
+        return {};
+      }
+
       this._normalizeTypes(resp);
       this._removeAnonymous(resp);
       this._ensureHasOwner(resp);
@@ -91,6 +104,21 @@ define(function(require) {
       return _.any(followers, function(role) {
         return role == 'owner';
       });
+    },
+
+    sync: function(method, model, options) {
+      if (method === 'update' || method === 'create') {
+        // Always POST only changed attributes
+        var changed = model.changedAttributes();
+        if (changed) {
+          options.data = JSON.stringify(changed || {});
+          options.contentType = 'application/json';
+          options.dataType = 'text';
+          method = 'create';
+        }
+      }
+      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
+      sync.call(this, method, model, options);
     }
   });
 

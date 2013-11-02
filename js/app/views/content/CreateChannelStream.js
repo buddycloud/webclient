@@ -29,7 +29,15 @@ define(function(require) {
 
     events: {
       'click .save': 'create',
-      'click .discard': 'render'
+      'click .discard': 'render',
+      'change #channel_default_role': '_toggleHint'
+    },
+
+    _toggleHint: function() {
+      var $defaultRole = this.$('#channel_default_role');
+      var value = $defaultRole.val();
+      var $hint = $defaultRole.next('.hint');
+      $hint.removeClass('followerSelected followerPlusSelected').addClass(value + 'Selected');
     },
 
     initialize: function() {
@@ -56,7 +64,7 @@ define(function(require) {
         this.model = this.options.user.metadata(channel);
         var options = {
           type: 'POST',
-          url: api.url(this.model.channel),
+          url: api.url(channel),
           crossDomain: true,
           xhrFields: {withCredentials: true},
           contentType: false,
@@ -67,16 +75,19 @@ define(function(require) {
           },
           success: function() {
             self.saveMetadata();
+          },
+          error: function() {
+            self._createErrorCallback();
           }
         };
 
-        $.ajax(options);
         this._disableCreateButton();
+        $.ajax(options);
       }
     },
 
     saveMetadata: function() {
-      this.listenTo(this.model, 'sync', this._channelCreated());
+      this.listenToOnce(this.model, 'sync', this._channelCreated());
       this._save(this.model);
     },
 
@@ -98,8 +109,18 @@ define(function(require) {
       this.$('.save').addClass('disabled').text('Creating...');
     },
 
+    _createErrorCallback: function() {
+      var $createButton = this.$('.save');
+      $createButton.removeClass('disabled').addClass('completed');
+      $createButton.text('Error');
+      setTimeout(function() {
+        $createButton.removeClass('completed');
+        $createButton.text('Create');
+      }, 7000);
+    },
+
     _getChannel: function() {
-      return this.$('#channel_title').val();
+      return this.$('#channel_jid').val();
     },
 
     _check: function(element, value) {

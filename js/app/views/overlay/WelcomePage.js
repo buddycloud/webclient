@@ -51,8 +51,8 @@ define(function(require) {
       this.listenTo(this.model, 'loginError', this._invalidLogin);
     },
 
-    _invalidLogin: function() {
-      $('.error').show();
+    _invalidLogin: function(message) {
+      $('.error').text(message).show();
       this._enableButton('#login_submit');
     },
 

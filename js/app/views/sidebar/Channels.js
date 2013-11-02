@@ -164,7 +164,7 @@ define(function(require) {
 
     _fetchMetadata: function(metadata, callback) {
       if (!metadata.hasEverChanged()) {
-        this.listenToOnce(metadata, 'change', callback);
+        this.listenToOnce(metadata, 'error change', callback);
         metadata.fetch({credentials: this.model.credentials});
       } else {
         if (callback) {
@@ -201,8 +201,9 @@ define(function(require) {
     // 1 - mentions
     // 2 - replies
     // 3 - total unread
-    // 4 - last updated
-    // 5 - still equal? Just compare the names then
+    // 4 - hits last week
+    // 5 - posts last week
+    // 6 - still equal? Just compare the names then
     _comparePosts: function(a, b) {
       var aInfo = this.sidebarInfo.getInfo(a.channel);
       var bInfo = this.sidebarInfo.getInfo(b.channel);
@@ -215,16 +216,22 @@ define(function(require) {
           diff = bInfo.total - aInfo.total;
 
           if (diff === 0) {
-            aUpdated = dateUtils.utcDate(aInfo.updated);
-            bUpdated = dateUtils.utcDate(bInfo.updated);
-
-            if (aUpdated > bUpdated) diff = -1;
-            if (aUpdated < bUpdated) diff = 1;
+            diff = bInfo.hitsLastWeek.length - aInfo.hitsLastWeek.length;
 
             if (diff === 0) {
-              return a.channel.localeCompare(b.channel);
+              /*aUpdated = dateUtils.utcDate(aInfo.updated);
+              bUpdated = dateUtils.utcDate(bInfo.updated);
+
+              if (aUpdated > bUpdated) diff = -1;
+              if (aUpdated < bUpdated) diff = 1;*/
+              diff = aInfo.postsLastWeek.length - bInfo.postsLastWeek.length;
+
+              if (diff === 0) {
+                return a.channel.localeCompare(b.channel);
+              }
             }
           }
+
         }
       }
 
@@ -454,16 +461,13 @@ define(function(require) {
       this.$('.channel[data-href="' + channel + '"]').addClass('selected');
 
       if (this.sidebarInfo.isReady()) {
-        var info = this.sidebarInfo.getInfo(channel);
-        if (info.total > 0 || info.mentions > 0 || info.replies > 0) {
-          this.sidebarInfo.resetCounters(username, channel);
+        this.sidebarInfo.resetCounters(username, channel);
 
-          if (channel === username) {
-            Events.trigger('personalChannelTotalCount', 0);
-            Events.trigger('personalChannelMentionsCount', 0);
-          } else {
-            this._renderUnreadCount(channel);
-          }
+        if (channel === username) {
+          Events.trigger('personalChannelTotalCount', 0);
+          Events.trigger('personalChannelMentionsCount', 0);
+        } else {
+          this._renderUnreadCount(channel);
         }
       }
       document.redraw();

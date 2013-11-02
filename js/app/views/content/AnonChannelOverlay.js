@@ -43,12 +43,14 @@ define(function(require) {
       this.$el.html(_.template(localTemplate));
     },
 
-    _invalidLogin: function() {
-      $('.error').show();
+    _invalidLogin: function(message) {
+      $('.error').text(message).show();
       this._enableButton();
     },
 
     _successfullLogin: function() {
+      $('.content').removeClass('anonView');
+      
       // Remove overlay
       this._removeOverlay(function() {
         Events.trigger('navigate', 'home');

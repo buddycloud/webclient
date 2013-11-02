@@ -18,6 +18,7 @@ define(function(require) {
   require(['jquery', 'timeago']);
   var _ = require('underscore');
   var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var Channel = require('models/Channel');
   var ChannelList = require('views/content/ChannelList');
   var l10n = require('l10n');
@@ -35,8 +36,11 @@ define(function(require) {
       this._fetchDetailsLists();
       this._fetchMetadata();
       if (this.options.user.subscribedChannels) {
-        this.listenTo( this.options.user.subscribedChannels, 'subscriptionSync', this._updateFollowersList);
+        this.listenTo( this.options.user.subscribedChannels, 'subscriptionSync', this._handleSubscribedAction);
       }
+
+      // Role changed event
+      Events.on('roleChanged', this._roleChanged, this);
     },
 
     _fetchDetailsLists: function() {
@@ -59,7 +63,7 @@ define(function(require) {
       this.remove();
     },
 
-    _updateFollowersList: function(action) {
+    _handleSubscribedAction: function(action) {
       if (this._isInitialized()) {
         var username = this.options.user.username();
         if (action === 'subscribedChannel') {
@@ -68,6 +72,30 @@ define(function(require) {
           this._removeFollower(username);
         }
         this.followersList.render();
+      }
+    },
+
+    _updateLists: function(listsToRemove, listsToAdd, username) {
+      // Remove from other lists (if present)
+      listsToRemove.forEach(function(list) {
+        list.removeItem(username);
+        list.render();
+      });
+
+      // Add to new list(s)
+      listsToAdd.forEach(function(list) {
+        list.addItem(username);
+        list.render();
+      });
+    },
+
+    _roleChanged: function(username, newRole) {
+      if (newRole === 'outcast') {
+        this._updateLists([this.moderatorsList, this.followersList], [this.bannedList], username);
+      } else if (newRole === 'moderator') {
+        this._updateLists([this.bannedList, this.followersList], [this.moderatorsList], username);
+      } else {
+        this._updateLists([this.moderatorsList, this.bannedList], [this.followersList], username);
       }
     },
 
@@ -80,7 +108,7 @@ define(function(require) {
     },
 
     render: function() {
-      this.$el.html(_.template(localTemplate, 
+      this.$el.html(_.template(localTemplate,
         {metadata: this.metadata}));
       return this;
     },
@@ -93,10 +121,12 @@ define(function(require) {
       this.moderatorsList.render();
       this.followersList.render();
       this.similarList.render();
+      this.bannedList.render();
       $holder.append(this.producerList.el);
       $holder.append(this.moderatorsList.el);
       $holder.append(this.followersList.el);
       $holder.append(this.similarList.el);
+      $holder.append(this.bannedList.el);
     },
 
     _populateChannelLists: function() {
@@ -105,12 +135,14 @@ define(function(require) {
       var producer = (types['owner'] || []);
       var moderators = (types['moderator'] || []);
       var followers = (types['publisher'] || []).concat(types['member'] || []);
-      this.producerList.model = producer;
-      this.moderatorsList.model = moderators;
-      this.followersList.model = followers;
+      var banned = (types['outcast'] || []);
+      this.producerList.channels = producer;
+      this.moderatorsList.channels = moderators;
+      this.followersList.channels = followers;
+      this.bannedList.channels = banned;
 
       // Similar Channels
-      this.similarList.model = this.model.similarChannels.usernames();
+      this.similarList.channels = this.model.similarChannels.usernames();
     },
 
     _isInitialized: function() {
@@ -120,10 +152,29 @@ define(function(require) {
     _toggleInfo: function() {
       this.$el.toggleClass('hidden');
       if (!this._isInitialized()) {
-        this.producerList = new ChannelList({title: l('producerList', {}, 'producer'), role: l('producerCaps', {}, 'Producer')});
-        this.moderatorsList = new ChannelList({title: l('moderatorsList', {}, 'moderators'), role: l('moderatorCaps', {}, 'Moderator')});
-        this.followersList = new ChannelList({title: l('followersList', {}, 'followers'), role: l('followerCaps', {}, 'Follower')});
-        this.similarList = new ChannelList({title: l('similarList', {}, 'similar'), role: l('similarCaps', {}, 'Similar')});
+        this.producerList = new ChannelList({
+          title: l('producerList', {}, 'producer'),
+          role: l('producerCaps', {}, 'Producer')});
+        this.moderatorsList = new ChannelList({
+          model: this.model.followers,
+          user: this.options.user,
+          title: l('moderatorsList', {}, 'moderators'),
+          role: l('moderatorCaps', {}, 'Moderator')});
+        this.followersList = new ChannelList({
+          model: this.model.followers,
+          user: this.options.user,
+          title: l('followersList', {}, 'followers'),
+          role: l('followerCaps', {}, 'Follower')});
+        this.bannedList = new ChannelList({
+          model: this.model.followers,
+          user: this.options.user,
+          //title: l('followersList', {}, 'followers'),
+          title: 'banned',
+          //role: l('followerCaps', {}, 'Follower'),
+          role: 'Banned'});
+        this.similarList = new ChannelList({
+          title: l('similarList', {}, 'similar'),
+          role: l('similarCaps', {}, 'Similar')});
 
         this._renderChannelLists();
       }

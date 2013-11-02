@@ -29,7 +29,15 @@ define(function(require) {
       'click .save': 'save',
       'click .discard': 'render',
       'click .twoStepConfirmation .stepOne': '_renderConfirmButton',
-      'click .twoStepConfirmation .stepTwo': '_delete'
+      'click .twoStepConfirmation .stepTwo': '_delete',
+      'change #channel_default_role': '_toggleHint'
+    },
+
+    _toggleHint: function() {
+      var $defaultRole = this.$('#channel_default_role');
+      var value = $defaultRole.val();
+      var $hint = $defaultRole.next('.hint');
+      $hint.removeClass('followerSelected followerPlusSelected').addClass(value + 'Selected');
     },
 
     initialize: function() {
@@ -41,8 +49,7 @@ define(function(require) {
         this.render();
       }
       this.isPersonalChannel = this.options.user.username() === this.model.channel;
-
-      this.listenTo(this.model, 'sync', this.render);
+      this.listenToOnce(this.model, 'sync', this.render);
     },
 
     destroy: function() {
@@ -61,20 +68,38 @@ define(function(require) {
       // FIXME Workaround to not get events from disabled save button
       if (this.$('.save').hasClass('disabled')) return;
       this._disableSaveButton();
-      this.listenTo(this.model, 'sync', this._responseCallback());
-      this._save(this.model, this._responseCallback());
+      this._save(this.model, {complete: this._handleResponse()});
     },
 
-    _responseCallback: function() {
+    _handleResponse: function() {
       var self = this;
-      return function(status) {
-        var $saveButton = self.$('.save');
-        $saveButton.removeClass('disabled').addClass('completed');
-        $saveButton.text('Saved');
-        setTimeout(function() {
-          Events.trigger('navigate', self.model.channel);
-        }, 7000);
+      return function(xhr) {
+        if (xhr.status === 0 || xhr.status === 200) {
+          self._successCallback();
+        } else {
+          self._errorCallback();
+        }
       };
+    },
+
+    _successCallback: function() {
+      var $saveButton = this.$('.save');
+      $saveButton.removeClass('disabled');
+      $saveButton.text('Saved');
+      var channel = this.model.channel;
+      setTimeout(function() {
+        Events.trigger('navigate', channel);
+      }, 7000);
+    },
+
+    _errorCallback: function() {
+      var $saveButton = this.$('.save');
+      $saveButton.removeClass('disabled').addClass('completed');
+      $saveButton.text('Error');
+      setTimeout(function() {
+        $saveButton.removeClass('completed');
+        $saveButton.text('Save');
+      }, 7000);
     },
 
     _disableSaveButton: function() {
@@ -90,24 +115,32 @@ define(function(require) {
     },
 
     _selectDefaultRole: function() {
-      if (this.model.defaultAffiliation() === 'publisher') {
-        this.$('#channel_default_role').val('followerPlus');
-      }
+      var $defaultRole = this.$('#channel_default_role');
+      var value = this.model.defaultAffiliation() === 'publisher' ? 'followerPlus' : 'follower';
+      $defaultRole.val(value);
+      $defaultRole.next('.hint').addClass(value + 'Selected');
     },
 
     _renderConfirmButton: function() {
       this.$('.twoStepConfirmation').toggleClass('confirmed');
     },
 
-    _disableSaveButton: function() {
-      this.$('.save').addClass('disabled').text('Saving...');
-    },
-
     _disableConfirmButton: function() {
       this.$('.stepTwo').addClass('disabled').text('Deleting...');
     },
 
+    _deleteErrorCallback: function() {
+      var $confirmButton = this.$('.stepTwo');
+      $confirmButton.removeClass('disabled').addClass('completed');
+      $confirmButton.text('Error');
+      setTimeout(function() {
+        $confirmButton.removeClass('completed');
+        $confirmButton.text('Confirm');
+      }, 7000);
+    },
+
     _delete: function() {
+      var self = this;
       var channel = this.model.channel;
       var url = this.isPersonalChannel ? api.url('account') : api.url(channel);
       var credentials = this.options.user.credentials;
@@ -123,8 +156,11 @@ define(function(require) {
             credentials.authorizationHeader());
         },
         success: function() {
-          Events.trigger('channelDeleted', channel)
+          Events.trigger('channelDeleted', channel);
           Events.trigger('navigate', 'home');
+        },
+        error: function() {
+          self._deleteErrorCallback();
         }
       };
 

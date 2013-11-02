@@ -46,11 +46,14 @@ define(function(require) {
       this._setDefaultRole(model);
     },
 
-    _save: function(model) {
+    _save: function(model, options) {
       // Set fields
       this._setFields(model);
+      
       // Save
-      model.save(null, {credentials: this.options.user.credentials});
+      options = options || {};
+      options.credentials = this.options.user.credentials;
+      model.save(null, options);
     },
 
     _setTextFields: function(model) {

@@ -87,9 +87,21 @@ define(function(require) {
       this.credentials.save(loginInfo, options);
       var self = this;
       this._tryFetchingSubscribedChannels({
-        error: function() {
+        error: function(model, xhr) {
           self.credentials.clear();
-          self.trigger('loginError');
+          var message;
+          switch (xhr.status) {
+            case 500:
+              message = 'Server down';
+              break;
+            case 401:
+              message = 'The username or password you entered is incorrect.';
+              break;
+            default:
+              message = 'Login error!';
+              break;
+          }
+          self.trigger('loginError', message);
         },
         success: function() {
           self.trigger('loginSuccess', self.username());
@@ -137,10 +149,18 @@ define(function(require) {
           self.credentials.save({'username': username, 'password': password});
           self.trigger('registrationSuccess');
         };
-        var errorCallback = function(res) {
-          var message = 'Registration error';
-          if (res.status === 503) {
-            message = 'User "' + username + '" already exists';
+        var errorCallback = function(model, xhr) {
+          var message;
+          switch (xhr.status) {
+            case 500:
+              message = 'Server down';
+              break;
+            case 503:
+              message = 'User "' + username + '" already exists';
+              break;
+            default:
+              message = 'Registration error!';
+              break;
           }
           self.trigger('registrationError', message);
         };

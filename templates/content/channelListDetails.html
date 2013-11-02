@@ -7,8 +7,8 @@
     </section>
     <section class="action changeRole">
       <h5 data-l10n="changeRole">Change role</h5>
-      <select>
-        <option value="owner" data-l10n="producerRole">producer</option>
+      <select id="selectRights">
+        <!-- Can't change a channel owner <option value="owner" data-l10n="producerRole">producer</option> -->
         <option value="moderator" data-l10n="moderatorRole">moderator</option>
         <option value="followerPlus" data-l10n="followerPlusRole">follower+post</option>
         <option value="follower" selected data-l10n="followerRole">follower</option>
@@ -53,6 +53,9 @@
     <section class="actionRow confirm">
       <div class="cancelButton" data-l10n="cancelButton">Cancel</div>
       <div class="okButton" data-l10n="okButton">Ok</div>
+    </section>
+    <section class="actionRow error">
+      <div class="errorButton" data-l10n="error">Change role</div>
     </section>
   </div><!-- /box -->
 </div><!-- /holder -->
