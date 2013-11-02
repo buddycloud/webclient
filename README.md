@@ -18,10 +18,13 @@ Setting up your webclient dev environment
 git clone https://github.com/buddycloud/webclient.git
 cd webclient
 cp <webroot>/config.js.example <webroot>/config.js
-edit <webroot>/config.js and set the API to https://api.buddycoud.org/api
-install node.js
-npm install -g grunt-cli
+# to work against the buddycloud demo server:
+edit <webroot>/config.js and set the baseURL to https://demo.buddycoud.org/api
+edit <webroot>/config.js and set the homeDomain to buddycoud.org
+# install node.js
 npm install
+npm install -g grunt-cli
+grunt build
 grunt default
 browse to http://localhost:3000
 ```
