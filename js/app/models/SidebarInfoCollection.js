@@ -78,30 +78,25 @@ define(function(require) {
           totalCount++;
         }
 
-        self._checkAuthor(item, username, userPosts, replies);
+        if (item.replyTo) {
+          if (replies[item.replyTo]) {
+            replies[item.replyTo] = replies[item.replyTo] + 1;
+          } else {
+            replies[item.replyTo] = 1;
+          }
+        } else {
+          // Posts from this user
+          if (item.author === username) {
+            userPosts.push(item.id);
+          }
+        }
+
         mentionsCount = self._checkMention(item, username, mentionsCount);
       });
       var repliesCount = this._countReplies(userPosts, replies);
       
       this._setInfo(username, channel, this._buildInfo(mentionsCount, totalCount,
         repliesCount, postsLastWeek, []));
-    },
-
-    _checkAuthor: function(item, username, userPosts, replies) {
-      if (item.replyTo) {
-        if (replies[item.replyTo]) {
-          replies[item.replyTo] = replies[item.replyTo] + 1;
-        } else {
-          replies[item.replyTo] = 1;
-        }
-      } else {
-        // Posts from this user
-        if (item.author === username) {
-          userPosts.push(item.id);
-        }
-      }
-
-      return userPosts;
     },
 
     _checkMention: function(item, username, mentionsCount) {
@@ -121,7 +116,7 @@ define(function(require) {
     _countReplies: function(posts, replies) {
       var repliesCount = 0;
       posts.forEach(function(post) {
-        repliesCount += replies[post];
+        repliesCount += replies[post] || 0;
       });
 
       return repliesCount;
