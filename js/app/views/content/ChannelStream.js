@@ -142,7 +142,7 @@ define(function(require) {
       if (!this.model.isReady()) {
         this.listenToOnce(this.model, 'fetch', this._begin);
         this.model.fetch({
-          data: {max: 51},
+          data: {max: 31},
           credentials: this.options.user.credentials,
           reset: true
         });
@@ -200,7 +200,7 @@ define(function(require) {
           this._showSpinner();
           this.listenToOnce(this.model, 'fetch', this._appendPosts);
           this.model.fetch({
-            data: {after: lastItem, max: 51},
+            data: {after: lastItem, max: 31},
             credentials: this.options.user.credentials,
             silent: true
           });
@@ -251,7 +251,7 @@ define(function(require) {
           this.hidden = false;
           this.listenToOnce(this.model, 'fetch', this._begin);
           this.model.fetch({
-            data: {max: 51}, 
+            data: {max: 31},
             credentials: this.options.user.credentials,
             reset: true
           });

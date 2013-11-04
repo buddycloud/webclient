@@ -116,7 +116,8 @@ define(function(require) {
 
       if (aUpdated > bUpdated) return 1;
       if (aUpdated < bUpdated) return -1;
-      return 0;      
+
+      return 0;
     },
 
     parse: function(response, options) {
@@ -195,7 +196,7 @@ define(function(require) {
         } else {
           self.trigger('fetch', resp);
         }
-      }
+      };
     },
 
     _syncIndexedDB: function(method, model, options) {
