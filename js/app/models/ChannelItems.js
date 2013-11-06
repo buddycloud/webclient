@@ -22,7 +22,7 @@ define(function(require) {
   var indexedDB = require('util/indexedDB');
   var Item = require('models/Item');
   var PostsDB = require('models/db/PostsDB');
-  require('backbone-indexeddb');
+  require(['backbone', 'backbone-indexeddb']);
 
   var ChannelItems = CollectionBase.extend({
     model: Item,

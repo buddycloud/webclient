@@ -51,17 +51,18 @@ define(function(require) {
       } else {
         var mostRecent;
         for (var i in channels) {
-          var self = this;
           var items = this.get(channels[i]);
-          items.forEach(function(item) {
+          for (var j in items) {
+            var item = items[j];
             item = new Item(item);
+
             var updated = dateUtils.utcDate(item.updated || item.published);
             if (!mostRecent || updated > mostRecent) {
               mostRecent = updated;
             }
-            self.listenToOnce(item, 'sync', afterCallback);
+            this.listenToOnce(item, 'sync', afterCallback);
             item.save(null, {syncWithServer: false});
-          });
+          }
         }
         if (mostRecent) {
           Events.trigger('updateLastSession', mostRecent.toISOString());
@@ -87,7 +88,7 @@ define(function(require) {
       var self = this;
       return function() {
         ModelBase.prototype.fetch.call(self, options);
-      }
+      };
     },
 
     url: function() {

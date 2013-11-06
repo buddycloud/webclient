@@ -21,7 +21,7 @@ define(function(require) {
   var linkify = require('util/linkify');
   var SidebarInfo = require('models/SidebarInfo');
   var SidebarInfoDB = require('models/db/SidebarInfoDB');
-  require('backbone-indexeddb');
+  require(['backbone', 'backbone-indexeddb']);
 
   var SidebarInfoCollection = Backbone.Collection.extend({
     model: SidebarInfo,
