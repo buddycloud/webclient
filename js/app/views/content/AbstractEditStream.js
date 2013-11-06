@@ -80,7 +80,7 @@ define(function(require) {
       if (this._isChecked(this.$('#channel_public_access'))) {
         model.set(accessField, 'open', {silent: true});
       } else {
-        model.set(accessField, 'whitelist', {silent: true});
+        model.set(accessField, 'authorize', {silent: true});
       }
     },
 

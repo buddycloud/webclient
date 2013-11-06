@@ -142,7 +142,7 @@ define(function(require) {
             Events.trigger('avatarUploadError', channel);
           });
         }
-      }
+      };
     },
 
     _edit: function() {
@@ -176,6 +176,16 @@ define(function(require) {
     _follow: function() {
       var channel = this.model.channel;
       var role = this.model.defaultAffiliation();
+
+      // Workaround for channels without default_affiliation
+      if (!role) {
+        if (this.model.accessModel() === 'open') {
+          role = 'publisher';
+        } else {
+          role = 'member';
+        }
+      }
+
       var credentials = this.options.user.credentials;
 
       // rainbow animation stuff
