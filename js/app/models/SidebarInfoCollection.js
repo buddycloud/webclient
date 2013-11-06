@@ -180,8 +180,8 @@ define(function(require) {
           sidebarInfo.set({
             'info': this._buildInfo(
               0, 0, 0,
-              this._filterLastWeek(oldInfo.postsLastWeek),
-              this._filterLastWeek(oldInfo.hitsLastWeek)
+              this._filterLastWeek(oldInfo.postsLastWeek || []),
+              this._filterLastWeek(oldInfo.hitsLastWeek || [])
             )
           });
           this.create(sidebarInfo);
@@ -190,8 +190,8 @@ define(function(require) {
         var oldInfo = this._info[channel] || this._emptyInfo();
         this._info[channel] = this._buildInfo(
           0, 0, 0,
-          this._filterLastWeek(oldInfo.postsLastWeek),
-          this._filterLastWeek(oldInfo.hitsLastWeek)
+          this._filterLastWeek(oldInfo.postsLastWeek || []),
+          this._filterLastWeek(oldInfo.hitsLastWeek || [])
         );
       }
     },
@@ -207,8 +207,8 @@ define(function(require) {
             oldInfo.mentions + info.mentions,
             oldInfo.total + info.total,
             oldInfo.replies + info.replies,
-            this._filterLastWeek(oldInfo.postsLastWeek),
-            this._filterLastWeek(oldInfo.hitsLastWeek)
+            this._filterLastWeek(oldInfo.postsLastWeek || []),
+            this._filterLastWeek(oldInfo.hitsLastWeek || [])
           );
           sidebarInfo.set({'info': newInfo});
         } else {
@@ -223,8 +223,8 @@ define(function(require) {
           oldInfo.mentions + info.mentions,
           oldInfo.total + info.total,
           oldInfo.replies + info.replies,
-          this._filterLastWeek(oldInfo.postsLastWeek),
-          this._filterLastWeek(oldInfo.hitsLastWeek)
+          this._filterLastWeek(oldInfo.postsLastWeek || []),
+          this._filterLastWeek(oldInfo.hitsLastWeek || [])
         );
         this._info[channel] = newInfo;
       }
