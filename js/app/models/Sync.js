@@ -29,45 +29,39 @@ define(function(require) {
       ModelBase.call(this);
       this.channelItems = {};
       this.sidebarInfo = new SidebarInfoCollection();
-      this.listenTo(this, 'sync', this._saveItems);
+      this.listenTo(this, 'sync', this._begin);
     },
 
-    _itemsSize: function(channels) {
-      var total = 0;
-      for (var i in channels) {
-        var items = this.get(channels[i]);
-        total += items.length;
-      }
-
-      return total;
-    },
-
-    _saveItems: function() {
+    _begin: function() {
       var channels = _.keys(_.omit(this.attributes, 'username'));
-      var afterCallback = _.after(this._itemsSize(channels), this._triggerSyncCallback);
 
-      if (_.isEmpty(channels)) {
-         this._triggerSyncCallback();
-      } else {
+      if (!_.isEmpty(channels)) {
         var mostRecent;
+        
         for (var i in channels) {
-          var items = this.get(channels[i]);
-          for (var j in items) {
-            var item = items[j];
-            item = new Item(item);
+          var channel = channels[i];
+          var info = this.get(channel);
 
-            var updated = dateUtils.utcDate(item.updated || item.published);
-            if (!mostRecent || updated > mostRecent) {
-              mostRecent = updated;
+          postsLastWeek = [];
+          for (var j in info.postsThisWeek) {
+            var date = new Date(info.postsThisWeek[j]);
+            if (!mostRecent || date > mostRecent) {
+              mostRecent = date;
             }
-            this.listenToOnce(item, 'sync', afterCallback);
-            item.save(null, {syncWithServer: false});
+            postsLastWeek.push(date);
           }
+
+          info['postsLastWeek'] = postsLastWeek; // Maintain old property name
+          info['hitsLastWeek'] = [];
+          this.sidebarInfo.setInfo(this.get('username'), channel, info);
         }
+
         if (mostRecent) {
           Events.trigger('updateLastSession', mostRecent.toISOString());
         }
       }
+
+      this._triggerSyncCallback();
     },
 
     _triggerSyncCallback: function() {
@@ -95,19 +89,6 @@ define(function(require) {
       return api.url('sync');
     },
 
-    parseSidebarInfo: function(channel, items) {
-      var username = this.get('username');
-      this.sidebarInfo.parseItems(username, channel, items);
-    },
-
-    _insertSource: function(channel, items) {
-      items.forEach(function(item) {
-        item['source'] = channel;
-      });
-
-      return items;
-    },
-
     parse: function(resp, xhr) {
       // This typeof(resp) === 'string') comparison is necessary
       // because the HTTP API returns a plain text and Backbone
@@ -118,14 +99,9 @@ define(function(require) {
         var result = {};
 
         var self = this;
-        _.each(resp, function(items, node) {
+        _.each(resp, function(info, node) {
           var channel = node.split('/')[2];
-          self._insertSource(channel, items);
-
-          result[channel] = items;
-
-          // Parse counters
-          self.parseSidebarInfo(channel, items);
+          result[channel] = info;
         });
 
         return result;

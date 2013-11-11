@@ -19,39 +19,25 @@ define(function(require) {
   var Backbone = require('backbone');
   var dateUtils = require('util/dateUtils');
   var CollectionBase = require('models/CollectionBase');
-  var indexedDB = require('util/indexedDB');
   var Item = require('models/Item');
-  var PostsDB = require('models/db/PostsDB');
-  require(['backbone', 'backbone-indexeddb']);
 
   var ChannelItems = CollectionBase.extend({
     model: Item,
-    database: PostsDB,
-    storeName: PostsDB.id,
 
     constructor: function(channel) {
       CollectionBase.call(this);
       this.channel = channel;
       this._fetched = false;
-      this._useIndexedDB = indexedDB.isSuppported();
       this.listenTo(this, 'add', this._itemAdded);
-      this.listenToOnce(this, 'fetch', this._onFetch);
+      this.listenToOnce(this, 'reset', this._onReset);
       this.listenTo(this, 'sort', this._onSort);
-    },
-
-    storeModels: function(action) {
-      var channel = this.channel;
-      this.models.forEach(function(item) {
-        item.set('source', channel, {silent: true});
-        item.save(null, {silent: true, syncWithServer: false});
-      });
     },
 
     isReady: function() {
       return this._fetched;
     },
 
-    _onFetch: function() {
+    _onReset: function() {
       this._fetched = true;
     },
 
@@ -86,21 +72,6 @@ define(function(require) {
       options = options || {};
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
-      options.conditions = {source: this.channel};
-      
-      var data = options.data;
-      if (data) {
-        if (data.max) {
-          options.limit = data.max;
-        }
-
-        if (data.after) {
-          options.offset = this.length;
-        }
-      }
-
-      options.customSort = this._compareItems;
-
       CollectionBase.prototype.fetch.call(this, options);
     },
 
@@ -166,73 +137,6 @@ define(function(require) {
       });
 
       return completeThreads;
-    },
-
-    _syncServerCallback: function(method, model, options) {
-      var self = this;
-      return function() {
-        self._syncServer(method, model, options);
-      };
-    },
-
-    _handleEmptySync: function() {
-      var self = this;
-      this.listenToOnce(this, 'sync', function(model, resp) {
-        self.trigger('fetch', resp);
-      });
-
-      this.listenToOnce(this, 'error', function(model, resp) {
-        self.trigger('fetch', []);
-      });
-    },
-
-    _onIndexedDBSync: function(method, model, options) {
-      self = this;
-      return function(collection, resp) {
-        // Check if there was data on DB, if not, sync with server
-        if (_.isEmpty(resp, options)) {
-          self._handleEmptySync();
-          self._syncServer(method, model, options);
-        } else {
-          self.trigger('fetch', resp);
-        }
-      };
-    },
-
-    _syncIndexedDB: function(method, model, options) {
-      if (method === 'read') {
-        this.listenToOnce(this, 'sync', this._onIndexedDBSync(method, model, options));
-      } else {
-        this.listenToOnce(this, 'sync', this._syncServerCallback(method, model, options));
-      }
-
-      Backbone.sync.call(this, method, model, options);
-    },
-
-    _syncServer: function(method, model, options) {
-      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
-      sync.call(this, method, model, options);
-    },
-
-    _isUserLogged: function(options) {
-      return options && options.credentials && options.credentials.username;
-    },
-
-    sync: function(method, model, options) {
-      if (this._useIndexedDB) {
-        // Only tries IndexedDB if it is a logged user
-        if (this._isUserLogged(options)) {
-          this._syncIndexedDB(method, model, options);
-        } else {
-          var self = this;
-          this.listenToOnce(this, 'sync', function(model, resp) {
-            self.trigger('fetch', resp);
-          });
-          this._syncServer(method, model, options);
-        }
-      } else {
-        this._syncServer(method, model, options);
-      }
     }
   });
 

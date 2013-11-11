@@ -140,7 +140,7 @@ define(function(require) {
       this.listenTo(this.model, 'addPost', this._prependPost);
 
       if (!this.model.isReady()) {
-        this.listenToOnce(this.model, 'fetch', this._begin);
+        this.listenToOnce(this.model, 'reset', this._begin);
         this.model.fetch({
           data: {max: 31},
           credentials: this.options.user.credentials,
@@ -197,25 +197,29 @@ define(function(require) {
         var lastItem = this.model.lastItem();
 
         if (lastItem) {
+          var self = this;
           this._showSpinner();
-          this.listenToOnce(this.model, 'fetch', this._appendPosts);
           this.model.fetch({
             data: {after: lastItem, max: 31},
             credentials: this.options.user.credentials,
-            silent: true
+            silent: true,
+            success: function() {
+              self._appendPosts();
+            }
           });
         }
       }
     },
 
-    _appendPosts: function(posts) {
-      var self = this;
-      _.each(posts, function(post) {
-        var view = self._viewForPost(new Item(post));
-        self._postViews.push(view);
-        view.render();
-        this.$('.posts').append(view.el);
-      });
+    _appendPosts: function() {
+      var posts = this.model.posts();
+      for (var i in posts) {
+        var post = posts[i];
+        var postView = this._viewForPost(post);
+        this._postViews.push(postView);
+        postView.render();
+        this.$('.posts').append(postView.el);
+      }
       this._hideSpinner();
     },
 
@@ -249,14 +253,12 @@ define(function(require) {
         // Followed the channel
         if (this.hidden) {
           this.hidden = false;
-          this.listenToOnce(this.model, 'fetch', this._begin);
+          this.listenToOnce(this.model, 'reset', this._begin);
           this.model.fetch({
             data: {max: 31},
             credentials: this.options.user.credentials,
             reset: true
           });
-        } else {
-          this.model.storeModels();
         }
 
         if (this._userCanPost()) {
@@ -441,7 +443,6 @@ define(function(require) {
         this.model.create(item, {
           credentials: this.options.user.credentials,
           wait: true,
-          syncWithServer: true,
           complete: function() {
             previewsContainer.empty();
             self.mediaToPost = [];

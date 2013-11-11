@@ -18,14 +18,9 @@ define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
   var dateUtils = require('util/dateUtils');
-  var indexedDB = require('util/indexedDB');
   var ModelBase = require('models/ModelBase');
-  var PostsDB = require('models/db/PostsDB');
-  require('backbone-indexeddb');
 
   var Item = ModelBase.extend({
-    database: PostsDB,
-    storeName: PostsDB.id,
 
     initialize: function() {
       this._initializeComments();
@@ -55,7 +50,6 @@ define(function(require) {
       this._defineGetter('replyTo');
       this._defineGetter('published');
       this._defineGetter('id');
-      this._useIndexedDB = indexedDB.isSuppported();
     },
 
     _initializeComments: function() {
@@ -102,40 +96,6 @@ define(function(require) {
 
     authorAvatarUrl: function(size) {
       return api.avatarUrl(this.author, size);
-    },
-
-    _syncServer: function(method, model, options) {
-      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
-      sync.call(this, method, model, options);
-    },
-
-    _syncIndexedDB: function(method, model, options) {
-      if (this._useIndexedDB) {
-        // XXX: workaround for posts without time
-        if (!model.updated && !model.published) {
-          var now = dateUtils.now().toISOString();
-          model.set('updated', now, {silent: true});
-          model.set('published', now, {silent: true});
-        }
-
-        Backbone.sync.call(this, method, model, options);
-      }
-    },
-
-    _syncIndexedDBCallback: function(method, model, options) {
-      var self = this;
-      return function() {
-        self._syncIndexedDB(method, model, options);
-      }
-    },
-
-    sync: function(method, model, options) {
-      if (options.syncWithServer) {
-        this.listenToOnce(this, 'sync', this._syncIndexedDBCallback(method, model, options));
-        this._syncServer(method, model, options);
-      } else {
-        this._syncIndexedDB(method, model, options);
-      }
     }
   });
 

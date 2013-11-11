@@ -45,83 +45,6 @@ define(function(require) {
       return !this._isLoading;
     },
 
-    _lastWeekDate: function() {
-      var dayInMillis = 24*60*(60*1000);
-      var now = dateUtils.toUTCDate(dateUtils.now());
-
-      return now - 7*dayInMillis;
-    },
-
-    // Based at: 
-    // https://github.com/buddycloud/webclient/blob/dev-candy/README.bubbling.md#buddycloud-sorts-the-most-interesting-information-for-you
-
-    parseItems: function(username, channel, items) {
-      if (_.isEmpty(items)) return;
-
-      var self = this;
-      var mentionsCount = 0; // new mentions
-      var userPosts = [];
-      var replies = {};
-      var totalCount = 0; // new messages
-      var postsLastWeek = []; // posts within a week
-
-      
-      var lastWeek =  this._lastWeekDate();
-
-      items.forEach(function(item) {
-        var updated = dateUtils.utcDate(item.updated);
-        if (updated > lastWeek) {
-          postsLastWeek.push(updated);
-        }
-
-        if (item.author !== username) {
-          totalCount++;
-        }
-
-        if (item.replyTo) {
-          if (replies[item.replyTo]) {
-            replies[item.replyTo] = replies[item.replyTo] + 1;
-          } else {
-            replies[item.replyTo] = 1;
-          }
-        } else {
-          // Posts from this user
-          if (item.author === username) {
-            userPosts.push(item.id);
-          }
-        }
-
-        mentionsCount = self._checkMention(item, username, mentionsCount);
-      });
-      var repliesCount = this._countReplies(userPosts, replies);
-      
-      this._setInfo(username, channel, this._buildInfo(mentionsCount, totalCount,
-        repliesCount, postsLastWeek, []));
-    },
-
-    _checkMention: function(item, username, mentionsCount) {
-      var content = item.content;
-      if (content && item.author !== username) {
-        var mentions =  linkify.mentions(content) || [];
-        mentions.forEach(function(mention) {
-          if (mention === username) {
-            mentionsCount++;
-          }
-        });
-      }
-
-      return mentionsCount;
-    },
-
-    _countReplies: function(posts, replies) {
-      var repliesCount = 0;
-      posts.forEach(function(post) {
-        repliesCount += replies[post] || 0;
-      });
-
-      return repliesCount;
-    },
-
     _getSidebarInfo: function(channel) {
       var temp = this.where({'channel': channel});
       // Should be unique
@@ -141,11 +64,11 @@ define(function(require) {
       return this._buildInfo(0, 0, 0, postsLastWeek || [], hitsLastWeek || []);
     },
 
-    _buildInfo: function(mentions, total, replies, postsLastWeek, hitsLastWeek) {
+    _buildInfo: function(mentionsCount, totalCount, repliesCount, postsLastWeek, hitsLastWeek) {
       return {
-        'mentions': mentions,
-        'total': total,
-        'replies': replies,
+        'mentionsCount': mentionsCount,
+        'totalCount': totalCount,
+        'repliesCount': repliesCount,
         'postsLastWeek': postsLastWeek,
         'hitsLastWeek': hitsLastWeek
       };
@@ -157,6 +80,12 @@ define(function(require) {
         'channel': channel,
         'info': info
       };
+    },
+
+    _lastWeekDate: function() {
+      var weekInMillis = 7*(24*60*(60*1000));
+      var now = dateUtils.toUTCDate(dateUtils.now());
+      return now - weekInMillis;
     },
 
     _filterLastWeek: function(toFilter) {
@@ -196,7 +125,7 @@ define(function(require) {
       }
     },
 
-    _setInfo: function(user, channel, info) {
+    setInfo: function(user, channel, info) {
       if (this.useIndexedDB) {
         var sidebarInfo = this._getSidebarInfo(channel);
         if (sidebarInfo) {
@@ -204,9 +133,9 @@ define(function(require) {
           oldInfo.postsLastWeek.concat(info.postsLastWeek);
 
           var newInfo = this._buildInfo(
-            oldInfo.mentions + info.mentions,
-            oldInfo.total + info.total,
-            oldInfo.replies + info.replies,
+            oldInfo.mentionsCount + info.mentionsCount,
+            oldInfo.totalCount + info.totalCount,
+            oldInfo.repliesCount + info.repliesCount,
             this._filterLastWeek(oldInfo.postsLastWeek || []),
             this._filterLastWeek(oldInfo.hitsLastWeek || [])
           );
@@ -220,9 +149,9 @@ define(function(require) {
         oldInfo.postsLastWeek.concat(info.postsLastWeek);
 
         var newInfo = this._buildInfo(
-          oldInfo.mentions + info.mentions,
-          oldInfo.total + info.total,
-          oldInfo.replies + info.replies,
+          oldInfo.mentionsCount + info.mentionsCount,
+          oldInfo.totalCount + info.totalCount,
+          oldInfo.repliesCount + info.repliesCount,
           this._filterLastWeek(oldInfo.postsLastWeek || []),
           this._filterLastWeek(oldInfo.hitsLastWeek || [])
         );

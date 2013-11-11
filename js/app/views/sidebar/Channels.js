@@ -78,11 +78,11 @@ define(function(require) {
       var info = this.sidebarInfo.getInfo(channel);
 
       var totalCountEl = channelEl.find('.channelpost');
-      var totalCount = info.total;
+      var totalCount = info.totalCount;
       this._showOrHideCount(totalCountEl, totalCount);
 
       var mentionsCountEl = channelEl.find('.admin');
-      var mentionsCount = info.mentions;
+      var mentionsCount = info.mentionsCount;
       this._showOrHideCount(mentionsCountEl, mentionsCount);
     },
 
@@ -208,12 +208,12 @@ define(function(require) {
       var aInfo = this.sidebarInfo.getInfo(a.channel);
       var bInfo = this.sidebarInfo.getInfo(b.channel);
 
-      var diff = bInfo.mentions - aInfo.mentions;
+      var diff = bInfo.mentionsCount - aInfo.mentionsCount;
       if (diff === 0) {
-        diff = bInfo.replies - aInfo.replies;
+        diff = bInfo.repliesCount - aInfo.repliesCount;
 
         if (diff === 0) {
-          diff = bInfo.total - aInfo.total;
+          diff = bInfo.totalCount - aInfo.totalCount;
 
           if (diff === 0) {
             diff = bInfo.hitsLastWeek.length - aInfo.hitsLastWeek.length;
