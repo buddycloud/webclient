@@ -82,14 +82,8 @@ define(function(require) {
       };
     },
 
-    _lastWeekDate: function() {
-      var weekInMillis = 7*(24*60*(60*1000));
-      var now = dateUtils.toUTCDate(dateUtils.now());
-      return now - weekInMillis;
-    },
-
     _filterLastWeek: function(toFilter) {
-      var lastWeek =  this._lastWeekDate();
+      var lastWeek = dateUtils.lastWeekDate();
       var idx = 0;
       while (toFilter[idx] < lastWeek) {
         toFilter.splice(idx, 1);
@@ -99,63 +93,90 @@ define(function(require) {
       return toFilter;
     },
 
+    _checkMentions: function(user, item) {
+      var mentionsCount = 0;
+      var mentions =  linkify.mentions(item.content) || [];
+      mentions.forEach(function(mention) {
+        if (mention === user) {
+          mentionsCount++;
+        }
+      });
+
+      return mentionsCount;
+    },
+
+    parseItem: function(user, item) {
+      var info = this._emptyInfo();
+      var lastWeek =  dateUtils.lastWeekDate();
+      var updated = dateUtils.utcDate(item.updated);
+      if (updated > lastWeek) {
+        info.postsLastWeek.push(updated);
+      }
+
+      if (item.author !== user) {
+        info.mentionsCount = this._checkMentions(user, item);
+        info.totalCount++;
+      }
+
+      this.setInfo(user, item.source, info);
+    },
+
     resetCounters: function(user, channel) {
       if (this.useIndexedDB) {
-        var sidebarInfo = this._getSidebarInfo(channel);
-        if (sidebarInfo) {
-          var oldInfo = sidebarInfo.get('info');
-          oldInfo.hitsLastWeek.push(dateUtils.toUTCDate(dateUtils.now()));
+        this._setIndexedDBInfo(user, channel);
+      } else {
+        this._setInfo(user, channel);
+      }
+    },
 
-          sidebarInfo.set({
-            'info': this._buildInfo(
-              0, 0, 0,
-              this._filterLastWeek(oldInfo.postsLastWeek || []),
-              this._filterLastWeek(oldInfo.hitsLastWeek || [])
-            )
-          });
-          this.create(sidebarInfo);
+    _updateInfo: function(cachedInfo, newInfo) {
+      cachedInfo.mentionsCount += newInfo.mentionsCount;
+      cachedInfo.totalCount += newInfo.totalCount;
+      cachedInfo.repliesCount += newInfo.repliesCount;
+      cachedInfo.postsLastWeek = this._filterLastWeek(cachedInfo.postsLastWeek || []);
+      cachedInfo.hitsLastWeek = this._filterLastWeek(cachedInfo.hitsLastWeek || []);
+    },
+
+    _setIndexedDBInfo: function(user, channel, info) {
+      var sidebarInfo = this._getSidebarInfo(channel);
+      if (sidebarInfo) {
+        var cachedInfo = sidebarInfo.get('info');
+        if (info) {
+          cachedInfo.postsLastWeek.concat(info.postsLastWeek);
+          this._updateInfo(cachedInfo, info);
+          sidebarInfo.set({'info': cachedInfo});
+        } else {
+          cachedInfo.hitsLastWeek.push(dateUtils.toUTCDate(dateUtils.now()));
+          cachedInfo.hitsLastWeek = this._filterLastWeek(cachedInfo.hitsLastWeek || []);
+          cachedInfo.postsLastWeek = this._filterLastWeek(cachedInfo.postsLastWeek || []);
+          sidebarInfo.set({'info': this._emptyInfo(cachedInfo.postsLastWeek, cachedInfo.hitsLastWeek)});
         }
       } else {
-        var oldInfo = this._info[channel] || this._emptyInfo();
-        this._info[channel] = this._buildInfo(
-          0, 0, 0,
-          this._filterLastWeek(oldInfo.postsLastWeek || []),
-          this._filterLastWeek(oldInfo.hitsLastWeek || [])
+        sidebarInfo = this._buildSidebarInfo(user, channel, info || this._emptyInfo());
+      }
+      this.create(sidebarInfo);
+    },
+
+    _setInfo: function(user, channel, info) {
+      var cachedInfo = this._info[channel] || this._emptyInfo();
+      if (info) {
+        cachedInfo.postsLastWeek.concat(info.postsLastWeek);
+        this._updateInfo(cachedInfo, info);
+        this._info[channel] = cachedInfo;
+      } else {
+        cachedInfo.hitsLastWeek.push(dateUtils.toUTCDate(dateUtils.now()));
+        this._info[channel] = this._emptyInfo(
+          this._filterLastWeek(cachedInfo.postsLastWeek || []),
+          this._filterLastWeek(cachedInfo.hitsLastWeek || [])
         );
       }
     },
 
     setInfo: function(user, channel, info) {
       if (this.useIndexedDB) {
-        var sidebarInfo = this._getSidebarInfo(channel);
-        if (sidebarInfo) {
-          var oldInfo = sidebarInfo.get('info');
-          oldInfo.postsLastWeek.concat(info.postsLastWeek);
-
-          var newInfo = this._buildInfo(
-            oldInfo.mentionsCount + info.mentionsCount,
-            oldInfo.totalCount + info.totalCount,
-            oldInfo.repliesCount + info.repliesCount,
-            this._filterLastWeek(oldInfo.postsLastWeek || []),
-            this._filterLastWeek(oldInfo.hitsLastWeek || [])
-          );
-          sidebarInfo.set({'info': newInfo});
-        } else {
-          sidebarInfo = this._buildSidebarInfo(user, channel, info);
-        }
-        this.create(sidebarInfo);
+        this._setIndexedDBInfo(user, channel, info);
       } else {
-        var oldInfo = this._info[channel] || this._emptyInfo();
-        oldInfo.postsLastWeek.concat(info.postsLastWeek);
-
-        var newInfo = this._buildInfo(
-          oldInfo.mentionsCount + info.mentionsCount,
-          oldInfo.totalCount + info.totalCount,
-          oldInfo.repliesCount + info.repliesCount,
-          this._filterLastWeek(oldInfo.postsLastWeek || []),
-          this._filterLastWeek(oldInfo.hitsLastWeek || [])
-        );
-        this._info[channel] = newInfo;
+        this._setInfo(user, channel, info);
       }
     }
 

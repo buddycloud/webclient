@@ -196,6 +196,7 @@ define(function(require) {
       this._renderCounters();
       avatarFallback(this.$('.channel img'), undefined, 50);
       this._setupAnimation();
+      document.redraw();
     },
 
     // 1 - mentions
@@ -219,11 +220,6 @@ define(function(require) {
             diff = bInfo.hitsLastWeek.length - aInfo.hitsLastWeek.length;
 
             if (diff === 0) {
-              /*aUpdated = dateUtils.utcDate(aInfo.updated);
-              bUpdated = dateUtils.utcDate(bInfo.updated);
-
-              if (aUpdated > bUpdated) diff = -1;
-              if (aUpdated < bUpdated) diff = 1;*/
               diff = aInfo.postsLastWeek.length - bInfo.postsLastWeek.length;
 
               if (diff === 0) {
@@ -429,11 +425,11 @@ define(function(require) {
       this.listenTo(user.notifications, 'new', function(item) {
         var channel = item.source;
         if (channel !== self.selected) {
-          sidebarInfo.parseItems(user.username(), channel, [item]);
+          sidebarInfo.parseItem(user.username(), item);
 
           if (channel === user.username()) {
-            Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).total);
-            Events.trigger('personalChannelMentionsCount', sidebarInfo.getInfo(channel).mentions);
+            Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).totalCount);
+            Events.trigger('personalChannelMentionsCount', sidebarInfo.getInfo(channel).mentionsCount);
           } else {
             self._renderUnreadCount(channel);
             self._bubbleUp(channel);

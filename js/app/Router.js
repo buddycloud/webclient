@@ -115,7 +115,6 @@ define(function(require) {
 
     channel: function(channel) {
       this._before();
-      channel = channel.toLowerCase();
       if (this.sidebar) {
         this.sidebar.selectChannel(channel);
       }

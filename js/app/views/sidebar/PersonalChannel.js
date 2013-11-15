@@ -82,8 +82,8 @@ define(function(require) {
 
     _showOrHideCount: function(countEl, count) {
       if (count > 0) {
-        if (count > 50) {
-          countEl.text('50+');
+        if (count > 30) {
+          countEl.text('30+');
         } else {
           countEl.text(count);
         }

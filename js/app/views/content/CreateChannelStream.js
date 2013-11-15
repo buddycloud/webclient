@@ -50,6 +50,7 @@ define(function(require) {
       this.$el.html(_.template(localTemplate, {
         domain: this._topicsDomain()
       }));
+      document.redraw();
     },
 
     _topicsDomain: function() {
