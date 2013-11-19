@@ -28,7 +28,7 @@ define(function(require) {
       ModelBase.call(this);
       this.channelItems = {};
       this.sidebarInfo = new SidebarInfoCollection();
-      this.listenTo(this, 'sync', this._begin);
+      this.listenTo(this, 'error sync', this._begin);
     },
 
     _begin: function() {
