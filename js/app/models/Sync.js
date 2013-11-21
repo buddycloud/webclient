@@ -44,10 +44,12 @@ define(function(require) {
           postsLastWeek = [];
           for (var j in info.postsThisWeek) {
             var date = new Date(info.postsThisWeek[j]);
-            if (!mostRecent || date > mostRecent) {
-              mostRecent = date;
-            }
             postsLastWeek.push(date);
+          }
+
+          var lastUpdated = new Date(info.lastUpdated);
+          if (!mostRecent || lastUpdated > mostRecent) {
+            mostRecent = lastUpdated;
           }
 
           info['postsLastWeek'] = postsLastWeek; // Maintain old property name
