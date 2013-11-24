@@ -74,18 +74,6 @@ define(function(require) {
       return !this.isPost();
     },
 
-    lastUpdated: function() {
-      var updated = dateUtils.utcDate(this.updated);
-      this.comments.forEach(function(comment) {
-        var updatedComment = dateUtils.utcDate(comment.updated);
-        if (updatedComment > updated) {
-          updated = updatedComment;
-        }
-      });
-
-      return updated;
-    },
-
     deleteComment: function(id) {
       for (var i in this.comments) {
         if (this.comments[i].id === id) {

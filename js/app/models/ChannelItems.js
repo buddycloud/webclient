@@ -42,7 +42,7 @@ define(function(require) {
     },
 
     comparator: function(item) {
-      return -item.lastUpdated();
+      return -item.update;
     },
 
     _itemAdded: function(item, collection, options) {
@@ -58,7 +58,7 @@ define(function(require) {
     },
 
     url: function() {
-      return api.url(this.channel, 'content', 'posts');
+      return api.url(this.channel, 'content', 'posts', 'threads');
     },
 
     lastItem: function() {
@@ -92,29 +92,25 @@ define(function(require) {
     },
 
     parse: function(response, options) {
-      // Cluster all comments by poster id
-      var comments = {};
-      response.forEach(function(item) {
-        if (item.replyTo) {
-          var postId = item.replyTo;
-          comments[postId] = comments[postId] || [];
-          comments[postId].push(item);
-        }
-      });
-
-      var self = this;
-      // Add comments to posts
-      response.forEach(function(item) {
-        if (!item.replyTo) {
-          var itemComments = comments[item.id];
-          if (itemComments) {
-            itemComments.sort(self._compareItems);
-            item.comments = itemComments;
+      var parsed = [];
+      response.forEach(function(resp) {
+        var post;
+        var comments = [];
+        for (var i in resp.items) {
+          var item = resp.items[i];
+          if (item.replyTo) {
+            comments.push(item);
+          } else {
+            post = item;
           }
         }
+
+        post.updated = resp.updated;
+        post.comments = comments;
+        parsed.push(post);
       });
 
-      return response;
+      return parsed;
     },
 
     byThread: function() {
