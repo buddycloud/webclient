@@ -105,9 +105,11 @@ define(function(require) {
           }
         }
 
-        post.updated = resp.updated;
-        post.comments = comments;
-        parsed.push(post);
+        if (post) {
+          post.updated = resp.updated;
+          post.comments = comments;
+          parsed.push(post);
+        }
       });
 
       return parsed;
