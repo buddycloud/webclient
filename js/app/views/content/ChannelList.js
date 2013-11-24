@@ -90,7 +90,7 @@ define(function(require) {
         model: this.model,
         user: this.options.user,
         title: event.target.title,
-        role: this.options.role,
+        defaultRole: this.options.defaultRole,
         position: inlinePosition
       });
       $(this._selectedTarget).addClass('selected');

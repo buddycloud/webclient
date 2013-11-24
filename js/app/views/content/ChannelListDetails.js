@@ -36,6 +36,12 @@ define(function(require) {
       'member': 'follower',
       'publisher': 'followerPlus'
     },
+    rolesNames: {
+      'moderator': 'Moderator',
+      'member': 'Follower',
+      'publisher': 'Follower+Post',
+      'outcast': 'Banned'
+    },
     events: {
       'click h4': '_navigateToChannel',
       'click .changeRoleButton': '_changeRole',
@@ -47,7 +53,12 @@ define(function(require) {
     initialize: function() {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {});
       this.$el.addClass(this.positions[this.options.position]);
+      this.role = this._getRole();
       this.render();
+    },
+
+    _getRole: function() {
+      return this.model ? this.model.userRole(this.options.title) : this.options.defaultRole;
     },
 
     _loggedUserAffiliation: function() {
@@ -60,9 +71,12 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(localTemplate, {
         channel: this.options.title,
-        role: this.options.role
+        role: this.options.defaultRole || this.rolesNames[this.role]
       }));
-
+      this._renderPopup();
+    },
+    
+    _renderPopup: function() {
       if (this.model && this.options.user) {
         var affiliation = this._loggedUserAffiliation();
         // Only producers and moderators can change roles
@@ -70,12 +84,11 @@ define(function(require) {
           this.$('.action').show();
           this.$('.actionRow.choose').show();
 
-          var role = this.model.userRole(this.options.title);
-          if (role === 'outcast') {
+          if (this.role === 'outcast') {
             this.$('.banUser').hide();
             this.$('.banUserButton').hide();
           } else {
-            var roleClass = this.rolesToClass[role];
+            var roleClass = this.rolesToClass[this.role];
             this.$('#selectRights > option').each(function() {
               var value = $(this).val();
               if (value === roleClass) {
