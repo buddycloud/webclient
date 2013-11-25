@@ -15,10 +15,7 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var Backbone = require('backbone');
-  var avatarFallback = require('util/avatarFallback');
-  var Events = Backbone.Events;
 
   var AbstractEditStream = Backbone.View.extend({
     className: 'stream clearfix',

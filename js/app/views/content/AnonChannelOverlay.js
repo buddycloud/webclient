@@ -15,13 +15,12 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
   var animations = require('util/animations');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
   var l10nBrowser = require('l10n-browser');
-  var template = require('text!templates/content/anonOverlay.html');
   var localTemplate;
+  var template = require('text!templates/content/anonOverlay.html');
 
   var AnonChannelOverlay = Backbone.View.extend({
     className: 'overlay',

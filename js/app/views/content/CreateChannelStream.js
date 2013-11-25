@@ -15,7 +15,6 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
   var AbstractEditStream = require('views/content/AbstractEditStream');
   var api = require('util/api');
   var Backbone = require('backbone');

@@ -15,11 +15,9 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var animations = require('util/animations');
   var Backbone = require('backbone');
-  var dateUtils = require('util/dateUtils');
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;

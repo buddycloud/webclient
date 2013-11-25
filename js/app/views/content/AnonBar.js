@@ -16,10 +16,10 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var l10nBrowser = require('l10n-browser');
-  var template = require('text!templates/content/anonBar.html')
   var Events = Backbone.Events;
+  var l10nBrowser = require('l10n-browser');
   var localTemplate;
+  var template = require('text!templates/content/anonBar.html');
 
   var AnonBar = Backbone.View.extend({
     className: 'navigation clearfix',

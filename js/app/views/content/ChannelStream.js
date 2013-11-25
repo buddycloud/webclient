@@ -15,7 +15,6 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
   var animations = require('util/animations');
   var api = require('util/api');
   var avatarFallback = require('util/avatarFallback');

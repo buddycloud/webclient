@@ -16,10 +16,10 @@
 
 define(function(require) {
   var AbstractExploreView = require('views/content/AbstractExploreView');
-  var spinner = require('util/spinner');
   var l10nBrowser = require('l10n-browser');
-  var template = require('text!templates/content/discover.html')
   var localTemplate;
+  var spinner = require('util/spinner');
+  var template = require('text!templates/content/discover.html');
 
   var DiscoverView = AbstractExploreView.extend({
     className: 'discoverChannels clearfix',

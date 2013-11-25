@@ -16,8 +16,6 @@
 
 define(function(require) {
   var api = require('util/api');
-  var Backbone = require('backbone');
-  var dateUtils = require('util/dateUtils');
   var CollectionBase = require('models/CollectionBase');
   var Item = require('models/Item');
 
@@ -51,6 +49,7 @@ define(function(require) {
       } else {
         var post = this.get(item.replyTo);
         if (post) {
+          post.updated = item.updated;
           post.comments.push(item);
           post.trigger('addComment', post, options);
         }
@@ -81,16 +80,6 @@ define(function(require) {
       });
     },
 
-    _compareItems: function(a, b) {
-      aUpdated = dateUtils.utcDate(a.updated);
-      bUpdated = dateUtils.utcDate(b.updated);
-
-      if (aUpdated > bUpdated) return 1;
-      if (aUpdated < bUpdated) return -1;
-
-      return 0;
-    },
-
     parse: function(response, options) {
       var parsed = [];
       response.forEach(function(resp) {
@@ -113,28 +102,6 @@ define(function(require) {
       });
 
       return parsed;
-    },
-
-    byThread: function() {
-      var incompleteThreads = {};
-      var completeThreads = [];
-
-      // Note that the items returned by the buddycloud
-      // API are sorted from newest to oldest.
-      this.models.forEach(function(item) {
-        var threadId = item.get('replyTo') || item.get('id');
-        var thread = incompleteThreads[threadId];
-        if (!thread) {
-          thread = incompleteThreads[threadId] = [];
-        }
-        thread.unshift(item);
-        if (!item.get('replyTo')) { // is top-level post
-          completeThreads.push(thread);
-          delete incompleteThreads[threadId];
-        }
-      });
-
-      return completeThreads;
     }
   });
 

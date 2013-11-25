@@ -16,7 +16,7 @@
 
 define(function(require) {
   var Backbone = require('backbone');
-  var CreateChannelStream = require('views/content/CreateChannelStream')
+  var CreateChannelStream = require('views/content/CreateChannelStream');
 
   var CreateChannelPage = Backbone.View.extend({
     className: 'channelView',

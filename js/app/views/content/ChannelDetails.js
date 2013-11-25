@@ -16,7 +16,6 @@
 
 define(function(require) {
   require(['jquery', 'timeago']);
-  var _ = require('underscore');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
   var Channel = require('models/Channel');

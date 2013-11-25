@@ -18,15 +18,12 @@ define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
-  var Item = require('models/Item');
   var ModelBase = require('models/ModelBase');
-  var ChannelItems = require('models/ChannelItems');
   var SidebarInfoCollection = require('models/SidebarInfoCollection');
 
   var Sync = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
-      this.channelItems = {};
       this.sidebarInfo = new SidebarInfoCollection();
       this.listenTo(this, 'error sync', this._begin);
     },

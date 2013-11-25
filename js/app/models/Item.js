@@ -16,8 +16,6 @@
 
 define(function(require) {
   var api = require('util/api');
-  var Backbone = require('backbone');
-  var dateUtils = require('util/dateUtils');
   var ModelBase = require('models/ModelBase');
 
   var Item = ModelBase.extend({
