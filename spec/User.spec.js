@@ -62,13 +62,13 @@ define(function(require) {
 
       it('should trigger "loginError" on error response', function() {
         spyOn($, 'ajax').andCallFake(function(options) {
-          options.error();
+          options.error(user.subscribedChannels, new XMLHttpRequest());
         });
         spyOn(user, 'trigger');
 
 
         user.login({username: username, password: password});
-        expect(user.trigger).toHaveBeenCalledWith('loginError');
+        expect(user.trigger).toHaveBeenCalledWith('loginError', 'Login error!');
       });
     });
 
@@ -125,12 +125,12 @@ define(function(require) {
 
       it('should trigger "registrationError" on error response', function() {
         spyOn($, 'ajax').andCallFake(function(options) {
-          options.error(new XMLHttpRequest);
+          options.error(user.subscribedChannels, new XMLHttpRequest());
         });
         spyOn(user, 'trigger');
 
         user.register('bob@example.com', 'bob', 'bob@example.com');
-        expect(user.trigger).toHaveBeenCalledWith('registrationError', 'Registration error');
+        expect(user.trigger).toHaveBeenCalledWith('registrationError', 'Registration error!');
       });
     });
   });
