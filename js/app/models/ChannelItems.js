@@ -49,7 +49,7 @@ define(function(require) {
       } else {
         var post = this.get(item.replyTo);
         if (post) {
-          post.updated = item.updated;
+          post.set('updated', item.updated);
           post.comments.push(item);
           post.trigger('addComment', post, options);
         }
