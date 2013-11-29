@@ -56,8 +56,12 @@ define(function(require) {
       }
     },
 
-    url: function() {
+    threadsUrl: function() {
       return api.url(this.channel, 'content', 'posts', 'threads');
+    },
+
+    defaultUrl: function() {
+      return api.url(this.channel, 'content', 'posts');
     },
 
     lastItem: function() {
@@ -69,6 +73,7 @@ define(function(require) {
       // Explicitly set "Accept: application/json" so that we get the
       // JSON representation instead of an Atom feed.
       options = options || {};
+      options.url = this.threadsUrl();
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
       CollectionBase.prototype.fetch.call(this, options);
@@ -102,7 +107,12 @@ define(function(require) {
       });
 
       return parsed;
-    }
+    },
+
+    create: function(attributes, options) {
+      options = _.defaults((options || {}), {url: this.defaultUrl()});
+      return CollectionBase.prototype.create.call(this, attributes, options);
+    },
   });
 
   return ChannelItems;
