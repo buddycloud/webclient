@@ -81,9 +81,14 @@ define(function(require) {
       expect(items.channel).toBe('alice@example.com');
     });
 
-    it('should have URL /<channel>/content/posts', function() {
+    it('should have default URL /<channel>/content/posts', function() {
+      var url = 'https://example.com/alice@example.com/content/posts';
+      expect(items.defaultUrl()).toBe(url);
+    });
+
+    it('should have threads URL /<channel>/content/posts/threads', function() {
       var url = 'https://example.com/alice@example.com/content/posts/threads';
-      expect(items.url()).toBe(url);
+      expect(items.threadsUrl()).toBe(url);
     });
 
     describe('fetch()', function() {
