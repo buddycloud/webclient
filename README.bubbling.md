@@ -29,13 +29,12 @@ count)
 
 -   the owner's channel should be pinned to the top of the channel list
     (and scroll with all channels)
--   1st: channels with unread user@mentions (where am I mentioned?)
--   2nd: channels with unread replies (replies to my posts)
--   3rd: channels with unread private messages (did someone try to contact me?)
--   4th: channels with unread channel posts (users check back regularly for new posts - make this easy)
--   5th: channels I visited more often this week
--   6th: most active channels this week
--   7th: alphabetical order
+-   1st: channels with unread user@mentions - sorted from newest to oldest (where am I mentioned?)
+-   2nd: channels with unread replies - sorted from newest to oldest (replies to my posts)
+-   3rd: channels with unread private messages - sorted from newest to oldest (did someone try to contact me?)
+-   4th: channels with unread channel posts - sorted from newest to oldest (users check back regularly for new posts - make this easy)
+-   5th: recently read - sorted from newest to oldest
+-   6th: tie breaker - compare alphabetically (brand new user with pre-defined channels)
 
 Note: an account that was read and no longer has unread posts, @replies
 or personal messages stays in the previous list order until the user
