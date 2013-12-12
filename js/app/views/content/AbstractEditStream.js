@@ -64,12 +64,7 @@ define(function(require) {
     },
 
     _isChecked: function(element) {
-      if (element) {
-        var checked = element.attr('checked');
-        return checked && checked === 'checked';
-      }
-
-      return false;
+      return element ? element.prop('checked') : false;
     },
 
     _setAccessModel: function(model) {

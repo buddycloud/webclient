@@ -20,6 +20,7 @@ define(function(require) {
   var avatarFallback = require('util/avatarFallback');
   var Backbone = require('backbone');
   var ChannelItems = require('models/ChannelItems');
+  var ChannelNotifications = require('views/content/ChannelNotifications');
   var config = require('config');
   var Dropzone = require('dropzone');
   var Events = Backbone.Events;
@@ -49,6 +50,7 @@ define(function(require) {
       this._postViews = [];
       this.mediaToPost = [];
       
+      this._initNotifications();
       this._initModel();
 
       var user = this.options.user;
@@ -63,6 +65,10 @@ define(function(require) {
 
       // Bubble up post
       Events.on('postBubble', this._bubble, this);
+    },
+
+    _initNotifications: function() {
+      this.notificationsView = new ChannelNotifications({channel: this.options.channel, user: this.options.user});
     },
 
     destroy: function() {
@@ -310,11 +316,17 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(localTemplate, {user: this.options.user, l: l10n.get}));
       this._prepareNewTopic();
+      this._prepareNotificationsArea();
       this._showPosts();
       this._postOnCtrlEnter();
       this._previewEmbed();
       this._hideSpinner();
       this._initializeDropzone();
+    },
+
+    _prepareNotificationsArea: function() {
+      this.$notifications = this.$('.notifications');
+      this.$notifications.html(this.notificationsView.el);
     },
 
     _prepareNewTopic: function() {
