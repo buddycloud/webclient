@@ -16,47 +16,31 @@
 
 define(function(require) {
   var api = require('util/api');
-  var Backbone = require('backbone');
-  var dateUtils = require('util/dateUtils');
   var CollectionBase = require('models/CollectionBase');
-  var indexedDB = require('util/indexedDB');
   var Item = require('models/Item');
-  var PostsDB = require('models/db/PostsDB');
-  require('backbone-indexeddb');
 
   var ChannelItems = CollectionBase.extend({
     model: Item,
-    database: PostsDB,
-    storeName: PostsDB.id,
 
     constructor: function(channel) {
       CollectionBase.call(this);
       this.channel = channel;
       this._fetched = false;
-      this._useIndexedDB = indexedDB.isSuppported();
       this.listenTo(this, 'add', this._itemAdded);
-      this.listenToOnce(this, 'fetch', this._onFetch);
+      this.listenToOnce(this, 'reset', this._onReset);
       this.listenTo(this, 'sort', this._onSort);
-    },
-
-    storeModels: function(action) {
-      var channel = this.channel;
-      this.models.forEach(function(item) {
-        item.set('source', channel, {silent: true});
-        item.save(null, {silent: true, syncWithServer: false});
-      });
     },
 
     isReady: function() {
       return this._fetched;
     },
 
-    _onFetch: function() {
+    _onReset: function() {
       this._fetched = true;
     },
 
     comparator: function(item) {
-      return -item.lastUpdated();
+      return -item.update;
     },
 
     _itemAdded: function(item, collection, options) {
@@ -65,13 +49,18 @@ define(function(require) {
       } else {
         var post = this.get(item.replyTo);
         if (post) {
+          post.set('updated', item.updated);
           post.comments.push(item);
           post.trigger('addComment', post, options);
         }
       }
     },
 
-    url: function() {
+    threadsUrl: function() {
+      return api.url(this.channel, 'content', 'posts', 'threads');
+    },
+
+    defaultUrl: function() {
       return api.url(this.channel, 'content', 'posts');
     },
 
@@ -84,23 +73,9 @@ define(function(require) {
       // Explicitly set "Accept: application/json" so that we get the
       // JSON representation instead of an Atom feed.
       options = options || {};
+      options.url = this.threadsUrl();
       options.headers = options.headers || {};
       options.headers['Accept'] = 'application/json';
-      options.conditions = {source: this.channel};
-      
-      var data = options.data;
-      if (data) {
-        if (data.max) {
-          options.limit = data.max;
-        }
-
-        if (data.after) {
-          options.offset = this.length;
-        }
-      }
-
-      options.customSort = this._compareItems;
-
       CollectionBase.prototype.fetch.call(this, options);
     },
 
@@ -110,129 +85,34 @@ define(function(require) {
       });
     },
 
-    _compareItems: function(a, b) {
-      aUpdated = dateUtils.utcDate(a.updated);
-      bUpdated = dateUtils.utcDate(b.updated);
-
-      if (aUpdated > bUpdated) return 1;
-      if (aUpdated < bUpdated) return -1;
-      return 0;      
-    },
-
     parse: function(response, options) {
-      // Cluster all comments by poster id
-      var comments = {};
-      response.forEach(function(item) {
-        if (item.replyTo) {
-          var postId = item.replyTo;
-          comments[postId] = comments[postId] || [];
-          comments[postId].push(item);
-        }
-      });
-
-      var self = this;
-      // Add comments to posts
-      response.forEach(function(item) {
-        if (!item.replyTo) {
-          var itemComments = comments[item.id];
-          if (itemComments) {
-            itemComments.sort(self._compareItems);
-            item.comments = itemComments;
+      var parsed = [];
+      response.forEach(function(resp) {
+        var post;
+        var comments = [];
+        for (var i in resp.items) {
+          var item = resp.items[i];
+          if (item.replyTo) {
+            comments.push(item);
+          } else {
+            post = item;
           }
         }
-      });
 
-      return response;
-    },
-
-    byThread: function() {
-      var incompleteThreads = {};
-      var completeThreads = [];
-
-      // Note that the items returned by the buddycloud
-      // API are sorted from newest to oldest.
-      this.models.forEach(function(item) {
-        var threadId = item.get('replyTo') || item.get('id');
-        var thread = incompleteThreads[threadId];
-        if (!thread) {
-          thread = incompleteThreads[threadId] = [];
-        }
-        thread.unshift(item);
-        if (!item.get('replyTo')) { // is top-level post
-          completeThreads.push(thread);
-          delete incompleteThreads[threadId];
+        if (post) {
+          post.updated = resp.updated;
+          post.comments = comments;
+          parsed.push(post);
         }
       });
 
-      return completeThreads;
+      return parsed;
     },
 
-    _syncServerCallback: function(method, model, options) {
-      var self = this;
-      return function() {
-        self._syncServer(method, model, options);
-      };
+    create: function(attributes, options) {
+      options = _.defaults((options || {}), {url: this.defaultUrl()});
+      return CollectionBase.prototype.create.call(this, attributes, options);
     },
-
-    _handleEmptySync: function() {
-      var self = this;
-      this.listenToOnce(this, 'sync', function(model, resp) {
-        self.trigger('fetch', resp);
-      });
-
-      this.listenToOnce(this, 'error', function(model, resp) {
-        self.trigger('fetch', []);
-      });
-    },
-
-    _onIndexedDBSync: function(method, model, options) {
-      self = this;
-      return function(collection, resp) {
-        // Check if there was data on DB, if not, sync with server
-        if (_.isEmpty(resp, options)) {
-          self._handleEmptySync();
-          self._syncServer(method, model, options);
-        } else {
-          self.trigger('fetch', resp);
-        }
-      }
-    },
-
-    _syncIndexedDB: function(method, model, options) {
-      if (method === 'read') {
-        this.listenToOnce(this, 'sync', this._onIndexedDBSync(method, model, options));
-      } else {
-        this.listenToOnce(this, 'sync', this._syncServerCallback(method, model, options));
-      }
-
-      Backbone.sync.call(this, method, model, options);
-    },
-
-    _syncServer: function(method, model, options) {
-      var sync = Backbone.ajaxSync ? Backbone.ajaxSync : Backbone.sync;
-      sync.call(this, method, model, options);
-    },
-
-    _isUserLogged: function(options) {
-      return options && options.credentials && options.credentials.username;
-    },
-
-    sync: function(method, model, options) {
-      if (this._useIndexedDB) {
-        // Only tries IndexedDB if it is a logged user
-        if (this._isUserLogged(options)) {
-          this._syncIndexedDB(method, model, options);
-        } else {
-          var self = this;
-          this.listenToOnce(this, 'sync', function(model, resp) {
-            self.trigger('fetch', resp);
-          });
-          this._syncServer(method, model, options);
-        }
-      } else {
-        this._syncServer(method, model, options);
-      }
-    }
   });
 
   return ChannelItems;

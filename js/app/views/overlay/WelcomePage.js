@@ -15,8 +15,6 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
-  var _ = require('underscore');
   var Backbone = require('backbone');
   var l10nBrowser = require('l10n-browser');
   var DiscoverOverlay = require('views/overlay/DiscoverOverlay');

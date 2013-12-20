@@ -27,7 +27,7 @@ define(function(require) {
   }
 
   function utcDate(isoDate) {
-  	return toUTC(new Date(isoDate));
+    return toUTC(new Date(isoDate));
   }
 
   function toUTCDate(date) {
@@ -35,11 +35,17 @@ define(function(require) {
   }
 
   function earliestTime() {
-  	return new Date(1970, 0, 1).toISOString();
+    return new Date(1970, 0, 1).toISOString();
   }
 
   function now() {
     return new Date();
+  }
+
+  function lastWeekDate() {
+    var weekInMillis = 7*(24*60*(60*1000));
+    var now = toUTCDate(new Date());
+    return now - weekInMillis;
   }
 
   return {
@@ -47,6 +53,7 @@ define(function(require) {
     utcDate: utcDate,
     toUTCDate: toUTCDate,
     earliestTime: earliestTime,
-    now: now
+    now: now,
+    lastWeekDate: lastWeekDate
   };
 });

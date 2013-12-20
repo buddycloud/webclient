@@ -16,7 +16,6 @@
 
 define(function(require) {
   require(['jquery', 'timeago']);
-  var _ = require('underscore');
   var Backbone = require('backbone');
   var Events = Backbone.Events;
   var Channel = require('models/Channel');
@@ -154,27 +153,22 @@ define(function(require) {
       if (!this._isInitialized()) {
         this.producerList = new ChannelList({
           title: l('producerList', {}, 'producer'),
-          role: l('producerCaps', {}, 'Producer')});
+          defaultRole: l('producerCaps', {}, 'Producer')});
         this.moderatorsList = new ChannelList({
           model: this.model.followers,
           user: this.options.user,
-          title: l('moderatorsList', {}, 'moderators'),
-          role: l('moderatorCaps', {}, 'Moderator')});
+          title: l('moderatorsList', {}, 'moderators')});
         this.followersList = new ChannelList({
           model: this.model.followers,
           user: this.options.user,
-          title: l('followersList', {}, 'followers'),
-          role: l('followerCaps', {}, 'Follower')});
+          title: l('followersList', {}, 'followers')});
         this.bannedList = new ChannelList({
           model: this.model.followers,
           user: this.options.user,
-          //title: l('followersList', {}, 'followers'),
-          title: 'banned',
-          //role: l('followerCaps', {}, 'Follower'),
-          role: 'Banned'});
+          title: 'banned'});
         this.similarList = new ChannelList({
           title: l('similarList', {}, 'similar'),
-          role: l('similarCaps', {}, 'Similar')});
+          defaultRole: l('similarCaps', {}, 'Similar')});
 
         this._renderChannelLists();
       }

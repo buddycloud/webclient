@@ -15,10 +15,7 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var Backbone = require('backbone');
-  var avatarFallback = require('util/avatarFallback');
-  var Events = Backbone.Events;
 
   var AbstractEditStream = Backbone.View.extend({
     className: 'stream clearfix',
@@ -67,12 +64,7 @@ define(function(require) {
     },
 
     _isChecked: function(element) {
-      if (element) {
-        var checked = element.attr('checked');
-        return checked && checked === 'checked';
-      }
-
-      return false;
+      return element ? element.prop('checked') : false;
     },
 
     _setAccessModel: function(model) {
@@ -80,7 +72,7 @@ define(function(require) {
       if (this._isChecked(this.$('#channel_public_access'))) {
         model.set(accessField, 'open', {silent: true});
       } else {
-        model.set(accessField, 'whitelist', {silent: true});
+        model.set(accessField, 'authorize', {silent: true});
       }
     },
 

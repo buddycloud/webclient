@@ -1,6 +1,6 @@
 <div class="antiscroll-inner scrollHolder">
   <% _.each(metadatas, function(metadata, index) { %>
-  <div class="channel <%= (metadata.channel == selected) ? 'selected' : '' %>"
+  <div class="channel <%= (metadata.channel === selected) ? 'selected' : '' %>"
        data-href="<%- metadata.channel %>">
     <div class="avatar">
       <img data-type="<%- metadata.channelType() %>"

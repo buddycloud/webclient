@@ -15,7 +15,6 @@
  */
 
 define(function(require) {
-  var $ = require('jquery');
   var AbstractEditStream = require('views/content/AbstractEditStream');
   var api = require('util/api');
   var Backbone = require('backbone');
@@ -50,6 +49,7 @@ define(function(require) {
       this.$el.html(_.template(localTemplate, {
         domain: this._topicsDomain()
       }));
+      document.redraw();
     },
 
     _topicsDomain: function() {

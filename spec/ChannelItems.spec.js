@@ -20,40 +20,57 @@ define(function(require) {
 
   describe('ChannelItems', function() {
     var items;
-    var itemsData = [{
-      'id': '6',
-      'author': 'alice@example.com',
-      'updated': '2012-01-06',
-      'content': 'Top-level post #3'
-    }, {
-      'id': '5',
-      'author': 'ron@example.com',
-      'updated': '2012-01-05',
-      'replyTo': '1',
-      'content': 'Comment on top-level post #1'
-    }, {
-      'id': '4',
-      'author': 'bob@example.com',
-      'updated': '2012-01-04',
-      'replyTo': '3',
-      'content': 'Comment on top-level post #2'
-    }, {
-      'id': '3',
-      'author': 'alice@example.com',
-      'updated': '2012-01-03',
-      'content': 'Top-level post #2'
-    }, {
-      'id': '2',
-      'author': 'bob@example.com',
-      'updated': '2012-01-02',
-      'replyTo': '1',
-      'content': 'Comment on top-level post #1'
-    }, {
-      'id': '1',
-      'author': 'alice@example.com',
-      'updated': '2012-01-01',
-      'content': 'Top-level post #1'
-    }];
+    var itemsData = [
+      {
+        'id': '6',
+        'updated': '2012-01-06',
+        'items': [{
+          'id': '6',
+          'updated': '2012-01-06',
+          'author': 'alice@example.com',
+          'content': 'Top-level post #3'
+        }]
+      },
+      {
+        'id': '1',
+        'updated': '2012-01-05',
+        'items': [{
+          'id': '1',
+          'updated': '2012-01-01',
+          'author': 'alice@example.com',
+          'content': 'Top-level post #1'
+        }, {
+          'id': '2',
+          'author': 'bob@example.com',
+          'updated': '2012-01-02',
+          'replyTo': '1',
+          'content': 'Comment on top-level post #1'
+        }, {
+          'id': '5',
+          'author': 'ron@example.com',
+          'updated': '2012-01-05',
+          'content': 'Comment on top-level post #1',
+          'replyTo': '1',
+        }]
+      },
+      {
+        'id': '3',
+        'updated': '2012-01-04',
+        'items': [{
+          'id': '3',
+          'author': 'alice@example.com',
+          'updated': '2012-01-03',
+          'content': 'Top-level post #2',
+        },
+        {
+          'id': '4',
+          'author': 'bob@example.com',
+          'updated': '2012-01-04',
+          'replyTo': '3',
+          'content': 'Comment on top-level post #2'
+        }]
+      }
+    ];
 
     beforeEach(function() {
       items = new ChannelItems('alice@example.com');
@@ -64,9 +81,14 @@ define(function(require) {
       expect(items.channel).toBe('alice@example.com');
     });
 
-    it('should have URL /<channel>/content/posts', function() {
+    it('should have default URL /<channel>/content/posts', function() {
       var url = 'https://example.com/alice@example.com/content/posts';
-      expect(items.url()).toBe(url);
+      expect(items.defaultUrl()).toBe(url);
+    });
+
+    it('should have threads URL /<channel>/content/posts/threads', function() {
+      var url = 'https://example.com/alice@example.com/content/posts/threads';
+      expect(items.threadsUrl()).toBe(url);
     });
 
     describe('fetch()', function() {
@@ -145,7 +167,7 @@ define(function(require) {
         var comment = new Item({replyTo: '1'});
         spyOn(post, 'trigger').andCallThrough();
         items.add(comment);
-        expect(post.trigger).toHaveBeenCalledWith('addComment', post);
+        expect(post.trigger).toHaveBeenCalledWith('addComment', post, jasmine.any(Object));
       });
     });
 

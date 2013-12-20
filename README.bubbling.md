@@ -1,46 +1,20 @@
-buddycloud bubbles
-------------------
+buddycloud bubbles: buddycloud sorts the most interesting information for you
+-----------------------------------------------------------------------------
 
-bubbling is unique to buddycloud and defines which events cause a user
-or channel to float upwards to the top of the channel list. Some users
-subscribe to hundreds of channels. To make it easier to Channels should
-initially be sorted on activity so that a channel post causes that
-channel to "bubble" upwards and become visible to the user. How far up a
-channel bubbles is defined in the sorting. The following events should
-cause an entry to bubble up
+Bubbling is unique to buddycloud and defines which events cause a user
+or channel to float upwards to the top of the channel list. Users subscribe 
+to hundreds of channels. We want to **show the user the most important information with the least
+amount of scrolling**. 
 
--   place change
--   next place setting
--   status update
--   posting into a channel
-    -   private message
-    -   @reply post (your name mentioned in a channel)
-    -   channel post
-
-buddycloud sorts the most interesting information for you
----------------------------------------------------------
-
-We want to **show the user the most important information with the least
-amount of scrolling**. When a channel bubbles up it stops rising upwards
-at a certain point:
-
-sort by recent posts (newer messages are more important than message
-count)
+Channels bubble up according to the following sorting:
 
 -   the owner's channel should be pinned to the top of the channel list
     (and scroll with all channels)
--   1st: channels with unread user@mentions (where am I mentioned?)
--   2nd: channels with unread replies (replies to my posts)
--   3rd: channels with unread private messages (did someone try to contact me?)
--   4th: channels with unread channel posts (users check back regularly for new posts - make this easy)
--   5th: channels I visited more often this week
--   6th: most active channels this week
--   7th: alphabetical order
-
-Note: an account that was read and no longer has unread posts, @replies
-or personal messages stays in the previous list order until the user
-reads a new channel at which point it silently drops down when you click
-on a new channel.
+-   1st: channels with unread @mentions - sorted from newest to oldest (where am I mentioned?)
+-   2nd: channels with unread private messages - sorted from newest to oldest (did someone try to contact me?)
+-   3th: channels with unread channel posts - sorted from newest to oldest (users check back regularly for new posts - make this easy)
+-   4th: recently read - sorted from most recent posts to oldest
+-   5th: tie breaker - compare alphabetically (for example a new user with pre-defined channels)
 
 So for example our hypothetical user might have their list of channels
 in the following order:
@@ -60,4 +34,3 @@ in the following order:
     for a long time)
 -   even-more-boring@boring-domain.com (not read for even longer than
     boring-channel@boring-domain.com)
-

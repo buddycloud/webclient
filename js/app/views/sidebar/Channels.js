@@ -15,11 +15,9 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var avatarFallback = require('util/avatarFallback');
   var animations = require('util/animations');
   var Backbone = require('backbone');
-  var dateUtils = require('util/dateUtils');
   var template = require('text!templates/sidebar/channels.html');
   var channelTemplate = require('text!templates/sidebar/channel.html');
   var Events = Backbone.Events;
@@ -78,18 +76,18 @@ define(function(require) {
       var info = this.sidebarInfo.getInfo(channel);
 
       var totalCountEl = channelEl.find('.channelpost');
-      var totalCount = info.total;
+      var totalCount = info.totalCount;
       this._showOrHideCount(totalCountEl, totalCount);
 
       var mentionsCountEl = channelEl.find('.admin');
-      var mentionsCount = info.mentions;
+      var mentionsCount = info.mentionsCount;
       this._showOrHideCount(mentionsCountEl, mentionsCount);
     },
 
     _showOrHideCount: function(countEl, count) {
       if (count > 0) {
-        if (count > 50) {
-          countEl.text('50+');
+        if (count > 30) {
+          countEl.text('30+');
         } else {
           countEl.text(count);
         }
@@ -196,6 +194,7 @@ define(function(require) {
       this._renderCounters();
       avatarFallback(this.$('.channel img'), undefined, 50);
       this._setupAnimation();
+      document.redraw();
     },
 
     // 1 - mentions
@@ -208,22 +207,17 @@ define(function(require) {
       var aInfo = this.sidebarInfo.getInfo(a.channel);
       var bInfo = this.sidebarInfo.getInfo(b.channel);
 
-      var diff = bInfo.mentions - aInfo.mentions;
+      var diff = bInfo.mentionsCount - aInfo.mentionsCount;
       if (diff === 0) {
-        diff = bInfo.replies - aInfo.replies;
+        diff = bInfo.repliesCount - aInfo.repliesCount;
 
         if (diff === 0) {
-          diff = bInfo.total - aInfo.total;
+          diff = bInfo.totalCount - aInfo.totalCount;
 
           if (diff === 0) {
             diff = bInfo.hitsLastWeek.length - aInfo.hitsLastWeek.length;
 
             if (diff === 0) {
-              /*aUpdated = dateUtils.utcDate(aInfo.updated);
-              bUpdated = dateUtils.utcDate(bInfo.updated);
-
-              if (aUpdated > bUpdated) diff = -1;
-              if (aUpdated < bUpdated) diff = 1;*/
               diff = aInfo.postsLastWeek.length - bInfo.postsLastWeek.length;
 
               if (diff === 0) {
@@ -429,11 +423,11 @@ define(function(require) {
       this.listenTo(user.notifications, 'new', function(item) {
         var channel = item.source;
         if (channel !== self.selected) {
-          sidebarInfo.parseItems(user.username(), channel, [item]);
+          sidebarInfo.parseItem(user.username(), item);
 
           if (channel === user.username()) {
-            Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).total);
-            Events.trigger('personalChannelMentionsCount', sidebarInfo.getInfo(channel).mentions);
+            Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).totalCount);
+            Events.trigger('personalChannelMentionsCount', sidebarInfo.getInfo(channel).mentionsCount);
           } else {
             self._renderUnreadCount(channel);
             self._bubbleUp(channel);

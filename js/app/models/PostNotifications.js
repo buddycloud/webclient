@@ -48,12 +48,7 @@ define(function(require) {
           mostRecent = updated;
         }
 
-        var self = this;
-        this.listenToOnce(item, 'sync', function () {
-          self.trigger('new', item);
-        });
-
-        item.save(null, {syncWithServer: false});
+        this.trigger('new', item);
       }
 
       if (mostRecent) {

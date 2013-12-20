@@ -180,7 +180,6 @@
   background: white;
 }
 .post {
-  width: 580px;
   background: #fff;
   position: relative;
   box-shadow: inset 0 -1px rgba(0,0,0,0.08);
@@ -465,6 +464,7 @@
 }
 .stream .notification .controls > .button {
   margin-left: 5px;
+  bottom: 13px;
   color: #000;
   background: #eee;
   box-shadow: 0 1px rgba(255,255,255,0.89) inset,0 1px rgba(0,0,0,0.21),0 1px 0 2px #b3235d,1px 0 0 2px #b3235d,-1px 0 0 2px #b3235d,0 2px 0 2px rgba(255,255,255,0.21),0 -1px 0 2px #a62156;
@@ -482,6 +482,7 @@
   width: 50px;
   cursor: pointer;
   position: absolute;
+  left: 17px;
 }
 .stream .notification.log {
   min-height: 23px;

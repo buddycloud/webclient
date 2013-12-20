@@ -16,8 +16,7 @@
 
 define(function(require) {
   function isSuppported() {
-    window.indexedDB = window.indexedDB || window.mozIndexedDB ||
-                        window.webkitIndexedDB || window.msIndexedDB;
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
     return window.indexedDB ? true : false;
   }
 

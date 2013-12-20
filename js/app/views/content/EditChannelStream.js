@@ -62,6 +62,8 @@ define(function(require) {
       }));
       this._fillCheckbox();
       this._selectDefaultRole();
+      this._toggleHint();
+      document.redraw();
     },
 
     save: function() {

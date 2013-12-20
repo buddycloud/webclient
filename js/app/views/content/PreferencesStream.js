@@ -15,7 +15,6 @@
  */
 
 define(function(require) {
-  var _ = require('underscore');
   var Backbone = require('backbone');
   var avatarFallback = require('util/avatarFallback');
   var Preferences = require('models/Preferences');

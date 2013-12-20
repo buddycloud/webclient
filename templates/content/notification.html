@@ -1,13 +1,17 @@
-<article class="notification">
-  <section>
-    <img class="avatar" src="avatars/user4.jpg" />
-    <div class="info">
-      <span class="name">martin<span class="domain">@buddycloud.com</span></span>
-      <p>wants to follow this channel.</p>
-    </div>
-    <div class="controls">
-      <div class="button small negative light">Deny</div>
-      <div class="button small positive light">Grant Martin to join</div>
-    </div>
-  </section>
-</article>
+<% _.each(pending, function(obj, index) { %>
+  <article class="notification" id="notification_<%- obj.jid%>">
+    <section>
+      <img class="avatar" src="<%- api.avatarUrl(obj.jid, 75) %>" />
+      <div class="info">
+        <span class="name"><%- obj.jid.split('@')[0] %><span class="domain">@<%- obj.jid.split('@')[1] %></span></span>
+        <p>wants to follow this channel.</p>
+        <span class="granted">started following this channel.</span>
+        <span class="denied">was denied to follow this channel.</span>
+      </div>
+      <div class="controls">
+        <div class="button small negative light">Deny</div>
+        <div class="button small positive light">Allow</div>
+      </div>
+    </section>
+  </article>
+<% }); %>

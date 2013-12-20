@@ -123,7 +123,7 @@ define(function(require) {
       var since = localStorage[this.username() + '.lastSession'] || dateUtils.earliestTime();
       this.sync.fetch({
         credentials: this.credentials,
-        data: {since: since, max: 51}
+        data: {since: since, max: 31, summary: true}
       });
     },
 

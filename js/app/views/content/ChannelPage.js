@@ -18,7 +18,6 @@ define(function(require) {
   var AnonChannelOverlay = require('views/content/AnonChannelOverlay');
   var Backbone = require('backbone');
   var ChannelView = require('views/content/ChannelView');
-  var Events = Backbone.Events;
 
   var ChannelPage = Backbone.View.extend({
     className: 'channelView clearfix',
@@ -26,8 +25,7 @@ define(function(require) {
     initialize: function() {
       this.view = new ChannelView({
         channel: this.options.channel,
-        user: this.options.user,
-        created: this.options.created
+        user: this.options.user
       });
 
       this.render();

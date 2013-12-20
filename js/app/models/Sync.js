@@ -17,56 +17,49 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
-  var dateUtils = require('util/dateUtils');
   var Events = Backbone.Events;
-  var Item = require('models/Item');
   var ModelBase = require('models/ModelBase');
-  var ChannelItems = require('models/ChannelItems');
   var SidebarInfoCollection = require('models/SidebarInfoCollection');
 
   var Sync = ModelBase.extend({
     constructor: function() {
       ModelBase.call(this);
-      this.channelItems = {};
       this.sidebarInfo = new SidebarInfoCollection();
-      this.listenTo(this, 'sync', this._saveItems);
+      this.listenTo(this, 'error sync', this._begin);
     },
 
-    _itemsSize: function(channels) {
-      var total = 0;
-      for (var i in channels) {
-        var items = this.get(channels[i]);
-        total += items.length;
-      }
-
-      return total;
-    },
-
-    _saveItems: function() {
+    _begin: function() {
       var channels = _.keys(_.omit(this.attributes, 'username'));
-      var afterCallback = _.after(this._itemsSize(channels), this._triggerSyncCallback);
 
-      if (_.isEmpty(channels)) {
-         this._triggerSyncCallback();
-      } else {
+      if (!_.isEmpty(channels)) {
         var mostRecent;
+        
         for (var i in channels) {
-          var self = this;
-          var items = this.get(channels[i]);
-          items.forEach(function(item) {
-            item = new Item(item);
-            var updated = dateUtils.utcDate(item.updated || item.published);
-            if (!mostRecent || updated > mostRecent) {
-              mostRecent = updated;
-            }
-            self.listenToOnce(item, 'sync', afterCallback);
-            item.save(null, {syncWithServer: false});
-          });
+          var channel = channels[i];
+          var info = this.get(channel);
+
+          postsLastWeek = [];
+          for (var j in info.postsThisWeek) {
+            var date = new Date(info.postsThisWeek[j]);
+            postsLastWeek.push(date);
+          }
+
+          var lastUpdated = new Date(info.lastUpdated);
+          if (!mostRecent || lastUpdated > mostRecent) {
+            mostRecent = lastUpdated;
+          }
+
+          info['postsLastWeek'] = postsLastWeek; // Maintain old property name
+          info['hitsLastWeek'] = [];
+          this.sidebarInfo.setInfo(this.get('username'), channel, info);
         }
+
         if (mostRecent) {
           Events.trigger('updateLastSession', mostRecent.toISOString());
         }
       }
+
+      this._triggerSyncCallback();
     },
 
     _triggerSyncCallback: function() {
@@ -87,24 +80,11 @@ define(function(require) {
       var self = this;
       return function() {
         ModelBase.prototype.fetch.call(self, options);
-      }
+      };
     },
 
     url: function() {
       return api.url('sync');
-    },
-
-    parseSidebarInfo: function(channel, items) {
-      var username = this.get('username');
-      this.sidebarInfo.parseItems(username, channel, items);
-    },
-
-    _insertSource: function(channel, items) {
-      items.forEach(function(item) {
-        item['source'] = channel;
-      });
-
-      return items;
     },
 
     parse: function(resp, xhr) {
@@ -117,14 +97,9 @@ define(function(require) {
         var result = {};
 
         var self = this;
-        _.each(resp, function(items, node) {
+        _.each(resp, function(info, node) {
           var channel = node.split('/')[2];
-          self._insertSource(channel, items);
-
-          result[channel] = items;
-
-          // Parse counters
-          self.parseSidebarInfo(channel, items);
+          result[channel] = info;
         });
 
         return result;
