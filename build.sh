@@ -1,4 +1,5 @@
 #!/bin/bash
+set -x
 
 # Install needed modules
 npm install
