@@ -26,8 +26,8 @@ define(function(require) {
   var PostNotifications = ModelBase.extend({
     initialize: function() {
       this._request = new Pollymer.Request({maxTries: -1, rawResponse: true});
-      this._lastCursor = null;
-      this.listenTo(this, 'change', this._triggerNewItem);
+      this._last = null;
+      this.listenTo(this, 'sync', this._triggerNewItem);
     },
 
     _request: null,
@@ -35,7 +35,7 @@ define(function(require) {
     _triggerNewItem: function() {
       var mostRecent;
 
-      for (var i = 0; i in this.attributes; ++i) {
+      for (var i in this.attributes) {
         var val = this.attributes[i];
         if (val.source) {
           val.source = val.source.split('/')[0];
@@ -58,7 +58,11 @@ define(function(require) {
 
     url: function() {
       var baseUrl = api.url('notifications', 'posts');
-      return this._lastCursor ? baseUrl + '?since=cursor:' + this._lastCursor : baseUrl;
+      // Parameters need to be manually added
+      if (this._last) {
+        baseUrl += '?since=' + this._last;
+      }
+      return baseUrl;
     },
 
     fetch: function(options) {
@@ -129,15 +133,15 @@ define(function(require) {
           options.complete(promise, "success");
         }
 
-        self._lastCursor = obj.last_cursor;
+        self._last = obj.last;
 
         this.off('finished', onFinished);
         dfd.resolve();
-        model.trigger('sync', model, obj, options);
+        //model.trigger('sync', model, obj, options);
       };
       this._request.on('finished', onFinished);
 
-      if (options.xhrFields && "withCredentials" in options.xhrFields) {
+      if (options.xhrFields && options.xhrFields.withCredentials) {
         this._request.withCredentials = options.xhrFields.withCredentials;
       } else {
         this._request.withCredentials = false;

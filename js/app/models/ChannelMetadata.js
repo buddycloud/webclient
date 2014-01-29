@@ -101,6 +101,9 @@ define(function(require) {
     _syncServerCallback: function(method, model, options) {
       var self = this;
       return function() {
+        self.listenToOnce(self, 'sync', function() {
+          self.trigger('serverSync');
+        });
         self._syncServer(method, model, options);
       };
     },

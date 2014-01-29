@@ -91,7 +91,11 @@ define(function(require) {
 
       if (username && password) {
         if (username.indexOf('@') == -1) {
-          username += '@' + config.homeDomain;
+          if (config.useURLHostAsDomain) {
+            username += '@' + Backbone.history.location.hostname;
+          } else {
+            username += '@' + config.homeDomain;
+          }
         }
 
         var credentials = btoa(username + ':' + password);
