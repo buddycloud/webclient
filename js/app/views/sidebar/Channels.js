@@ -29,6 +29,7 @@ define(function(require) {
     initialize: function() {
       this.sidebarInfo = this.model.sync.sidebarInfo;
       this.subscribedChannels = this.model.subscribedChannels;
+      this._listeningNewItems = false;
 
       this.listenTo(this.subscribedChannels, 'subscriptionSync', this._updateChannels);
 
@@ -416,26 +417,29 @@ define(function(require) {
     },
 
     _listenForNewItems: function() {
-      var user = this.model;
-      var sidebarInfo = this.sidebarInfo;
-      
-      var self = this;
-      this.listenTo(user.notifications, 'new', function(item) {
-        var channel = item.source;
-        if (channel !== self.selected) {
-          sidebarInfo.parseItem(user.username(), item);
+      if (!this._listeningNewItems) {
+        var user = this.model;
+        var sidebarInfo = this.sidebarInfo;
+        
+        var self = this;
+        this.listenTo(user.notifications, 'new', function(item) {
+          var channel = item.source;
+          if (channel !== self.selected) {
+            sidebarInfo.parseItem(user.username(), item);
 
-          if (channel === user.username()) {
-            Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).totalCount);
-            Events.trigger('personalChannelMentionsCount', sidebarInfo.getInfo(channel).mentionsCount);
-          } else {
-            self._renderUnreadCount(channel);
-            self._bubbleUp(channel);
+            if (channel === user.username()) {
+              Events.trigger('personalChannelTotalCount', sidebarInfo.getInfo(channel).totalCount);
+              Events.trigger('personalChannelMentionsCount', sidebarInfo.getInfo(channel).mentionsCount);
+            } else {
+              self._renderUnreadCount(channel);
+              self._bubbleUp(channel);
+            }
           }
-        }
-      });
+        });
 
-      user.notifications.listen({credentials: user.credentials});
+        user.notifications.listen({credentials: user.credentials});
+        this._listeningNewItems = true;
+      }
     },
 
     _shouldBubble: function(prev, username, channel) {

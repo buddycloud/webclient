@@ -181,7 +181,7 @@ define(function(require) {
     _listenForNewPosts: function() {
       var user = this.options.user;
       var items = this.model;
-      user.notifications.on('new', function(item) {
+      this.listenTo(user.notifications, 'new', function(item) {
         if (item.source === items.channel) {
           items.add(item, {isNotification: true});
         }
