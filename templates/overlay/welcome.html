@@ -20,9 +20,10 @@
         </div>
         <div class="email">
           <label for="register_email" data-l10n="email">Email</label>
-          <input id="register_email" class="small" type="email">
+          <input id="register_email" class="small" type="text">
         </div>
       </div>
+      <p id='register_error' class="error"></p>
       <button type="submit" id="register_submit" class="left callToAction" data-l10n="joinButton">Join buddycloud</button>
     </form>
     <form class="clearfix login">
@@ -34,7 +35,7 @@
         <label for="login_password" data-l10n="password">Password</label><a class="forgot" data-l10n="forgotPassword">Forgot password?</a>
         <input type="password" class="small xl" id="login_password" required="required">
       </div>
-      <p class="error"></p>
+      <p id='login_error' class="error"></p>
       <div class="submit">
         <span class="storePassword">
           <input type="checkbox" id="store_local" />
