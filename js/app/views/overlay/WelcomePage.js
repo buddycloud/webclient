@@ -50,7 +50,7 @@ define(function(require) {
     },
 
     _invalidLogin: function(message) {
-      $('.error').text(message).show();
+      $('#login_error').text(message).show();
       this._enableButton('#login_submit');
     },
 
@@ -86,7 +86,7 @@ define(function(require) {
     login: function(event) {
       event.preventDefault();
       this._disableButton('#login_submit');
-      $('.error').hide();
+      $('.login').find('.error').hide();
       var username = this.$('#login_name').val().toLowerCase(); // Ensure lower case
       var password = this.$('#login_password').val();
       var permanent = $('#store_local').is(':checked');
@@ -98,10 +98,27 @@ define(function(require) {
     register: function(event) {
       event.preventDefault();
       this._disableButton('#register_submit');
+      $('#register_error').hide();
       var username = this.$('#register_name').val();
       var password = this.$('#register_password').val();
       var email = this.$('#register_email').val();
+      
+      if (!this._validateEmail(email)) {
+        this._invalidEmail();
+        return;
+      }
+
       this.model.register(username, password, email);
+    },
+
+    _invalidEmail: function() {
+      $('#register_error').text('Invalid email!').show();
+      this._enableButton('#register_submit');
+    },
+
+    _validateEmail: function(email) {
+      var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return emailRegex.test(email);
     },
 
     render: function() {
