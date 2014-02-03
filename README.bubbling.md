@@ -12,7 +12,7 @@ Channels bubble up according to the following sorting:
     (and scroll with all channels)
 -   1st: channels with unread @mentions - sorted from newest to oldest (where am I mentioned?)
 -   2nd: channels with unread private messages - sorted from newest to oldest (did someone try to contact me?)
--   3th: channels with unread channel posts - sorted from newest to oldest (users check back regularly for new posts - make this easy)
+-   3th: channels with unread channel posts - most recent posts to oldest (show new new posts higher up the list)
 -   4th: sorted from most recent posts to oldest
 -   5th: tie breaker - compare alphabetically (for example a new user with pre-defined channels)
 
