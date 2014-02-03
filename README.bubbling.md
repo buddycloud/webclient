@@ -21,28 +21,28 @@ Channels bubble up according to the following sorting:
 ```
 sort(channelA, channelB):
   if (channelA.hasMentions and !channelB.hasMentions):
-    return 1
-  if (!channelA.hasMentions and channelB.hasMentions):
     return -1
+  if (!channelA.hasMentions and channelB.hasMentions):
+    return 1
   if (channelA.hasMentions and channelB.hasMentions):
-    return channelA.lastPost - channelB.lastPost
+    return channelB.lastMention - channelA.lastMention
     
   if (channelA.hasPrivate and !channelB.hasPrivate):
-    return 1
-  if (!channelA.hasPrivate and channelB.hasPrivate):
     return -1
+  if (!channelA.hasPrivate and channelB.hasPrivate):
+    return 1
   if (channelA.hasPrivate and channelB.hasPrivate):
-    return channelA.lastPost - channelB.lastPost
+    return channelB.lastPrivate - channelA.lastPrivate
     
   if (channelA.hasPost and !channelB.hasPost):
-    return 1
-  if (!channelA.hasPost and channelB.hasPost):
     return -1
+  if (!channelA.hasPost and channelB.hasPost):
+    return 1
   if (channelA.hasPost and channelB.hasPost):
-    return channelA.lastPost - channelB.lastPost
+    return channelB.lastPost - channelA.lastPost
     
   if (channelA.lastPost != channelB.lastPost):
-    return channelA.lastPost - channelB.lastPost
+    return channelB.lastPost - channelA.lastPost
   
   return channelA.name - channelB.name
     
