@@ -18,6 +18,36 @@ Channels bubble up according to the following sorting:
 -   4th: sorted from most recent posts to oldest
 -   5th: tie breaker - compare alphabetically (for example a new user with pre-defined channels)
 
+```
+sort(channelA, channelB):
+  if (channelA.hasMentions and !channelB.hasMentions):
+    return 1
+  if (!channelA.hasMentions and channelB.hasMentions):
+    return -1
+  if (channelA.hasMentions and channelB.hasMentions):
+    return channelA.lastPost - channelB.lastPost
+    
+  if (channelA.hasPrivate and !channelB.hasPrivate):
+    return 1
+  if (!channelA.hasPrivate and channelB.hasPrivate):
+    return -1
+  if (channelA.hasPrivate and channelB.hasPrivate):
+    return channelA.lastPost - channelB.lastPost
+    
+  if (channelA.hasPost and !channelB.hasPost):
+    return 1
+  if (!channelA.hasPost and channelB.hasPost):
+    return -1
+  if (channelA.hasPost and channelB.hasPost):
+    return channelA.lastPost - channelB.lastPost
+    
+  if (channelA.lastPost != channelB.lastPost):
+    return channelA.lastPost - channelB.lastPost
+  
+  return channelA.name - channelB.name
+    
+```
+
 So for example our hypothetical user might have their list of channels
 in the following order:
 
