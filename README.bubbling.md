@@ -8,6 +8,8 @@ amount of scrolling**.
 
 Channels bubble up according to the following sorting:
 
+(Never sorted by post counts)
+
 -   the owner's channel should be pinned to the top of the channel list
     (and scroll with all channels)
 -   1st: channels with unread @mentions - sorted from newest to oldest (where am I mentioned?)
