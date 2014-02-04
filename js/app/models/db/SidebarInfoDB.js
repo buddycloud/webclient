@@ -19,17 +19,28 @@ define(function(require) {
     id: 'sidebar-info',
     migrations: [
       {
-        version: '1.1',
+        version: '1.0',
         migrate: function(transaction, next) {
-          var store;
-
-          if (!transaction.db.objectStoreNames.contains('sidebar-info')) {
-            store = transaction.db.createObjectStore('sidebar-info');
-          } else {
-            store = transaction.objectStore('sidebar-info');
+          if (transaction.db.objectStoreNames.contains('sidebar-info')) {
+            var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB
+            var dbreq = indexedDB.deleteDatabase('sidebar-info')
           }
 
-          store.createIndex('userIndex', 'user', { unique: false });
+          next()
+        }
+      },
+      {
+        version: '1.1',
+        migrate: function(transaction, next) {
+          var store
+
+          if (!transaction.db.objectStoreNames.contains('sidebar-info')) {
+            store = transaction.db.createObjectStore('sidebar-info')
+          } else {
+            store = transaction.objectStore('sidebar-info')
+          }
+
+          store.createIndex('userIndex', 'user', { unique: false })
 
           next();
         }

@@ -198,39 +198,54 @@ define(function(require) {
       document.redraw();
     },
 
-    // 1 - mentions
-    // 2 - replies
-    // 3 - total unread
-    // 4 - hits last week
-    // 5 - posts last week
-    // 6 - still equal? Just compare the names then
+    // Refference: https://github.com/buddycloud/webclient/blob/d11eb8fa1c2d01ec91c1a32135ecc8858498b4dd/README.bubbling.md
     _comparePosts: function(a, b) {
-      var aInfo = this.sidebarInfo.getInfo(a.channel);
-      var bInfo = this.sidebarInfo.getInfo(b.channel);
+      var aInfo = this.sidebarInfo.getInfo(a.channel)
+      var bInfo = this.sidebarInfo.getInfo(b.channel)
 
-      var diff = bInfo.mentionsCount - aInfo.mentionsCount;
-      if (diff === 0) {
-        diff = bInfo.repliesCount - aInfo.repliesCount;
+      // Mentions
+      if (aInfo.mentionsCount > 0 && bInfo.mentionsCount === 0) {
+        return -1
+      }
 
-        if (diff === 0) {
-          diff = bInfo.totalCount - aInfo.totalCount;
+      if (aInfo.mentionsCount === 0 && bInfo.mentionsCount > 0) {
+        return 1
+      }
 
-          if (diff === 0) {
-            diff = bInfo.hitsLastWeek.length - aInfo.hitsLastWeek.length;
-
-            if (diff === 0) {
-              diff = aInfo.postsLastWeek.length - bInfo.postsLastWeek.length;
-
-              if (diff === 0) {
-                return a.channel.localeCompare(b.channel);
-              }
-            }
-          }
-
+      if (aInfo.mentionsCount > 0 && bInfo.mentionsCount > 0) {
+        if (aInfo.lastMention > bInfo.lastMention) {
+          return -1
+        } else if (aInfo.lastMention < bInfo.lastMention) {
+          return 1
         }
       }
 
-      return diff;
+      // No mentions or mentions with same date
+      // Posts
+      if (aInfo.totalCount > 0 && bInfo.totalCount === 0) {
+        return -1
+      }
+
+      if (aInfo.totalCount === 0 && bInfo.totalCount > 0) {
+        return 1
+      }
+
+      if (aInfo.totalCount > 0 && bInfo.totalCount > 0) {
+        if (aInfo.lastPost > bInfo.lastPost) {
+          return -1
+        } else if (aInfo.lastPost < bInfo.lastPost) {
+          return 1
+        }
+      }
+
+      // No posts
+      if (aInfo.lastPost > bInfo.lastPost) {
+        return -1
+      } else if (aInfo.lastPost < bInfo.lastPost) {
+        return 1
+      }
+
+      return a.channel.localeCompare(b.channel)
     },
 
     _sortChannels: function() {

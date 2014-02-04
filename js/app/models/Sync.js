@@ -17,6 +17,7 @@
 define(function(require) {
   var api = require('util/api');
   var Backbone = require('backbone');
+  var dateUtils = require('util/dateUtils');
   var Events = Backbone.Events;
   var ModelBase = require('models/ModelBase');
   var SidebarInfoCollection = require('models/SidebarInfoCollection');
@@ -29,37 +30,31 @@ define(function(require) {
     },
 
     _begin: function() {
-      var channels = _.keys(_.omit(this.attributes, 'username'));
+      var channels = _.keys(_.omit(this.attributes, 'username'))
+      var earliest = dateUtils.utcDate(dateUtils.earliestTime())
 
       if (!_.isEmpty(channels)) {
-        var mostRecent;
-        
+        var mostRecent
         for (var i in channels) {
-          var channel = channels[i];
-          var info = this.get(channel);
+          var channel = channels[i]
+          // {totalCount, mentionsCount, lastPost, lastMention}
+          var info = this.get(channel)
+          info.lastPost = info.lastPost || earliest
+          info.lastMention = info.lastMention || earliest
 
-          postsLastWeek = [];
-          for (var j in info.postsThisWeek) {
-            var date = new Date(info.postsThisWeek[j]);
-            postsLastWeek.push(date);
+          if (!mostRecent || info.lastPost > mostRecent) {
+            mostRecent = info.lastPost
           }
 
-          var lastUpdated = new Date(info.lastUpdated);
-          if (!mostRecent || lastUpdated > mostRecent) {
-            mostRecent = lastUpdated;
-          }
-
-          info['postsLastWeek'] = postsLastWeek; // Maintain old property name
-          info['hitsLastWeek'] = [];
-          this.sidebarInfo.setInfo(this.get('username'), channel, info);
-        }
-
-        if (mostRecent) {
-          Events.trigger('updateLastSession', mostRecent.toISOString());
+          this.sidebarInfo.setInfo(this.get('username'), channel, info)
         }
       }
 
-      this._triggerSyncCallback();
+      if (mostRecent) {
+        Events.trigger('updateLastSession', mostRecent.toISOString)
+      }
+
+      this._triggerSyncCallback()
     },
 
     _triggerSyncCallback: function() {
