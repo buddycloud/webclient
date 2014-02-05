@@ -72,11 +72,6 @@ define(function(require) {
         // Disable button
         $channel.find('.follow').removeClass('callToAction').addClass('disabled');
       }
-    },
-
-    _redirect: function(event) {
-      var jid = this.$(event.currentTarget).parent().attr('id');
-      Events.trigger('navigate', jid);
     }
   });
 

@@ -16,6 +16,8 @@
 
 define(function(require) {
   var AbstractExploreView = require('views/content/AbstractExploreView');
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var spinner = require('util/spinner');
   var l10nBrowser = require('l10n-browser');
   var template = require('text!templates/content/searchResults.html')
@@ -26,7 +28,8 @@ define(function(require) {
 
     events: {
       'click .callToAction': '_follow',
-      'click .info,.avatar': '_redirect'
+      'click #channel_avatar, #channel_info': '_redirectChannel',
+      'click .post': '_redirectPost'
     },
 
     initialize: function() {
@@ -38,16 +41,22 @@ define(function(require) {
       spinner.replace(this.$el);
     },
 
-    destroy: function() {
-      this.remove();
-    },
-
     render: function() {
       this.$el.html(_.template(localTemplate, {
         channels: this.channels,
         posts: this.model.posts.models
       }));
       this._render();
+    },
+
+    _redirectChannel: function(event) {
+      var jid = this.$(event.currentTarget).parent().attr('id');
+      Events.trigger('navigate', jid);
+    },
+
+    _redirectPost: function(event) {
+      var jid = this.$(event.currentTarget).attr('id');
+      Events.trigger('navigate', jid);
     }
   });
 
