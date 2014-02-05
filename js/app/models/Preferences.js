@@ -25,12 +25,15 @@ define(function(require) {
     },
 
     parse: function(resp, xhr) {
+      // FIXME: only handling one email
+      resp = resp[0] || {}
+
       if (!resp.target) {
         // Workaround for old accounts (without email)
-        this.trigger('change');
+        this.trigger('change')
       }
 
-      return resp;
+      return resp
     },
 
     sync: function(method, model, options) {
