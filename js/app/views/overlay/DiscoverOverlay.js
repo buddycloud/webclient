@@ -15,8 +15,9 @@
  */
 
 define(function(require) {
-  var api = require('util/api');
-  var Backbone = require('backbone');
+  var api = require('util/api')
+  var Backbone = require('backbone')
+  var config = require('config')
   var avatarFallback = require('util/avatarFallback');
   var l10nBrowser = require('l10n-browser');
   var Events = Backbone.Events;
@@ -36,15 +37,35 @@ define(function(require) {
       if (!localTemplate) localTemplate = l10nBrowser.localiseHTML(template, {})
       if (!localFooter) localFooter = l10nBrowser.localiseHTML(footer, {})
 
+      this._initModels()
+      this._registerEvents()
+      this._fetch()
+    },
+
+    _initModels: function() {
       this.mostActive = new DiscoverCollection(api.url('most_active'))
       this.popular = new DiscoverCollection(api.url('most_active'))
+      this.localMostActive = new DiscoverCollection(api.url('most_active'))
+      this.localPopular = new DiscoverCollection(api.url('most_active'))
+    },
 
-      var callback = this._triggerRenderCallback([this.mostActive, this.popular])
+    _registerEvents: function() {
+      var callback = this._triggerRenderCallback([
+        this.mostActive, this.popular, this.localMostActive, this.localPopular
+      ])
       this.listenTo(this.mostActive, 'reset', callback)
       this.listenTo(this.popular, 'reset', callback)
+      this.listenTo(this.localMostActive, 'reset', callback)
+      this.listenTo(this.localPopular, 'reset', callback)
+    },
 
+    _fetch: function() {
       this.mostActive.fetch({data: {max: 5, period: 7}, reset: true})
       this.popular.fetch({data: {max: 5, period: 30}, reset: true})
+
+      var domain = config.homeDomain
+      this.localMostActive.fetch({data: {max: 5, period: 7, domain: domain}, reset: true})
+      this.localPopular.fetch({data: {max: 5, period: 30, domain: domain}, reset: true})
     },
 
     _triggerRenderCallback: function(models) {
@@ -61,7 +82,9 @@ define(function(require) {
     render: function() {
       this.$el.html(_.template(localTemplate, {
         mostActive: this.mostActive.models,
-        popular: this.popular.models
+        popular: this.popular.models,
+        localMostActive: this.localMostActive.models,
+        localPopular: this.localPopular.models
       }))
 
       // Add footer
