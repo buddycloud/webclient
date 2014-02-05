@@ -28,7 +28,6 @@ define(function(require) {
   var localFooter;
 
   var DiscoverOverlay = Backbone.View.extend({
-
     events: {
       'click .channel': '_redirect'
     },
@@ -70,12 +69,15 @@ define(function(require) {
 
     _triggerRenderCallback: function(models) {
       var self = this
-        , fetched = 0
-      return function() {
-        fetched++
-        if (fetched === models.length) {
-          self.render()
+        , fetched = []
+      return function(model) {
+        fetched.push(model)
+        for (var i in models) {
+          if (!_.include(fetched, models[i])) {
+            return
+          }
         }
+        self.render()
       }
     },
 
