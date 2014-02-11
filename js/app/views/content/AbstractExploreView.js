@@ -67,16 +67,11 @@ define(function(require) {
         var offset = $channel.offset();
 
         // Subscribe
-        this.options.user.subscribedChannels.subscribe(jid, 'posts', role, credentials, {offset: offset, animationClass: animationClassName});
+        this.options.user.subscribedChannels.subscribe(jid, ['posts'], role, credentials, {offset: offset, animationClass: animationClassName});
 
         // Disable button
         $channel.find('.follow').removeClass('callToAction').addClass('disabled');
       }
-    },
-
-    _redirect: function(event) {
-      var jid = this.$(event.currentTarget).parent().attr('id');
-      Events.trigger('navigate', jid);
     }
   });
 

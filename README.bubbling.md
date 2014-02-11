@@ -8,13 +8,45 @@ amount of scrolling**.
 
 Channels bubble up according to the following sorting:
 
+(Never sorted by post counts)
+
 -   the owner's channel should be pinned to the top of the channel list
     (and scroll with all channels)
 -   1st: channels with unread @mentions - sorted from newest to oldest (where am I mentioned?)
 -   2nd: channels with unread private messages - sorted from newest to oldest (did someone try to contact me?)
--   3th: channels with unread channel posts - sorted from newest to oldest (users check back regularly for new posts - make this easy)
--   4th: recently read - sorted from most recent posts to oldest
+-   3th: channels with unread channel posts - most recent posts to oldest (show new new posts higher up the list)
+-   4th: sorted from most recent posts to oldest
 -   5th: tie breaker - compare alphabetically (for example a new user with pre-defined channels)
+
+```
+sort(channelA, channelB):
+  if (channelA.hasMentions and !channelB.hasMentions):
+    return -1
+  if (!channelA.hasMentions and channelB.hasMentions):
+    return 1
+  if (channelA.hasMentions and channelB.hasMentions):
+    return channelB.lastMention - channelA.lastMention
+    
+  if (channelA.hasPrivate and !channelB.hasPrivate):
+    return -1
+  if (!channelA.hasPrivate and channelB.hasPrivate):
+    return 1
+  if (channelA.hasPrivate and channelB.hasPrivate):
+    return channelB.lastPrivate - channelA.lastPrivate
+    
+  if (channelA.hasPost and !channelB.hasPost):
+    return -1
+  if (!channelA.hasPost and channelB.hasPost):
+    return 1
+  if (channelA.hasPost and channelB.hasPost):
+    return channelB.lastPost - channelA.lastPost
+    
+  if (channelA.lastPost != channelB.lastPost):
+    return channelB.lastPost - channelA.lastPost
+  
+  return channelA.name - channelB.name
+    
+```
 
 So for example our hypothetical user might have their list of channels
 in the following order:

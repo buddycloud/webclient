@@ -16,6 +16,8 @@
 
 define(function(require) {
   var AbstractExploreView = require('views/content/AbstractExploreView');
+  var Backbone = require('backbone');
+  var Events = Backbone.Events;
   var l10nBrowser = require('l10n-browser');
   var localTemplate;
   var spinner = require('util/spinner');
@@ -40,17 +42,17 @@ define(function(require) {
       spinner.replace(this.$el);
     },
 
-    destroy: function() {
-      this.model.unbind('fetch', this.render, this);
-      this.remove();
-    },
-
     render: function() {
       this.$el.html(_.template(localTemplate, {
         mostActive: this.model.mostActive.models,
         recommended: this.model.recommendations.models
       }));
       this._render();
+    },
+
+    _redirect: function(event) {
+      var jid = this.$(event.currentTarget).parent().attr('id');
+      Events.trigger('navigate', jid);
     }
   });
 

@@ -2,9 +2,9 @@
   <h1 data-l10n="discoveryLocal">Local</h1>
     <div class="mostActive span-1">
       <h2 data-l10n="discoveryActive">Most active</h2>
-      <% if (mostActive) { %>
+      <% if (localMostActive) { %>
       <div class="list">
-        <% _.each(mostActive, function(channel) { %>
+        <% _.each(localMostActive, function(channel) { %>
         <div class="channel justify" id="<%- channel.jid() %>">
           <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">
@@ -18,9 +18,9 @@
     </div>
     <div class="popular span-1">
       <h2 data-l10n="discoveryPopular">Popular</h2>
-      <% if (popular) { %>
+      <% if (localPopular) { %>
       <div class="list">
-        <% _.each(popular, function(channel) { %>
+        <% _.each(localPopular, function(channel) { %>
         <div class="channel justify" id="<%- channel.jid() %>">
           <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
           <div class="info flex">

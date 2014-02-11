@@ -6,8 +6,8 @@
       <div class="list">
         <% _.each(channels, function(channel) { %>
         <div class="channel justify" id="<%- channel.jid() %>">
-          <img class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
-          <div class="info flex">
+          <img id="channel_avatar" class="avatar" data-type="<%- channel.channelType() %>" src="<%- channel.jidAvatarUrl(50) %>"></img>
+          <div id="channel_info" class="info flex">
             <span class="owner"><%- channel.title() %></span>
             <span class="about"><%- channel.description() %></span>
           </div>
@@ -22,12 +22,16 @@
       <% if (posts) { %>
       <div class="list posts">
         <% _.each(posts, function(post) { %>
-        <article class="post">
+        <article class="post" id="<%- post.author() %>">
           <section class="opener">
             <img class="avatar" data-type="personal" src="<%- post.authorAvatarUrl(50) %>"></img>
-              <div class="postmeta">
-                <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%- post.published() %>" title="<%- post.published() %>">3 days</time>
-              </div>
+            <div class="usermeta">
+              <div class="name"><%- post.author().split('@', 2)[0] %></div>
+              <div class="jid"><%- post.author() %></div>
+            </div>
+            <div class="postmeta">
+              <time class="ago" data-strftime="%d.%m.%Y %H:%M" data-strftitle="%A %d %B %Y %H:%M" datetime="<%- post.published() %>" title="<%- post.published() %>">3 days</time>
+            </div>
             <p><%- post.content() %></p>
           </section>
         </article>

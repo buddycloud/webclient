@@ -15,30 +15,34 @@
  */
 
 define(function(require) {
-  var api = require('util/api');
-  var ModelBase = require('models/ModelBase');
+  var api = require('util/api')
+    , ModelBase = require('models/ModelBase')
 
   var ContentSearchResult = ModelBase.extend({
     authorAvatarUrl: function(size) {
-      return api.avatarUrl(this.author(), size);
+      return api.avatarUrl(this.author(), size)
     },
 
     author: function() {
-      return this.get('author');
+      return this.get('author')
     },
 
     content: function() {
-      return this.get('content');
+      return this.get('content')
     },
 
     published: function() {
-      return this.get('published');
+      return this.get('published')
     },
 
     updated: function() {
-      return this.get('updated') || this.get('published');
+      return this.get('updated') || this.get('published')
+    },
+
+    parentJID: function() {
+      return this.get('parent_simpleid')
     }
   });
 
-  return ContentSearchResult;
+  return ContentSearchResult
 });
