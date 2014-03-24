@@ -141,7 +141,7 @@ define(function(require) {
       if (username && password && email) {
         var self = this;
         var data = {
-          'username': username,
+          'username': self.credentials.normalizeJid(username),
           'password': password,
           'email': email
         };
