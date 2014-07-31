@@ -31,8 +31,8 @@ define(function(require) {
 
   var Router = Backbone.Router.extend({
     routes: {
-      '': 'home',
-      'home': 'home',
+      '(?h=:host)': 'home',
+      'home(?h=:host)': 'home',
       'explore': 'explore',
       'prefs': 'preferences',
       'new-channel': 'newChannel',

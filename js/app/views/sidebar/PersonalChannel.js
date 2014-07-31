@@ -16,6 +16,7 @@
 
 define(function(require) {
   var avatarFallback = require('util/avatarFallback');
+  var config = require('config');
   var Backbone = require('backbone');
   var template = require('text!templates/sidebar/personalChannel.html');
   var l10nBrowser = require('l10n-browser');
@@ -101,9 +102,15 @@ define(function(require) {
     },
 
     _logout: function() {
+      var username = this.model.credentials.username;
       this.model.logout();
+      
       // Return to WelcomePage
-      Events.trigger('navigate', '/');
+      if (config.useURLHostAsDomain) {
+        Events.trigger('navigate', '?h=' + username.split('@')[1]);
+      } else {
+        Events.trigger('navigate', '/');
+      }
     },
 
     selectChannel: function(channel) {

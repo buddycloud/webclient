@@ -17,6 +17,7 @@
 define(function(require) {
   require('jquery.cookie');
   var api = require('util/api');
+  var url = require('util/url');
   var config = require('config');
   var Backbone = require('backbone');
   var ModelBase = require('models/ModelBase');
@@ -69,7 +70,7 @@ define(function(require) {
         $.removeCookie(key);
       }
     },
-
+    
     isPermanent: function() {
       return Boolean(localStorage.loginPermanent);
     },
@@ -90,13 +91,7 @@ define(function(require) {
       var password = attributes.password;
 
       if (username && password) {
-        if (username.indexOf('@') == -1) {
-          if (config.useURLHostAsDomain) {
-            username += '@' + Backbone.history.location.hostname;
-          } else {
-            username += '@' + config.homeDomain;
-          }
-        }
+        username = this.normalizeJid(username);
 
         var credentials = btoa(username + ':' + password);
         this.set({'username': username, 'credentials': credentials});
@@ -105,7 +100,19 @@ define(function(require) {
         this._persist(options.permanent);
       }
     },
-
+    
+    normalizeJid: function(username) {
+      if (username.indexOf('@') == -1) {
+        if (config.useURLHostAsDomain) {
+          username += '@' + (url.getQueryVariable('h') || 
+              Backbone.history.location.hostname);
+        } else {
+          username += '@' + config.homeDomain;
+        }
+      }
+      return username;
+    },
+    
     addAuthorizationToAjaxOptions: function(options) {
       if (options) {
         options.headers = options.headers || {};
