@@ -109,8 +109,7 @@ define(function(require) {
           if (hostname.indexOf(hostnamePrefix) == 0) {
             hostname = hostname.slice(hostnamePrefix.length, hostname.length);
           }
-          username += '@' + (url.getQueryVariable('h') || 
-              Backbone.history.location.hostname);
+          username += '@' + (url.getQueryVariable('h') || hostname);
         } else {
           username += '@' + config.homeDomain;
         }
