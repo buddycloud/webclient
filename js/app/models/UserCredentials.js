@@ -104,8 +104,12 @@ define(function(require) {
     normalizeJid: function(username) {
       if (username.indexOf('@') == -1) {
         if (config.useURLHostAsDomain) {
-          username += '@' + (url.getQueryVariable('h') || 
-              Backbone.history.location.hostname);
+          hostname = Backbone.history.location.hostname;
+          hostnamePrefix = 'buddycloud.';
+          if (hostname.indexOf(hostnamePrefix) == 0) {
+            hostname = hostname.slice(hostnamePrefix.length, hostname.length);
+          }
+          username += '@' + (url.getQueryVariable('h') || hostname);
         } else {
           username += '@' + config.homeDomain;
         }
