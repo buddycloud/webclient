@@ -8,7 +8,7 @@ The code is based on
 * [jQuery](http://jquery.com/)
 * [Underscore](http://underscorejs.org/) 
 * [Backbone.js](http://backbonejs.org/)
-* [Jasmine](http://pivotal.github.com/jasmine/) for unit testing
+* [Jasmine](https://jasmine.github.io/) for unit testing
 
 Setup
 =====
